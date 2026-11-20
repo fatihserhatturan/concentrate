@@ -1,0 +1,3478 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 0
+          },
+          {
+            "table": "Directory",
+            "count": 10
+          },
+          {
+            "table": "File",
+            "count": 13
+          },
+          {
+            "table": "Import",
+            "count": 20
+          },
+          {
+            "table": "Function",
+            "count": 40
+          },
+          {
+            "table": "Class",
+            "count": 10
+          },
+          {
+            "table": "Field",
+            "count": 25
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 20
+          },
+          {
+            "table": "Interface",
+            "count": 1
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 4
+          },
+          {
+            "table": "Route",
+            "count": 4
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 13
+          },
+          {
+            "table": "ConfigValue",
+            "count": 18
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 0
+        },
+        {
+          "table": "Directory",
+          "count": 10
+        },
+        {
+          "table": "File",
+          "count": 13
+        },
+        {
+          "table": "Import",
+          "count": 20
+        },
+        {
+          "table": "Function",
+          "count": 40
+        },
+        {
+          "table": "Class",
+          "count": 10
+        },
+        {
+          "table": "Field",
+          "count": 25
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 20
+        },
+        {
+          "table": "Interface",
+          "count": 1
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 4
+        },
+        {
+          "table": "Route",
+          "count": 4
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 13
+        },
+        {
+          "table": "ConfigValue",
+          "count": 18
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "AppSettings",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ClientProperties",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/ClientProperties.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "EnvKeys",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/EnvKeys.java",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "EnvUsage",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "FeatureProperties",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/FeatureProperties.java",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "MailProperties",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Retry",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "StatusController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Value",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/lombok/Value.java",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "featureProperties",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppConfig"
+          },
+          {
+            "name": "dataSourceUrl",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppConfig"
+          },
+          {
+            "name": "AppSettings",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 30,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppSettings"
+          },
+          {
+            "name": "setFrom",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 34,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppSettings"
+          },
+          {
+            "name": "label",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 37,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppSettings"
+          },
+          {
+            "name": "where",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppSettings"
+          },
+          {
+            "name": "unrelated",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 40,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AppSettings"
+          },
+          {
+            "name": "EnvKeys",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvKeys.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvKeys"
+          },
+          {
+            "name": "EnvUsage",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "region",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "prefixed",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "property",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "fromProperties",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 30,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "notEnv",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 31,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "enabled",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 37,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "viaEnvVar",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvUsage"
+          },
+          {
+            "name": "isEnabled",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/FeatureProperties.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureProperties"
+          },
+          {
+            "name": "getHost",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailProperties"
+          },
+          {
+            "name": "setHost",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailProperties"
+          },
+          {
+            "name": "getPort",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailProperties"
+          },
+          {
+            "name": "getFromAddress",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailProperties"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface) MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target) WHERE target.name IN [\"Value\"] RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine, cls.name AS name, classFile.relativePath AS file, cls.line AS line ORDER BY classFile.relativePath, cls.line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "AppSettings",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ClientProperties",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/ClientProperties.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "EnvKeys",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/EnvKeys.java",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "EnvUsage",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "FeatureProperties",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/FeatureProperties.java",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "MailProperties",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Retry",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StatusController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Value",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/lombok/Value.java",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "featureProperties",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppConfig"
+        },
+        {
+          "name": "dataSourceUrl",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppConfig"
+        },
+        {
+          "name": "AppSettings",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 30,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppSettings"
+        },
+        {
+          "name": "setFrom",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 34,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppSettings"
+        },
+        {
+          "name": "label",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 37,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppSettings"
+        },
+        {
+          "name": "where",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 39,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppSettings"
+        },
+        {
+          "name": "unrelated",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 40,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AppSettings"
+        },
+        {
+          "name": "EnvKeys",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/EnvKeys.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvKeys"
+        },
+        {
+          "name": "EnvUsage",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvUsage"
+        },
+        {
+          "name": "region",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvUsage"
+        },
+        {
+          "name": "prefixed",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvUsage"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "name": "AppConfig",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "name": "AppSettings",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/ClientProperties.java",
+            "name": "ClientProperties",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/EnvKeys.java",
+            "name": "EnvKeys",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "name": "EnvUsage",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/FeatureProperties.java",
+            "name": "FeatureProperties",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "name": "MailProperties",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "name": "Retry",
+            "kind": "Class",
+            "line": 20,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/lombok/Account.java",
+            "name": "Account",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "name": "StatusController",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/lombok/Value.java",
+            "name": "Value",
+            "kind": "Interface",
+            "line": 3,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "name": "AppConfig",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "name": "AppSettings",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/ClientProperties.java",
+          "name": "ClientProperties",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/EnvKeys.java",
+          "name": "EnvKeys",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "name": "EnvUsage",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/FeatureProperties.java",
+          "name": "FeatureProperties",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "name": "MailProperties",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "name": "Retry",
+          "kind": "Class",
+          "line": 20,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/lombok/Account.java",
+          "name": "Account",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "name": "StatusController",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/lombok/Value.java",
+          "name": "Value",
+          "kind": "Interface",
+          "line": 3,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 11
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 22,
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "spring-mvc",
+            "handlerName": "status",
+            "handler": "status"
+          },
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 27,
+            "method": "GET",
+            "path": "/client",
+            "fullPath": "/client",
+            "framework": "spring-mvc",
+            "handlerName": "client",
+            "handler": "client"
+          },
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 30,
+            "method": "GET",
+            "path": "/retries",
+            "fullPath": "/retries",
+            "framework": "spring-mvc",
+            "handlerName": "retries",
+            "handler": "retries"
+          },
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 33,
+            "method": "GET",
+            "path": "/sender",
+            "fullPath": "/sender",
+            "framework": "spring-mvc",
+            "handlerName": "sender",
+            "handler": "sender"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 22,
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "spring-mvc",
+          "handlerName": "status",
+          "handler": "status"
+        },
+        {
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 27,
+          "method": "GET",
+          "path": "/client",
+          "fullPath": "/client",
+          "framework": "spring-mvc",
+          "handlerName": "client",
+          "handler": "client"
+        },
+        {
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 30,
+          "method": "GET",
+          "path": "/retries",
+          "fullPath": "/retries",
+          "framework": "spring-mvc",
+          "handlerName": "retries",
+          "handler": "retries"
+        },
+        {
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 33,
+          "method": "GET",
+          "path": "/sender",
+          "fullPath": "/sender",
+          "framework": "spring-mvc",
+          "handlerName": "sender",
+          "handler": "sender"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 19,
+            "name": "REGION",
+            "value": "@Value",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/AppSettings.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 11,
+            "name": "APP_MODE",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 17,
+            "name": "DB_PASSWORD",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 18,
+            "name": "REGION",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 19,
+            "name": "APP_TOKEN",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 20,
+            "name": "LOG_LEVEL",
+            "value": "System.getenv().get",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 23,
+            "name": "TZ",
+            "value": "System.getenv().get",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 25,
+            "name": "HOME_DIR",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 38,
+            "name": "APP_MAIL_PORT",
+            "value": "spring relaxed binding",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 39,
+            "name": "SPRING_DEMO_TOKEN",
+            "value": "Environment.getProperty",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 6,
+            "name": "APP_MAIL_PORT",
+            "value": "spring relaxed binding",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/MailProperties.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 24,
+            "name": "RELEASE",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/web/StatusController.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 4,
+            "name": "DB_PASSWORD",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 17,
+            "name": "PORT",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 20,
+            "name": "DB_HOST",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 22,
+            "name": "DB_PASSWORD",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 15,
+            "name": "app.greeting",
+            "value": "hello",
+            "valueType": "default",
+            "consumer": "src/main/java/com/acme/config/AppSettings.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 3,
+            "name": "app.feature.enabled",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 4,
+            "name": "spring.datasource.password",
+            "value": "${DB_PASSWORD}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 2,
+            "name": "app.name",
+            "value": "Config Demo",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 3,
+            "name": "app.timeout",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 11,
+            "name": "app.mail.allowed-senders[0]",
+            "value": "a@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 12,
+            "name": "app.mail.allowed-senders[1]",
+            "value": "b@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 14,
+            "name": "app.client.base-url",
+            "value": "https://api.example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 15,
+            "name": "app.client.connect-timeout",
+            "value": "2s",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 17,
+            "name": "server.port",
+            "value": "${PORT:8080}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 20,
+            "name": "spring.datasource.url",
+            "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 21,
+            "name": "spring.datasource.username",
+            "value": "shop",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 22,
+            "name": "spring.datasource.password",
+            "value": "${DB_PASSWORD}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "line": 3,
+            "name": "app.feature.enabled",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "enabled",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "line": 20,
+            "name": "spring.datasource.url",
+            "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+            "valueType": "string",
+            "consumer": "url",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppConfig.java",
+            "line": 21,
+            "name": "spring.datasource.username",
+            "value": "shop",
+            "valueType": "string",
+            "consumer": "user",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 2,
+            "name": "app.name",
+            "value": "Config Demo",
+            "valueType": "string",
+            "consumer": "name",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 3,
+            "name": "app.timeout",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "timeout",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "setFrom",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 15,
+            "name": "app.greeting",
+            "value": "hello",
+            "valueType": "default",
+            "consumer": "greeting",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 20,
+            "name": "spring.datasource.url",
+            "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+            "valueType": "string",
+            "consumer": "url",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/ClientProperties.java",
+            "line": 14,
+            "name": "app.client.base-url",
+            "value": "https://api.example.com",
+            "valueType": "string",
+            "consumer": "baseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/ClientProperties.java",
+            "line": 15,
+            "name": "app.client.connect-timeout",
+            "value": "2s",
+            "valueType": "string",
+            "consumer": "connectTimeout",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 3,
+            "name": "app.feature.enabled",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "app.feature.enabled",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "app.mail.port",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "port",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "fromAddress",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "retry.maxAttempts",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 11,
+            "name": "app.mail.allowed-senders[0]",
+            "value": "a@example.com",
+            "valueType": "string",
+            "consumer": "allowedSenders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 12,
+            "name": "app.mail.allowed-senders[1]",
+            "value": "b@example.com",
+            "valueType": "string",
+            "consumer": "allowedSenders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "from",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "retry.maxAttempts",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 14,
+            "name": "app.client.base-url",
+            "value": "https://api.example.com",
+            "valueType": "string",
+            "consumer": "baseUrl",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 19,
+          "name": "REGION",
+          "value": "@Value",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/AppSettings.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 11,
+          "name": "APP_MODE",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 17,
+          "name": "DB_PASSWORD",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 18,
+          "name": "REGION",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 19,
+          "name": "APP_TOKEN",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 20,
+          "name": "LOG_LEVEL",
+          "value": "System.getenv().get",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 23,
+          "name": "TZ",
+          "value": "System.getenv().get",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 25,
+          "name": "HOME_DIR",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 38,
+          "name": "APP_MAIL_PORT",
+          "value": "spring relaxed binding",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 39,
+          "name": "SPRING_DEMO_TOKEN",
+          "value": "Environment.getProperty",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 6,
+          "name": "APP_MAIL_PORT",
+          "value": "spring relaxed binding",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/MailProperties.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 24,
+          "name": "RELEASE",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/web/StatusController.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 4,
+          "name": "DB_PASSWORD",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 17,
+          "name": "PORT",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 20,
+          "name": "DB_HOST",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 22,
+          "name": "DB_PASSWORD",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 15,
+          "name": "app.greeting",
+          "value": "hello",
+          "valueType": "default",
+          "consumer": "src/main/java/com/acme/config/AppSettings.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 3,
+          "name": "app.feature.enabled",
+          "value": "true",
+          "valueType": "boolean",
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 4,
+          "name": "spring.datasource.password",
+          "value": "${DB_PASSWORD}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 2,
+          "name": "app.name",
+          "value": "Config Demo",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 3,
+          "name": "app.timeout",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 9,
+          "name": "app.mail.retry.max-attempts",
+          "value": "3",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 11,
+          "name": "app.mail.allowed-senders[0]",
+          "value": "a@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 12,
+          "name": "app.mail.allowed-senders[1]",
+          "value": "b@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 14,
+          "name": "app.client.base-url",
+          "value": "https://api.example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 15,
+          "name": "app.client.connect-timeout",
+          "value": "2s",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 17,
+          "name": "server.port",
+          "value": "${PORT:8080}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 20,
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 21,
+          "name": "spring.datasource.username",
+          "value": "shop",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 22,
+          "name": "spring.datasource.password",
+          "value": "${DB_PASSWORD}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "line": 3,
+          "name": "app.feature.enabled",
+          "value": "true",
+          "valueType": "boolean",
+          "consumer": "enabled",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "line": 20,
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+          "valueType": "string",
+          "consumer": "url",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppConfig.java",
+          "line": 21,
+          "name": "spring.datasource.username",
+          "value": "shop",
+          "valueType": "string",
+          "consumer": "user",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 2,
+          "name": "app.name",
+          "value": "Config Demo",
+          "valueType": "string",
+          "consumer": "name",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 3,
+          "name": "app.timeout",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "timeout",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "setFrom",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 15,
+          "name": "app.greeting",
+          "value": "hello",
+          "valueType": "default",
+          "consumer": "greeting",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 20,
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${DB_HOST:localhost}/shop",
+          "valueType": "string",
+          "consumer": "url",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/ClientProperties.java",
+          "line": 14,
+          "name": "app.client.base-url",
+          "value": "https://api.example.com",
+          "valueType": "string",
+          "consumer": "baseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/ClientProperties.java",
+          "line": 15,
+          "name": "app.client.connect-timeout",
+          "value": "2s",
+          "valueType": "string",
+          "consumer": "connectTimeout",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 3,
+          "name": "app.feature.enabled",
+          "value": "true",
+          "valueType": "boolean",
+          "consumer": "app.feature.enabled",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "app.mail.port",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 50,
+        "nextCursor": "eyJvIjo1MCwiayI6InozLXVFNmNRMVIydWE1bVQifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "name": "app.mail"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"app.mail\")) RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"app.mail\")) RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 11,
+            "name": "app.mail.allowed-senders[0]",
+            "value": "a@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 12,
+            "name": "app.mail.allowed-senders[1]",
+            "value": "b@example.com",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"app.mail\")) RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "setFrom",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "app.mail.port",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "port",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "fromAddress",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "retry.maxAttempts",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 11,
+            "name": "app.mail.allowed-senders[0]",
+            "value": "a@example.com",
+            "valueType": "string",
+            "consumer": "allowedSenders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 12,
+            "name": "app.mail.allowed-senders[1]",
+            "value": "b@example.com",
+            "valueType": "string",
+            "consumer": "allowedSenders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 7,
+            "name": "app.mail.from-address",
+            "value": "noreply@example.com",
+            "valueType": "string",
+            "consumer": "from",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 9,
+            "name": "app.mail.retry.max-attempts",
+            "value": "3",
+            "valueType": "number",
+            "consumer": "retry.maxAttempts",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "app.mail",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "config",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 9,
+          "name": "app.mail.retry.max-attempts",
+          "value": "3",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 11,
+          "name": "app.mail.allowed-senders[0]",
+          "value": "a@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 12,
+          "name": "app.mail.allowed-senders[1]",
+          "value": "b@example.com",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "setFrom",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "app.mail.port",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "port",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "fromAddress",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 9,
+          "name": "app.mail.retry.max-attempts",
+          "value": "3",
+          "valueType": "number",
+          "consumer": "retry.maxAttempts",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 11,
+          "name": "app.mail.allowed-senders[0]",
+          "value": "a@example.com",
+          "valueType": "string",
+          "consumer": "allowedSenders",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/MailProperties.java",
+          "line": 12,
+          "name": "app.mail.allowed-senders[1]",
+          "value": "b@example.com",
+          "valueType": "string",
+          "consumer": "allowedSenders",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 7,
+          "name": "app.mail.from-address",
+          "value": "noreply@example.com",
+          "valueType": "string",
+          "consumer": "from",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 9,
+          "name": "app.mail.retry.max-attempts",
+          "value": "3",
+          "valueType": "number",
+          "consumer": "retry.maxAttempts",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 22
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "name": "DB_PASSWORD"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"DB_PASSWORD\")) RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 17,
+            "name": "DB_PASSWORD",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 4,
+            "name": "DB_PASSWORD",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application-prod.properties",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 22,
+            "name": "DB_PASSWORD",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"DB_PASSWORD\")) RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"DB_PASSWORD\")) RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "DB_PASSWORD",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 17,
+          "name": "DB_PASSWORD",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application-prod.properties",
+          "line": 4,
+          "name": "DB_PASSWORD",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application-prod.properties",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 22,
+          "name": "DB_PASSWORD",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "file": "EnvUsage.java"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": ".env.example"
+          },
+          {
+            "file": "src/main/java/com/acme/config/AppConfig.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/AppSettings.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/ClientProperties.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/EnvKeys.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/EnvUsage.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/FeatureProperties.java"
+          },
+          {
+            "file": "src/main/java/com/acme/config/MailProperties.java"
+          },
+          {
+            "file": "src/main/java/com/acme/lombok/Account.java"
+          },
+          {
+            "file": "src/main/java/com/acme/lombok/Value.java"
+          },
+          {
+            "file": "src/main/java/com/acme/web/StatusController.java"
+          },
+          {
+            "file": "src/main/resources/application-prod.properties"
+          },
+          {
+            "file": "src/main/resources/application.yml"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND file.relativePath IN [\"src/main/java/com/acme/config/EnvUsage.java\"] RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 11,
+            "name": "APP_MODE",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 17,
+            "name": "DB_PASSWORD",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 18,
+            "name": "REGION",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 19,
+            "name": "APP_TOKEN",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 20,
+            "name": "LOG_LEVEL",
+            "value": "System.getenv().get",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 23,
+            "name": "TZ",
+            "value": "System.getenv().get",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 25,
+            "name": "HOME_DIR",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 38,
+            "name": "APP_MAIL_PORT",
+            "value": "spring relaxed binding",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 39,
+            "name": "SPRING_DEMO_TOKEN",
+            "value": "Environment.getProperty",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND file.relativePath IN [\"src/main/java/com/acme/config/EnvUsage.java\"] RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND file.relativePath IN [\"src/main/java/com/acme/config/EnvUsage.java\"] RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 2,
+            "name": "app.mail.host",
+            "value": "smtp.prod.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 3,
+            "name": "app.feature.enabled",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "app.feature.enabled",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 5,
+            "name": "app.mail.host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "app.mail.host",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 6,
+            "name": "app.mail.port",
+            "value": "25",
+            "valueType": "number",
+            "consumer": "app.mail.port",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "file": "EnvUsage.java",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 11,
+          "name": "APP_MODE",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 17,
+          "name": "DB_PASSWORD",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 18,
+          "name": "REGION",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 19,
+          "name": "APP_TOKEN",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 20,
+          "name": "LOG_LEVEL",
+          "value": "System.getenv().get",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 23,
+          "name": "TZ",
+          "value": "System.getenv().get",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 25,
+          "name": "HOME_DIR",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 38,
+          "name": "APP_MAIL_PORT",
+          "value": "spring relaxed binding",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 39,
+          "name": "SPRING_DEMO_TOKEN",
+          "value": "Environment.getProperty",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/config/EnvUsage.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 2,
+          "name": "app.mail.host",
+          "value": "smtp.prod.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 3,
+          "name": "app.feature.enabled",
+          "value": "true",
+          "valueType": "boolean",
+          "consumer": "app.feature.enabled",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 5,
+          "name": "app.mail.host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "app.mail.host",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 6,
+          "name": "app.mail.port",
+          "value": "25",
+          "valueType": "number",
+          "consumer": "app.mail.port",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 13
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "unread": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO|USES_ENV_ENTRYPOINT]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
+        "rows": [
+          {
+            "kind": "unread",
+            "name": "UNUSED_FLAG",
+            "file": ".env.example",
+            "line": 3
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) RETURN DISTINCT env.name AS name",
+        "rows": [
+          {
+            "name": "DB_PASSWORD"
+          },
+          {
+            "name": "APP_MAIL_PORT"
+          },
+          {
+            "name": "UNUSED_FLAG"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[read:USES_ENV_FILE|USES_ENV_FUNCTION]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": [
+          {
+            "kind": "undeclared",
+            "name": "REGION",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 19
+          },
+          {
+            "kind": "undeclared",
+            "name": "HOME_DIR",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 25
+          },
+          {
+            "kind": "undeclared",
+            "name": "TZ",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 23
+          },
+          {
+            "kind": "undeclared",
+            "name": "LOG_LEVEL",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 20
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_TOKEN",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 19
+          },
+          {
+            "kind": "undeclared",
+            "name": "REGION",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 18
+          },
+          {
+            "kind": "undeclared",
+            "name": "DB_PASSWORD",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 17
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_MODE",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 11
+          },
+          {
+            "kind": "undeclared",
+            "name": "SPRING_DEMO_TOKEN",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 39
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_MAIL_PORT",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 38
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_MAIL_PORT",
+            "file": "src/main/java/com/acme/config/MailProperties.java",
+            "line": 6
+          },
+          {
+            "kind": "undeclared",
+            "name": "RELEASE",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 24
+          },
+          {
+            "kind": "undeclared",
+            "name": "DB_PASSWORD",
+            "file": "src/main/resources/application-prod.properties",
+            "line": 4
+          },
+          {
+            "kind": "undeclared",
+            "name": "PORT",
+            "file": "src/main/resources/application.yml",
+            "line": 17
+          },
+          {
+            "kind": "undeclared",
+            "name": "DB_HOST",
+            "file": "src/main/resources/application.yml",
+            "line": 20
+          },
+          {
+            "kind": "undeclared",
+            "name": "DB_PASSWORD",
+            "file": "src/main/resources/application.yml",
+            "line": 22
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(:Function)-[read:USES_ENV_FILE|USES_ENV_FUNCTION]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(:Function)-[read:USES_ENV_FILE|USES_ENV_FUNCTION]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": [
+          {
+            "kind": "undeclared",
+            "name": "REGION",
+            "file": "src/main/java/com/acme/config/AppSettings.java",
+            "line": 19
+          },
+          {
+            "kind": "undeclared",
+            "name": "DB_PASSWORD",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 17
+          },
+          {
+            "kind": "undeclared",
+            "name": "REGION",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 18
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_TOKEN",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 19
+          },
+          {
+            "kind": "undeclared",
+            "name": "LOG_LEVEL",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 20
+          },
+          {
+            "kind": "undeclared",
+            "name": "TZ",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 23
+          },
+          {
+            "kind": "undeclared",
+            "name": "HOME_DIR",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 25
+          },
+          {
+            "kind": "undeclared",
+            "name": "APP_MAIL_PORT",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 38
+          },
+          {
+            "kind": "undeclared",
+            "name": "SPRING_DEMO_TOKEN",
+            "file": "src/main/java/com/acme/config/EnvUsage.java",
+            "line": 39
+          },
+          {
+            "kind": "undeclared",
+            "name": "RELEASE",
+            "file": "src/main/java/com/acme/web/StatusController.java",
+            "line": 24
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(:EntryPoint)-[read:USES_ENV_ENTRYPOINT]->(env:EnvVar) WHERE env.name <> 'NODE_ENV' RETURN 'undeclared' AS kind, env.name AS name, file.relativePath AS file, read.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[read:USES_ENV_REPO]->(env:EnvVar) WHERE true RETURN 'undeclared' AS kind, env.name AS name, read.file AS file, read.line AS line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "unread": true,
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "undeclared",
+          "name": "REGION",
+          "file": "src/main/java/com/acme/config/AppSettings.java",
+          "line": 19
+        },
+        {
+          "kind": "undeclared",
+          "name": "APP_MODE",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 11
+        },
+        {
+          "kind": "undeclared",
+          "name": "REGION",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 18
+        },
+        {
+          "kind": "undeclared",
+          "name": "APP_TOKEN",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 19
+        },
+        {
+          "kind": "undeclared",
+          "name": "LOG_LEVEL",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 20
+        },
+        {
+          "kind": "undeclared",
+          "name": "TZ",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 23
+        },
+        {
+          "kind": "undeclared",
+          "name": "HOME_DIR",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 25
+        },
+        {
+          "kind": "undeclared",
+          "name": "SPRING_DEMO_TOKEN",
+          "file": "src/main/java/com/acme/config/EnvUsage.java",
+          "line": 39
+        },
+        {
+          "kind": "undeclared",
+          "name": "RELEASE",
+          "file": "src/main/java/com/acme/web/StatusController.java",
+          "line": 24
+        },
+        {
+          "kind": "undeclared",
+          "name": "PORT",
+          "file": "src/main/resources/application.yml",
+          "line": 17
+        },
+        {
+          "kind": "undeclared",
+          "name": "DB_HOST",
+          "file": "src/main/resources/application.yml",
+          "line": 20
+        },
+        {
+          "kind": "unread",
+          "name": "UNUSED_FLAG",
+          "file": ".env.example",
+          "line": 3
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  }
+]

@@ -1,0 +1,3109 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 0
+          },
+          {
+            "table": "Directory",
+            "count": 7
+          },
+          {
+            "table": "File",
+            "count": 6
+          },
+          {
+            "table": "Import",
+            "count": 20
+          },
+          {
+            "table": "Function",
+            "count": 24
+          },
+          {
+            "table": "Class",
+            "count": 6
+          },
+          {
+            "table": "Field",
+            "count": 10
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 7
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 5
+          },
+          {
+            "table": "Route",
+            "count": 3
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 0
+          },
+          {
+            "table": "DataModel",
+            "count": 7
+          },
+          {
+            "table": "Table",
+            "count": 7
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 0
+        },
+        {
+          "table": "Directory",
+          "count": 7
+        },
+        {
+          "table": "File",
+          "count": 6
+        },
+        {
+          "table": "Import",
+          "count": 20
+        },
+        {
+          "table": "Function",
+          "count": 24
+        },
+        {
+          "table": "Class",
+          "count": 6
+        },
+        {
+          "table": "Field",
+          "count": 10
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 7
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 5
+        },
+        {
+          "table": "Route",
+          "count": 3
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 0
+        },
+        {
+          "table": "DataModel",
+          "count": 7
+        },
+        {
+          "table": "Table",
+          "count": 7
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "OrderDao",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Queries",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/jdbc/Queries.java",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "SearchIndex",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "UserDao",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "record",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AuditDao"
+          },
+          {
+            "name": "cleanup",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AuditDao"
+          },
+          {
+            "name": "OrderDao",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderDao"
+          },
+          {
+            "name": "ordersOf",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderDao"
+          },
+          {
+            "name": "cancel",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 23,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderDao"
+          },
+          {
+            "name": "Queries",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/Queries.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "Queries"
+          },
+          {
+            "name": "query",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "SearchIndex"
+          },
+          {
+            "name": "update",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "SearchIndex"
+          },
+          {
+            "name": "UserController",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserController"
+          },
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserController"
+          },
+          {
+            "name": "rename",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserController"
+          },
+          {
+            "name": "orders",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 30,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserController"
+          },
+          {
+            "name": "UserDao",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          },
+          {
+            "name": "names",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          },
+          {
+            "name": "rename",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          },
+          {
+            "name": "purge",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          },
+          {
+            "name": "insertAll",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 36,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          },
+          {
+            "name": "fromParameter",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 44,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "UserDao"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "OrderDao",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Queries",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/jdbc/Queries.java",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "SearchIndex",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "UserDao",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "record",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AuditDao"
+        },
+        {
+          "name": "cleanup",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 27,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "AuditDao"
+        },
+        {
+          "name": "OrderDao",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderDao"
+        },
+        {
+          "name": "ordersOf",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderDao"
+        },
+        {
+          "name": "cancel",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 23,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderDao"
+        },
+        {
+          "name": "Queries",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/Queries.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "Queries"
+        },
+        {
+          "name": "query",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "SearchIndex"
+        },
+        {
+          "name": "update",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "SearchIndex"
+        },
+        {
+          "name": "UserController",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserController"
+        },
+        {
+          "name": "get",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserController"
+        },
+        {
+          "name": "rename",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 25,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserController"
+        },
+        {
+          "name": "orders",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 30,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserController"
+        },
+        {
+          "name": "UserDao",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserDao"
+        },
+        {
+          "name": "names",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserDao"
+        },
+        {
+          "name": "rename",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 24,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "UserDao"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "name": "AuditDao",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "name": "OrderDao",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/Queries.java",
+            "name": "Queries",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "name": "SearchIndex",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "name": "UserController",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "name": "UserDao",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "name": "AuditDao",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "name": "OrderDao",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/Queries.java",
+          "name": "Queries",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+          "name": "SearchIndex",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "name": "UserController",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "name": "UserDao",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 20,
+            "method": "GET",
+            "path": "/users/{id}",
+            "fullPath": "/users/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 25,
+            "method": "POST",
+            "path": "/users/{id}/rename",
+            "fullPath": "/users/{id}/rename",
+            "framework": "spring-mvc",
+            "handlerName": "rename",
+            "handler": "rename"
+          },
+          {
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 30,
+            "method": "GET",
+            "path": "/users/{id}/orders",
+            "fullPath": "/users/{id}/orders",
+            "framework": "spring-mvc",
+            "handlerName": "orders",
+            "handler": "orders"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 20,
+          "method": "GET",
+          "path": "/users/{id}",
+          "fullPath": "/users/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 25,
+          "method": "POST",
+          "path": "/users/{id}/rename",
+          "fullPath": "/users/{id}/rename",
+          "framework": "spring-mvc",
+          "handlerName": "rename",
+          "handler": "rename"
+        },
+        {
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 30,
+          "method": "GET",
+          "path": "/users/{id}/orders",
+          "fullPath": "/users/{id}/orders",
+          "framework": "spring-mvc",
+          "handlerName": "orders",
+          "handler": "orders"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "AuditDao",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:14:com.acme.jdbc.AuditDao.AuditDao",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 16,
+            "model": "audit_log",
+            "library": "jdbc",
+            "table": "audit_log",
+            "operation": "create",
+            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "find",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "get",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:20:com.acme.jdbc.UserController.get",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ordersOf",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "orders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ordersOf",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "orders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "record",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:19:com.acme.jdbc.AuditDao.record",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 21,
+            "model": "audit_events",
+            "library": "jdbc",
+            "table": "audit_events",
+            "operation": "create",
+            "expression": "connection.prepareStatement"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "names",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:20:com.acme.jdbc.UserDao.names",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 21,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cancel",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:23:com.acme.jdbc.OrderDao.cancel",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 24,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "client.sql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "count",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:27:com.acme.jdbc.OrderDao.count",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 28,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "client.sql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:27:com.acme.jdbc.AuditDao.cleanup",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 29,
+            "model": "audit_events",
+            "library": "jdbc",
+            "table": "audit_events",
+            "operation": "delete",
+            "expression": "statement.executeUpdate"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "purge",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:29:com.acme.jdbc.UserDao.purge",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 30,
+            "model": "sessions",
+            "library": "jdbc",
+            "table": "sessions",
+            "operation": "delete",
+            "expression": "jdbcTemplate.execute"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "log",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:33:com.acme.jdbc.AuditDao.log",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 34,
+            "model": "audit_trail",
+            "library": "jdbc",
+            "table": "audit_trail",
+            "operation": "create",
+            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "insertAll",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:36:com.acme.jdbc.UserDao.insertAll",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 37,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "create",
+            "expression": "jdbcTemplate.batchUpdate"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:20:0:GET:/users/{id}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/orders",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:30:0:GET:/users/{id}/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/orders",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:30:0:GET:/users/{id}/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/rename",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "AuditDao",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 16,
+          "model": "audit_log",
+          "library": "jdbc",
+          "table": "audit_log",
+          "operation": "create",
+          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "find",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ordersOf",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ordersOf",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "record",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 21,
+          "model": "audit_events",
+          "library": "jdbc",
+          "table": "audit_events",
+          "operation": "create",
+          "expression": "connection.prepareStatement"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "names",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 21,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cancel",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 24,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "client.sql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "count",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 28,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "client.sql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 29,
+          "model": "audit_events",
+          "library": "jdbc",
+          "table": "audit_events",
+          "operation": "delete",
+          "expression": "statement.executeUpdate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "purge",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 30,
+          "model": "sessions",
+          "library": "jdbc",
+          "table": "sessions",
+          "operation": "delete",
+          "expression": "jdbcTemplate.execute"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "log",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 34,
+          "model": "audit_trail",
+          "library": "jdbc",
+          "table": "audit_trail",
+          "operation": "create",
+          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "insertAll",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 37,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "create",
+          "expression": "jdbcTemplate.batchUpdate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "get",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 21
+      }
+    }
+  },
+  {
+    "tool": "list_tables",
+    "args": {
+      "name": "users"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
+        "params": {
+          "name": "users",
+          "library": ""
+        },
+        "rows": [
+          {
+            "id": "table:java:-:users",
+            "name": "users",
+            "kind": "table",
+            "library": "jdbc",
+            "schemaName": null,
+            "provider": null,
+            "declaredIn": null,
+            "line": null,
+            "columns": "[]",
+            "migrations": null,
+            "indexes": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(model) AS modelId, model.name AS model",
+        "params": {
+          "name": "users",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:users",
+            "modelId": "datamodel:jdbc:users",
+            "model": "users"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[rel:RELATES_TO]->(target:DataModel) RETURN id(model) AS modelId, rel.field AS field, rel.kind AS kind, target.name AS target, rel.relationName AS relationName, rel.onDelete AS onDelete",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(route) RETURN id(table) AS table, id(route) AS id, route.method AS method, route.fullPath AS fullPath, route.path AS path, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "users",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:route:20:0:GET:/users/{id}",
+            "method": "GET",
+            "fullPath": "/users/{id}",
+            "path": "/users/{id}",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 20,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename",
+            "method": "POST",
+            "fullPath": "/users/{id}/rename",
+            "path": "/users/{id}/rename",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 25,
+            "relType": "WRITES_ROUTE",
+            "operation": "update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "users",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(fn) AS id, label(rel) AS relType",
+        "params": {
+          "name": "users",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:20:com.acme.jdbc.UserDao.names",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:36:com.acme.jdbc.UserDao.insertAll",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:20:com.acme.jdbc.UserController.get",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:users",
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "relType": "WRITES_FUNCTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "users"
+      },
+      "totalTables": 1,
+      "tables": [
+        {
+          "name": "users",
+          "kind": "table",
+          "library": "jdbc",
+          "declaredIn": null,
+          "line": null,
+          "columns": [],
+          "models": [
+            {
+              "name": "users",
+              "relations": []
+            }
+          ],
+          "readBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 3
+          },
+          "writtenBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 3
+          },
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/users/{id}",
+              "file": "src/main/java/com/acme/jdbc/UserController.java",
+              "line": 20,
+              "reads": [
+                "read"
+              ]
+            },
+            {
+              "method": "POST",
+              "path": "/users/{id}/rename",
+              "file": "src/main/java/com/acme/jdbc/UserController.java",
+              "line": 25,
+              "writes": [
+                "update"
+              ]
+            }
+          ],
+          "entrypoints": []
+        }
+      ],
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "jdbc"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"jdbc\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"jdbc\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "AuditDao",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:14:com.acme.jdbc.AuditDao.AuditDao",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 16,
+            "model": "audit_log",
+            "library": "jdbc",
+            "table": "audit_log",
+            "operation": "create",
+            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "find",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "get",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:20:com.acme.jdbc.UserController.get",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ordersOf",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "orders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ordersOf",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "orders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "record",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:19:com.acme.jdbc.AuditDao.record",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 21,
+            "model": "audit_events",
+            "library": "jdbc",
+            "table": "audit_events",
+            "operation": "create",
+            "expression": "connection.prepareStatement"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "names",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:20:com.acme.jdbc.UserDao.names",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 21,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForList"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cancel",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:23:com.acme.jdbc.OrderDao.cancel",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 24,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "client.sql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "count",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:27:com.acme.jdbc.OrderDao.count",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 28,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "client.sql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:27:com.acme.jdbc.AuditDao.cleanup",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 29,
+            "model": "audit_events",
+            "library": "jdbc",
+            "table": "audit_events",
+            "operation": "delete",
+            "expression": "statement.executeUpdate"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "purge",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:29:com.acme.jdbc.UserDao.purge",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 30,
+            "model": "sessions",
+            "library": "jdbc",
+            "table": "sessions",
+            "operation": "delete",
+            "expression": "jdbcTemplate.execute"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "log",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:33:com.acme.jdbc.AuditDao.log",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 34,
+            "model": "audit_trail",
+            "library": "jdbc",
+            "table": "audit_trail",
+            "operation": "create",
+            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "insertAll",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:36:com.acme.jdbc.UserDao.insertAll",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 37,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "create",
+            "expression": "jdbcTemplate.batchUpdate"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"jdbc\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:20:0:GET:/users/{id}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 17,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForMap"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/orders",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:30:0:GET:/users/{id}/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/orders",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:30:0:GET:/users/{id}/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 20,
+            "model": "customers",
+            "library": "jdbc",
+            "table": "customers",
+            "operation": "read",
+            "expression": "named.queryForList"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/rename",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"jdbc\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "jdbc",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "AuditDao",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 16,
+          "model": "audit_log",
+          "library": "jdbc",
+          "table": "audit_log",
+          "operation": "create",
+          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "find",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ordersOf",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ordersOf",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "record",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 21,
+          "model": "audit_events",
+          "library": "jdbc",
+          "table": "audit_events",
+          "operation": "create",
+          "expression": "connection.prepareStatement"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "names",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 21,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cancel",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 24,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "client.sql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "count",
+          "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 28,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "client.sql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 29,
+          "model": "audit_events",
+          "library": "jdbc",
+          "table": "audit_events",
+          "operation": "delete",
+          "expression": "statement.executeUpdate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "purge",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 30,
+          "model": "sessions",
+          "library": "jdbc",
+          "table": "sessions",
+          "operation": "delete",
+          "expression": "jdbcTemplate.execute"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "log",
+          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
+          "line": 34,
+          "model": "audit_trail",
+          "library": "jdbc",
+          "table": "audit_trail",
+          "operation": "create",
+          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "insertAll",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 37,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "create",
+          "expression": "jdbcTemplate.batchUpdate"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "get",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 17,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForMap"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/orders",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/OrderDao.java",
+          "line": 20,
+          "model": "customers",
+          "library": "jdbc",
+          "table": "customers",
+          "operation": "read",
+          "expression": "named.queryForList"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 21
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "model": "users",
+      "operation": "update"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"users\")) AND rel.operation = \"update\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"users\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "rename",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"users\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/users/{id}/rename",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "sourceId": "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "model": "users",
+            "library": "jdbc",
+            "table": "users",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"users\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "model": "users",
+        "operation": "update",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/users/{id}/rename",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "model": "users",
+          "library": "jdbc",
+          "table": "users",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "rename"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:14:com.acme.jdbc.AuditDao.AuditDao",
+            "name": "AuditDao",
+            "className": "AuditDao",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 14,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:19:com.acme.jdbc.AuditDao.record",
+            "name": "record",
+            "className": "AuditDao",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 19,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:27:com.acme.jdbc.AuditDao.cleanup",
+            "name": "cleanup",
+            "className": "AuditDao",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 27,
+            "endLine": 31
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:33:com.acme.jdbc.AuditDao.log",
+            "name": "log",
+            "className": "AuditDao",
+            "file": "src/main/java/com/acme/jdbc/AuditDao.java",
+            "line": 33,
+            "endLine": 35
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:14:com.acme.jdbc.OrderDao.OrderDao",
+            "name": "OrderDao",
+            "className": "OrderDao",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 14,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "name": "ordersOf",
+            "className": "OrderDao",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 19,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:23:com.acme.jdbc.OrderDao.cancel",
+            "name": "cancel",
+            "className": "OrderDao",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 23,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:27:com.acme.jdbc.OrderDao.count",
+            "name": "count",
+            "className": "OrderDao",
+            "file": "src/main/java/com/acme/jdbc/OrderDao.java",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/Queries.java:function:8:com.acme.jdbc.Queries.Queries",
+            "name": "Queries",
+            "className": "Queries",
+            "file": "src/main/java/com/acme/jdbc/Queries.java",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:5:com.acme.jdbc.SearchIndex.query",
+            "name": "query",
+            "className": "SearchIndex",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:7:com.acme.jdbc.SearchIndex.update",
+            "name": "update",
+            "className": "SearchIndex",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:9:com.acme.jdbc.SearchIndex.run",
+            "name": "run",
+            "className": "SearchIndex",
+            "file": "src/main/java/com/acme/jdbc/SearchIndex.java",
+            "line": 9,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:15:com.acme.jdbc.UserController.UserController",
+            "name": "UserController",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 15,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:20:com.acme.jdbc.UserController.get",
+            "name": "get",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 20,
+            "endLine": 23
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "name": "rename",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 25,
+            "endLine": 28
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "name": "orders",
+            "className": "UserController",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 30,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:12:com.acme.jdbc.UserDao.UserDao",
+            "name": "UserDao",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
+            "name": "find",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:20:com.acme.jdbc.UserDao.names",
+            "name": "names",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "name": "rename",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 24,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:29:com.acme.jdbc.UserDao.purge",
+            "name": "purge",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 29,
+            "endLine": 34
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:36:com.acme.jdbc.UserDao.insertAll",
+            "name": "insertAll",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 36,
+            "endLine": 38
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:40:com.acme.jdbc.UserDao.dynamic",
+            "name": "dynamic",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 40,
+            "endLine": 42
+          },
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserDao.java:function:44:com.acme.jdbc.UserDao.fromParameter",
+            "name": "fromParameter",
+            "className": "UserDao",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 44,
+            "endLine": 46
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "rename"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:9:com.acme.jdbc.SearchIndex.run",
+            "callee": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:5:com.acme.jdbc.SearchIndex.query",
+            "line": 10
+          },
+          {
+            "caller": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:9:com.acme.jdbc.SearchIndex.run",
+            "callee": "file:src/main/java/com/acme/jdbc/SearchIndex.java:function:7:com.acme.jdbc.SearchIndex.update",
+            "line": 11
+          },
+          {
+            "caller": "file:src/main/java/com/acme/jdbc/UserController.java:function:20:com.acme.jdbc.UserController.get",
+            "callee": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
+            "line": 22
+          },
+          {
+            "caller": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "callee": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename",
+            "line": 27
+          },
+          {
+            "caller": "file:src/main/java/com/acme/jdbc/UserController.java:function:30:com.acme.jdbc.UserController.orders",
+            "callee": "file:src/main/java/com/acme/jdbc/OrderDao.java:function:19:com.acme.jdbc.OrderDao.ordersOf",
+            "line": 32
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename",
+            "method": "POST",
+            "path": "/users/{id}/rename",
+            "fullPath": "/users/{id}/rename",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/jdbc/UserController.java",
+            "line": 25,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": [
+          {
+            "model": "users",
+            "library": "jdbc",
+            "operation": "update",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "expression": "jdbcTemplate.update",
+            "fn": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          },
+          {
+            "model": "users",
+            "library": "jdbc",
+            "operation": "update",
+            "file": "src/main/java/com/acme/jdbc/UserDao.java",
+            "line": 26,
+            "expression": "jdbcTemplate.update",
+            "fn": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": [
+          {
+            "tableId": "table:java:-:users",
+            "table": "users",
+            "kind": "table",
+            "library": "jdbc",
+            "tableAccess": "WRITES_FUNCTION",
+            "operation": "update",
+            "fn": "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          },
+          {
+            "tableId": "table:java:-:users",
+            "table": "users",
+            "kind": "table",
+            "library": "jdbc",
+            "tableAccess": "WRITES_FUNCTION",
+            "operation": "update",
+            "fn": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:route:25:0:POST:/users/{id}/rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename",
+            "file:src/main/java/com/acme/jdbc/UserDao.java:function:24:com.acme.jdbc.UserDao.rename"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"rename\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"rename\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"rename\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "rename"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/jdbc/UserController.java:function:25:com.acme.jdbc.UserController.rename:call:27:11:users.rename",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "rename",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "rename",
+          "className": "UserController",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 25,
+          "endLine": 28
+        },
+        {
+          "name": "rename",
+          "className": "UserDao",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 24,
+          "endLine": 27
+        }
+      ],
+      "callers": [],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/users/{id}/rename",
+          "fullPath": "/users/{id}/rename",
+          "framework": "spring-mvc",
+          "file": "src/main/java/com/acme/jdbc/UserController.java",
+          "line": 25,
+          "reachedThrough": [
+            {
+              "function": "rename",
+              "functionFile": "src/main/java/com/acme/jdbc/UserController.java",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
+      "dataAccess": [
+        {
+          "model": "users",
+          "library": "jdbc",
+          "operation": "update",
+          "file": "src/main/java/com/acme/jdbc/UserDao.java",
+          "line": 26,
+          "expression": "jdbcTemplate.update",
+          "usedBy": [
+            {
+              "function": "rename",
+              "functionFile": "src/main/java/com/acme/jdbc/UserDao.java"
+            },
+            {
+              "function": "rename",
+              "functionFile": "src/main/java/com/acme/jdbc/UserController.java"
+            }
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "table": "users",
+          "kind": "table",
+          "library": "jdbc",
+          "reads": [],
+          "writes": [
+            "update"
+          ],
+          "usedBy": [
+            {
+              "function": "rename",
+              "functionFile": "src/main/java/com/acme/jdbc/UserDao.java"
+            },
+            {
+              "function": "rename",
+              "functionFile": "src/main/java/com/acme/jdbc/UserController.java"
+            }
+          ]
+        }
+      ],
+      "envVars": [],
+      "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named rename in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]
