@@ -2480,13 +2480,30 @@ Config and env (`list_env_config`):
 - `System.getenv("NAME")`, `System.getenv().get("NAME")` and `getOrDefault`,
   also through a local bound to `System.getenv()` and a static import, with a
   literal or constant name, are USES_ENV from the method (the file for a field
-  initializer). `System.getProperty` is a JVM property and is ignored.
-- Spring config files (`application*.properties|yml|yaml`, `bootstrap*`): every
-  key is a ConfigValue declared by its file. A profile file's keys are nodes of
-  that file, never merged with the default ones. The value of a key named like
-  a secret (password, secret, token, key, credential) is stored as `<redacted>`
-  unless it is only a placeholder. A `${NAME}` placeholder that names no key and
-  looks like an environment variable is USES_ENV from the config file.
+  initializer). `System` is `java.lang.System`: a scanned type named `System`
+  (same package, nested, or imported), or an import of another `System`, makes
+  the call no env read. `System.getProperty` is a JVM property and is ignored.
+- Spring config files (`application*.properties|yml|yaml`, `bootstrap*`) in a
+  `resources` directory (`src/main/resources`, `src/test/resources`, a module's
+  own) or its `config` directory, and in a `config` directory (or `config/*/`)
+  at a module or repository root outside `src`: every key is a ConfigValue
+  declared by its file. They are read only when the scan has Java files or a
+  Maven/Gradle build file, so a Python or Node repo's `resources/application.yml`
+  makes nothing. A profile file's keys are nodes of that file, never merged
+  with the default ones. Keys of `src/test/resources` are consumed by readers
+  in test files only, not by main code.
+- Redaction: a key is a secret when any segment of it (split on `.`, then on
+  kebab, camel and underscore parts) holds password, passwd, pwd, secret,
+  token, credential(s), or private-key, api-key, access-key, secret-key,
+  encryption-key, signing-key; a plain `key` is not (`cache.key-prefix` is
+  shown). The value of a secret key is stored as `<redacted>` unless it is only
+  a placeholder without a default (`${DB_PASSWORD}`; `${DB_PASSWORD:pw}` is
+  redacted). The default of `@Value("${secret.key:default}")` and
+  `getProperty("secret.key", "default")` follows the same rule. In any value,
+  the password of URL userinfo (`scheme://user:pw@host`, including
+  `jdbc:...://`) and a `password=` parameter become `<redacted>`. A `${NAME}`
+  placeholder that names no key and looks like an environment variable is
+  USES_ENV from the config file.
 - CONSUMES_CONFIG comes from `@Value("${key}")` and `@Value("${key:default}")`
   (Spring's and Micronaut's, and Micronaut `@Property`), from
   `@ConfigurationProperties(prefix)` classes (also on a `@Bean` method, with
@@ -2509,7 +2526,10 @@ Config and env (`list_env_config`):
   `ConfigurableEnvironment` property sources, the element type of a
   `Map<String, Nested>` or `List<Nested>` field (the field binds every key under
   it), and keys built at run time. Profile activation is not evaluated: the
-  files of every profile are linked. Config consumption is not carried through
+  files of every profile are linked (the HTTP reader is the one that prefers
+  the entries of `spring.profiles.active`).
+  A field's reader is a method that names it, not as the target of an
+  assignment; a nested type that declares a field of the same name hides it. Config consumption is not carried through
   calls: a method that only calls the reader does not consume the key (data
   access is).
 
@@ -2542,12 +2562,23 @@ Outbound HTTP (`api_consumers`):
   with the method mapping (`@GetMapping`, `@RequestMapping(method = ...)`, ...).
   Without `url` the base is the service name as `http://<name>`; pass
   `--api-origin http://<name>` to turn it into a path.
+- A client may be a subclass of the library type (`class MyRt extends
+  RestTemplate`), also through scanned types. A file is looked at when it names
+  a client type or a distinctive RestTemplate method (`getForObject`, ...).
 - URLs are literals, constants, locals, concatenations, `@Value("${api.url}")`
-  fields and `Environment.getProperty`, resolved through the Spring config (an
-  unresolved placeholder is `${env:NAME}`). Any other dynamic part is
+  fields and `Environment.getProperty`, resolved through the Spring config
+  (the entries of the profiles `spring.profiles.active` names win; an
+  unresolved placeholder is `${env:NAME}`). A placeholder through a key named
+  like a secret (`${db.password}`) is never filled and stays as written, and
+  the userinfo of an absolute URL (`http://user:pw@host`) is dropped from
+  `httpUrl`. `UriComponentsBuilder.path` / `pathSegment` join with one slash
+  (`"/a/"` + `"/b"` is `/a/b`). A Feign overload (same method name) is linked
+  only when exactly one has the call's argument count. Any other dynamic part is
   `${expression}` and matches a route parameter. A URL that starts with a
   dynamic part gets no base and, when nothing else is known, stays unlinked.
-- Not handled: Apache HttpClient, Retrofit, `HttpURLConnection` and the JAX-RS
+- Not handled: an `HttpRequest.Builder` or `Request.Builder` held in a variable
+  (only the chain from `newBuilder` / `new Request.Builder()` to `build()` is
+  read), Apache HttpClient, Retrofit, `HttpURLConnection` and the JAX-RS
   `Client`, `RestTemplate.exchange(RequestEntity)` built elsewhere, a
   `WebClient` request built through a `RequestHeadersUriSpec` variable,
   `UriComponentsBuilder` beyond `path` / `pathSegment`, a base URL set by `@Bean`

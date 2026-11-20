@@ -2,7 +2,7 @@ import type { IGraphContributor } from "../../../core/contracts/graph-contributo
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { normalizeJavaType } from "../../languages/java/syntax.js";
-import { createJavaTypeIndex, type JavaTypeIndex } from "../../languages/java/types.js";
+import { createJavaTypeIndex, parseStringList, type JavaTypeIndex } from "../../languages/java/types.js";
 import { javaMethods } from "./shared.js";
 
 // The declared type of the receiver of a Java call, to tell `jdbcTemplate.query(…)` or
@@ -25,7 +25,9 @@ import { javaMethods } from "./shared.js";
 // is qualified, or a single-type import or `java.lang` names it (`JdbcTemplate` imported from
 // `org.springframework.jdbc.core`); otherwise null, and `candidates` lists what the wildcard imports of
 // the file could make it (`org.springframework.jdbc.core.*` → `org.springframework.jdbc.core.JdbcTemplate`).
-// `receiverMatches` answers whether a type may be a given library class.
+// `receiverMatches` answers whether a type may be a given library class: by its own name, or, for a scanned
+// type, because a type it extends or implements (through scanned types too) is one of them
+// (`class MyRt extends RestTemplate`, `ancestors`).
 //
 // Two flavours: `createJavaReceiverResolver` over the whole graph (a contributor, after every file is
 // parsed: inherited fields and types of other files are known) and `createFileReceiverResolver` over one
@@ -40,6 +42,8 @@ export type JavaReceiverType = {
   candidates: string[];
   /** Id of the scanned Class/Interface node when the type is one of the scan. */
   typeId: string | null;
+  /** For a scanned type: the qualified names (or wildcard-import candidates) of the external types it extends or implements, transitively. Absent when none or unknown. */
+  ancestors?: string[];
   via: "local" | "field" | "new" | "this" | "static";
 };
 
@@ -63,6 +67,8 @@ type Env = {
   /** The normalized declared type of field `name` of the type, its supertypes included; undefined when there is none. */
   fieldType(typeId: string, name: string): string | null | undefined;
   enclosing(typeId: string): string | null;
+  /** The external supertypes of a scanned type, as `qualifyExternal` names them; none when unknown. */
+  ancestors?(typeId: string): string[];
 };
 
 const JAVA_LANG = new Set([
@@ -87,7 +93,10 @@ const PRIMITIVES = new Set(["int", "long", "short", "byte", "char", "boolean", "
 function describe(typeName: string, context: FnContext, env: Env, via: JavaReceiverType["via"]): JavaReceiverType | null {
   if (PRIMITIVES.has(typeName) || typeName.endsWith("[]")) return null;
   const scanned = env.scannedType(typeName, context);
-  if (scanned) return { typeName, qualifiedName: scanned.qualifiedName, candidates: [], typeId: scanned.id, via };
+  if (scanned) {
+    const ancestors = env.ancestors?.(scanned.id) ?? [];
+    return { typeName, qualifiedName: scanned.qualifiedName, candidates: [], typeId: scanned.id, ...(ancestors.length > 0 ? { ancestors } : {}), via };
+  }
   return { typeName, ...qualifyExternal(typeName, env.importsOf(context.fileId)), typeId: null, via };
 }
 
@@ -216,6 +225,7 @@ function fieldOf(ownerId: string, name: string, env: Env, outer: boolean): strin
 /** Whether a receiver type may be one of the library classes `names` (qualified): by qualified name, or by a wildcard import that could bring it. */
 export function receiverMatches(type: JavaReceiverType | null | undefined, names: readonly string[]): boolean {
   if (!type) return false;
+  if (type.ancestors?.some((name) => names.includes(name))) return true;
   if (type.qualifiedName !== null) return names.includes(type.qualifiedName);
   return type.candidates.some((candidate) => names.includes(candidate));
 }
@@ -281,7 +291,36 @@ export function createJavaReceiverResolver(graph: IGraphContributor): JavaReceiv
     return undefined;
   };
 
+  const ancestorCache = new Map<string, string[]>();
+  const ancestors = (typeId: string): string[] => {
+    const known = ancestorCache.get(typeId);
+    if (known) return known;
+    ancestorCache.set(typeId, []);
+    const type = types.byId.get(typeId);
+    const found = new Set<string>();
+    if (type) {
+      const names = type.isInterface
+        ? parseStringList(type.node.properties.embeds)
+        : [...parseStringList(type.node.properties.extendsNames), ...parseStringList(type.node.properties.implementsNames)];
+      const scannedParents = new Set(types.supertypes(type).map((parent) => parent.id));
+      for (const name of names) {
+        // A name that is a scanned type is followed through its own ancestors; any other is an external type.
+        const scope = { fileId: type.fileId, typeId: type.outer === null ? null : types.byQualifiedName(type.outer)?.id ?? null };
+        const target = types.resolve(name, scope) ?? types.resolve(name, { fileId: type.fileId, typeId: type.id });
+        if (target && scannedParents.has(target.id)) continue;
+        const external = qualifyExternal(name, importsByFile.get(type.fileId) ?? []);
+        if (external.qualifiedName !== null) found.add(external.qualifiedName);
+        for (const candidate of external.candidates) found.add(candidate);
+      }
+      for (const parent of types.supertypes(type)) for (const inherited of ancestors(parent.id)) found.add(inherited);
+    }
+    const list = [...found];
+    ancestorCache.set(typeId, list);
+    return list;
+  };
+
   const env: Env = {
+    ancestors,
     context(fn) {
       const method = methods.get(fn.id);
       return method ? { ownerId: method.owner.id, fileId: method.fileId, fnLine: Number(fn.properties.line) } : null;

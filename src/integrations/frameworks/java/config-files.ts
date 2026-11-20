@@ -7,7 +7,11 @@ import { asMap, readYamlDocuments, type YValue } from "../scripts/yaml.js";
 //
 // Files: `application.properties`, `application.yml` / `.yaml`, their profile variants
 // (`application-dev.yml`) and `bootstrap.*`, in a directory named `resources` (`src/main/resources`,
-// `src/test/resources`, a module's own) or its `config` directory. The profile of a file is the one in its
+// `src/test/resources`, a module's own) or its `config` directory, and in a `config` directory (or one of its
+// subdirectories, `config/*/`) at a module or repository root outside `src` (where Spring Boot also looks).
+// Entries of `src/test/resources` are visible to test readers only (a `near` outside the test source set
+// does not see them). Config is read only for a scan with Java files or a Maven/Gradle build file
+// (`readScanConfig`). The profile of a file is the one in its
 // name; a YAML document (multi-document files are read whole, `---` separated) can narrow itself with
 // `spring.config.activate.on-profile` (or the older `spring.profiles`), which wins for its keys.
 //
@@ -22,7 +26,9 @@ import { asMap, readYamlDocuments, type YValue } from "../scripts/yaml.js";
 // `near` (a source file's relative path) wins. `resolveText` fills `${key}` / `${key:default}`
 // placeholders from the entries (nested placeholders and placeholders whose value has placeholders too, with
 // a cycle stopping at eight levels) and lists the names it could not fill: not a key, so a candidate for an
-// environment variable (`${PORT}`).
+// environment variable (`${PORT}`). A placeholder whose key is named like a secret (`isSecretKey`) is never
+// filled, whatever the entries or its default hold: it stays `${key}`. `redactValue` is the one rule for
+// what a shown value may reveal.
 
 export type ConfigEntry = {
   /** Dotted key as written in the file: `spring.datasource.url`, `servers[0].host`. */
@@ -75,8 +81,50 @@ export function springConfigProfile(relativePath: string): string | null | undef
   if (!match) return undefined;
   const directory = path.posix.dirname(posix);
   const parent = path.posix.basename(directory);
-  if (parent !== "resources" && !(parent === "config" && path.posix.basename(path.posix.dirname(directory)) === "resources")) return undefined;
-  return match[2] ?? null;
+  if (parent === "resources" || (parent === "config" && path.posix.basename(path.posix.dirname(directory)) === "resources")) return match[2] ?? null;
+  // `config/` and `config/<profile dir>/` at a module or repository root: not inside a source tree.
+  const root = parent === "config" ? path.posix.dirname(directory) : path.posix.basename(path.posix.dirname(directory)) === "config" ? path.posix.dirname(path.posix.dirname(directory)) : null;
+  if (root !== null && !/(?:^|\/)(?:src|node_modules)(?:\/|$)/u.test(root)) return match[2] ?? null;
+  return undefined;
+}
+
+/** Whether a relative path is in a test source set (`src/test/...`): its config is for test readers. */
+export const isTestSourcePath = (relativePath: string): boolean => /(?:^|\/)src\/test\//u.test(relativePath.split(path.sep).join("/"));
+
+/** Whether a scan holds a Java project: a `.java` file or a Maven / Gradle build file. */
+export function hasJavaProject(files: readonly string[]): boolean {
+  return files.some((file) => /\.java$/u.test(file) || /(?:^|[\\/])(?:pom\.xml|build\.gradle(?:\.kts)?|settings\.gradle(?:\.kts)?)$/u.test(file));
+}
+
+const SECRET_PARTS = /(?:password|passwd|pwd|secret|token|credentials?|privatekey|apikey|accesskey|secretkey|encryptionkey|signingkey|clientsecret)/u;
+
+/**
+ * Whether a config key names a secret: some segment of it (split on `.`, then kebab, camel and underscore
+ * parts) holds password, passwd, pwd, secret, token, credential(s) or a key compound (private-key, api-key,
+ * access-key, secret-key, encryption-key, signing-key). A plain `key` is no secret (`cache.key-prefix`).
+ */
+export function isSecretKey(key: string): boolean {
+  return key.split(".").some((segment) => {
+    const name = segment.replace(/\[[^\]]*\]/gu, "");
+    const parts = name.replace(/([a-z\d])([A-Z])/gu, "$1-$2").replace(/([A-Z]+)([A-Z][a-z])/gu, "$1-$2").toLowerCase().split(/[-_\s]+/u);
+    return SECRET_PARTS.test(parts.join(""));
+  });
+}
+
+const PURE_PLACEHOLDER = /^\$\{[^}:]*\}$/u;
+
+/**
+ * A config value as it may be shown: `<redacted>` for the value of a secret key unless it is only a
+ * placeholder without a default (`${DB_PASSWORD}`); in any value, the password of a URL's userinfo
+ * (`scheme://user:pw@host`) and a `password=` parameter (`jdbc:…;password=pw`, `?password=pw`).
+ */
+export function redactValue(key: string, value: string): string {
+  if (value === "") return value;
+  if (isSecretKey(key)) return PURE_PLACEHOLDER.test(value) ? value : "<redacted>";
+  const keep = (secret: string): string => (PURE_PLACEHOLDER.test(secret) ? secret : "<redacted>");
+  return value
+    .replace(/((?:[a-z][a-z0-9+.-]*:)+\/\/[^/\s:@?#]*:)([^@/\s]*)(@)/giu, (_match, head: string, secret: string, at: string) => `${head}${keep(secret)}${at}`)
+    .replace(/([?;&,](?:password|passwd|pwd)=)([^&;,\s]*)/giu, (_match, head: string, secret: string) => `${head}${keep(secret)}`);
 }
 
 export const isSpringConfigFile = (relativePath: string): boolean => springConfigProfile(relativePath) !== undefined;
@@ -153,7 +201,17 @@ export function parsePlaceholders(text: string): PlaceholderPart[] {
     if (literal) parts.push({ text: literal });
     return { parts, end: i };
   };
+  // `parseInner` depends only on where it starts: memoized, failures too, so an unclosed `${${${` stays linear.
+  const inners = new Map<number, { part: PlaceholderPart; end: number } | null>();
   const parseInner = (start: number): { part: PlaceholderPart; end: number } | null => {
+    if (inners.has(start)) return inners.get(start)!;
+    inners.set(start, null);
+    const result = readInner(start);
+    inners.set(start, result);
+    return result;
+  };
+  const readInner = (start: number): { part: PlaceholderPart; end: number } | null => {
+    if (text.indexOf("}", start) === -1) return null;
     const key = parse(start, new Set([":", "}"]));
     let position = key.end;
     let fallback: PlaceholderPart[] | null = null;
@@ -327,7 +385,9 @@ function createConfig(entries: ConfigEntry[], files: string[]): SpringConfig {
       return a[0] - b[0] || a[1] - b[1] || order.get(left)! - order.get(right)!;
     });
   };
-  const all = (key: string, options?: ConfigLookupOptions) => sorted(byKey.get(looseKey(key)) ?? [], options);
+  // Entries of the test source set are for readers in it; with no reader (`near`) everything is visible.
+  const visible = (entry: ConfigEntry, options: ConfigLookupOptions | undefined): boolean => !options?.near || isTestSourcePath(options.near) || !isTestSourcePath(entry.file);
+  const all = (key: string, options?: ConfigLookupOptions) => sorted((byKey.get(looseKey(key)) ?? []).filter((entry) => visible(entry, options)), options);
   const lookup = (key: string, options?: ConfigLookupOptions) => all(key, options)[0] ?? null;
   const active = (): string[] => {
     const value = lookup("spring.profiles.active")?.value;
@@ -342,6 +402,7 @@ function createConfig(entries: ConfigEntry[], files: string[]): SpringConfig {
     withPrefix(prefix, options) {
       const wanted = canonicalKey(prefix).replace(/-/gu, "");
       const matching = entries.filter((entry) => {
+        if (!visible(entry, options)) return false;
         const key = looseKey(entry.key);
         return key === wanted || key.startsWith(`${wanted}.`) || key.startsWith(`${wanted}[`);
       });
@@ -354,6 +415,8 @@ function createConfig(entries: ConfigEntry[], files: string[]): SpringConfig {
       const unresolved: string[] = [];
       const fill = (source: string, depth: number, seen: ReadonlySet<string>): string => {
         const { value, unresolved: missing } = resolvePlaceholders(source, (key) => {
+          // A secret's placeholder stays as written.
+          if (isSecretKey(key)) return `\${${key}}`;
           const entry = lookup(key, options);
           if (!entry) return null;
           const loose = looseKey(key);
@@ -421,6 +484,11 @@ export async function readSpringConfig(rootPath: string, files: readonly string[
   const config = readConfig(rootPath, found);
   configs.set(rootPath, { signature, config });
   return config;
+}
+
+/** `readSpringConfig` for a scan with Java files or a build file; no entries (not even a read) for any other scan. */
+export async function readScanConfig(rootPath: string, files: readonly string[]): Promise<SpringConfig> {
+  return hasJavaProject(files) ? readSpringConfig(rootPath, files) : springConfigOf([]);
 }
 
 /** A config over entries built by hand, for tests and for callers that already hold the entries. */

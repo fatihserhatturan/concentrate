@@ -9,7 +9,7 @@ import { compactExpression, normalizeJavaType } from "../../languages/java/synta
 import { createJavaTypeIndex, type JavaType, type JavaTypeIndex } from "../../languages/java/types.js";
 import { isEnvFile, parseEnvFile } from "../js-ts/env-files.js";
 import { annotationValue, findAnnotations, javaAnnotationReader, type JavaAnnotationInfo } from "./annotations.js";
-import { keyToEnvName, looseKey, parsePlaceholders, readSpringConfig, type ConfigEntry, type PlaceholderPart, type SpringConfig } from "./config-files.js";
+import { isTestSourcePath, keyToEnvName, looseKey, parsePlaceholders, readScanConfig, redactValue, type ConfigEntry, type PlaceholderPart, type SpringConfig } from "./config-files.js";
 import { createJavaReceiverResolver } from "./receivers.js";
 import { javaMethods, type JavaMethod } from "./shared.js";
 import { createJavaStringResolver, hasLiteralText, readJavaString, readLocalStrings, type JavaStringTemplate } from "./strings.js";
@@ -18,7 +18,8 @@ import { createJavaStringResolver, hasLiteralText, readJavaString, readLocalStri
 //
 // Env reads, as USES_ENV from the method that reads (the file for a field initializer or an initializer
 // block) and from the file, to an EnvVar (`env:NAME`, as every language makes it; `access` is the call):
-//   - `System.getenv("NAME")` (`System.getenv`) and `System.getenv().get("NAME")` / `.getOrDefault(…)`, also
+//   - `System.getenv("NAME")` (`System.getenv`; `System` is `java.lang.System`: not when the file imports, or
+//     its package or enclosing types declare, a scanned type of that name) and `System.getenv().get("NAME")` / `.getOrDefault(…)`, also
 //     through a local bound to `System.getenv()` (`System.getenv().get`); a static import of `getenv`;
 //   - the name may be a constant (`EnvKeys.REGION`, `PREFIX + "TOKEN"`: `createJavaStringResolver`);
 //   - `System.getProperty` is a JVM property, not the environment: ignored.
@@ -27,8 +28,14 @@ import { createJavaStringResolver, hasLiteralText, readJavaString, readLocalStri
 // every file is a ConfigValue `{name: key, value, valueType, line}` declared by that file (DECLARES_CONFIG;
 // id `<file id>:config:<line>:<key>` as the JS/TS config values have). A key of a profile file is its own
 // node in that file (`application-prod.properties`), never merged with the default one, so the file says
-// the profile. The value of a key named like a secret (password, secret, token, key, credential) is
-// `<redacted>` unless it is only a placeholder (`${DB_PASSWORD}`). `${NAME}` / `${NAME:default}`
+// the profile. The value of a key with a secret-named segment (`isSecretKey`: password, passwd, pwd, secret,
+// token, credential(s), private/api/access/secret/encryption/signing-key; not a plain `key`) is `<redacted>`
+// unless it is only a placeholder without a default (`${DB_PASSWORD}`); the same holds for the default of
+// `@Value("${secret.key:default}")` / `getProperty("secret.key", "default")`. In any value the password of a
+// URL's userinfo (`scheme://user:pw@host`) and a `password=` parameter are redacted too (`redactValue`).
+// Spring config is read only for a scan with Java files or a build file; a Python or Node repo's
+// `resources/application.yml` makes nothing. Keys of `src/test/resources` are consumed by test readers only.
+// `${NAME}` / `${NAME:default}`
 // placeholders of a value that name no key and look like an environment variable are USES_ENV from the
 // config file.
 //
@@ -38,7 +45,8 @@ import { createJavaStringResolver, hasLiteralText, readJavaString, readLocalStri
 //     Micronaut's `io.micronaut.context.annotation`; `@Property(name = "key")`): on a parameter the method or
 //     constructor is the reader; on a method (a setter) the method; on a field the methods of the class
 //     (inner classes too) that read the field by name (`name`, `this.name`; not a local or parameter of
-//     the same name), and always the file. SpEL `#{…}` and plain literals are no reads. A literal key
+//     the same name; not the target of an assignment; a type nested in between that declares a field of the
+//     name hides it), and always the file. SpEL `#{…}` and plain literals are no reads. A literal key
 //     (or a constant) with several placeholders reads each;
 //   - `@ConfigurationProperties(prefix = "app.mail")` (Spring Boot and Micronaut) on a class, or on a `@Bean`
 //     method (the returned class): the fields of the class (its supertypes, nested classes and records
@@ -67,7 +75,8 @@ import { createJavaStringResolver, hasLiteralText, readJavaString, readLocalStri
 // Not handled: SpEL (`#{…}`), `@Value` of a constant that is no literal, `@PropertySource` and
 // `@EnableConfigurationProperties` / `@ConfigurationPropertiesScan` (a properties class counts through its own
 // annotation), constructor binding names from `@Name`, `Binder.get(…)`, MicroProfile `@ConfigProperty`,
-// `System.getProperty`, `Environment.getProperty` in a field initializer, `ConfigurableEnvironment`
+// `System.getProperty`, `Environment.getProperty` in a field initializer, a config lookup by active profile
+// (the readers link the key of every file, active or not), `ConfigurableEnvironment`
 // property sources, a `Map<String, Nested>` / `List<Nested>` field's element type (the field binds all
 // keys under it), a key built at run time, and profile activation (every profile's file is a node).
 
@@ -78,6 +87,8 @@ type CallFact = {
   /** Id of the Function that holds it, null at file level. */
   f: string | null;
   a: "getenv" | "getenv-map" | "property";
+  /** Reached through a bare `System`: dropped when a scanned type of that name is visible. */
+  b?: true;
   k: JavaStringTemplate;
   /** Literal second argument (`getProperty("k", "default")`). */
   d?: string;
@@ -102,7 +113,6 @@ const ENVIRONMENTS = [
   "io.micronaut.context.env.Environment",
   "io.micronaut.context.env.PropertyResolver",
 ];
-const SECRET_KEY = /(?:password|passwd|secret|token|credential|api-?key|private-?key|access-?key)/iu;
 
 const isComment = (node: SyntaxNode) => node.type.endsWith("comment");
 const argumentsOf = (call: SyntaxNode): SyntaxNode[] => call.childForFieldName("arguments")?.namedChildren.filter((child) => !isComment(child)) ?? [];
@@ -110,9 +120,17 @@ const argumentsOf = (call: SyntaxNode): SyntaxNode[] => call.childForFieldName("
 // ---------------------------------------------------------------- parse time
 
 // `System.getenv`: the object is `System` (or `java.lang.System`).
-function isSystem(object: SyntaxNode | null): boolean {
+// `bare` is `System` written alone: the contributor checks that no scanned type of that name hides it.
+function systemOf(object: SyntaxNode | null): "bare" | "qualified" | null {
   const text = object ? compactExpression(object.text) : "";
-  return text === "System" || text === "java.lang.System";
+  return text === "System" ? "bare" : text === "java.lang.System" ? "qualified" : null;
+}
+
+// `a = …` (not `a += …`): the node, or the `this.a` it is the field of, is the target.
+function isAssignmentTarget(node: SyntaxNode): boolean {
+  const target = node.parent?.type === "field_access" && node.parent.childForFieldName("field")?.id === node.id ? node.parent : node;
+  const parent = target.parent;
+  return parent?.type === "assignment_expression" && parent.childForFieldName("left")?.id === target.id && (parent.childForFieldName("operator")?.text ?? "=") === "=";
 }
 
 function contains(outer: SyntaxNode, inner: SyntaxNode): boolean {
@@ -142,6 +160,12 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
   const file = nodes.find((node) => node.id === fileNodeId);
   if (!file) return;
   const staticGetenv = /\bimport\s+static\s+java\.lang\.System\.(?:getenv|\*)\s*;/u.test(text);
+  // A single-type import of another `System`, or a `System` declared here: the name is not java.lang's.
+  const ownSystem = /\bimport\s+(?!static\b)(?!java\.lang\.System\s*;)[\w.]+\.System\s*;/u.test(text) || /\b(?:class|interface|enum|record)\s+System\b/u.test(text);
+  const systemKind = (object: SyntaxNode | null): "bare" | "qualified" | null => {
+    const kind = systemOf(object);
+    return kind === "bare" && ownSystem ? null : kind;
+  };
 
   const owners = [...functions];
   const innermost = (node: SyntaxNode) => owners.filter((fn) => contains(fn.syntax, node)).sort((a, b) => (a.syntax.endIndex - a.syntax.startIndex) - (b.syntax.endIndex - b.syntax.startIndex))[0];
@@ -151,12 +175,12 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
     if (!known) locals.set(fnId, (known = readLocalStrings([syntax])));
     return known;
   };
-  // Locals bound to `System.getenv()`, by function.
-  const aliases = new Map<string, Set<string>>();
-  const aliasesOf = (fnId: string, syntax: SyntaxNode): Set<string> => {
+  // Locals bound to `System.getenv()`, by function, with how `System` was written.
+  const aliases = new Map<string, Map<string, "bare" | "qualified" | "static">>();
+  const aliasesOf = (fnId: string, syntax: SyntaxNode): Map<string, "bare" | "qualified" | "static"> => {
     let known = aliases.get(fnId);
     if (known) return known;
-    known = new Set();
+    known = new Map();
     const stack: SyntaxNode[] = [syntax];
     while (stack.length > 0) {
       const node = stack.pop()!;
@@ -164,7 +188,8 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
         for (const declarator of node.childrenForFieldName("declarator")) {
           const value = declarator.childForFieldName("value");
           const name = declarator.childForFieldName("name")?.text;
-          if (name && value && isGetenvMap(value)) known.add(name);
+          const kind = value ? getenvMap(value) : null;
+          if (name && kind) known.set(name, kind);
         }
       }
       stack.push(...node.namedChildren);
@@ -172,8 +197,11 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
     aliases.set(fnId, known);
     return known;
   };
-  const isGetenvMap = (node: SyntaxNode): boolean =>
-    node.type === "method_invocation" && node.childForFieldName("name")?.text === "getenv" && argumentsOf(node).length === 0 && (isSystem(node.childForFieldName("object")) || (!node.childForFieldName("object") && staticGetenv));
+  const getenvMap = (node: SyntaxNode): "bare" | "qualified" | "static" | null => {
+    if (node.type !== "method_invocation" || node.childForFieldName("name")?.text !== "getenv" || argumentsOf(node).length !== 0) return null;
+    const object = node.childForFieldName("object");
+    return object ? systemKind(object) : staticGetenv ? "static" : null;
+  };
 
   const calls: CallFact[] = [];
   const reads = new Map<string, Set<string>>();
@@ -187,14 +215,22 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
       const args = argumentsOf(node);
       let api: CallFact["a"] | null = null;
       const owner = innermost(node);
-      if (name === "getenv" && args.length >= 1 && (isSystem(object) || (!object && staticGetenv))) api = "getenv";
-      else if (MAP_READS.has(name) && object && args.length >= 1) {
-        if (isGetenvMap(object) || (object.type === "identifier" && owner && aliasesOf(owner.node.id, owner.syntax).has(object.text))) api = "getenv-map";
+      let bare = false;
+      if (name === "getenv" && args.length >= 1 && (systemKind(object) !== null || (!object && staticGetenv))) {
+        api = "getenv";
+        bare = systemKind(object) === "bare";
+      } else if (MAP_READS.has(name) && object && args.length >= 1) {
+        const kind = getenvMap(object) ?? (object.type === "identifier" && owner ? aliasesOf(owner.node.id, owner.syntax).get(object.text) ?? null : null);
+        if (kind) {
+          api = "getenv-map";
+          bare = kind === "bare";
+        }
       } else if (PROPERTY_READS.has(name) && object && args.length >= 1) api = "property";
       if (!api || !args[0]) continue;
       const key = readJavaString(args[0], owner ? { locals: localsOf(owner.node.id, owner.syntax) } : {});
       if (!key) continue;
       const fact: CallFact = { l: node.startPosition.row + 1, c: node.startPosition.column, f: owner?.node.id ?? null, a: api, k: key };
+      if (bare) fact.b = true;
       if (api === "property" && args[1]) {
         const second = readJavaString(args[1]);
         if (second && second.every((part) => "text" in part)) fact.d = second.map((part) => ("text" in part ? part.text : "")).join("");
@@ -208,9 +244,13 @@ const readConfigEnv: JavaParsePlugin = ({ fileNodeId, root, nodes, relationships
     if (parent.type === "method_invocation" && parent.childForFieldName("name")?.id === node.id) continue;
     if (parent.type === "field_access") {
       if (parent.childForFieldName("field")?.id !== node.id || parent.childForFieldName("object")?.text !== "this") continue;
-    } else if (parent.type === "variable_declarator" || parent.type === "formal_parameter" || parent.type === "spread_parameter") {
+    } else if (parent.type === "variable_declarator") {
+      // Only the declared name is no read: `int z = xy;` reads `xy`.
+      if (parent.childForFieldName("name")?.id === node.id) continue;
+    } else if (parent.type === "formal_parameter" || parent.type === "spread_parameter") {
       continue;
     }
+    if (isAssignmentTarget(node)) continue;
     const owner = innermost(node);
     if (!owner) continue;
     // A parameter or local of the same name hides the field (`this.name` does not care).
@@ -235,7 +275,7 @@ function safeParse(value: unknown): Record<string, unknown> | null {
   }
 }
 
-export const javaConfigEnvPlugin: JavaParsePlugin & { version: string } = Object.assign(readConfigEnv, { version: "1" });
+export const javaConfigEnvPlugin: JavaParsePlugin & { version: string } = Object.assign(readConfigEnv, { version: "2" });
 
 // ---------------------------------------------------------------- contributor
 
@@ -287,10 +327,7 @@ function parametersOf(fn: GraphNode): Parameter[] {
 
 const valueTypeOf = (value: string): string => (/^(?:true|false)$/iu.test(value) ? "boolean" : /^-?\d+(?:\.\d+)?$/u.test(value) ? "number" : "string");
 
-function shownValue(entry: ConfigEntry): string {
-  if (!SECRET_KEY.test(entry.key.split(".").at(-1) ?? "") || entry.value === "") return entry.value;
-  return /^\$\{[^}]*\}$/u.test(entry.value) ? entry.value : "<redacted>";
-}
+const shownValue = (entry: ConfigEntry): string => redactValue(entry.key, entry.value);
 
 const configValueId = (fileId: string, line: number, key: string): string => `${fileId}:config:${line}:${key}`;
 
@@ -305,7 +342,7 @@ export const javaConfigEnvContributor: ISemanticContributor = {
       if (parsed) facts.set(file.id, parsed as unknown as FileFacts);
       delete file.properties[FACTS];
     }
-    const config = await readSpringConfig(rootPath, files);
+    const config = await readScanConfig(rootPath, files);
     const methods = javaMethods(graph);
     if (methods.length === 0 && config.entries.length === 0) return;
     await new Builder(graph, rootPath, files, config, methods, facts).run();
@@ -410,9 +447,12 @@ class Builder {
   }
 
   // The entries of every file for `key` (relaxed binding) and, for a list, its items; `below`: all keys under it.
-  private entriesFor(key: string, below: boolean): ConfigEntry[] {
+  // `reader`: the file that reads; test-source-set entries are for readers in it only (all when omitted).
+  private entriesFor(key: string, below: boolean, reader?: string): ConfigEntry[] {
     const wanted = looseKey(key);
+    const near = reader === undefined ? undefined : String(this.graph.node(reader)?.properties.relativePath ?? "");
     return this.config.entries.filter((entry) => {
+      if (near && isTestSourcePath(entry.file) && !isTestSourcePath(near)) return false;
       const loose = this.loose.get(entry)!;
       return loose === wanted || loose.startsWith(`${wanted}[`) || (below && loose.startsWith(`${wanted}.`));
     });
@@ -438,7 +478,10 @@ class Builder {
     for (const [fileId, fileFacts] of this.facts) {
       for (const call of fileFacts.calls) {
         if (call.a === "property") continue;
-        const name = this.literalKey(call.k, this.scopeOf(call.f, fileId, call.l));
+        const scope = this.scopeOf(call.f, fileId, call.l);
+        // A scanned type named `System` (same package, enclosing type, import) is not java.lang's.
+        if (call.b && this.types.resolve("System", { ...scope, typeId: scope.typeId ?? null })) continue;
+        const name = this.literalKey(call.k, scope);
         if (name === null || !ENV_NAME.test(name)) continue;
         this.envUses.push({ fnId: call.f, fileId, name, line: call.l, access: call.a === "getenv" ? "System.getenv" : "System.getenv().get" });
       }
@@ -451,14 +494,21 @@ class Builder {
     const reader = javaAnnotationReader(this.graph);
     const fileOfType = new Map<string, string>();
     for (const type of this.types.types) fileOfType.set(type.id, type.fileId);
-    const readsByFn = new Map<string, Set<string>>();
-    for (const fileFacts of this.facts.values()) for (const [fnId, names] of Object.entries(fileFacts.reads)) readsByFn.set(fnId, new Set(names));
+    // Field name -> the methods that read it, once (not a scan of every method per field).
+    const readersByName = new Map<string, JavaMethod[]>();
+    for (const fileFacts of this.facts.values()) {
+      for (const [fnId, names] of Object.entries(fileFacts.reads)) {
+        const method = this.methodById.get(fnId);
+        if (method) for (const name of names) readersByName.set(name, [...readersByName.get(name) ?? [], method]);
+      }
+    }
 
     // Fields: the class's methods that read it, and the file.
     for (const type of this.types.types) {
       for (const field of this.fieldsByType.get(type.id) ?? []) {
         for (const ann of this.valueAnnotations(reader.annotationsOf(field))) {
-          const readers = this.methods.filter((method) => readsByFn.get(method.node.id)?.has(String(field.properties.name)) && this.within(method.owner.id, type.id)).map((method) => method.node.id);
+          const fieldName = String(field.properties.name);
+          const readers = (readersByName.get(fieldName) ?? []).filter((method) => this.within(method.owner.id, type.id) && !this.hiddenBetween(method.owner.id, type.id, fieldName)).map((method) => method.node.id);
           for (const key of this.keysOf(ann)) {
             const common = { fileId: type.fileId, key: key.key, def: key.def, below: false, line: ann.line, access: ann.simpleName === "Property" ? "@Property" : "@Value", localName: String(field.properties.name) };
             if (readers.length === 0) this.uses.push({ fnId: null, ...common });
@@ -534,6 +584,14 @@ class Builder {
     }
     this.importCache.set(fileId, known);
     return known;
+  }
+
+  // A type from `inner` up to (not including) `outer` declares a field `name`: it hides the one of `outer`.
+  private hiddenBetween(inner: string, outer: string, name: string): boolean {
+    for (let current: JavaType | null = this.types.byId.get(inner) ?? null; current && current.id !== outer; current = this.types.enclosing(current)) {
+      if ((this.fieldsByType.get(current.id) ?? []).some((field) => String(field.properties.name) === name)) return true;
+    }
+    return false;
   }
 
   // `inner` is `outer` or nested in it.
@@ -680,7 +738,7 @@ class Builder {
   // ---- output
 
   private emitUses(): void {
-    const entriesOf = (use: Use) => this.entriesFor(use.key, use.below);
+    const entriesOf = (use: Use) => this.entriesFor(use.key, use.below, use.fileId);
     // Names an environment variable can have, to tell which relaxed-binding overrides are real.
     const known = new Set<string>();
     for (const env of this.envs) known.add(env.slice("env:".length));
@@ -700,7 +758,7 @@ class Builder {
       if (entries.length === 0 && !use.below) {
         if (use.def !== null) {
           const id = configValueId(use.fileId, use.line, use.key);
-          this.graph.addNode({ id, label: "ConfigValue", properties: { name: use.key, value: use.def, valueType: "default", line: use.line } });
+          this.graph.addNode({ id, label: "ConfigValue", properties: { name: use.key, value: redactValue(use.key, use.def), valueType: "default", line: use.line } });
           this.relationship({ from: use.fileId, to: id, type: "DECLARES_CONFIG", properties: {} });
           this.consume(use.fnId, use.fileId, id, use.localName);
         }

@@ -7,9 +7,9 @@ import type { JavaParsePlugin } from "../../languages/java/parser.js";
 import { compactExpression, modifiersOf, annotationOf, normalizeJavaType, typeText, typeDeclarationTypes } from "../../languages/java/syntax.js";
 import { createJavaTypeIndex, type JavaType } from "../../languages/java/types.js";
 import { annotationEnum, annotationValue, findAnnotations, javaAnnotationReader, joinRoutePath, type JavaAnnotationInfo, type JavaAnnotationReader } from "./annotations.js";
-import { readSpringConfig, keyToEnvName, type SpringConfig } from "./config-files.js";
+import { readScanConfig, isSecretKey, keyToEnvName, type SpringConfig } from "./config-files.js";
 import { createJavaReceiverResolver, receiverMatches } from "./receivers.js";
-import { javaMethods } from "./shared.js";
+import { javaMethods, type JavaMethod } from "./shared.js";
 import {
   javaStringFromText,
   createJavaStringResolver,
@@ -64,7 +64,16 @@ import {
 //     A query string or fragment is dropped.
 // Test files (`File.isTest`) are skipped.
 //
-// Not handled: Apache HttpClient, Retrofit, `HttpURLConnection`, Jersey / JAX-RS `Client`,
+// A client may be a subclass of the library type (`class MyRt extends RestTemplate`, through scanned types
+// too): `receiverMatches` follows the supertypes. A file is a candidate when it names a client type or one
+// of RestTemplate's distinctive methods (`getForObject`, `postForEntity`, …). `${…}` placeholders are filled
+// with the entries of the active profiles (`spring.profiles.active`) first, never through a key named like a
+// secret (`${db.password}` stays as written), and the userinfo of an absolute URL (`http://user:pw@host`) is
+// dropped from `httpUrl`. `UriComponentsBuilder.path` joins with one slash. A Feign overload is linked only
+// when exactly one has the call's argument count.
+//
+// Not handled: `HttpRequest.Builder` / `Request.Builder` held in a variable (only a chain from `newBuilder` /
+// `new Request.Builder()` to `build()` is read), Apache HttpClient, Retrofit, `HttpURLConnection`, Jersey / JAX-RS `Client`,
 // `RestTemplate.exchange(RequestEntity)` built elsewhere, `WebClient` requests built through a
 // `RequestHeadersUriSpec` variable, URLs built by `UriComponentsBuilder` beyond `path` / `pathSegment`,
 // a base URL set by `@Bean` customizers, `uriBuilder` lambdas that do not call `path`, Feign
@@ -151,6 +160,18 @@ const URL_PASS_THROUGH = new Set(["build", "buildAndExpand", "toUri", "toUriStri
 
 const concat = (...parts: JavaStringTemplate[]): JavaStringTemplate => parts.flat();
 
+// `UriComponentsBuilder.path`: the slash between two paths is one (`"/a/"` + `"/b"` and `"/a"` + `"b"` are `/a/b`)
+// when both sides of the join are literal text; otherwise the parts are put together as they are.
+function joinPath(left: JavaStringTemplate, right: JavaStringTemplate): JavaStringTemplate {
+  const last = left.at(-1);
+  const first = right[0];
+  if (!last || !first || !("text" in last) || !("text" in first) || first.text === "") return concat(left, right);
+  if (left.length === 0) return right;
+  const head = last.text;
+  const tail = first.text.replace(/^\/+/u, "");
+  return [...left.slice(0, -1), { text: `${head}${head.endsWith("/") ? "" : "/"}${tail}` }, ...right.slice(1)];
+}
+
 // The template of a URL argument: a string expression, `URI.create(s)`, `new URI(s)`, `new URL(s)`,
 // `HttpUrl.get(s)`, and `UriComponentsBuilder.fromHttpUrl(s).path(p).build().toUri()`.
 function urlOf(node: SyntaxNode, scope: JavaStringScope, depth = 0): JavaStringTemplate {
@@ -172,8 +193,8 @@ function urlOf(node: SyntaxNode, scope: JavaStringScope, depth = 0): JavaStringT
         const root = object.type === "method_invocation" ? chainDown(object).calls.at(-1) : null;
         const builderChain = root ? URI_BUILDER.test(text(root.childForFieldName("object"))) : false;
         if (builderChain && object.type === "method_invocation") {
-          if (name === "path" && args[0]) return concat(urlOf(object, scope, depth + 1), urlOf(args[0], scope, depth + 1));
-          if (name === "pathSegment") return concat(urlOf(object, scope, depth + 1), ...args.map((arg) => concat([{ text: "/" }], urlOf(arg, scope, depth + 1))));
+          if (name === "path" && args[0]) return joinPath(urlOf(object, scope, depth + 1), urlOf(args[0], scope, depth + 1));
+          if (name === "pathSegment") return args.reduce<JavaStringTemplate>((joined, arg) => joinPath(joined, concat([{ text: "/" }], urlOf(arg, scope, depth + 1))), urlOf(object, scope, depth + 1));
           if (URL_PASS_THROUGH.has(name)) return urlOf(object, scope, depth + 1);
         }
       }
@@ -240,7 +261,7 @@ type Binding = { base: JavaStringTemplate | null };
 
 export const javaHttpClientsPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(({ fileNodeId, root, nodes, functions }) => {
   const source = root.text;
-  if (!/\b(?:RestTemplate|RestOperations|RestClient|WebClient|HttpRequest|Request\.Builder|Feign|RestTemplateBuilder)\b/u.test(source)) return;
+  if (!/\b(?:RestTemplate|RestOperations|RestClient|WebClient|HttpRequest|Request\.Builder|Feign|RestTemplateBuilder|getForObject|getForEntity|postForObject|postForEntity|postForLocation|patchForObject|headForHeaders|optionsForAllow)\b/u.test(source)) return;
 
   const callNodes = new Map<string, GraphNode>();
   for (const node of nodes) {
@@ -457,7 +478,7 @@ export const javaHttpClientsPlugin: JavaParsePlugin & { version: string } = Obje
       record(call, { k: "fluent", method, url: serialized(url), root: text(start), base: serialized(base ?? binding?.base ?? null), bound: base !== null || binding !== undefined });
     }
   }
-}, { version: "1" });
+}, { version: "2" });
 
 // ---------------------------------------------------------------- contributor
 
@@ -474,6 +495,9 @@ function withoutQuery(url: string): string {
   return url;
 }
 
+// `http://user:pw@host/x` is `http://host/x`: credentials never reach the graph.
+const withoutUserInfo = (url: string): string => url.replace(/^([a-z][a-z0-9+.-]*:\/\/)[^/?#]*@/iu, "$1");
+
 const joinUrl = (base: string, url: string): string => (ABSOLUTE.test(url) ? url : url === "" ? base : `${base.replace(/\/+$/u, "")}/${url.replace(/^\/+/u, "")}`);
 
 const parseRaw = (call: GraphNode): RawRequest | null => {
@@ -487,6 +511,14 @@ const parseRaw = (call: GraphNode): RawRequest | null => {
 export const javaHttpClientsContributor: ISemanticContributor = {
   id: "java.http-clients",
   async contribute(graph, rootPath, _report, files) {
+    // The private `@Bean` facts are read and removed first, whatever returns below.
+    const beanFacts: Array<{ method: JavaMethod; text: string }> = [];
+    for (const method of javaMethods(graph)) {
+      const beanText = method.node.properties[BEAN_PROPERTY];
+      if (beanText === undefined) continue;
+      delete method.node.properties[BEAN_PROPERTY];
+      if (typeof beanText === "string") beanFacts.push({ method, text: beanText });
+    }
     const raws = graph.nodesWithLabel("Call").filter((node) => node.properties[PROPERTY] !== undefined);
     const interfaces = graph.nodesWithLabel("Interface");
     const reader = javaAnnotationReader(graph);
@@ -498,7 +530,7 @@ export const javaHttpClientsContributor: ISemanticContributor = {
     const types = createJavaTypeIndex(graph, relationships);
     const receivers = createJavaReceiverResolver(graph);
     const strings = createJavaStringResolver(graph);
-    const config: SpringConfig = await readSpringConfig(rootPath, files ?? []);
+    const config: SpringConfig = await readScanConfig(rootPath, files ?? []);
     const methods = new Map(javaMethods(graph).map((method) => [method.node.id, method]));
 
     const fileNode = (fileId: string) => graph.node(fileId);
@@ -552,8 +584,10 @@ export const javaHttpClientsContributor: ISemanticContributor = {
     };
 
     // The config text with its placeholders filled; a key no file has becomes `${env:NAME}`.
+    const active = config.activeProfiles();
+    const lookupOptions = (near: string) => (active.length > 0 ? { near, profile: active } : { near });
     const configText = (raw: string, near: string): string => {
-      const { value, unresolved } = config.resolveText(raw, { near });
+      const { value, unresolved } = config.resolveText(raw, lookupOptions(near));
       return unresolved.reduce((result, key) => result.replaceAll(`\${${key}}`, `\${env:${/^[A-Z][A-Z0-9_]*$/u.test(key) ? key : keyToEnvName(key)}}`), value);
     };
 
@@ -567,7 +601,8 @@ export const javaHttpClientsContributor: ISemanticContributor = {
         } else if ("expr" in part) {
           const property = /^[\w$.]+\.(?:getProperty|getRequiredProperty)\("([^"]+)"(?:,"([^"]*)")?\)$/u.exec(part.expr);
           if (property) {
-            const entry = config.lookup(property[1]!, { near });
+            // A secret's value is never put in a URL.
+            const entry = isSecretKey(property[1]!) ? null : config.lookup(property[1]!, lookupOptions(near));
             return { text: entry ? configText(entry.value, near) : property[2] ?? `\${env:${keyToEnvName(property[1]!)}}` };
           }
         }
@@ -578,10 +613,7 @@ export const javaHttpClientsContributor: ISemanticContributor = {
 
     // The only @Bean client with a base URL, by simple type name, for an injected client.
     const beanBases = new Map<string, Array<{ template: JavaStringTemplate; typeId: string; fileId: string; fnLine: number }>>();
-    for (const method of methods.values()) {
-      const beanText = method.node.properties[BEAN_PROPERTY];
-      if (typeof beanText !== "string") continue;
-      delete method.node.properties[BEAN_PROPERTY];
+    for (const { method, text: beanText } of beanFacts) {
       if (findAnnotations(reader.annotationsOf(method.node), "Bean", ["org.springframework.context.annotation"]).length === 0) continue;
       const bean = JSON.parse(beanText) as { type: string; base: string | null };
       const template = parseJavaString(bean.base);
@@ -593,7 +625,7 @@ export const javaHttpClientsContributor: ISemanticContributor = {
     const apply = (call: GraphNode, client: string, method: string | null, url: string): void => {
       call.properties.httpClient = client;
       call.properties.httpMethod = method;
-      call.properties.httpUrl = withoutQuery(url);
+      call.properties.httpUrl = withoutUserInfo(withoutQuery(url));
     };
 
     // ------------------------------------------------ calls with a parsed request
@@ -724,6 +756,18 @@ export const javaHttpClientsContributor: ISemanticContributor = {
 
     const byResolved = new Map<string, GraphNode>();
     for (const rel of graph.relationshipsOfType("CALL_RESOLVES_TO")) byResolved.set(rel.from, graph.node(rel.to) as GraphNode);
+    // Method -> the Feign interface that declares it (itself or through a superinterface), once.
+    const feignOwnerOfMethod = new Map<string, string>();
+    for (const [id, list] of feignMethods) {
+      if (list.length === 0) continue;
+      const type = types.byId.get(id);
+      const seenTypes = new Set<string>([id]);
+      const stack: JavaType[] = type ? [type] : [];
+      for (let next = stack.pop(); next; next = stack.pop()) {
+        for (const declared of ownMethods.get(next.id) ?? []) feignOwnerOfMethod.set(declared.id, id);
+        for (const parent of types.supertypes(next)) if (!seenTypes.has(parent.id)) { seenTypes.add(parent.id); stack.push(parent); }
+      }
+    }
     for (const call of graph.nodesWithLabel("Call")) {
       if (call.properties.callKind !== "method" || call.properties.httpClient !== undefined) continue;
       const fnId = relationships.callerFunctionByCallId.get(call.id);
@@ -735,23 +779,14 @@ export const javaHttpClientsContributor: ISemanticContributor = {
       const receiver = receivers.typeOfCall(call, caller.node);
       if (receiver?.typeId && feignMethods.has(receiver.typeId)) owner = receiver.typeId;
       const resolved = byResolved.get(call.id);
-      if (!owner && resolved) {
-        for (const [id, list] of feignMethods) {
-          const declared = [...(ownMethods.get(id) ?? [])];
-          const type = types.byId.get(id);
-          const stack = type ? [...types.supertypes(type)] : [];
-          for (let next = stack.pop(); next; next = stack.pop()) {
-            declared.push(...ownMethods.get(next.id) ?? []);
-            stack.push(...types.supertypes(next));
-          }
-          if (list.length > 0 && declared.some((candidate) => candidate.id === resolved.id)) owner = id;
-        }
-      }
+      if (!owner && resolved) owner = feignOwnerOfMethod.get(resolved.id) ?? null;
       if (!owner) continue;
       const callee = String(call.properties.callee);
       const count = Number(call.properties.argumentCount ?? -1);
       const matches = feignMethods.get(owner)!.filter((entry) => entry.name === callee);
-      const chosen = matches.length === 1 ? matches[0] : matches.find((entry) => entry.parameterCount === count);
+      // Overloads: the one with this argument count, when exactly one has it.
+      const sameCount = matches.filter((entry) => entry.parameterCount === count);
+      const chosen = matches.length === 1 ? matches[0] : sameCount.length === 1 ? sameCount[0] : undefined;
       if (!chosen) continue;
       apply(call, "feign", chosen.httpMethod === "ALL" ? null : chosen.httpMethod, chosen.url);
     }
