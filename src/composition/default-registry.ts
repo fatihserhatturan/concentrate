@@ -52,6 +52,7 @@ import { styleImportResolver, protoImportResolver } from "../integrations/langua
 import { rustImportResolver } from "../integrations/languages/rust/import-resolver.js";
 import { cppImportResolver } from "../integrations/languages/cpp/import-resolver.js";
 import { pythonImportResolver } from "../integrations/languages/python/import-resolver.js";
+import { javaImportResolver } from "../integrations/languages/java/import-resolver.js";
 import { goImportResolver } from "../integrations/languages/go/import-resolver.js";
 import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resolver.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
@@ -96,7 +97,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   }
 
   // The first that supports an importing file resolves its imports.
-  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, jsTsImportResolver]) {
+  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, javaImportResolver, jsTsImportResolver]) {
     registry.registerImportResolver(resolver);
   }
 
