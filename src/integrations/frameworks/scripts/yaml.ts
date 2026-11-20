@@ -20,6 +20,20 @@ export async function readYaml(source: string): Promise<YValue> {
   });
 }
 
+// Every document of a multi-document file (`---` separated), in order; an empty
+// document is null. Null (no documents at all) for a file with syntax errors.
+export async function readYamlDocuments(source: string): Promise<YValue[] | null> {
+  return withSyntaxTree("yaml", source, (tree) => {
+    if (tree.rootNode.hasError) return null;
+    return tree.rootNode.namedChildren
+      .filter((child) => child.type === "document")
+      .map((document) => {
+        const body = document.namedChildren.find((child) => child.type !== "comment");
+        return body ? convert(body, new Map()) : null;
+      });
+  });
+}
+
 export function asMap(value: YValue | undefined): YMap | null {
   return value?.type === "map" ? value : null;
 }

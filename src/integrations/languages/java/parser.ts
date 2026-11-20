@@ -79,10 +79,15 @@ export type JavaParsePlugin = (file: {
   functions: readonly JavaParsedFunction[];
 }) => void;
 
-export function createJavaParser(plugins: readonly JavaParsePlugin[] = []): LanguageParser {
+// A plugin may carry a `version`: part of the parser's cache fingerprint, bumped when its output changes
+// (so each framework layer bumps its own, not the parser's).
+export type VersionedJavaParsePlugin = JavaParsePlugin & { version?: string };
+
+export function createJavaParser(plugins: readonly VersionedJavaParsePlugin[] = []): LanguageParser {
+  const versions = plugins.flatMap((plugin) => (plugin.version === undefined ? [] : [plugin.version]));
   return {
     language: "java",
-    version: "1",
+    version: versions.length === 0 ? "1" : `1+${versions.join("+")}`,
     parse: (rootPath, filePath) => parseJavaFile(rootPath, filePath, plugins),
   };
 }

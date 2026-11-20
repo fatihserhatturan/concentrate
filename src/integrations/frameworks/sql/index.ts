@@ -42,7 +42,7 @@ function version(relative: string): bigint | null {
 export const sqlSchemaContributor: ISemanticContributor = {
   id: "sql.schema",
   // SQL files merge into the Table nodes these make, by name.
-  dependsOn: ["js-ts.data-access", "go.data-access", "rust.data-access", "cpp.data-access"],
+  dependsOn: ["js-ts.data-access", "go.data-access", "rust.data-access", "cpp.data-access", "java.data-jpa", "java.data-jdbc"],
   async contribute(graph, rootPath, _report, files) {
     const sqlFiles: Array<{ absolute: string; relative: string }> = [];
     const known = new Map<string, GraphNode>();
