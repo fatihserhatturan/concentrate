@@ -1,6 +1,7 @@
 import { createLanguageFileMatcher } from "../../core/scan/language.js";
 import { cppLanguages } from "./cpp/descriptor.js";
 import { goLanguages } from "./go/descriptor.js";
+import { javaLanguages } from "./java/descriptor.js";
 import { jsTsLanguages } from "./js-ts/descriptor.js";
 import { pythonLanguages } from "./python/descriptor.js";
 import { rustLanguages } from "./rust/descriptor.js";
@@ -14,6 +15,7 @@ const goMatcher = createLanguageFileMatcher(...goLanguages);
 const pythonMatcher = createLanguageFileMatcher(...pythonLanguages);
 const rustMatcher = createLanguageFileMatcher(...rustLanguages);
 const cppMatcher = createLanguageFileMatcher(...cppLanguages);
+const javaMatcher = createLanguageFileMatcher(...javaLanguages);
 
 export function isJsTsFile(fileId: string): boolean {
   return jsTsMatcher(fileId);
@@ -33,4 +35,8 @@ export function isRustFile(fileId: string): boolean {
 
 export function isCppFile(fileId: string): boolean {
   return cppMatcher(fileId);
+}
+
+export function isJavaFile(fileId: string): boolean {
+  return javaMatcher(fileId);
 }

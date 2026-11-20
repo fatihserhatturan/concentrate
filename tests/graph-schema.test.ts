@@ -133,9 +133,14 @@ describe("default graph schema", () => {
     assert.deepEqual(defaultGraphSchema, snapshot);
   });
 
-  it("is the base schema plus extensions only: every extension adds properties, no tables", () => {
+  it("is the base schema plus extensions only: extensions add properties, and Java adds its relationship tables", () => {
     assert.deepEqual(defaultGraphSchema.nodeTables.map((table) => table.label), baseGraphSchema.nodeTables.map((table) => table.label));
-    assert.deepEqual(defaultGraphSchema.relationshipTables.map((table) => table.type), baseGraphSchema.relationshipTables.map((table) => table.type));
+    assert.deepEqual(defaultGraphSchema.relationshipTables.map((table) => table.type), [
+      ...baseGraphSchema.relationshipTables.map((table) => table.type),
+      "DEFINES_INTERFACE_METHOD",
+      "DEFINES_INTERFACE_FIELD",
+      "FIELD_HAS_DECORATOR",
+    ]);
     assert.deepEqual(defaultGraphSchema.nodeLabels, baseGraphSchema.nodeLabels);
     assert.ok(Object.keys(defaultGraphSchema.nodeTables.find((table) => table.label === "File")!.properties).includes("rustCrate"));
     assert.ok(!Object.keys(baseGraphSchema.nodeTables.find((table) => table.label === "File")!.properties).includes("rustCrate"));

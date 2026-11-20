@@ -65,6 +65,9 @@ import { rustUnusedRules } from "../integrations/languages/rust/unused.js";
 import { jsTsGraphSchema } from "../integrations/frameworks/js-ts/schema.js";
 import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
 import { cppGraphSchema } from "../integrations/languages/cpp/schema.js";
+import { javaGraphSchema } from "../integrations/languages/java/schema.js";
+import { javaLanguages } from "../integrations/languages/java/descriptor.js";
+import { javaParser } from "../integrations/languages/java/parser.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -74,17 +77,17 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   const registry = new CoreIntegrationRegistry();
 
   // Plain languages first: a file name or extension a later descriptor also claims goes to the later one.
-  for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages]) {
+  for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages, ...javaLanguages]) {
     registry.registerLanguage(descriptor);
   }
 
   // Graph properties each integration adds to the core tables. Rust before C/C++: both add Import
   // properties after `isModule`, and the merged order must stay what the closed schema had.
-  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema]) {
+  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema, javaGraphSchema]) {
     registry.registerGraphSchema(extension);
   }
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
