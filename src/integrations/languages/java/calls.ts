@@ -50,7 +50,9 @@ function declared(typeNode: SyntaxNode | null, dimensions: SyntaxNode | null, va
   return type ? { type } : null;
 }
 
-function inferred(value: SyntaxNode | null): JavaLocal | null {
+function inferred(written: SyntaxNode | null): JavaLocal | null {
+  let value = written;
+  while (value?.type === "parenthesized_expression" && value.namedChildren[0]) value = value.namedChildren[0];
   if (!value) return null;
   if (value.type === "object_creation_expression") {
     const type = normalizeJavaType(typeText(value.childForFieldName("type")));
@@ -60,7 +62,6 @@ function inferred(value: SyntaxNode | null): JavaLocal | null {
     const type = normalizeJavaType(typeText(value.childForFieldName("type")));
     return type ? { type } : null;
   }
-  if (value.type === "parenthesized_expression" && value.namedChildren[0]) return inferred(value.namedChildren[0]);
   return null;
 }
 
@@ -124,9 +125,17 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly Ja
       default:
         break;
     }
-    for (const child of node.namedChildren) visit(child);
   };
-  for (const root of roots) visit(root);
+  // Iterative pre-order walk: expression chains can be thousands of levels deep.
+  const stack: SyntaxNode[] = [];
+  for (let r = roots.length - 1; r >= 0; r--) stack.push(roots[r]!);
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    if (isNestedScope(node)) continue;
+    visit(node);
+    const children = node.namedChildren;
+    for (let i = children.length - 1; i >= 0; i--) stack.push(children[i]!);
+  }
   return locals;
 }
 
@@ -140,9 +149,14 @@ export const callLikeTypes: ReadonlySet<string> = new Set([
 
 // True when the code holds a call site (not counting nested declarations).
 export function hasCallSite(root: SyntaxNode): boolean {
-  if (isNestedScope(root)) return false;
-  if (callLikeTypes.has(root.type)) return true;
-  return root.namedChildren.some((child) => hasCallSite(child));
+  const stack: SyntaxNode[] = [root];
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    if (isNestedScope(node)) continue;
+    if (callLikeTypes.has(node.type)) return true;
+    for (const child of node.namedChildren) stack.push(child);
+  }
+  return false;
 }
 
 // `Type.m()` and `a.b.C.m()` have a receiver that is a dotted name and not a local variable:

@@ -78,7 +78,7 @@ export function typeText(node: SyntaxNode | null | undefined): string {
 // (their type is not a name). Primitives are kept (`int`): no class has that name.
 export function normalizeJavaType(text: string | null | undefined): string | null {
   if (!text) return null;
-  let type = text.replace(/@[\w.]+(?:\s*\([^)]*\))?/gu, " ");
+  let type = text.replace(/@[\p{L}\p{N}_$.]+(?:\s*\([^)]*\))?/gu, " ");
   let depth = 0;
   let stripped = "";
   for (const char of type) {
@@ -88,7 +88,7 @@ export function normalizeJavaType(text: string | null | undefined): string | nul
   }
   type = stripped.replace(/\bfinal\b/gu, " ").replace(/\.\.\./gu, "[]").replace(/\s+/gu, "").trim();
   if (type === "" || type === "var" || type === "?" || type.startsWith("?")) return null;
-  return /^[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*(?:\[\])*$/u.test(type) ? type : null;
+  return /^[\p{L}_$][\p{L}\p{N}_$]*(?:\.[\p{L}_$][\p{L}\p{N}_$]*)*(?:\[\])*$/u.test(type) ? type : null;
 }
 
 export function lastSegment(name: string): string {
@@ -142,10 +142,17 @@ export function dottedName(node: SyntaxNode | null | undefined): string | null {
   if (!node) return null;
   if (node.type === "identifier" || node.type === "type_identifier") return node.text;
   if (node.type === "scoped_identifier" || node.type === "scoped_type_identifier") return compactNoSpace(node.text);
-  if (node.type === "field_access") {
-    const object = dottedName(node.childForFieldName("object"));
-    const field = node.childForFieldName("field");
-    return object && field && field.type === "identifier" ? `${object}.${field.text}` : null;
+  if (node.type !== "field_access") return null;
+  // Iterative: walk down the `object` chain, then join the fields from the root up.
+  const fields: string[] = [];
+  let current: SyntaxNode | null = node;
+  while (current.type === "field_access") {
+    const field: SyntaxNode | null = current.childForFieldName("field");
+    if (!field || field.type !== "identifier") return null;
+    fields.push(field.text);
+    current = current.childForFieldName("object");
+    if (!current) return null;
   }
-  return null;
+  const base = dottedName(current);
+  return base ? [base, ...fields.reverse()].join(".") : null;
 }
