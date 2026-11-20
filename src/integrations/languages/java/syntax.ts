@@ -9,7 +9,10 @@ export type JavaVisibility = "public" | "protected" | "package" | "private";
 // known (`null`: the name is a local, its type is not).
 export type JavaLocal = { type: string };
 
-export type JavaParameter = { name: string; type: string; varargs?: true; annotations?: string[] };
+// `annotations` (only when the parameter has some): `@Qualifier("x")` is { name: "Qualifier", args: [`"x"`] },
+// the same name and args as a Decorator node.
+export type JavaParameterAnnotation = { name: string; args: string[] };
+export type JavaParameter = { name: string; type: string; varargs?: true; annotations?: JavaParameterAnnotation[] };
 
 export const typeDeclarationTypes: ReadonlySet<string> = new Set([
   "class_declaration",
@@ -45,6 +48,24 @@ export function visibilityOf(words: ReadonlySet<string>, fallback: JavaVisibilit
 
 export type JavaAnnotation = { name: string; expression: string; args: string[]; line: number; column: number };
 
+// Removes whitespace outside string and char literals (`path = "a b"` keeps its space).
+export function compactOutsideLiterals(text: string): string {
+  let out = "";
+  let quote: string | null = null;
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i]!;
+    if (quote) {
+      out += char;
+      if (char === "\\" && i + 1 < text.length) out += text[++i]!;
+      else if (char === quote) quote = null;
+    } else if (char === '"' || char === "'") {
+      quote = char;
+      out += char;
+    } else if (!/\s/u.test(char)) out += char;
+  }
+  return out;
+}
+
 // `@Named("x")` is name `Named`, args [`"x"`]; `@Foo(a = 1, b = {2, 3})` is args [`a=1`, `b={2,3}`].
 export function annotationOf(node: SyntaxNode): JavaAnnotation {
   const args: string[] = [];
@@ -54,9 +75,9 @@ export function annotationOf(node: SyntaxNode): JavaAnnotation {
     if (child.type === "element_value_pair") {
       const key = child.childForFieldName("key")?.text ?? "";
       const value = child.childForFieldName("value")?.text ?? "";
-      args.push(`${key}=${compactNoSpace(value)}`);
+      args.push(`${key}=${compactOutsideLiterals(value)}`);
     } else {
-      args.push(child.type === "string_literal" ? child.text : compactNoSpace(child.text));
+      args.push(child.type === "string_literal" ? child.text : compactOutsideLiterals(child.text));
     }
   }
   return {
@@ -109,7 +130,10 @@ export function javaParameters(list: SyntaxNode | null | undefined): JavaParamet
       const name = parameter.childForFieldName("name")?.text;
       if (!name) continue;
       const dimensions = parameter.childForFieldName("dimensions")?.text.replace(/\s+/gu, "") ?? "";
-      const annotations = modifiersOf(parameter).annotations.map((annotation) => compact(annotation.text));
+      const annotations = modifiersOf(parameter).annotations.map((annotation) => {
+        const { name, args } = annotationOf(annotation);
+        return { name, args };
+      });
       parameters.push({
         name,
         type: `${typeText(parameter.childForFieldName("type"))}${dimensions}`,
@@ -120,7 +144,10 @@ export function javaParameters(list: SyntaxNode | null | undefined): JavaParamet
       const name = declarator?.childForFieldName("name")?.text;
       const typeNode = parameter.namedChildren.find((child) => child.type !== "modifiers" && child.type !== "variable_declarator" && !child.type.endsWith("comment"));
       if (!name) continue;
-      const annotations = modifiersOf(parameter).annotations.map((annotation) => compact(annotation.text));
+      const annotations = modifiersOf(parameter).annotations.map((annotation) => {
+        const { name, args } = annotationOf(annotation);
+        return { name, args };
+      });
       parameters.push({
         name,
         type: `${typeText(typeNode)}[]`,
