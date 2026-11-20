@@ -21,7 +21,7 @@ describe("non-code files in the graph", () => {
 
   it("detects the language of a file by extension or name", () => {
     const expected: Array<[string, string]> = [
-      ["a.css", "css"], ["a.scss", "scss"], ["a.less", "less"], ["a.json", "json"], ["a.yml", "yaml"], ["a.toml", "toml"],
+      ["a.css", "css"], ["a.scss", "scss"], ["a.less", "less"], ["a.json", "json"], ["a.yml", "yaml"], ["a.toml", "toml"], ["a.xml", "xml"], ["pom.xml", "xml"],
       ["a.md", "markdown"], ["a.sh", "shell"], ["a.ps1", "powershell"], ["Dockerfile", "dockerfile"], ["Dockerfile.prod", "dockerfile"],
       ["Makefile", "makefile"], ["a.sql", "sql"], ["a.proto", "proto"], ["a.png", "asset"], ["a.PNG", "asset"], ["LICENSE", "other"],
       ["a.ts", "typescript"], ["a.py", "python"],

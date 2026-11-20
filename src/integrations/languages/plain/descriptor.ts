@@ -9,6 +9,7 @@ export const plainLanguages: readonly LanguageDescriptor[] = [
   { id: "less", code: false, extensions: [".less"] },
   { id: "json", code: false, extensions: [".json", ".jsonc", ".json5"] },
   { id: "yaml", code: false, extensions: [".yml", ".yaml"] },
+  { id: "xml", code: false, extensions: [".xml"] },
   { id: "toml", code: false, extensions: [".toml"] },
   { id: "markdown", code: false, extensions: [".md", ".mdx", ".markdown"] },
   { id: "shell", code: false, extensions: [".sh", ".bash", ".zsh"] },
