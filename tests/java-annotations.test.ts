@@ -249,6 +249,15 @@ describe("one package-precision rule for unqualified annotations", () => {
     "src/main/java/own/Same.java": "package own;\nimport org.springframework.stereotype.*;\n@Controller\npublic class Same {}\n",
     // The user's own type from a scanned wildcard-imported package.
     "src/main/java/other/Wild.java": "package other;\nimport own.*;\n@Controller\npublic class Wild {}\n",
+    // Partially qualified names: the first segment is a type, resolved through the single-type imports.
+    "src/main/java/cli/Partial.java": "package cli;\nimport picocli.CommandLine;\n@CommandLine.Command(name = \"x\")\npublic class Partial {}\n",
+    "src/main/java/cli/PartialUnknown.java": "package cli;\n@CommandLine.Command(name = \"x\")\npublic class PartialUnknown {}\n",
+    "src/main/java/cli/PartialOther.java": "package cli;\nimport com.acme.CommandLine;\n@CommandLine.Command(name = \"x\")\npublic class PartialOther {}\n",
+    // Nested types are not in scope for their package: `Order.Service` does not make `@Service` the user's own.
+    "src/main/java/nest/Order.java": "package nest;\npublic class Order {\n  public @interface Service {}\n  @Service static class Inner {}\n}\n",
+    "src/main/java/nest/Uses.java": "package nest;\nimport org.springframework.stereotype.Service;\n@Service\npublic class Uses {}\n",
+    "src/main/java/nest/UsesPlain.java": "package nest;\n@Service\npublic class UsesPlain {}\n",
+    "src/main/java/nest/NestWild.java": "package nest;\nimport nest.Order.*;\n@Service\npublic class NestWild {}\n",
   };
   let ruleGraph: GraphBuilder;
   let ruleRoot: string;
@@ -287,5 +296,26 @@ describe("one package-precision rule for unqualified annotations", () => {
     assert.equal(hasAnnotation(annotationsOfClass("Same"), "Controller", SPRING), false);
     assert.equal(hasAnnotation(annotationsOfClass("Wild"), "Controller", SPRING), false);
     assert.equal(hasAnnotation(annotationsOfClass("Wild"), "Controller"), true);
+  });
+
+  it("resolves a partially qualified name through the file's imports, never reading an upper-case segment as a package", () => {
+    const partial = annotationsOfClass("Partial")[0]!;
+    assert.equal(partial.qualifiedName, "picocli.CommandLine.Command");
+    assert.equal(hasAnnotation(annotationsOfClass("Partial"), "Command", ["picocli"]), true);
+    assert.equal(hasAnnotation(annotationsOfClass("Partial"), "Command", ["org.other"]), false);
+    // Not imported: unknown, not a package-qualified name.
+    assert.equal(annotationsOfClass("PartialUnknown")[0]!.qualifiedName, null);
+    // Imported from somewhere else: that package, so not picocli.
+    assert.equal(annotationsOfClass("PartialOther")[0]!.qualifiedName, "com.acme.CommandLine.Command");
+    assert.equal(hasAnnotation(annotationsOfClass("PartialOther"), "Command", ["picocli"]), false);
+  });
+
+  it("counts only top-level types of the package as the user's own; a nested type only in its own file or by wildcard", () => {
+    assert.equal(hasAnnotation(annotationsOfClass("Uses"), "Service", ["org.springframework.stereotype"]), true);
+    assert.equal(hasAnnotation(annotationsOfClass("UsesPlain"), "Service", ["org.springframework.stereotype"]), true);
+    // In the file of the outer type the nested `Service` is in scope.
+    assert.equal(hasAnnotation(annotationsOfClass("Inner"), "Service", ["org.springframework.stereotype"]), false);
+    // `import nest.Order.*;` brings it in.
+    assert.equal(hasAnnotation(annotationsOfClass("NestWild"), "Service", ["org.springframework.stereotype"]), false);
   });
 });

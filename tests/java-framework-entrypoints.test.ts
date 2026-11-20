@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
@@ -66,5 +68,43 @@ describe("picocli entrypoints (fixtures/java-picocli)", () => {
       "com.acme.cli.Tool.status cli picocli status true",
       "com.acme.cli.Tool.sync cli picocli sync true",
     ]);
+  });
+});
+
+describe("entrypoint triggers that are not literals", () => {
+  it("marks placeholders, constants, missing destinations and non-class event values unresolved", async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), "concentrate-java-ep-"));
+    try {
+      await mkdir(path.join(dir, "src/main/java/app"), { recursive: true });
+      await writeFile(path.join(dir, "src/main/java/app/L.java"), `package app;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.annotation.TopicPartition;
+import org.springframework.context.event.EventListener;
+public class L {
+  @Scheduled(cron = "\${x.cron}") void placeholder() {}
+  @Scheduled(cron = "0 * * * * *") void literal() {}
+  @KafkaListener(topics = "\${t}") void topicPlaceholder() {}
+  @KafkaListener(topics = "orders") void topic() {}
+  @KafkaListener(topicPartitions = @TopicPartition(topic = "p", partitions = "0")) void partitions() {}
+  @EventListener(classes = FOO) void constant() {}
+  @EventListener(OrderPlaced.class) void classLiteral() {}
+  @EventListener void fromParameter(OrderPlaced event) {}
+}
+`);
+      const graph = await buildCodeGraph(dir, { continueOnError: false });
+      assert.deepEqual(entries(graph), [
+        "app.L.classLiteral event spring OrderPlaced true",
+        "app.L.constant event spring FOO false",
+        "app.L.fromParameter event spring OrderPlaced true",
+        "app.L.literal scheduler spring cron=0 * * * * * true",
+        "app.L.partitions queue spring-kafka null false",
+        "app.L.placeholder scheduler spring cron=${x.cron} false",
+        "app.L.topic queue spring-kafka orders true",
+        "app.L.topicPlaceholder queue spring-kafka ${t} false",
+      ]);
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
   });
 });
