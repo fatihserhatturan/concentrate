@@ -2232,8 +2232,8 @@ the call recall leaves out:
   not as an EXTENDS edge. The schema allows EXTENDS from Class to Class only.
 - Unused detection for package-private and private members is name-based within
   the file or package: a mention of the name counts as a use.
-- Source roots come from conventions (`src/main/java`, `src/test/java`) or from the
-  package path of the file, until the build files are read (Phase 40).
+- Source roots come from the build files (see Java build systems below), then from
+  conventions (`src/main/java`, `src/test/java`) or the package path of the file.
 - Locals are not scope-tracked. The same name declared with different types in one
   method gives an unknown type, so a call on it stays unresolved.
 - Method references (`Type::method`) have an unknown arity. When the method is
@@ -2241,7 +2241,40 @@ the call recall leaves out:
 - `switch` and record patterns do not feed local types.
 - `module-info.java` records only the module name (`File.javaModule`); `requires`,
   `exports` and `opens` are not read.
-- Not read yet: build systems (Phase 40) and frameworks (Phase 41 onward).
+- Not read yet: frameworks (Phase 41 onward).
+
+### Java build systems
+
+- `pom.xml`, `settings.gradle(.kts)` and `build.gradle(.kts)` give one `Package`
+  node per module, with its source roots, `PACKAGE_IMPORTS_PACKAGE` between
+  modules, and a `java-main-class` entrypoint that runs the class's `main`. `.xml`
+  files are `File` nodes; their content is not read except for the poms.
+- Gradle is read with a line and token reader, not evaluated. Plugins are not
+  applied, and conditions are not evaluated: every branch of an `if` is read.
+- `subprojects { }` and `allprojects { }` are applied for `sourceSets` only, and
+  only when `sourceSets` is a direct child (or under an `if`). Dependencies and
+  `plugins.withType { }` inside them are ignored.
+- Version catalogs (`libs.versions.toml`, `libs.x` accessors), `buildSrc`,
+  convention plugins and included builds are not read. In the Kotlin DSL
+  `project(mapOf(...))` is not recognized, so that link is missing.
+- Gradle values interpolate only `rootDir`, `settingsDir`, `projectDir` and
+  `rootProject.projectDir`. Any other `$x` or a `buildDir` based path is counted in
+  `unresolved`, as is a dependency on a project that is not included.
+- Maven profiles, `<dependencyManagement>`, inherited `<sourceDirectory>` and
+  plugins, `settings.xml` and `${env.*}` are not read. `<sourceDirectory>` and the
+  plugins come from the module's own pom only.
+- A `${property}` is expanded from the pom's properties and its parents. It counts
+  as unresolved only where the reader uses the value (a source directory, a main
+  class, a module path), not for every unused property.
+- External dependencies are not in the graph. Only dependencies on modules of the
+  scan become `PACKAGE_IMPORTS_PACKAGE`.
+- A file sees the types of its own module and of the modules it depends on. When
+  no visible module declares a type, every candidate is kept, because the build
+  file may be incomplete. A specific type import then resolves to the first
+  declaring file.
+- Source roots are reported even when the directory does not exist. They are
+  stored on the `Package` node as JSON-string arrays (`sourceRoots`,
+  `testSourceRoots`), not as list properties.
 
 ## Non-code files
 
