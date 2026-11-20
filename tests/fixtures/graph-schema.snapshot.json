@@ -21,6 +21,12 @@
     "workspaceRoot": "BOOLEAN",
     "targetType": "STRING",
     "buildFile": "STRING",
+    "buildSystem": "STRING",
+    "sourceRoots": "STRING",
+    "testSourceRoots": "STRING",
+    "aggregator": "BOOLEAN",
+    "mainClass": "STRING",
+    "mainClassSource": "STRING",
     "unresolved": "INT64"
    }
   },
@@ -275,7 +281,9 @@
     "receiverName": "STRING",
     "library": "STRING",
     "line": "INT64",
-    "handlerName": "STRING"
+    "handlerName": "STRING",
+    "source": "STRING",
+    "resolved": "BOOLEAN"
    }
   },
   {

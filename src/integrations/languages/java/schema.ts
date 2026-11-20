@@ -12,6 +12,8 @@ export const javaGraphSchema: GraphSchemaExtension = {
     { label: "Interface", after: "kind", properties: { namespace: "STRING", qualifiedName: "STRING", outer: "STRING", nesting: "STRING" } },
     { label: "Function", after: "qualifiedName", properties: { isStatic: "BOOLEAN", parameterCount: "INT64", javaLocals: "STRING" } },
     { label: "Field", after: "line", properties: { declaredType: "STRING", fieldKind: "STRING" } },
+    { label: "Package", after: "workspaceRoot", properties: { buildSystem: "STRING", sourceRoots: "STRING", testSourceRoots: "STRING", aggregator: "BOOLEAN", mainClass: "STRING", mainClassSource: "STRING", buildFile: "STRING" } },
+    { label: "EntryPoint", after: "handlerName", properties: { source: "STRING", resolved: "BOOLEAN" } },
     { label: "Call", after: "qualifier", properties: { argumentCount: "INT64", callKind: "STRING" } },
   ],
   relationshipTables: [
