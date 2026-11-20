@@ -1,3 +1,4 @@
+import { isPythonFile } from "../../languages/file-kind.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { PyListItem, PyParam } from "./facts.js";
 import type { PythonContext } from "./context.js";
@@ -787,7 +788,7 @@ function resolveMiddleware(names: string[], context: PythonContext): Step[] {
     const dot = name.lastIndexOf(".");
     if (dot < 0) continue;
     const [module, member] = [name.slice(0, dot), name.slice(dot + 1)];
-    const importer = [...context.fileIds.keys()].find((file) => file.endsWith(".py")) ?? "";
+    const importer = [...context.fileIds.keys()].find(isPythonFile) ?? "";
     const [target] = context.resolver.resolveImport({ importerFile: importer, source: module, importedName: null }).files;
     const fileId = target ? context.fileIds.get(target) : undefined;
     if (!fileId) continue;

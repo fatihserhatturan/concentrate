@@ -80,6 +80,31 @@ export class LanguageTable {
   }
 }
 
+/**
+ * A test for the files of the given languages, from their descriptors: the
+ * extension as written, an exact or matched file name, then the lower-case
+ * extension (the order `LanguageTable.detect` uses). Takes a `file:<relative path>`
+ * id or a plain path. Matches by the descriptor alone: `refine` hooks do not apply.
+ */
+export function createLanguageFileMatcher(...descriptors: readonly LanguageDescriptor[]): (fileId: string) => boolean {
+  const extensions = new Set(descriptors.flatMap((descriptor) => descriptor.extensions ?? []));
+  const fileNames = new Set(descriptors.flatMap((descriptor) => descriptor.fileNames ?? []));
+  const nameMatchers = descriptors.map((descriptor) => descriptor.matchFileName).filter((match) => match !== undefined);
+  return (fileId) => {
+    const fileName = path.posix.basename(fileId.startsWith("file:") ? fileId.slice("file:".length) : fileId);
+    const extension = path.posix.extname(fileName);
+    return extensions.has(extension)
+      || fileNames.has(fileName)
+      || nameMatchers.some((match) => match(fileName))
+      || extensions.has(extension.toLowerCase());
+  };
+}
+
+/** True when a file id belongs to one of the languages, by their descriptors. */
+export function fileMatchesLanguage(descriptors: readonly LanguageDescriptor[], fileId: string): boolean {
+  return createLanguageFileMatcher(...descriptors)(fileId);
+}
+
 const never = () => false;
 
 /** Combines the descriptors' file conventions. With no descriptors nothing is a test, generated or support name, and nothing is ignored. */
