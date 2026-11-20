@@ -2,7 +2,8 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 
 // Where each Java Function sits: its owning type (a Class, or an Interface for interface
-// methods) and the file that declares the type.
+// methods) and the file that declares the type. The parser links every type, nested ones included,
+// straight from its File (`File -DEFINES_CLASS-> Outer.Inner`), so no walk up to the top-level type is needed.
 export type JavaMethod = { node: GraphNode; owner: GraphNode; fileId: string };
 
 export function javaMethods(graph: IGraphContributor): JavaMethod[] {

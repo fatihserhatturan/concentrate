@@ -16,9 +16,10 @@ import {
 import { javaMethods, type JavaMethod } from "./shared.js";
 
 // HTTP routes declared by annotations: Spring MVC, JAX-RS / Jakarta REST (RESTEasy, Quarkus, Jersey)
-// and Micronaut. Every annotation is matched by simple name AND package: one whose package is
-// provably different never counts (a Micronaut `@Controller` is not Spring's), an unknown package
-// (wildcard import) still can, and the method annotations (`@GetMapping` vs `@Get`) then decide.
+// and Micronaut. Every annotation is matched by simple name AND package through `findAnnotations`
+// (annotations.ts): one whose package is provably different never counts (a Micronaut `@Controller`,
+// even from `import io.micronaut.http.annotation.*`, is not Spring's), and the method annotations
+// (`@GetMapping` vs `@Get`) decide what remains.
 //
 // Not handled (never guessed): meta-annotations (a custom annotation composed of `@RestController`),
 // `@ApplicationPath` / `server.servlet.context-path` / `quarkus.rest.path` prefixes, JAX-RS
