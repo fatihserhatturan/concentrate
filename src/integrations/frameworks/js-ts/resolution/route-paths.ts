@@ -1,3 +1,4 @@
+import { isGoFile } from "../../../languages/file-kind.js";
 import type { GraphNode, GraphRelationship, ImportBinding } from "../../../../core/graph/model.js";
 import type { IGraphContributor } from "../../../../core/contracts/graph-contributor.js";
 
@@ -19,7 +20,7 @@ export function resolveRouteFullPaths(graph: IGraphContributor): void {
   for (const route of graph.nodesWithLabel("Route")) {
     const fileId = context.fileIdByRouteId.get(route.id);
     // Go routes get their paths in frameworks/go/route-mounts.ts.
-    if (!fileId || fileId.endsWith(".go")) continue;
+    if (!fileId || isGoFile(fileId)) continue;
 
     const rawPath = resolveRoutePath(route, fileId, context.constantsByFileId);
     route.properties.path = rawPath;

@@ -11,8 +11,10 @@ A scan runs in five stages, each with one owner:
    - language integrations turn syntax trees into graph nodes;
    - framework contributors add routes, dependency injection, environment and
      data-access facts on top.
-4. **Resolution** (`core/scan/resolution`): links imports, calls and
-   inheritance across files over the whole graph.
+4. **Resolution**: links imports, calls and inheritance across files over the
+   whole graph. Each language supplies its own resolvers
+   (`integrations/languages/*`); `core/scan/resolution` holds the default
+   lookup for files no resolver claims.
 5. **Storage and querying** (`adapters/store`):
    - the graph is written as an atomic snapshot under a writer lock;
    - it is read through a read-only Cypher subset;
@@ -28,26 +30,38 @@ design and the rules each layer follows are in
 ```
 src/
   index.ts          — CLI binary entry point
+  api.ts            — Public API: registry, contracts, scan and store entry points
   program.ts        — Command, argument and flag definitions
+  commands/         — CLI command entry points
   adapters/
     cli/            — Command adapters (scan, stats, query, export, smoke, mcp) and the parseArgs router
     store/          — Graph store: in-memory graph, snapshots, writer lock, schema
       cypher/       — Read-only Cypher subset: lexer, parser, binder, planner, executor
     mcp/            — MCP server adapter
-  commands/         — CLI command entry points
-  composition/      — Default registry + orchestrator wiring (core ← integrations)
+    fs/             — Node file system, content hasher, parse cache, source reader
+    git/            — Change source for detect_changes
+  composition/      — Default registry, default schema, orchestrator, parse worker pool, scan-into-store (core ← integrations)
   core/
-    contracts/      — Language-agnostic interfaces
-    graph/          — Graph model (GraphNode, GraphRelationship, GraphBuilder)
-    integrations/   — Default parser + contributor registry
+    contracts/      — Language-agnostic interfaces: language descriptor, parser, call/import/inheritance resolvers,
+                      semantic contributor, unused-export rules, ports
+    graph/          — Graph model, builder, base schema as data, normalize, JSONL
+    integrations/   — CoreIntegrationRegistry and the registry-module contract
+    queries/        — Use cases shared by MCP, CLI and UI, over IQueryEngine
     scan/           — Orchestration, file discovery, manifest, report
-      resolution/   — Language-agnostic call/inheritance/import resolution
+      resolution/   — Default call, inheritance and name lookup
   integrations/
-    frameworks/js-ts/   — Express, Fastify, NestJS, env-config, data-access semantics
-    languages/          — Go, Python, Rust, JS/TS parsers and resolution
-      syntax/           — tree-sitter on WebAssembly (the only web-tree-sitter importer)
+    languages/      — One directory per language (plain, js-ts, python, go, rust, cpp): descriptor,
+                      parser, call/import/inheritance resolvers, unused rules, schema
+      syntax/       — tree-sitter on WebAssembly (the only web-tree-sitter importer)
+      file-kind.ts  — isXFile helpers built from the descriptors
+    frameworks/     — cpp, go, js-ts, proto, python, rust, scripts, sql, styles: routes, dependency
+                      injection, environment, data-access and other framework facts
+    resolution/     — imports.ts dispatches to the registered import resolvers
 vendor/grammars/    — Prebuilt tree-sitter grammars (.wasm) and their manifest
 ```
+
+A new language adds a directory under `integrations/languages/` and registers
+in `composition/default-registry.ts`; see [adding-a-language.md](adding-a-language.md).
 
 ## Dependencies
 

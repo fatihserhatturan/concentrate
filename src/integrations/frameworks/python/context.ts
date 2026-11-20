@@ -1,3 +1,4 @@
+import { isPythonFile } from "../../languages/file-kind.js";
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
@@ -66,7 +67,7 @@ export async function createPythonContext(graph: IGraphContributor, rootPath: st
       delete node.properties.pyData;
     }
   }
-  const hasPython = [...fileIds.keys()].some((file) => file.endsWith(".py"));
+  const hasPython = [...fileIds.keys()].some(isPythonFile);
   if (!hasPython) return null;
 
   const relationshipIndex = createResolutionRelationshipIndex(graph);

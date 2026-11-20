@@ -1,9 +1,11 @@
 import type { ILanguageCallResolver, ILanguageInheritanceResolver } from "../contracts/call-resolver.js";
+import type { ILanguageImportResolver } from "../contracts/import-resolver.js";
 import type { LanguageDescriptor } from "../contracts/language-descriptor.js";
 import type { IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
 import type { ILanguageResolver } from "../contracts/language-resolver.js";
 import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
+import type { IUnusedExportRules } from "../contracts/unused-rules.js";
 import { baseGraphSchema, mergeGraphSchema, type GraphSchema, type GraphSchemaExtension } from "../graph/schema.js";
 
 export class CoreIntegrationRegistry {
@@ -12,8 +14,10 @@ export class CoreIntegrationRegistry {
   private readonly languageResolverList: ILanguageResolver[] = [];
   private readonly semanticContributorList: ISemanticContributor[] = [];
   private readonly callResolverList: ILanguageCallResolver[] = [];
+  private readonly importResolverList: ILanguageImportResolver[] = [];
   private readonly inheritanceResolverList: ILanguageInheritanceResolver[] = [];
   private readonly projectManifestReaderList: IProjectManifestReader[] = [];
+  private readonly unusedExportRulesList: IUnusedExportRules[] = [];
   // The contributors in run order; dropped whenever one is registered.
   private orderedContributors: readonly ISemanticContributor[] | null = null;
   private readonly graphSchemaExtensions: GraphSchemaExtension[] = [];
@@ -78,6 +82,15 @@ export class CoreIntegrationRegistry {
     return this.callResolverList;
   }
 
+  // Per-language import resolution; the first that supports an importing file resolves its imports.
+  registerImportResolver(resolver: ILanguageImportResolver): void {
+    this.importResolverList.push(resolver);
+  }
+
+  get importResolvers(): readonly ILanguageImportResolver[] {
+    return this.importResolverList;
+  }
+
   // Per-language EXTENDS / IMPLEMENTS, run in registration order after the default lookup.
   registerInheritanceResolver(resolver: ILanguageInheritanceResolver): void {
     this.inheritanceResolverList.push(resolver);
@@ -94,6 +107,18 @@ export class CoreIntegrationRegistry {
 
   get projectManifestReaders(): readonly IProjectManifestReader[] {
     return this.projectManifestReaderList;
+  }
+
+  // Per-language rules of the unused-exports analysis. Ids are unique; registration order is the note order.
+  registerUnusedExportRules(rules: IUnusedExportRules): void {
+    if (this.unusedExportRulesList.some((existing) => existing.id === rules.id)) {
+      throw new Error(`Unused-export rules already registered: ${rules.id}`);
+    }
+    this.unusedExportRulesList.push(rules);
+  }
+
+  get unusedExportRules(): readonly IUnusedExportRules[] {
+    return this.unusedExportRulesList;
   }
 
   // New graph tables and extra properties on existing ones. Ids are unique, and an
@@ -128,7 +153,9 @@ export function describeIntegrations(registry: CoreIntegrationRegistry): string[
     ...registry.languageResolvers.map((item) => line("resolver", item.id, item.version)),
     ...registry.semanticContributors.map((item) => line("contributor", item.id, item.version)),
     ...registry.callResolvers.map((item) => line("call-resolver", item.id, undefined)),
+    ...registry.importResolvers.map((item) => line("import-resolver", item.id, item.version)),
     ...registry.inheritanceResolvers.map((item) => line("inheritance-resolver", item.id, undefined)),
+    ...registry.unusedExportRules.map((item) => line("unused-rules", item.id, undefined)),
     ...registry.projectManifestReaders.map((item) => line("manifest-reader", item.id, item.version)),
   ].sort();
 }

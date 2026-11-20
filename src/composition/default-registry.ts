@@ -48,7 +48,19 @@ import { LanguageTable } from "../core/scan/language.js";
 import { cppCallResolver, cppInheritanceResolver } from "../integrations/languages/cpp/resolvers.js";
 import { goCallResolver, goInheritanceResolver } from "../integrations/languages/go/resolvers.js";
 import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
+import { styleImportResolver, protoImportResolver } from "../integrations/languages/plain/import-resolver.js";
+import { rustImportResolver } from "../integrations/languages/rust/import-resolver.js";
+import { cppImportResolver } from "../integrations/languages/cpp/import-resolver.js";
+import { pythonImportResolver } from "../integrations/languages/python/import-resolver.js";
+import { goImportResolver } from "../integrations/languages/go/import-resolver.js";
+import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resolver.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
+
+import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
+import { goUnusedRules } from "../integrations/languages/go/unused.js";
+import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
+import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
+import { rustUnusedRules } from "../integrations/languages/rust/unused.js";
 
 import { jsTsGraphSchema } from "../integrations/frameworks/js-ts/schema.js";
 import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
@@ -80,6 +92,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     registry.registerCallResolver(resolver);
   }
 
+  // The first that supports an importing file resolves its imports.
+  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, jsTsImportResolver]) {
+    registry.registerImportResolver(resolver);
+  }
+
   for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver]) {
     registry.registerInheritanceResolver(resolver);
   }
@@ -87,6 +104,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   // js-ts first: it owns a directory that has both a package.json and a pyproject.toml.
   for (const reader of [jsTsManifestReader, pythonManifestReader]) {
     registry.registerProjectManifestReader(reader);
+  }
+
+  // The order is the order of the find_unused_exports note's language paragraphs.
+  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules]) {
+    registry.registerUnusedExportRules(rules);
   }
 
   for (const resolver of createDefaultLanguageResolvers(registry)) {
@@ -154,7 +176,7 @@ function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILan
   const importResolver: ILanguageResolver = {
     id: "core.imports",
     async resolve(graph, rootPath, report) {
-      const counts = await addImportResolutionRelationships(graph, rootPath, report);
+      const counts = await addImportResolutionRelationships(graph, rootPath, registry.importResolvers, report);
       report.resolvedImports = counts.resolved;
       report.unresolvedRelativeImports = counts.unresolved;
     },

@@ -27,6 +27,21 @@ import { rustLanguageParser } from "../src/integrations/languages/rust/index.js"
 
 const fixturesRoot = path.join(import.meta.dirname, "../fixtures");
 
+// One file to parse per code language, keyed by language id. A newly registered code language needs an entry.
+const parserFixtures: Record<string, { root: string; file: string }> = {
+  javascript: { root: "parser-javascript", file: "index.js" },
+  typescript: { root: "parser-typescript", file: "index.ts" },
+  python: { root: "parser-python", file: "module.py" },
+  go: { root: "parser-go", file: "service.go" },
+  rust: { root: "parser-rust", file: "lib.rs" },
+  c: { root: "c-basic", file: "src/list.c" },
+  cpp: { root: "cpp-calls", file: "src/shape.cpp" },
+  html: { root: "vanilla-html", file: "index.html" },
+  vue: { root: "vue-components", file: "src/App.vue" },
+  svelte: { root: "svelte-components", file: "src/App.svelte" },
+  astro: { root: "astro-site", file: "src/components/Header.astro" },
+};
+
 describe("Core contract conformance", () => {
   it("GraphBuilder satisfies IGraphContributor", () => {
     const builder = new GraphBuilder();
@@ -83,12 +98,38 @@ describe("Core contract conformance", () => {
     assert.equal(typeof parser.parse, "function");
   });
 
-  it("languageParsers map covers all five supported languages", () => {
-    for (const lang of ["javascript", "typescript", "python", "go", "rust"]) {
-      const parser = languageParsers.get(lang);
-      assert.ok(parser, `missing parser for ${lang}`);
-      assert.equal(parser.language, lang);
+  it("every registered language parser has its language label and a parse function", () => {
+    assert.ok(languageParsers.size > 0, "the default registry registers parsers");
+    for (const [language, parser] of languageParsers) {
+      assert.equal(parser.language, language);
       assert.equal(typeof parser.parse, "function");
+    }
+    // The registry must still cover the languages the product ships.
+    for (const language of ["javascript", "typescript", "python", "go", "rust"]) {
+      assert.ok(languageParsers.get(language), `missing parser for ${language}`);
+    }
+  });
+
+  it("every registered code language has a parser and a conformance fixture", () => {
+    for (const language of defaultLanguageTable.codeLanguages) {
+      assert.ok(languageParsers.get(language), `code language "${language}" has no registered parser`);
+      assert.ok(
+        language in parserFixtures,
+        `code language "${language}" has no entry in parserFixtures (tests/contracts.test.ts): add a fixture directory and a file to parse`,
+      );
+    }
+  });
+
+  it("every registered parser parses its fixture into a File node plus language nodes", async () => {
+    for (const [language, parser] of languageParsers) {
+      if (!defaultLanguageTable.isCode(language)) continue;
+      const fixture = parserFixtures[language];
+      assert.ok(fixture, `code language "${language}" has no entry in parserFixtures`);
+      const rootPath = path.join(fixturesRoot, fixture.root);
+      const result = await parser.parse(rootPath, path.join(rootPath, fixture.file));
+
+      assert.ok(result.nodes.some((n) => n.label === "File"), `${language}: should have File node`);
+      assert.ok(result.nodes.length > 1, `${language}: should have more than just the File node`);
     }
   });
 

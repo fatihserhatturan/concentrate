@@ -1,3 +1,4 @@
+import { isGoFile } from "../../languages/file-kind.js";
 import { fileOfNodeId } from "../js-ts/resolution/data-access.js";
 import path from "node:path";
 import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
@@ -422,7 +423,7 @@ export const goDataAccessContributor: ISemanticContributor = {
     // Imported package sources per file by local name.
     const sourcesByFile = new Map<string, Map<string, string>>();
     for (const relationship of graph.relationshipsOfType("IMPORTS")) {
-      if (!relationship.from.endsWith(".go")) continue;
+      if (!isGoFile(relationship.from)) continue;
       const imported = nodeById.get(relationship.to);
       const source = imported?.properties.source;
       if (imported?.label !== "Import" || typeof source !== "string") continue;

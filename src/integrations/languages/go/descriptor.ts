@@ -3,6 +3,7 @@ import type { LanguageDescriptor } from "../../../core/contracts/language-descri
 export const goLanguages: readonly LanguageDescriptor[] = [
   {
     id: "go",
+    displayName: "Go",
     code: true,
     extensions: [".go"],
     testFile: (fileName) => fileName.endsWith("_test.go"),

@@ -45,6 +45,5 @@ export { mergeGraphSchema, baseGraphSchema, type GraphSchema, type GraphSchemaEx
 export { matchName, type MatchType } from "./core/queries/match.js";
 export type { ISourceReader } from "./core/contracts/source-reader.js";
 export { findUnusedExports, type FindUnusedExportsOptions, type UnusedExport, type UnusedExportsResult } from "./core/queries/unused.js";
-export { defaultUnusedExportRules } from "./composition/unused-rules.js";
 export type { IUnusedExportRules } from "./core/contracts/unused-rules.js";
 export { findImportCycles, type ImportCycle, type ImportCyclesResult } from "./core/queries/cycles.js";

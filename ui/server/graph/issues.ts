@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { defaultUnusedExportRules, findImportCycles, findUnusedExports, type ISourceReader } from "../core.js";
+import { coreIntegrationRegistry, findImportCycles, findUnusedExports, type ISourceReader } from "../core.js";
 import { loadIndex, projectStore } from "./index.js";
 
 export type Issues = {
@@ -25,7 +25,7 @@ export async function issues(projectPath: string): Promise<Issues> {
   const store = await projectStore(root);
   const [cycleResult, unusedResult] = await Promise.all([
     findImportCycles(store, { scope: "file" }),
-    findUnusedExports(store, sourceReader, { rules: defaultUnusedExportRules }),
+    findUnusedExports(store, sourceReader, { rules: coreIntegrationRegistry.unusedExportRules }),
   ]);
   const result: Issues = {
     cycles: cycleResult.cycles.map((c) => ({

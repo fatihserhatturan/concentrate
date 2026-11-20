@@ -9,6 +9,8 @@ export type DetectedFile = { filePath: string; language: string };
 export interface LanguageDescriptor {
   /** The value of `File.language`, the key of the parser, and the name a `concentrate.json` extension override uses. */
   readonly id: string;
+  /** Human name in tool output (`C++`); defaults to `id`. */
+  readonly displayName?: string;
   /** Part of the parse cache fingerprint. */
   readonly version?: string;
   /** True when the parser reads declarations, imports and calls; false for a file that is only a `File` node. */

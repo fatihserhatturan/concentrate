@@ -16,8 +16,8 @@ const jsTsFileConventions: Partial<LanguageDescriptor> = {
 
 // JavaScript, TypeScript and the markup formats whose scripts they parse.
 export const jsTsLanguages: readonly LanguageDescriptor[] = [
-  { id: "javascript", code: true, extensions: [".js", ".jsx", ".mjs", ".cjs"], ...jsTsFileConventions },
-  { id: "typescript", code: true, extensions: [".ts", ".tsx", ".mts", ".cts"] },
+  { id: "javascript", displayName: "JavaScript", code: true, extensions: [".js", ".jsx", ".mjs", ".cjs"], ...jsTsFileConventions },
+  { id: "typescript", displayName: "TypeScript", code: true, extensions: [".ts", ".tsx", ".mts", ".cts"] },
   { id: "html", code: true, extensions: [".html", ".htm"] },
   { id: "vue", code: true, extensions: [".vue"] },
   { id: "svelte", code: true, extensions: [".svelte"] },
