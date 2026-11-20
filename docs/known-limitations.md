@@ -2241,7 +2241,9 @@ the call recall leaves out:
 - `switch` and record patterns do not feed local types.
 - `module-info.java` records only the module name (`File.javaModule`); `requires`,
   `exports` and `opens` are not read.
-- Not read yet: frameworks (Phase 41 onward).
+- Frameworks: routes, entrypoints and dependency injection are read (see Java
+  frameworks below). Data access, config and outbound HTTP are not read yet
+  (Phase 42 onward).
 
 ### Java build systems
 
@@ -2281,6 +2283,92 @@ the call recall leaves out:
 - Source roots are reported even when the directory does not exist. They are
   stored on the `Package` node as JSON-string arrays (`sourceRoots`,
   `testSourceRoots`), not as list properties.
+
+### Java frameworks
+
+HTTP routes, framework entrypoints and dependency injection come from
+annotations and a few call shapes, in `src/integrations/frameworks/java/`. An
+annotation is matched by simple name and package: one whose package provably
+differs (by import or qualified name) never counts, and an unknown package
+(wildcard import) still can. Nested classes are read.
+
+Routes (`list_routes`):
+
+- `spring-mvc`: `@RestController` and `@Controller` with `@RequestMapping`,
+  `@GetMapping`, `@PostMapping` and the other verb mappings. The class path and
+  the method path are joined; one `Route` per path and verb. A mapping without a
+  method is `ALL`. Mappings are inherited through implemented interfaces and
+  superclasses when the subclass redeclares the method.
+- `jaxrs`: javax and jakarta `@Path` with `@GET`, `@POST` and the other verbs
+  (RESTEasy, Quarkus, Jersey). A method with `@Path` and no verb is a
+  sub-resource locator and gives no route.
+- `micronaut`: `@Controller` with `@Get`, `@Post` and the other verbs; `uri` and
+  `uris` are read.
+- `spring-webflux`: functional routers. A method returning `RouterFunction` built
+  with `RouterFunctions.route` and `andRoute`, `andNest`, or the `route()`
+  builder (`GET`, `POST`, `path`, `nest`, `.and`, `.or` predicates, qualified or
+  statically imported). Literal `nest` and `path` prefixes are applied. The
+  handler is a method reference or a lambda that only calls the handler.
+- A path that is a constant or an expression is not guessed: the route has
+  `path: null` and `pathExpression` holds the text.
+- Not read: meta-annotations (a custom annotation composed of `@RestController`),
+  context paths (`@ApplicationPath`, `server.servlet.context-path`,
+  `quarkus.rest.path`), a mapping inherited through `interface I extends J`, an
+  inherited method the subclass does not redeclare, a WebFlux router nested from
+  another method (`nest(path("/a"), other())`: its routes get no prefix), a
+  predicate held in a variable or built by a helper (the route has no path), and
+  a handler that is neither a method reference nor a delegating lambda (the route
+  has no handler).
+
+Entrypoints (`list_entrypoints`):
+
+- gRPC (kind `grpc`, library `grpc-java`, trigger `Service/method`): public
+  methods with a gRPC signature of a class extending `XGrpc.XImplBase` or
+  implementing `XGrpc.AsyncService`. A call on a blocking, future or async stub
+  (a local, parameter or field, `this.field`, `XGrpc.newBlockingStub(channel)`
+  directly, through `.withX(...)` or held by a `var`) gets `CALL_RESOLVES_TO` with
+  `via: "grpc"` to the method of every class serving the service, and a `.proto`
+  rpc gets `RPC_IMPLEMENTED_BY` to those methods.
+- `@SpringBootApplication` (kind `spring-boot-application`, library
+  `spring-boot`): runs the class's `main`. A class without a `main` is no
+  entrypoint.
+- `@Scheduled`, Spring and Micronaut (kind `scheduler`; trigger `cron=...`,
+  `fixedRate=...` or `fixedDelay=...` as written, one entrypoint per attribute).
+- `@KafkaListener`, `@RabbitListener` and `@JmsListener` (kind `queue`, one
+  entrypoint per topic or queue).
+- `@EventListener` and `@TransactionalEventListener` (kind `event`; trigger the
+  event type from `classes` or `value`, else the type of the single parameter).
+- picocli `@Command` classes (kind `cli`, library `picocli`; handled by `run()` or
+  `call()`) and `@Command` methods as subcommands.
+- A trigger that is a constant or a placeholder is `resolved: false`.
+- Not read: class-level `@KafkaListener` with `@KafkaHandler` methods,
+  `@Schedules`, a stub held in a field of a superclass, a receiver of unknown
+  type, an intermediate base class between the implementation and `XImplBase`,
+  and two services of the same name in different proto packages (both link).
+  `RPC_SERVED_BY` is not produced.
+
+Dependency injection (`INJECTS`):
+
+- A provider is a non-abstract class with `@Component`, `@Service`,
+  `@Repository`, `@Controller`, `@RestController`, `@Configuration`,
+  `@SpringBootApplication`, `@Named` or `@Singleton` (`diStereotype`,
+  `diBeanName` on the `Class`). A `@Bean` method provides its return type
+  (`diBean` on the method), named by the method or `@Bean("name")`.
+- Injection points are the `@Autowired` or `@Inject` constructor (else the only
+  constructor), `@Autowired`, `@Inject` and `@Resource` fields, `@Autowired` and
+  `@Inject` methods, and `@Bean` method parameters. `INJECTS` carries `fieldName`,
+  `via` (`constructor`, `field`, `setter` or `bean-parameter`) and `beanMethod`.
+- A scanned concrete class resolves to itself. An interface or abstract class
+  resolves to its implementations, narrowed by `@Qualifier`, `@Named` and
+  `@Resource(name=)`, then by the one `@Primary`, then by a bean named like the
+  field. When several remain there is no edge and `ambiguousInjections` on the
+  consumer counts it. `Optional`, `ObjectProvider`, `Provider` and `ObjectFactory`
+  are looked through; `List`, `Set`, `Collection`, `Map<String, T>` and arrays
+  inject every provider. A type outside the scan (`JdbcTemplate`) is ignored.
+- Not read: meta-annotations and custom stereotypes, Lombok `@RequiredArgsConstructor`
+  and record constructors, conditional beans (`@Profile`, `@ConditionalOn*`),
+  matching on generic type arguments, CDI `@Produces` and `Instance<T>`, and
+  Micronaut `@Factory`.
 
 ## Non-code files
 
