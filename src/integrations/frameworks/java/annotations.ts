@@ -20,8 +20,9 @@ export type JavaAnnotationInfo = {
   /** Id of the Decorator node. */
   decoratorId: string;
   /**
-   * True when `qualifiedName` is unknown and the scan declares a type of this simple name in the file's
-   * package, or one that a wildcard import of the file brings in: the user's own annotation, never a framework's.
+   * True when `qualifiedName` is unknown and the scan declares a type of this simple name (for
+   * `Outer.X`: of the name `Outer`) as a top-level type in the file's package, as any type of the file
+   * itself, or one that a wildcard import of the file brings in: the user's own annotation, never a framework's.
    */
   ownType?: boolean;
   /** The file's non-static wildcard imports (`org.springframework.stereotype`), as written. */
@@ -48,8 +49,12 @@ function simpleNameOf(name: string): string {
 /**
  * Indexes the graph's Java annotations once; call `annotationsOf` per node. Qualified names come from
  * the declaring file's imports: a single-type import (`import a.b.GetMapping;`) of the simple name
- * qualifies it, a name written with its package is its own qualification, and anything else
- * (wildcard imports, same package, java.lang) stays null.
+ * qualifies it, a name written with its package is its own qualification, a name written through a
+ * type (`@CommandLine.Command`; the first segment is upper case, so no package) is qualified by the
+ * single-type import of that type (`import picocli.CommandLine;`), and anything else (wildcard
+ * imports, same package, java.lang, a type that is not imported) stays null. Own types: a top-level type
+ * of the file's package counts, a nested one only in the file that declares it (or when imported, which
+ * gives a qualified name, or by `import pkg.Outer.*;`).
  */
 export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationReader {
   const decoratorsByOwner = new Map<string, GraphNode[]>();
@@ -82,26 +87,32 @@ export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationRe
     if (!imports) importsByFile.set(rel.from, (imports = new Map()));
     imports.set(simpleNameOf(properties.source), properties.source);
   }
-  // The scan's own types: qualified names, and `package|simpleName` (nested types count for their package).
+  // The scan's own types: qualified names; `package|simpleName` for top-level types only (a nested type
+  // is not in scope for its package); `file|simpleName` for every type a file declares, nested ones
+  // included (the file of the outer type is where a nested type is in scope).
   const declared = new Set<string>();
   const declaredInPackage = new Set<string>();
+  const declaredInFile = new Set<string>();
   const packageOfFile = new Map<string, string>();
   for (const label of ["Class", "Interface"] as const) {
     for (const type of graph.nodesWithLabel(label)) {
-      const { namespace, qualifiedName } = type.properties;
+      const { namespace, qualifiedName, outer } = type.properties;
       if (typeof namespace !== "string" || typeof qualifiedName !== "string") continue;
       declared.add(qualifiedName);
-      declaredInPackage.add(`${namespace}|${simpleNameOf(qualifiedName)}`);
+      if (typeof outer !== "string") declaredInPackage.add(`${namespace}|${simpleNameOf(qualifiedName)}`);
     }
   }
   for (const type of ["DEFINES_CLASS", "DEFINES_INTERFACE"] as const) {
     for (const rel of graph.relationshipsOfType(type)) {
-      const namespace = graph.node(rel.to)?.properties.namespace;
+      const target = graph.node(rel.to);
+      const namespace = target?.properties.namespace;
       if (typeof namespace === "string") packageOfFile.set(rel.from, namespace);
+      if (target && typeof target.properties.qualifiedName === "string") declaredInFile.add(`${rel.from}|${simpleNameOf(target.properties.qualifiedName)}`);
     }
   }
   const isOwnType = (fileId: string | null, simpleName: string): boolean => {
     if (!fileId) return false;
+    if (declaredInFile.has(`${fileId}|${simpleName}`)) return true;
     if (declaredInPackage.has(`${packageOfFile.get(fileId) ?? ""}|${simpleName}`)) return true;
     return (wildcardsByFile.get(fileId) ?? []).some((source) => declared.has(`${source}.${simpleName}`));
   };
@@ -126,7 +137,17 @@ export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationRe
           const properties = decorator.properties;
           const name = String(properties.name);
           const simpleName = simpleNameOf(name);
-          const qualifiedName = name.includes(".") ? name : fileId ? importsByFile.get(fileId)?.get(simpleName) ?? null : null;
+          // `a.b.X` is written qualified; `Outer.X` (first segment a type name, never a package) is resolved
+          // through the file's single-type imports, else unknown.
+          const first = name.split(".")[0]!;
+          const partial = name.includes(".") && /^\p{Lu}/u.test(first);
+          let qualifiedName: string | null;
+          if (!name.includes(".")) qualifiedName = fileId ? importsByFile.get(fileId)?.get(simpleName) ?? null : null;
+          else if (!partial) qualifiedName = name;
+          else {
+            const imported = fileId ? importsByFile.get(fileId)?.get(first) : undefined;
+            qualifiedName = imported ? `${imported}${name.slice(first.length)}` : null;
+          }
           let args: string[] = [];
           try {
             const parsed: unknown = JSON.parse(String(properties.args ?? "[]"));
@@ -141,7 +162,7 @@ export function javaAnnotationReader(graph: IGraphContributor): JavaAnnotationRe
             args,
             line: Number(properties.line),
             decoratorId: decorator.id,
-            ownType: qualifiedName === null && isOwnType(fileId, simpleName),
+            ownType: qualifiedName === null && isOwnType(fileId, partial ? first : simpleName),
             wildcardImports: (fileId ? wildcardsByFile.get(fileId) : undefined) ?? [],
           };
         })

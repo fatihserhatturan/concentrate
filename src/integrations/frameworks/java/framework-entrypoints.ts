@@ -26,8 +26,10 @@ import { javaMethods } from "./shared.js";
 //                                     command `name`, handled by its `run()` (Runnable) or `call()`
 //                                     (Callable); @Command methods are subcommands named by `name`, else by
 //                                     the method name
-// `resolved` is false on an EntryPoint whose trigger is an expression (a constant, a placeholder) rather
-// than a literal. Annotations are matched by simple name and package by `findAnnotations` (see annotations.ts).
+// `resolved` is true only when the trigger is a literal (a string, a number, a `X.class`, the parameter's
+// type). It is false when the trigger is an expression (a constant, a `${...}` / `#{...}` placeholder: the
+// trigger then keeps the written text) or unknown (`@KafkaListener(topicPartitions=...)`, no destination:
+// trigger null). Annotations are matched by simple name and package by `findAnnotations` (see annotations.ts).
 
 const SPRING_BOOT = ["org.springframework.boot"];
 const SPRING_SCHEDULING = ["org.springframework.scheduling.annotation"];
@@ -36,6 +38,9 @@ const SPRING_EVENTS = ["org.springframework.context.event", "org.springframework
 const PICOCLI = ["picocli"];
 // `fixedRate = 5000` is as literal as a string is.
 const NUMBER = /^\d[\d_]*[lL]?$/u;
+// A property placeholder or SpEL expression is resolved by Spring at run time, never by the scan.
+const PLACEHOLDER = /\$\{|#\{/u;
+const CLASS_LITERAL = /^[\p{L}_$][\p{L}\p{N}_$]*(?:\s*\.\s*[\p{L}_$][\p{L}\p{N}_$]*)*\.class$/u;
 
 type Parameter = { name?: string; type?: string | null };
 type Trigger = { value: string | null; resolved: boolean };
@@ -83,10 +88,10 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
     }
 
     const emit = (fileId: string, handler: GraphNode, ann: JavaAnnotationInfo, kind: string, library: string, triggers: Trigger[]): void => {
-      const list = triggers.length > 0 ? triggers : [{ value: null, resolved: true }];
+      const list = triggers.length > 0 ? triggers : [{ value: null, resolved: false }];
       for (const trigger of list) {
         const entry = addJavaEntryPoint(graph, { fileId, kind, trigger: trigger.value, line: ann.line, handler, library });
-        entry.properties.resolved = trigger.resolved;
+        entry.properties.resolved = trigger.resolved && !(trigger.value !== null && PLACEHOLDER.test(trigger.value));
       }
     };
     const values = (ann: JavaAnnotationInfo, key: string) => annotationValue(ann, key) ?? [];
@@ -158,7 +163,11 @@ export const javaFrameworkEntrypointsContributor: ISemanticContributor = {
 
       for (const name of ["EventListener", "TransactionalEventListener"]) {
         for (const ann of findAnnotations(annotations, name, SPRING_EVENTS)) {
-          let triggers: Trigger[] = [...values(ann, "classes"), ...values(ann, "value")].map((value) => ({ value: value.value.replace(/\.class$/u, ""), resolved: true }));
+          // Only `X.class` names the event type; a constant (`classes = FOO`) stays as written, unresolved.
+          let triggers: Trigger[] = [...values(ann, "classes"), ...values(ann, "value")].map((value) => {
+            const literal = !value.resolved && CLASS_LITERAL.test(value.value);
+            return { value: literal ? value.value.replace(/\s+/gu, "").replace(/\.class$/u, "") : value.value, resolved: literal };
+          });
           if (triggers.length === 0) {
             const parameters = parametersOf(node);
             if (parameters.length === 1 && parameters[0]!.type) triggers = [{ value: parameters[0]!.type!, resolved: true }];

@@ -123,3 +123,93 @@ describe("Java dependency injection resolution rules", () => {
     assert.deepEqual(injections(graph), []);
   });
 });
+
+describe("Java dependency injection: names, generics, maps, self-injection", () => {
+  const SPRING = "import org.springframework.stereotype.*;\nimport org.springframework.beans.factory.annotation.*;\nimport org.springframework.context.annotation.*;\n";
+  const consumerOf = (graph: Graph, name: string) => graph.nodes.find((node) => node.label === "Class" && node.properties.name === name)!;
+
+  it("never guesses the bean name when the explicit name is not a literal", async () => {
+    const graph = await scanSources({
+      "Repo.java": "package app;\ninterface Repo {}\n",
+      "Names.java": "package app;\nclass Names { static final String X = \"a\"; }\n",
+      "A.java": `package app;\n${SPRING}@Component(Names.X) class A implements Repo {}\n`,
+      "B.java": `package app;\n${SPRING}@Component class B implements Repo {}\n`,
+      "C.java": `package app;\n${SPRING}@Service class C {\n  @Autowired Repo a;\n  @Autowired Repo b;\n  @Autowired @Qualifier("b") Repo qualified;\n}\n`,
+    });
+    // `a` could be A (named Names.X) or B: nothing is linked and each point is counted, also the qualified one.
+    assert.deepEqual(injections(graph), []);
+    assert.equal(consumerOf(graph, "C").properties.ambiguousInjections, 3);
+    assert.equal(consumerOf(graph, "A").properties.diBeanName, undefined);
+    assert.equal(consumerOf(graph, "A").properties.diStereotype, "Component");
+    assert.equal(consumerOf(graph, "B").properties.diBeanName, "b");
+  });
+
+  it("does not name a @Bean method by its method when its name is a constant", async () => {
+    const graph = await scanSources({
+      "Repo.java": "package app;\ninterface Repo {}\nclass RepoA implements Repo {}\nclass RepoB implements Repo {}\n",
+      "Config.java": `package app;\n${SPRING}@Configuration class Config {\n  @Bean(NAME) Repo one() { return new RepoA(); }\n  @Bean Repo two() { return new RepoB(); }\n}\n`,
+      "C.java": `package app;\n${SPRING}@Service class C {\n  @Autowired Repo two;\n}\n`,
+    });
+    assert.deepEqual(injections(graph), []);
+    assert.equal(consumerOf(graph, "C").properties.ambiguousInjections, 1);
+    const methods = graph.nodes.filter((node) => node.label === "Function" && node.properties.diBean !== undefined).map((node) => `${node.properties.name}:${node.properties.diBean}`);
+    assert.deepEqual(methods, ["two:two"]);
+  });
+
+  it("resolves @Resource without a name by the field name before the type, even against @Primary", async () => {
+    const graph = await scanSources({
+      "Repo.java": "package app;\ninterface Repo {}\n",
+      "A.java": `package app;\n${SPRING}@Component @Primary class A implements Repo {}\n`,
+      "B.java": `package app;\n${SPRING}@Component class B implements Repo {}\n`,
+      "C.java": `package app;\n${SPRING}import jakarta.annotation.Resource;\n@Service class C {\n  @Resource Repo b;\n  @Resource Repo other;\n  @Autowired Repo b2;\n  private Repo viaSetter;\n  @Resource void setB(Repo r) {}\n}\n`,
+    });
+    // `b`: the bean named b beats @Primary; `other`: no such name, falls back to the type (@Primary A);
+    // `b2`: @Autowired never picks by a name when @Primary exists; the setter property is `b`.
+    assert.deepEqual(injections(graph), ["C -> A b2 field", "C -> A other field", "C -> B b field", "C -> B b setter"]);
+  });
+
+  it("matches the type arguments of an injection point with the provider's supertype", async () => {
+    const graph = await scanSources({
+      "Handler.java": "package app;\ninterface Handler<T> {}\ninterface Repository<T, ID> {}\n",
+      "S.java": `package app;\n${SPRING}@Component class S implements Handler<String> {}\n`,
+      "I.java": `package app;\n${SPRING}@Component class I implements Handler<java.lang.Integer> {}\n`,
+      "Raw.java": `package app;\n${SPRING}@Component class Raw implements Handler {}\n`,
+      "Users.java": `package app;\n${SPRING}@Component class Users implements Repository<User,  Long> {}\nclass User {}\n`,
+      "C.java": `package app;\n${SPRING}@Service class C {\n  @Autowired Handler<Integer> integer;\n  @Autowired Handler<String> string;\n  @Autowired Handler<Long> none;\n  @Autowired Repository<User, Long> users;\n  @Autowired Repository<User, String> wrong;\n  @Autowired List<Handler<String>> all;\n}\n`,
+    });
+    assert.deepEqual(injections(graph), ["C -> I integer field", "C -> S all field", "C -> S string field", "C -> Users users field"]);
+    // `none` has no provable provider (Raw is not provable) and is counted; `wrong` is provably no provider and is not.
+    assert.equal(consumerOf(graph, "C").properties.ambiguousInjections, 1);
+  });
+
+  it("counts a generic point whose only provider's supertype is raw or indirect", async () => {
+    const graph = await scanSources({
+      "Handler.java": "package app;\ninterface Handler<T> {}\ninterface Strings extends Handler<String> {}\n",
+      "S.java": `package app;\n${SPRING}@Component class S implements Strings {}\n`,
+      "C.java": `package app;\n${SPRING}@Service class C {\n  @Autowired Handler<String> string;\n}\n`,
+    });
+    assert.deepEqual(injections(graph), []);
+    assert.equal(consumerOf(graph, "C").properties.ambiguousInjections, 1);
+  });
+
+  it("injects only a plain value type of Map<String, V>", async () => {
+    const graph = await scanSources({
+      "Repo.java": "package app;\ninterface Repo {}\n",
+      "A.java": `package app;\n${SPRING}@Component class A implements Repo {}\n`,
+      "B.java": `package app;\n${SPRING}@Component class B implements Repo {}\n`,
+      "C.java": `package app;\n${SPRING}@Service class C {\n  @Autowired Map<String, Repo> plain;\n  @Autowired Map<String, List<Repo>> lists;\n  @Autowired Map<String, Optional<Repo>> optionals;\n  @Autowired Map<String, Repo[]> arrays;\n}\n`,
+    });
+    assert.deepEqual(injections(graph), ["C -> A plain field", "C -> B plain field"]);
+  });
+
+  it("excludes the consumer itself while another provider exists", async () => {
+    const graph = await scanSources({
+      "I.java": "package app;\ninterface I {}\n",
+      "A.java": `package app;\n${SPRING}@Component class A implements I {\n  @Autowired I other;\n}\n`,
+      "B.java": `package app;\n${SPRING}@Component class B implements I {}\n`,
+    });
+    assert.deepEqual(injections(graph), ["A -> B other field"]);
+    assert.equal(consumerOf(graph, "A").properties.ambiguousInjections, undefined);
+  });
+});
+
