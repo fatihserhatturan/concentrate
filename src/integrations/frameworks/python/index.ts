@@ -21,6 +21,7 @@ export const pythonFrameworkParser = createPythonParser([pythonFactsPlugin, pyth
 // reads, the `.env` values of request URLs, and dependency injection. All
 // finished once every file is parsed.
 export const pythonRoutesContributor: ISemanticContributor = {
+  id: "python.routes",
   async contribute(graph, rootPath, _report, files) {
     const context = await createPythonContext(graph, rootPath);
     if (!context) return;

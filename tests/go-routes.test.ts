@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { joinRoutePaths, parseServeMuxPattern } from "../src/integrations/frameworks/go/routes.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -211,7 +212,7 @@ describe("route MCP tools on Go", () => {
 
   before(async () => {
     const graph = await buildCodeGraph(path.resolve("fixtures/go-gin"), { continueOnError: false, keepCallSites: true });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-routes-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-routes-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });
@@ -279,7 +280,7 @@ describe("Go gRPC and cobra entrypoints", () => {
 
 describe("list_entrypoints on Go", () => {
   const listed = async (fixture: string, kind: string) => {
-    const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-entrypoints-")), "graph"));
+    const store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-entrypoints-")), "graph"));
     try {
       await store.reset();
       const graph = await scan(fixture);

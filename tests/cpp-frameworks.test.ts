@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { findInvocations, readCppSource, resolveString, scopeAt, scopesOf, stringConstants, stringLiteral, stringValue } from "../src/integrations/frameworks/cpp/scan.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -221,7 +222,7 @@ describe("C and C++ services in the MCP tools", () => {
   const call = async (name: string, args: Record<string, unknown>): Promise<Record<string, any>> => (await callMcpTool(store, name, args)).structuredContent as Record<string, any>;
   before(async () => {
     const graph = await scan("fixtures/cpp-data");
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-cpp-frameworks-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-cpp-frameworks-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

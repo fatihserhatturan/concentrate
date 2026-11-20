@@ -50,6 +50,12 @@ import { goCallResolver, goInheritanceResolver } from "../integrations/languages
 import { pythonCallResolver, pythonInheritanceResolver } from "../integrations/languages/python/resolvers.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
+import { jsTsGraphSchema } from "../integrations/frameworks/js-ts/schema.js";
+import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
+import { cppGraphSchema } from "../integrations/languages/cpp/schema.js";
+import { goGraphSchema } from "../integrations/languages/go/schema.js";
+import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
+
 export { CoreIntegrationRegistry };
 
 export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry {
@@ -58,6 +64,12 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   // Plain languages first: a file name or extension a later descriptor also claims goes to the later one.
   for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages]) {
     registry.registerLanguage(descriptor);
+  }
+
+  // Graph properties each integration adds to the core tables. Rust before C/C++: both add Import
+  // properties after `isModule`, and the merged order must stay what the closed schema had.
+  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema]) {
+    registry.registerGraphSchema(extension);
   }
 
   for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, ...plainFileParsers]) {
@@ -128,7 +140,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     nextjsPagesContributor,
     nuxtPagesContributor,
     navigationContributor,
-    // After every contributor that makes Table nodes: SQL files merge into them by name.
+    // Declares dependsOn every contributor that makes Table nodes: SQL files merge into them by name.
     sqlSchemaContributor,
     protoContributor,
   ]) {
@@ -140,6 +152,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
 
 function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILanguageResolver[] {
   const importResolver: ILanguageResolver = {
+    id: "core.imports",
     async resolve(graph, rootPath, report) {
       const counts = await addImportResolutionRelationships(graph, rootPath, report);
       report.resolvedImports = counts.resolved;
@@ -148,18 +161,21 @@ function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILan
   };
 
   const packageImportResolver: ILanguageResolver = {
+    id: "core.package-imports",
     resolve(graph) {
       addImportPackageRelationships(graph);
     },
   };
 
   const inheritanceResolver: ILanguageResolver = {
+    id: "core.inheritance",
     resolve(graph) {
       addInheritanceRelationships(graph, registry.inheritanceResolvers);
     },
   };
 
   const callResolver: ILanguageResolver = {
+    id: "core.calls",
     resolve(graph) {
       addCallResolutionRelationships(graph, registry.callResolvers);
     },

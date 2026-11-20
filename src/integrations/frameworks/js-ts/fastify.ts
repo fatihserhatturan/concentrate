@@ -24,6 +24,7 @@ export function applyFastifyParseSemantics(
 // Post-parse route path resolution (resolves composed paths across mounts and
 // constants). Applies to all HTTP frameworks including Fastify.
 export const routePathContributor: ISemanticContributor = {
+  id: "js-ts.fastify-route-paths",
   contribute(graph) {
     resolveRouteFullPaths(graph);
   },

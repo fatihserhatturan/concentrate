@@ -8,6 +8,7 @@ import type { GraphNode } from "../../../core/graph/model.js";
 // file declares (`google.protobuf.Empty`) is not linked. The Go code that
 // serves an rpc is linked by frameworks/go/grpc.ts.
 export const protoContributor: ISemanticContributor = {
+  id: "proto.rpc-messages",
   contribute(graph) {
     const messages = new Map<string, GraphNode>();
     const rpcs = graph.nodesWithLabel("Rpc");

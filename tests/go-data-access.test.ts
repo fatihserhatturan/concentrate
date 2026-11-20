@@ -9,6 +9,7 @@ import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { gormTableName } from "../src/integrations/frameworks/go/data-access.js";
 import { sqlTableAccesses } from "../src/integrations/frameworks/go/sql.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -35,7 +36,7 @@ function tablesOf(graph: Graph): string[] {
 }
 
 async function withStore<T>(graph: Graph, run: (tool: (name: string, args: Record<string, unknown>) => Promise<Record<string, any>>) => Promise<T>): Promise<T> {
-  const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-data-")), "graph"));
+  const store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-data-")), "graph"));
   try {
     await store.reset();
     await store.write(graph.nodes, graph.relationships);

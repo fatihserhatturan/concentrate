@@ -21,6 +21,7 @@ import { addWorkflow, isWorkflowFile } from "./workflows.js";
 const NPM_HOOKS = ["pre", "post"];
 
 export const scriptsContributor: ISemanticContributor = {
+  id: "scripts.scripts",
   async contribute(graph, rootPath, _report, files) {
     const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;

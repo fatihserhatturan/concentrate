@@ -70,6 +70,7 @@ export const cppQtPlugin: CppParsePlugin = ({ fileNodeId, relativePath, source: 
 };
 
 export const cppQtContributor: ISemanticContributor = {
+  id: "cpp.qt",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.cppQtConnects === "string");
     if (files.length === 0) return;

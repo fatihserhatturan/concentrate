@@ -9,6 +9,7 @@ import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { defaultLanguageTable } from "../src/composition/default-registry.js";
 import { assertGolden } from "./helpers/golden.js";
 import { corpusGoldenPath, formatCorpusResults, readCorpus, runCorpus } from "./helpers/cypher-corpus.js";
+import { openTestStore } from "./helpers/store.js";
 
 const fixturesRoot = path.join(import.meta.dirname, "../fixtures");
 const corpus = await readCorpus();
@@ -22,7 +23,7 @@ describe("Cypher conformance corpus", () => {
   for (const fixture of corpus.fixtures) {
     it(fixture, async () => {
       const graph = codeFilesOnly(await buildCodeGraph(path.join(fixturesRoot, fixture), { continueOnError: true, concurrency: 4, keepCallSites: true }));
-      const store = await GraphStore.open(path.join(workRoot, `${fixture}.graph`));
+      const store = await openTestStore(path.join(workRoot, `${fixture}.graph`));
       await store.reset();
       await store.write(graph.nodes, graph.relationships);
       const results = await runCorpus(corpus.cases, (cypher, params) => store.query(cypher, params), classifyCypherError);

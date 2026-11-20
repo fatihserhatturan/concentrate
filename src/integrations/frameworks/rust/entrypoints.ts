@@ -297,6 +297,7 @@ function selfType(at: SyntaxNode): string | null {
 }
 
 export const rustEntrypointsContributor: ISemanticContributor = {
+  id: "rust.entrypoints",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => (typeof node.properties.rustGrpcServers === "string" || typeof node.properties.rustClap === "string"));
     if (files.length === 0) return;

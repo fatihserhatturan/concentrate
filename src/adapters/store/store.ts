@@ -6,11 +6,14 @@ import { executeCypher, type QueryParameters } from "./cypher/executor.js";
 import { MemoryGraph } from "./graph.js";
 import { acquireWriteLock } from "./lock.js";
 import { commitScannedSnapshot, commitSnapshot, loadSnapshot, readHead, type Head } from "./persistence.js";
-import { nodeLabels, SCHEMA_VERSION } from "./schema.js";
+import { indexGraphSchema, type GraphSchema, type GraphSchemaIndex } from "../../core/graph/schema.js";
+import { schemaFingerprint } from "./schema-fingerprint.js";
 
 export type GraphStoreOpenOptions = {
   /** Wait for another writer to finish instead of failing at once. */
   retryLock?: boolean;
+  /** The tables of the store: the merged schema of the scan's registry (`registry.graphSchema`). */
+  schema: GraphSchema;
 };
 
 /**
@@ -38,12 +41,14 @@ export class GraphStore implements IGraphStore {
     private graph: MemoryGraph | null,
     private head: Head | null,
     private readonly retryLock: boolean,
+    private readonly schema: GraphSchemaIndex,
   ) {}
 
   /** Open (or, on first write, create) the store at `directory`. Reading never creates it. */
-  static async open(directory: string, options: GraphStoreOpenOptions = {}): Promise<GraphStore> {
+  static async open(directory: string, options: GraphStoreOpenOptions): Promise<GraphStore> {
     await assertStoreDirectory(directory);
-    return new GraphStore(directory, null, await readHead(directory), options.retryLock ?? false);
+    const schema = indexGraphSchema(options.schema);
+    return new GraphStore(directory, null, await readHead(directory), options.retryLock ?? false, schema);
   }
 
   /** Start from an empty graph. Committed by the next write or close. */
@@ -78,7 +83,7 @@ export class GraphStore implements IGraphStore {
     const count = (cypher: string, params: QueryParameters = {}) => executeCypher(graph, cypher, params)[0]?.count ?? 0;
 
     if (!options.packageName) {
-      return nodeLabels.map((label) => ({ table: label, count: count(`MATCH (n:${label}) RETURN count(n) AS count`) }));
+      return this.schema.nodeLabels.map((label) => ({ table: label, count: count(`MATCH (n:${label}) RETURN count(n) AS count`) }));
     }
 
     const packagePredicate = "p.name = $package OR p.relativePath = $package";
@@ -98,7 +103,7 @@ export class GraphStore implements IGraphStore {
   }
 
   async schemaVersion(): Promise<number | null> {
-    if (this.pendingReset) return SCHEMA_VERSION;
+    if (this.pendingReset) return this.schema.version;
     await this.refreshHead();
     return this.head?.schemaVersion ?? null;
   }
@@ -112,7 +117,7 @@ export class GraphStore implements IGraphStore {
     const release = await acquireWriteLock(this.directory, { wait: this.retryLock });
     try {
       const previous = await readHead(this.directory);
-      this.head = await commitScannedSnapshot(this.directory, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous });
+      this.head = await commitScannedSnapshot(this.directory, nodes, relationships, { schema: this.schema, previous });
       this.graph = null;
       this.scanned = { nodes, relationships };
       this.pendingReset = false;
@@ -130,7 +135,8 @@ export class GraphStore implements IGraphStore {
         this.graph = null;
         this.scanned = null;
       }
-      const graph = this.graph ?? await this.loadGraph();
+      // A snapshot written for other tables is replaced, not patched: start from an empty graph.
+      const graph = this.graph ?? (this.isCurrentSchema(latest) ? await this.loadGraph() : this.graph = new MemoryGraph(this.schema));
       let result: T;
       try {
         result = change(graph);
@@ -139,7 +145,7 @@ export class GraphStore implements IGraphStore {
         this.graph = null;
         throw error;
       }
-      this.head = await commitSnapshot(this.directory, graph, { schemaVersion: SCHEMA_VERSION, previous: latest });
+      this.head = await commitSnapshot(this.directory, graph, { previous: latest });
       return result;
     } finally {
       await release();
@@ -148,7 +154,7 @@ export class GraphStore implements IGraphStore {
 
   /** The graph to read: empty after a local reset, otherwise the latest committed generation, loaded on demand. */
   private async current(): Promise<MemoryGraph> {
-    if (this.pendingReset) return this.graph ??= new MemoryGraph();
+    if (this.pendingReset) return this.graph ??= new MemoryGraph(this.schema);
     await this.refreshHead();
     return this.graph ?? await this.loadGraph();
   }
@@ -170,12 +176,26 @@ export class GraphStore implements IGraphStore {
     const scanned = this.scanned;
     this.scanned = null;
     if (scanned) {
-      const graph = new MemoryGraph();
+      const graph = new MemoryGraph(this.schema);
       graph.write(scanned.nodes, scanned.relationships);
       return this.graph = graph;
     }
-    ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory));
+    try {
+      ({ head: this.head, graph: this.graph } = await loadSnapshot(this.directory, this.schema));
+    } catch (error) {
+      // Reading a snapshot of other tables may fail on a table this schema lacks: say what to do about it.
+      const head = await readHead(this.directory);
+      if (head && !this.isCurrentSchema(head)) {
+        throw new Error(`${this.directory} was written for another graph schema (version ${head.schemaVersion}); run concentrate scan again (${(error as Error).message})`, { cause: error });
+      }
+      throw error;
+    }
     return this.graph;
+  }
+
+  /** Whether a snapshot was written for exactly this store's tables; a head without a fingerprint predates it and is not trusted. */
+  private isCurrentSchema(head: Head | null): boolean {
+    return head === null || (head.schemaVersion === this.schema.version && head.schemaFingerprint === schemaFingerprint(this.schema));
   }
 
   /** Follow the latest committed generation; a newer one drops the loaded graph. */

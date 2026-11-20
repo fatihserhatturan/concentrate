@@ -9,6 +9,7 @@ import { createPythonResolver } from "../../languages/python/resolution.js";
 // metadata file and handled by the function it names (`Class.method` too).
 // A function the module only re-exports (`from .x import main`) is not followed.
 export const pythonEntrypointsContributor: ISemanticContributor = {
+  id: "python.entrypoints",
   async contribute(graph, rootPath) {
     const files = new Map<string, string>();
     for (const node of graph.nodesWithLabel("File")) {

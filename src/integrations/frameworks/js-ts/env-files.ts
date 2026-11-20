@@ -51,6 +51,7 @@ export function parseEnvFile(content: string): Array<{ name: string; value: stri
 // env too (`url = env("DATABASE_URL")`) and have no File node, so those reads
 // are `USES_ENV` from the Repo with their file.
 export const envFilesContributor: ISemanticContributor = {
+  id: "js-ts.env-files",
   async contribute(graph, rootPath, _report, files) {
     const repo = graph.nodesWithLabel("Repo")[0];
     if (!repo) return;

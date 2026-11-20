@@ -87,6 +87,7 @@ function unwrap(node: SyntaxNode | null): SyntaxNode | null {
 }
 
 export const svelteKitContributor: ISemanticContributor = {
+  id: "js-ts.svelte-kit",
   async contribute(graph) {
     const functionsByFile = new Map<string, GraphNode[]>();
     const componentByFile = new Map<string, string>();

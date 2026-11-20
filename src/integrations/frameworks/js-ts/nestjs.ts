@@ -26,6 +26,7 @@ export function applyNestJsParseSemantics(
 // `imports` / `providers`, into MODULE_IMPORTS / MODULE_PROVIDES /
 // MODULE_CONTROLS / MODULE_EXPORTS / MODULE_DECLARES relationships.
 export const nestjsModulesContributor: ISemanticContributor = {
+  id: "js-ts.nestjs-modules",
   contribute(graph) {
     addNestJsModuleRelationships(graph);
   },
@@ -34,6 +35,7 @@ export const nestjsModulesContributor: ISemanticContributor = {
 // Post-parse constructor injection resolution: links @Injectable classes to
 // the services they inject via constructor parameter properties.
 export const nestjsInjectionContributor: ISemanticContributor = {
+  id: "js-ts.nestjs-injection",
   contribute(graph) {
     addInjectionRelationships(graph);
   },
@@ -43,6 +45,7 @@ export const nestjsInjectionContributor: ISemanticContributor = {
 // through variables initialized with `new ClassName()`, and calls on objects
 // a factory builds by mixing a module in (Express's `app`).
 export const instanceMethodContributor: ISemanticContributor = {
+  id: "js-ts.instance-methods",
   contribute(graph) {
     addInstanceMethodResolutionRelationships(graph);
     addMixinMethodResolutionRelationships(graph);

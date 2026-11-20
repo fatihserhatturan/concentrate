@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -37,7 +38,7 @@ describe("Python data access", () => {
   before(async () => {
     sqlalchemy = await buildCodeGraph(path.resolve("fixtures/python-sqlalchemy"), { continueOnError: false });
     django = await buildCodeGraph(path.resolve("fixtures/python-django-orm"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-data-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-data-")), "graph"));
     await store.reset();
     await store.write(sqlalchemy.nodes, sqlalchemy.relationships);
   });

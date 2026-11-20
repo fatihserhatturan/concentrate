@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { nearestPackageDirectory, parseAttributes, parsePrismaSchema } from "../src/integrations/frameworks/js-ts/prisma-schema.js";
+import { openTestStore } from "./helpers/store.js";
 
 const fixturePath = path.join(import.meta.dirname, "../fixtures/prisma-schema");
 
@@ -85,7 +86,7 @@ describe("Prisma schema scan", () => {
   let graph: Awaited<ReturnType<typeof buildCodeGraph>>;
   before(async () => {
     graph = await buildCodeGraph(fixturePath, { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-prisma-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-prisma-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

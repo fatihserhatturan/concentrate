@@ -87,6 +87,7 @@ export const goDiPlugin: GoParsePlugin = ({ fileNodeId, root, nodes }) => {
 type Provider = { fn: GraphNode; fileId: string; as: string[] };
 
 export const goDiContributor: ISemanticContributor = {
+  id: "go.di",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goDi === "string");
     if (files.length === 0) return;

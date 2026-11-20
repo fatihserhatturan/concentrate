@@ -168,6 +168,7 @@ export const goEnvConfigPlugin: GoParsePlugin = ({ fileNodeId, root, nodes, rela
 // the repo's when the file makes none (`AutomaticEnv` in main, `Get*` in a
 // config package).
 export const goEnvConfigContributor: ISemanticContributor = {
+  id: "go.env-config",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.goViper === "string");
     if (files.length === 0) return;

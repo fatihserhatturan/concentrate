@@ -3,7 +3,14 @@
 export { scanIntoStore, type ScanAdapterOptions } from "./composition/scan-into-store.js";
 export { formatJsonl } from "./core/graph/jsonl.js";
 export { writeJsonl } from "./composition/jsonl.js";
-export { scanOrchestrator, buildCodeGraph } from "./composition/orchestrator.js";
+export { scanOrchestrator, buildCodeGraph, createScanDependencies, type ScanDependenciesOptions } from "./composition/orchestrator.js";
+// Plugin host: build a registry (empty or the default one), register integrations in it, scan with it.
+export { CoreIntegrationRegistry, createEmptyCoreIntegrationRegistry } from "./core/integrations/registry.js";
+export { createDefaultCoreIntegrationRegistry } from "./composition/default-registry.js";
+export type { IRegistryModule, RegistryModuleSpecifier } from "./core/integrations/registry-module.js";
+export type { ScanDependencies } from "./core/scan/orchestrator.js";
+export type { ParsedSourceFile } from "./core/graph/model.js";
+export type * from "./core/contracts/index.js";
 export { openGraphStore, GRAPH_SCHEMA_VERSION, type OpenGraphStoreOptions } from "./composition/graph-store.js";
 export type {
   GraphNode,
@@ -30,7 +37,11 @@ import { graphSummary as coreGraphSummary } from "./core/queries/summary.js";
 import type { IQueryEngine as SummaryEngine } from "./core/contracts/query-engine.js";
 export const graphSummary = (engine: SummaryEngine) => coreGraphSummary(engine, { codeLanguages: defaultLanguageTable.codeLanguages });
 export { defaultLanguageTable };
-export { nodeLabels, nodeTables, relationshipTables, type NodeTable, type RelationshipTable } from "./adapters/store/schema.js";
+// The graph schema: the default integrations' merged schema (what a scan with the default registry writes), and the types and merge to build others.
+import { defaultGraphSchema } from "./composition/default-schema.js";
+export { defaultGraphSchema as graphSchema };
+export const { nodeLabels, nodeTables, relationshipTables } = defaultGraphSchema;
+export { mergeGraphSchema, baseGraphSchema, type GraphSchema, type GraphSchemaExtension, type NodeTable, type PropertyExtension, type PropertyType, type RelationshipTable } from "./core/graph/schema.js";
 export { matchName, type MatchType } from "./core/queries/match.js";
 export type { ISourceReader } from "./core/contracts/source-reader.js";
 export { findUnusedExports, type FindUnusedExportsOptions, type UnusedExport, type UnusedExportsResult } from "./core/queries/unused.js";

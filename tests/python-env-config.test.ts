@@ -8,6 +8,7 @@ import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import { compareEnv } from "../scripts/accuracy/compare.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -33,7 +34,7 @@ describe("Python env and config", () => {
   before(async () => {
     env = await buildCodeGraph(path.resolve("fixtures/python-env"), { continueOnError: false });
     django = await buildCodeGraph(path.resolve("fixtures/python-django-orm"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-env-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-env-")), "graph"));
     await store.reset();
     await store.write(env.nodes, env.relationships);
   });

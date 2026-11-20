@@ -31,6 +31,7 @@ const DESTINATION_KINDS = new Set(["page", undefined, null]);
 type PageEntry = { id: string; segments: RouteSegment[] };
 
 export const navigationContributor: ISemanticContributor = {
+  id: "js-ts.navigation",
   async contribute(graph) {
     const pages: PageEntry[] = [];
     for (const node of graph.nodesWithLabel("Page")) {

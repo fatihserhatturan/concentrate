@@ -7,7 +7,7 @@ import { scanIntoStore } from "../src/composition/scan-into-store.js";
 import { callPaths, questionTerms, rankSymbols } from "../src/core/queries/explore.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { provenanceOf } from "../src/adapters/store/provenance.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
+import { BASE_SCHEMA_VERSION as SCHEMA_VERSION } from "../src/core/graph/schema.js";
 import { openGraphStore } from "../src/composition/graph-store.js";
 
 async function scan(projectPath: string) {

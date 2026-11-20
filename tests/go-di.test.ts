@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -35,7 +36,7 @@ describe("Go dependency injection", () => {
     ]);
     assert.ok(graph.nodes.every((node) => !("goDi" in node.properties)));
 
-    const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-di-")), "graph"));
+    const store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-go-di-")), "graph"));
     try {
       await store.reset();
       await store.write(graph.nodes, graph.relationships);

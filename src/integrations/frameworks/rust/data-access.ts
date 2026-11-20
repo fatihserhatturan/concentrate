@@ -340,6 +340,7 @@ export const rustDataAccessPlugin: RustParsePlugin = ({ fileNodeId, relativePath
 type Access = { owner: string; modelId: string; operation: Operation; library: string; line: number; expression: string };
 
 export const rustDataAccessContributor: ISemanticContributor = {
+  id: "rust.data-access",
   contribute(graph) {
     const files = graph.nodesWithLabel("File").filter((node) => typeof node.properties.rustData === "string");
     if (files.length === 0) return;

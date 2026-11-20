@@ -17,6 +17,7 @@ type Incoming = { mount: RustMount; callerFunctionId: string; fileId: string };
 // ROUTE_HANDLED_BY and ROUTE_LIFECYCLE_STEP. The extractors of the handler
 // (`Path`, `Query`, `Json`, `State`…) are recorded on the route.
 export const rustRoutesContributor: ISemanticContributor = {
+  id: "rust.routes",
   contribute(graph) {
     const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.rustPending === "string");
     const mountOwners = graph.nodesWithLabel("Function").filter((node) => typeof node.properties.rustMounts === "string");

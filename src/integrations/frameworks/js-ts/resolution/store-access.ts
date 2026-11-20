@@ -39,6 +39,7 @@ import type { ReduxAccess } from "../redux.js";
 const writeMethods = new Set(["$patch", "$reset", "setState"]);
 
 export const storeAccessContributor: ISemanticContributor = {
+  id: "js-ts.store-access",
   contribute(graph) {
     const storesByFileAndName = new Map<string, Map<string, string[]>>();
     const svelteStoresByFileAndName = new Map<string, Map<string, string[]>>();

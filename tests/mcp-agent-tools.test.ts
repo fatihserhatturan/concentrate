@@ -10,6 +10,7 @@ import { callMcpTool, mcpToolDefinitions } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { startMcpServer } from "./helpers/mcp-stdio.js";
+import { openTestStore } from "./helpers/store.js";
 
 // A small Express app: route (with route-level middleware) -> handler ->
 // service -> prisma, an env read, a class method caller, and a module-level
@@ -68,7 +69,7 @@ async function createProject(): Promise<{ root: string; projectPath: string; dat
     await writeFile(path.join(projectPath, file), content, "utf8");
   }
   const graph = await buildCodeGraph(projectPath, { continueOnError: false });
-  const store = await GraphStore.open(databasePath);
+  const store = await openTestStore(databasePath);
   await store.reset();
   await store.write(graph.nodes, graph.relationships);
   return { root, projectPath, databasePath, store };

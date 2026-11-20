@@ -18,6 +18,7 @@ type CallerArgument = { argument: GoRouterArgument; callerFunctionId: string; fi
 // gets the path its callers mount the result at), and handler and middleware
 // references become ROUTE_HANDLED_BY and ROUTE_LIFECYCLE_STEP.
 export const goRoutesContributor: ISemanticContributor = {
+  id: "go.routes",
   contribute(graph) {
     const routes = graph.nodesWithLabel("Route").filter((node) => typeof node.properties.goPending === "string");
     const routerCalls = graph.nodesWithLabel("Call").filter((node) => typeof node.properties.routerArguments === "string");

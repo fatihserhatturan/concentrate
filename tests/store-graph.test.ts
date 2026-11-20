@@ -3,6 +3,7 @@ import { readdir } from "node:fs/promises";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { MemoryGraph } from "../src/adapters/store/graph.js";
+import { defaultGraphSchemaIndex } from "../src/composition/default-schema.js";
 import { serializeSegments } from "../src/adapters/store/persistence.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
@@ -27,7 +28,7 @@ function defines(file: string, name: string): GraphRelationship {
 
 describe("MemoryGraph", () => {
   it("validates writes against the schema", () => {
-    const graph = new MemoryGraph();
+    const graph = new MemoryGraph(defaultGraphSchemaIndex);
     assert.throws(() => graph.addNode("NoSuchLabel", "x", {}), /table NoSuchLabel does not exist/);
     assert.throws(() => graph.addNode("File", "f", { noSuchProperty: 1 }), /unknown property noSuchProperty/);
     assert.throws(() => graph.addNode("File", "f", { isTest: "yes" }), /must be BOOLEAN/);
@@ -41,7 +42,7 @@ describe("MemoryGraph", () => {
   });
 
   it("detach-deletes nodes, including self-loops", () => {
-    const graph = new MemoryGraph();
+    const graph = new MemoryGraph(defaultGraphSchemaIndex);
     graph.addNode("Class", "a", { name: "A" });
     graph.addNode("Class", "b", { name: "B" });
     graph.addRelationship("EXTENDS", "a", "a", {});
@@ -56,7 +57,7 @@ describe("MemoryGraph", () => {
   });
 
   it("indexes name, relativePath, method and path", () => {
-    const graph = new MemoryGraph();
+    const graph = new MemoryGraph(defaultGraphSchemaIndex);
     graph.addNode("Function", "f1", { name: "run" });
     graph.addNode("Function", "f2", { name: "run" });
     graph.addNode("Class", "c1", { name: "run" });

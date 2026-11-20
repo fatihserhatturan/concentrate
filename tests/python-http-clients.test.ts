@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -16,7 +17,7 @@ describe("Python outbound HTTP", () => {
 
   before(async () => {
     graph = await buildCodeGraph(path.resolve("fixtures/python-http-clients"), { continueOnError: false });
-    store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-http-")), "graph"));
+    store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-python-http-")), "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

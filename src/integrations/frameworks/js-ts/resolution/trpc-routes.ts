@@ -8,6 +8,7 @@ import { createVariableResolver } from "./variable-resolver.js";
 // mounted by more than one router has no single path; its procedures get a
 // null `fullPath` and are not linked. A router nobody mounts is a root.
 export const trpcRoutesContributor: ISemanticContributor = {
+  id: "js-ts.trpc-routes",
   contribute(graph) {
     const routes = graph.nodesWithLabel("Route").filter((node) => node.properties.framework === "trpc");
     if (routes.length === 0) return;

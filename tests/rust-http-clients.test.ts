@@ -7,6 +7,7 @@ import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 type Graph = { nodes: GraphNode[]; relationships: GraphRelationship[] };
 
@@ -58,7 +59,7 @@ describe("Rust outbound HTTP", () => {
   });
 
   it("api_consumers lists the Rust callers of a route", async () => {
-    const store = await GraphStore.open(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-http-")), "graph"));
+    const store = await openTestStore(path.join(await mkdtemp(path.join(os.tmpdir(), "concentrate-rust-http-")), "graph"));
     try {
       await store.reset();
       await store.write(graph.nodes, graph.relationships);

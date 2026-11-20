@@ -46,6 +46,7 @@ export function applyEnvConfigParseSemantics(
 // Post-parse env/config resolution: links EnvVar and ConfigValue nodes
 // across files (e.g. imported config modules to their consumers).
 export const envConfigContributor: ISemanticContributor = {
+  id: "js-ts.env-config",
   contribute(graph) {
     addEnvAndConfigRelationships(graph);
   },

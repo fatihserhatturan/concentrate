@@ -149,7 +149,7 @@ is paid.
 | --- | --- | --- | --- |
 | Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (empty) | — |
 | Language knowledge in core | a file named after a language (`go-*.ts`), a per-language predicate (`isGoFile`), a `language === "<id>"` comparison, an extension test (`.endsWith(".py")`), or an ecosystem file name (`package.json`, `go.mod`, `node_modules`, `conftest`...) | `CORE_LANGUAGE_KNOWLEDGE_DEBT` (empty: core names no language) | — |
-| Adapter re-exports in the public API | `src/api.ts` re-exporting from `src/adapters/` | `API_ADAPTER_EXPORT_DEBT` (1 module: the store schema the UI reads) | a schema description owned by core |
+| Adapter re-exports in the public API | `src/api.ts` re-exporting from `src/adapters/` | `API_ADAPTER_EXPORT_DEBT` (empty: the schema is core data) | — |
 
 ## Graph Queries (`src/core/queries/`)
 
@@ -207,8 +207,48 @@ Known debt the ratchets do not detect: the default JS/TS call lookup
 `core/scan/resolution/calls.ts` and `call-targets.ts` as the fallback for
 files no language resolver supports; import resolution
 (`integrations/resolution/imports.ts`) is one switch over languages rather than
-a per-language contract; and the graph schema is closed (`core/graph/model.ts`,
-`adapters/store/schema.ts`).
+a per-language contract.
+
+## Plugin Host
+
+Core hosts integrations from outside the repository; `src/api.ts` exports
+everything a plugin needs (`CoreIntegrationRegistry`,
+`createEmptyCoreIntegrationRegistry`, `createDefaultCoreIntegrationRegistry`,
+`createScanDependencies`, the contracts and the graph schema types).
+
+- **Registry per scan.** `buildCodeGraph(path, options, registryOrDeps)` and
+  `scanIntoStore(path, options, onProgress, registryOrDeps)` take a registry
+  (or `ScanDependencies`); nothing on that path uses the default singleton.
+  `scanIntoStore` writes the store with that registry's schema.
+- **Workers.** A registry module (`core/integrations/registry-module.ts`)
+  exports `createRegistry()`. `createScanDependencies(registry, { registryModule })`
+  passes it to the parse workers, which build the same registry; without one a
+  custom registry parses on the main thread. A worker that cannot load it dies
+  and the pool parses on the main thread with the scan's registry.
+- **Identity, ordering, lifecycle.** Contributors and resolvers have an `id`
+  and an optional `version`. A contributor's `dependsOn` orders it after the
+  named contributors (topological, stable on registration order; unknown ids,
+  duplicates and cycles throw). Optional `prepare` / `finish` hooks run once per
+  scan around resolution, `finish` in a `finally`.
+- **Parse-cache fingerprint.** `parserFingerprint(registry)` hashes the bundled
+  code plus every registered integration's `kind:id@version`, so a plugin
+  version bump invalidates the cache.
+- **Extensible graph schema.** `core/graph/schema.ts` holds the base tables
+  (`baseGraphSchema`, `BASE_SCHEMA_VERSION`) as data; `GraphNodeLabel` derives
+  from them. An integration declares a `GraphSchemaExtension` (new node and
+  relationship tables, extra properties anchored after an existing one) and
+  registers it with `registry.registerGraphSchema`; `mergeGraphSchema` rejects
+  type conflicts and unknown tables. Integration-specific properties live in
+  `integrations/*/schema.ts`; `tests/graph-schema.test.ts` pins the merged
+  default schema to a frozen snapshot. The store takes the schema as input
+  (`GraphStore.open(dir, { schema })`, `openGraphStore` defaults to the default
+  registry's) and records a schema fingerprint in `HEAD.json`; a head of another
+  schema is rewritten, never patched. The store adapter imports neither
+  composition nor integrations (guardrail).
+
+Still closed: extension node labels are not part of the `GraphNodeLabel`
+union, so plugin code writes them with a cast, and the logical relationship
+union in `core/graph/model.ts` is hand-written.
 
 ## Proposed Directory Shape
 

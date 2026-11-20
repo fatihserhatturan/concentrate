@@ -6,6 +6,7 @@ import { after, before, describe, it } from "node:test";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
+import { openTestStore } from "./helpers/store.js";
 
 describe("scripts and infrastructure in the MCP tools", () => {
   let store: GraphStore;
@@ -13,7 +14,7 @@ describe("scripts and infrastructure in the MCP tools", () => {
   before(async () => {
     root = await mkdtemp(path.join(os.tmpdir(), "concentrate-mcp-scripts-"));
     const graph = await buildCodeGraph(path.resolve("fixtures/scripts-infra"), { continueOnError: false });
-    store = await GraphStore.open(path.join(root, "graph"));
+    store = await openTestStore(path.join(root, "graph"));
     await store.reset();
     await store.write(graph.nodes, graph.relationships);
   });

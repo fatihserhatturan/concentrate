@@ -26,6 +26,7 @@ type VarUse = { name: string; line: number };
 const MAX_NAME_MATCHES = 20;
 
 export const stylesContributor: ISemanticContributor = {
+  id: "styles.styles",
   contribute(graph) {
     const definitions = new Map<string, Array<{ id: string; file: string }>>();
     const fileOfStyle = new Map<string, string>();

@@ -6,10 +6,11 @@ import path from "node:path";
 import { after, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { MemoryGraph } from "../src/adapters/store/graph.js";
+import { defaultGraphSchemaIndex } from "../src/composition/default-schema.js";
 import { commitScannedSnapshot, commitSnapshot, loadSnapshot, readHead, serializeSegments } from "../src/adapters/store/persistence.js";
-import { SCHEMA_VERSION } from "../src/adapters/store/schema.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
+import { openTestStore } from "./helpers/store.js";
 
 const workRoot = await mkdtemp(path.join(os.tmpdir(), "concentrate-stream-"));
 after(() => rm(workRoot, { recursive: true, force: true }));
@@ -26,12 +27,12 @@ async function segmentFiles(directory: string, segments: Record<string, string>)
 /** Commit through the MemoryGraph path and the streaming path and compare every byte but writtenAt. */
 async function assertIdentical(nodes: GraphNode[], relationships: GraphRelationship[]): Promise<void> {
   const legacy = freshDirectory();
-  const graph = new MemoryGraph();
+  const graph = new MemoryGraph(defaultGraphSchemaIndex);
   graph.write(nodes, relationships);
-  const expected = await commitSnapshot(legacy, graph, { schemaVersion: SCHEMA_VERSION, previous: null });
+  const expected = await commitSnapshot(legacy, graph, { previous: null });
 
   const streamed = freshDirectory();
-  const actual = await commitScannedSnapshot(streamed, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
+  const actual = await commitScannedSnapshot(streamed, nodes, relationships, { schema: defaultGraphSchemaIndex, previous: null });
 
   assert.deepEqual({ ...actual, writtenAt: "" }, { ...expected, writtenAt: "" });
   assert.deepEqual(await readdir(path.join(streamed, "segments")), await readdir(path.join(legacy, "segments")));
@@ -74,8 +75,8 @@ describe("streaming snapshot write", () => {
   it("reuses unchanged segments of the previous HEAD", async () => {
     const built = await buildCodeGraph(path.resolve("fixtures", "call-resolution"), { continueOnError: false });
     const directory = freshDirectory();
-    const first = await commitScannedSnapshot(directory, built.nodes, built.relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
-    const second = await commitScannedSnapshot(directory, built.nodes, built.relationships, { schemaVersion: SCHEMA_VERSION, previous: first });
+    const first = await commitScannedSnapshot(directory, built.nodes, built.relationships, { schema: defaultGraphSchemaIndex, previous: null });
+    const second = await commitScannedSnapshot(directory, built.nodes, built.relationships, { schema: defaultGraphSchemaIndex, previous: first });
     assert.equal(second.generation, 2);
     assert.deepEqual(second.segments, first.segments);
   });
@@ -83,7 +84,7 @@ describe("streaming snapshot write", () => {
   it("throws the MemoryGraph errors and leaves HEAD alone", async () => {
     const directory = freshDirectory();
     const node = (id: string, label: string, properties = {}) => ({ id, label, properties }) as GraphNode;
-    const store = await GraphStore.open(directory);
+    const store = await openTestStore(directory);
     await store.reset();
     await store.write([node("file:a.ts", "File", { relativePath: "a.ts" })], []);
     await store.reset();
@@ -108,11 +109,11 @@ describe("streaming snapshot write", () => {
   it("loads a snapshot segment by segment into the same graph", async () => {
     for (const fixture of fixtures) {
       const built = await buildCodeGraph(path.resolve("fixtures", fixture), { continueOnError: false });
-      const expected = new MemoryGraph();
+      const expected = new MemoryGraph(defaultGraphSchemaIndex);
       expected.write(built.nodes, built.relationships);
       const directory = freshDirectory();
-      await commitScannedSnapshot(directory, built.nodes, built.relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
-      const { graph } = await loadSnapshot(directory);
+      await commitScannedSnapshot(directory, built.nodes, built.relationships, { schema: defaultGraphSchemaIndex, previous: null });
+      const { graph } = await loadSnapshot(directory, defaultGraphSchemaIndex);
       assert.equal(graph.nodeCount, expected.nodeCount);
       assert.equal(graph.relationshipCount, expected.relationshipCount);
       assert.deepEqual(serializeSegments(graph), serializeSegments(expected));
@@ -122,12 +123,12 @@ describe("streaming snapshot write", () => {
   it("reports a relationship whose endpoint is in no segment as corruption", async () => {
     const directory = freshDirectory();
     const nodes = [{ id: "file:a.ts", label: "File", properties: { relativePath: "a.ts" } }] as GraphNode[];
-    const head = await commitScannedSnapshot(directory, nodes, [], { schemaVersion: SCHEMA_VERSION, previous: null });
+    const head = await commitScannedSnapshot(directory, nodes, [], { schema: defaultGraphSchemaIndex, previous: null });
     const broken = `${JSON.stringify(["r", "DEFINES_FUNCTION", "file:a.ts", "file:a.ts:function:gone", {}])}\n`;
     const file = "ffffffffffffffffffffffffffffffff.jsonl.gz";
     await writeFile(path.join(directory, "segments", file), gzipSync(broken));
     await writeFile(path.join(directory, "HEAD.json"), JSON.stringify({ ...head, segments: { ...head.segments, global: file } }));
-    await assert.rejects(loadSnapshot(directory), /Corrupt graph store .*DEFINES_FUNCTION file:a.ts -> file:a.ts:function:gone has a missing endpoint/);
+    await assert.rejects(loadSnapshot(directory, defaultGraphSchemaIndex), /Corrupt graph store .*DEFINES_FUNCTION file:a.ts -> file:a.ts:function:gone has a missing endpoint/);
   });
 });
 
@@ -144,11 +145,11 @@ describe("loading a large segment", () => {
       from: nodes[index]!.id, to: node.id, type: "PACKAGE_IMPORTS_PACKAGE", properties: {},
     }));
     const directory = freshDirectory();
-    const head = await commitScannedSnapshot(directory, nodes, relationships, { schemaVersion: SCHEMA_VERSION, previous: null });
+    const head = await commitScannedSnapshot(directory, nodes, relationships, { schema: defaultGraphSchemaIndex, previous: null });
     const file = path.join(directory, "segments", head.segments.global!);
     assert.ok((await readFile(file)).length > 1 << 20, "the global segment must be large enough to be streamed");
 
-    const { graph } = await loadSnapshot(directory);
+    const { graph } = await loadSnapshot(directory, defaultGraphSchemaIndex);
     assert.equal(graph.nodeCount, nodes.length);
     assert.equal(graph.relationshipCount, relationships.length);
     assert.deepEqual(graph.node(nodes[123]!.id)?.properties, nodes[123]!.properties);
@@ -160,8 +161,8 @@ describe("lazy loading", () => {
   it("loads the snapshot once for concurrent readers of a fresh store", async () => {
     const directory = freshDirectory();
     const nodes: GraphNode[] = [{ id: "repo:/x", label: "Repo", properties: { path: "/x", name: "x" } }];
-    await commitScannedSnapshot(directory, nodes, [], { schemaVersion: SCHEMA_VERSION, previous: null });
-    const store = await GraphStore.open(directory);
+    await commitScannedSnapshot(directory, nodes, [], { schema: defaultGraphSchemaIndex, previous: null });
+    const store = await openTestStore(directory);
     const original = (store as unknown as { readGraph: () => Promise<unknown> }).readGraph.bind(store);
     let loads = 0;
     (store as unknown as { readGraph: () => Promise<unknown> }).readGraph = async () => { loads += 1; return original(); };
