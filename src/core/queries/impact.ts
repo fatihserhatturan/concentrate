@@ -1,5 +1,5 @@
 import type { IQueryEngine } from "../contracts/query-engine.js";
-import { callerCompleteness, computeImpact, loadFunctions, matchesFileOrDirectory, type ListWindow, unresolvedCalls } from "./graph.js";
+import { callerCompleteness, computeImpact, loadFunctions, loadInterfaceMethods, matchesFileOrDirectory, type ListWindow, unresolvedCalls } from "./graph.js";
 import { loadRunners } from "./runners.js";
 import { isStyleFilePath, loadStyleTargets, parseStyleSymbol, styleImpact } from "./styles.js";
 
@@ -35,6 +35,8 @@ export async function impactOf(engine: IQueryEngine, options: ImpactOfOptions) {
   }
 
   const functions = await loadFunctions(engine);
+  // A Java interface method is a valid seed: calls through the interface resolve to it.
+  for (const method of await loadInterfaceMethods(engine)) if (!functions.has(method.id)) functions.set(method.id, method);
   const seedIds = [...functions.values()]
     .filter((fn) => !symbol || fn.name === symbol || fn.className === symbol)
     .filter((fn) => !file || matchesFileOrDirectory(fn.file, file))
