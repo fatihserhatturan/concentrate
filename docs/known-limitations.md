@@ -2248,21 +2248,21 @@ the call recall leaves out:
 - Every discovered file is a `File` node with a `language` and a `sourceType`.
   Code files (JS/TS, HTML, Vue, Svelte, Astro, Python, Go, Rust) are parsed for
   declarations. The others are known formats (`css`, `scss`, `less`, `json`,
-  `yaml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
+  `yaml`, `xml`, `toml`, `markdown`, `shell`, `powershell`, `dockerfile`, `makefile`,
   `sql`, `proto`) or `other` (text) and `asset` (images, fonts, media,
   archives, and any file with a NUL byte in its first 8 000 bytes). They have
   no declarations unless a later bullet says so (scripts and infrastructure,
   CSS, SQL and `.proto` files are read). The scan report counts them as `otherFiles`;
   `supportedFiles` is the number of code files.
 - Vendored grammars (`vendor/grammars`, built with `npm run grammars:build`):
-  `css`, `scss`, `json`, `yaml`, `bash`, `powershell`, `make` and `sql`.
+  `css`, `scss`, `json`, `yaml`, `xml`, `bash`, `powershell`, `make` and `sql`.
   `less`, `toml` and `markdown` have none. Dockerfile and `.proto` have small
   line readers (`src/integrations/languages/plain/`) because npm has no usable
   grammar for them (`tree-sitter-dockerfile` there is a security placeholder).
   `tree-sitter-powershell` is pinned to 0.26.4 because 0.26.6 was under two
   weeks old when it was added; its grammar reports a one-line
   `param($a) $a` as an error.
-- A syntax error in a JSON, YAML, shell, PowerShell, Makefile, Dockerfile or
+- A syntax error in a JSON, YAML, XML, shell, PowerShell, Makefile, Dockerfile or
   `.proto` file keeps the `File` node and gives one scan warning
   (`Syntax error at lines 3, 9`, at most five lines). Not checked, to avoid
   wrong warnings: CSS, SCSS and SQL (the grammars reject valid CSS range media

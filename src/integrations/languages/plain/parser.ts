@@ -37,6 +37,7 @@ const grammars: Partial<Record<FileLanguage, GrammarName>> = {
   scss: "scss",
   json: "json",
   yaml: "yaml",
+  xml: "xml",
   shell: "bash",
   powershell: "powershell",
   makefile: "make",
@@ -49,7 +50,7 @@ const grammars: Partial<Record<FileLanguage, GrammarName>> = {
 // `;;`, MySQL backticks and `/*! … */` comments, `LIMIT $2`, `FOR NO KEY
 // UPDATE`), so a warning would be wrong more often than right.
 const warnsOnSyntaxErrors: ReadonlySet<FileLanguage> = new Set([
-  "json", "yaml", "shell", "powershell", "makefile", "dockerfile", "proto", "cmake",
+  "json", "yaml", "xml", "shell", "powershell", "makefile", "dockerfile", "proto", "cmake",
 ]);
 
 // JSON that tools read with comments and trailing commas.

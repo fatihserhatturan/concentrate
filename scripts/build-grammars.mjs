@@ -32,6 +32,7 @@ const grammars = [
   { name: "scss", package: "tree-sitter-scss", version: "1.0.0", dir: "." },
   { name: "json", package: "tree-sitter-json", version: "0.24.8", dir: "." },
   { name: "yaml", package: "@tree-sitter-grammars/tree-sitter-yaml", version: "0.7.1", dir: "." },
+  { name: "xml", package: "@tree-sitter-grammars/tree-sitter-xml", version: "0.7.0", dir: "xml" },
   { name: "bash", package: "tree-sitter-bash", version: "0.25.1", dir: "." },
   { name: "powershell", package: "tree-sitter-powershell", version: "0.26.4", dir: "." },
   { name: "make", package: "tree-sitter-make", version: "1.1.1", dir: "." },

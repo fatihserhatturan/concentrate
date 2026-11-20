@@ -37,6 +37,7 @@ describe("vendored grammars", () => {
       scss: ["$a: 1;\n.b { c: $a; }", "declaration"],
       json: ["{\"a\": [1, 2]}", "object"],
       yaml: ["a: 1\nb:\n  - x\n", "document"],
+      xml: ["<a b=\"1\"><c/></a>", "element"],
       bash: ["echo hi\n", "command"],
       powershell: ["Write-Host hi\n", "statement_list"],
       make: ["all: dep\n\techo hi\n", "rule"],
