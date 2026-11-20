@@ -2,7 +2,7 @@ import path from "node:path";
 import { GraphBuilder } from "../graph/builder.js";
 import { addDirectoryChain } from "./directory-graph.js";
 import { classifyFile } from "./file-classification.js";
-import { isCodeLanguage, type SupportedLanguage } from "./language.js";
+import type { LanguageTable } from "./language.js";
 import type { ParsedSourceFile } from "../graph/model.js";
 import type { ParseResult } from "./parse-source.js";
 import { addUniqueScanWarning, createScanFailure, type ScanReport } from "./report.js";
@@ -14,8 +14,9 @@ export function addParseResultsToGraph(
   parseResults: ParseResult[],
   report: ScanReport,
   continueOnError: boolean,
+  languages: LanguageTable,
 ): boolean {
-  const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, continueOnError);
+  const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, continueOnError, languages);
   parseResults.forEach((result, index) => sink.set(index, result));
   return sink.complete;
 }
@@ -38,6 +39,7 @@ export class OrderedParseResults {
     private readonly rootPath: string,
     private readonly report: ScanReport,
     private readonly continueOnError: boolean,
+    private readonly languages: LanguageTable,
   ) {}
 
   /** False once a failed file stopped the scan (without continueOnError). */
@@ -59,7 +61,7 @@ export class OrderedParseResults {
 
   private add(result: ParseResult): void {
     if (result.ok) {
-      if (addParsedFileToGraph(this.graph, this.repoNodeId, this.rootPath, result, this.report)) this.report.parsedFiles += 1;
+      if (addParsedFileToGraph(this.graph, this.repoNodeId, this.rootPath, result, this.report, this.languages)) this.report.parsedFiles += 1;
       return;
     }
     this.report.failedFiles.push(createScanFailure(this.rootPath, result.filePath, result.error));
@@ -73,6 +75,7 @@ function addParsedFileToGraph(
   rootPath: string,
   result: Extract<ParseResult, { ok: true }>,
   report: ScanReport,
+  languages: LanguageTable,
 ): boolean {
   const directoryNodeId = addDirectoryChain(graph, repoNodeId, rootPath, path.dirname(result.filePath));
   const relativePath = path.relative(rootPath, result.filePath);
@@ -80,8 +83,8 @@ function addParsedFileToGraph(
   // A parser may know the file is generated from its contents (Go's
   // `// Code generated … DO NOT EDIT.`).
   const language = fileNode?.properties.language;
-  const code = typeof language !== "string" || isCodeLanguage(language as SupportedLanguage);
-  const classification = classifyFile(relativePath, fileNode?.properties.isGenerated === true, code, fileNode?.properties.isTest === true);
+  const code = typeof language !== "string" || languages.isCode(language);
+  const classification = classifyFile(relativePath, languages.conventions, fileNode?.properties.isGenerated === true, code, fileNode?.properties.isTest === true);
   for (const node of result.parsed.nodes) {
     if (node.id !== result.parsed.fileNodeId || node.label !== "File") continue;
     node.properties = {

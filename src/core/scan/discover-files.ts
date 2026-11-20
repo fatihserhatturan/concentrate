@@ -1,6 +1,7 @@
 import path from "node:path";
 import { existsSync } from "node:fs";
 import { readFile } from "node:fs/promises";
+import type { FileConventions } from "../contracts/language-descriptor.js";
 import { GitIgnore } from "./gitignore.js";
 import { createGlobMatcher, walkFiles } from "./glob.js";
 
@@ -8,19 +9,17 @@ const defaultIgnorePatterns = [
   ".git",
   // The graph, parse cache and manifest of Concentrate itself.
   ".concentrate",
-  "node_modules",
   "dist",
   "build",
   "coverage",
-  ".next",
-  ".turbo",
   ".cache",
-  "*.min.js",
 ];
 
 export type DiscoverFilesOptions = {
   include?: string[];
   exclude?: string[];
+  /** The languages' ignore rules (`node_modules`, Go's `vendor/`); without them only the generic defaults apply. */
+  conventions?: Pick<FileConventions, "ignoredPatterns" | "ignoredInDirectory">;
 };
 
 /**
@@ -29,7 +28,7 @@ export type DiscoverFilesOptions = {
  * ones, use gitignore semantics.
  */
 export async function discoverFiles(rootPath: string, options: DiscoverFilesOptions = {}): Promise<string[]> {
-  const ignoreRules = new GitIgnore().add(defaultIgnorePatterns);
+  const ignoreRules = new GitIgnore().add([...defaultIgnorePatterns, ...options.conventions?.ignoredPatterns ?? []]);
   if (options.exclude && options.exclude.length > 0) {
     ignoreRules.add(options.exclude);
   }
@@ -50,10 +49,7 @@ export async function discoverFiles(rootPath: string, options: DiscoverFilesOpti
       if (entryNames.includes(".gitignore")) {
         await addGitIgnore(rootPath, directory, ignoreRules);
       }
-      // A Go module's `vendor/` holds copies of its dependencies.
-      if (entryNames.includes("go.mod") && entryNames.includes("vendor")) {
-        ignoreRules.add("/vendor/", directory);
-      }
+      for (const pattern of options.conventions?.ignoredInDirectory(entryNames) ?? []) ignoreRules.add(pattern, directory);
     },
     accept: (relativePath, isDirectory) => {
       if (ignoreRules.ignores(relativePath, isDirectory)) return false;

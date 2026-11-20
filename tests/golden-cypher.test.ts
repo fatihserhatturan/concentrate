@@ -6,7 +6,7 @@ import { CypherError } from "../src/adapters/store/cypher/errors.js";
 import { GraphStore } from "../src/adapters/store/store.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
-import { isCodeLanguage, type SupportedLanguage } from "../src/core/scan/language.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
 import { assertGolden } from "./helpers/golden.js";
 import { corpusGoldenPath, formatCorpusResults, readCorpus, runCorpus } from "./helpers/cypher-corpus.js";
 
@@ -42,7 +42,7 @@ function classifyCypherError(error: unknown) {
 // and the directories that still hold one.
 function codeFilesOnly(graph: { nodes: GraphNode[]; relationships: GraphRelationship[] }) {
   const dropped = new Set(graph.nodes
-    .filter((node) => node.label === "File" && !isCodeLanguage(node.properties.language as SupportedLanguage))
+    .filter((node) => node.label === "File" && !defaultLanguageTable.isCode(node.properties.language as string))
     .map((node) => node.id));
   let nodes = graph.nodes.filter((node) => !dropped.has(node.id));
   let relationships = graph.relationships.filter((rel) => !dropped.has(rel.from) && !dropped.has(rel.to));

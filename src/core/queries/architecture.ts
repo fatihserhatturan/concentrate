@@ -5,7 +5,12 @@ import { loadImports } from "./model.js";
 type Row = Record<string, unknown>;
 
 export type ArchitectureLevel = "package" | "directory" | "subsystem";
-export type ArchitectureOptions = { level: ArchitectureLevel; depth: number };
+export type ArchitectureOptions = {
+  level: ArchitectureLevel;
+  depth: number;
+  // The languages whose files count as code (`LanguageTable.codeLanguages`).
+  codeLanguages: ReadonlySet<string>;
+};
 
 type Group = {
   name: string;
@@ -24,7 +29,7 @@ type Group = {
 // import edges between groups weighted by the number of file imports. `edges`
 // is the full sorted list; callers page it.
 export async function architectureOverview(engine: IQueryEngine, options: ArchitectureOptions) {
-  const { level, depth } = options;
+  const { level, depth, codeLanguages } = options;
 
   const [files, membership, functionCounts, methodCounts, classCounts, routeCounts, entrypointCounts, fileModels, functionModels, declared, imports] = await Promise.all([
     engine.query("MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest"),
@@ -55,7 +60,7 @@ export async function architectureOverview(engine: IQueryEngine, options: Archit
   ]) as [Row[], Row[], Map<string, number>, Map<string, number>, Map<string, number>, Map<string, number>, Map<string, number>, Row[], Row[], Row[], Awaited<ReturnType<typeof loadImports>>];
 
   const packageOf = new Map(membership.map((row) => [String(row.file), String(row.package)]));
-  const fileGraph = await loadFileGraph(engine);
+  const fileGraph = await loadFileGraph(engine, codeLanguages);
   const clusters = level === "subsystem" ? subsystems(fileGraph) : [];
   const subsystemOf = new Map(clusters.flatMap((cluster) => cluster.files.map((file) => [file, cluster.name] as const)));
   const groupOf = (file: string): string | null => level === "package"
@@ -75,7 +80,7 @@ export async function architectureOverview(engine: IQueryEngine, options: Archit
   let ungrouped = 0;
   for (const row of files) {
     // The structure of the code: styles, JSON, docs and assets are left out.
-    if (!countsAsCodeFile(row.language)) continue;
+    if (!countsAsCodeFile(row.language, codeLanguages)) continue;
     const file = String(row.file);
     const name = groupOf(file);
     if (name === null) {

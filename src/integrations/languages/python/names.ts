@@ -1,4 +1,4 @@
-import type { GraphNode, ImportBinding } from "../../graph/model.js";
+import type { GraphNode, ImportBinding } from "../../../core/graph/model.js";
 
 type Declarations = Map<string, Map<string, string[]>>;
 

@@ -1,13 +1,12 @@
 import type { IQueryEngine } from "../contracts/query-engine.js";
 import { louvain } from "../graph/louvain.js";
-import { CODE_LANGUAGES, type SupportedLanguage } from "../scan/language.js";
 import { loadCallEdges, loadFunctions } from "./graph.js";
 import { loadImports } from "./model.js";
 
 type Row = Record<string, unknown>;
 
 // Code files, plus files whose language is unknown; styles, JSON, docs and assets are not code.
-export const countsAsCodeFile = (value: unknown): boolean => typeof value !== "string" || CODE_LANGUAGES.has(value as SupportedLanguage);
+export const countsAsCodeFile = (value: unknown, codeLanguages: ReadonlySet<string>): boolean => typeof value !== "string" || codeLanguages.has(value);
 
 // The file graph behind hubs and subsystems: code files other than tests,
 // connected by resolved imports and by calls from one file into another.
@@ -23,7 +22,7 @@ export type FileGraph = {
   functions: Awaited<ReturnType<typeof loadFunctions>>;
 };
 
-export async function loadFileGraph(engine: IQueryEngine): Promise<FileGraph> {
+export async function loadFileGraph(engine: IQueryEngine, codeLanguages: ReadonlySet<string>): Promise<FileGraph> {
   const [fileRows, imports, functions, calls] = await Promise.all([
     engine.query("MATCH (file:File) RETURN file.relativePath AS file, file.language AS language, file.isTest AS isTest") as Promise<Row[]>,
     loadImports(engine),
@@ -31,7 +30,7 @@ export async function loadFileGraph(engine: IQueryEngine): Promise<FileGraph> {
     loadCallEdges(engine),
   ]);
   const files = fileRows
-    .filter((row) => row.isTest !== true && (countsAsCodeFile(row.language)))
+    .filter((row) => row.isTest !== true && countsAsCodeFile(row.language, codeLanguages))
     .map((row) => String(row.file))
     .sort();
   const included = new Set(files);

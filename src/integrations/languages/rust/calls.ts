@@ -1,8 +1,8 @@
-import type { IGraphContributor } from "../../contracts/graph-contributor.js";
-import type { GraphNode } from "../../graph/model.js";
-import type { ResolutionRelationshipIndex } from "./indexes.js";
-import { isRustFile } from "./file-kind.js";
-import { rustBaseType, unwrapResultType } from "./rust-types.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
+import { isRustFile } from "../file-kind.js";
+import { rustBaseType, unwrapResultType } from "./types.js";
 
 // Rust calls resolve through names, not through files: the module a file is
 // (`rustCrate` / `rustModule`, written by import resolution), the items of

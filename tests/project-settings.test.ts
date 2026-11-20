@@ -6,8 +6,11 @@ import { describe, it } from "node:test";
 import { scanIntoStore } from "../src/composition/scan-into-store.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { openGraphStore } from "../src/composition/graph-store.js";
-import { detectLanguage } from "../src/core/scan/language.js";
-import { loadProjectSettings, parseProjectSettings } from "../src/core/scan/project-settings.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
+const detectLanguage = (file: string, overrides?: ReadonlyMap<string, string>) => defaultLanguageTable.detect(file, overrides);
+import { loadProjectSettings as loadSettings, parseProjectSettings as parseSettings } from "../src/core/scan/project-settings.js";
+const parseProjectSettings = (raw: unknown) => parseSettings(raw, defaultLanguageTable);
+const loadProjectSettings = (root: string) => loadSettings(root, defaultLanguageTable);
 
 describe("concentrate.json", () => {
   it("parses every key and rejects what it cannot use", () => {

@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { rustBaseType } from "../../../core/scan/resolution/rust-types.js";
+import { rustBaseType } from "./types.js";
 import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";

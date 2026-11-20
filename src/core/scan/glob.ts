@@ -255,19 +255,3 @@ function minimalStarts(starts: string[]): string[] {
   if (unique.includes("")) return [""];
   return unique.filter((start, index) => !unique.slice(0, index).some((other) => start.startsWith(`${other}/`)));
 }
-
-/** `package.json` paths for one workspace pattern such as `packages/*`, skipping `node_modules`. */
-export async function findWorkspacePackageJsons(rootPath: string, workspacePattern: string): Promise<string[]> {
-  if (workspacePattern.startsWith("!")) return [];
-  const pattern = workspacePattern.endsWith("package.json")
-    ? workspacePattern
-    : path.posix.join(workspacePattern, "package.json");
-  const matcher = createGlobMatcher(pattern);
-
-  return walkFiles(rootPath, {
-    start: [matcher.base],
-    accept: (relativePath, isDirectory) => isDirectory
-      ? path.posix.basename(relativePath) !== "node_modules" && matcher.mayContain(relativePath)
-      : matcher.matches(relativePath),
-  });
-}

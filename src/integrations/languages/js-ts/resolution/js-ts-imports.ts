@@ -2,7 +2,7 @@ import {
   createJsTsConfiguredImportBasePaths,
   type JsTsResolutionConfig,
 } from "./config.js";
-import { createRelativeImportCandidates } from "../../../../core/scan/resolution/import-candidates.js";
+import { createRelativeImportCandidates } from "./import-candidates.js";
 
 export function resolveJsTsConfiguredImport(
   source: string,

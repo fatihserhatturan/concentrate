@@ -1,11 +1,27 @@
+import type { ILanguageCallResolver, ILanguageInheritanceResolver } from "../contracts/call-resolver.js";
+import type { LanguageDescriptor } from "../contracts/language-descriptor.js";
+import type { IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
 import type { ILanguageResolver } from "../contracts/language-resolver.js";
 import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
 
 export class CoreIntegrationRegistry {
+  private readonly languageDescriptors = new Map<string, LanguageDescriptor>();
   private readonly parsersByLanguage = new Map<string, ILanguageParser>();
   private readonly languageResolverList: ILanguageResolver[] = [];
   private readonly semanticContributorList: ISemanticContributor[] = [];
+  private readonly callResolverList: ILanguageCallResolver[] = [];
+  private readonly inheritanceResolverList: ILanguageInheritanceResolver[] = [];
+  private readonly projectManifestReaderList: IProjectManifestReader[] = [];
+
+  // What files a language owns and whether it is code; registering an id again replaces it.
+  registerLanguage(descriptor: LanguageDescriptor): void {
+    this.languageDescriptors.set(descriptor.id, descriptor);
+  }
+
+  get languages(): readonly LanguageDescriptor[] {
+    return [...this.languageDescriptors.values()];
+  }
 
   // One parser per language; registering a language again replaces its parser.
   registerLanguageParser(parser: ILanguageParser): void {
@@ -38,5 +54,32 @@ export class CoreIntegrationRegistry {
 
   get semanticContributors(): readonly ISemanticContributor[] {
     return this.semanticContributorList;
+  }
+
+  // Per-language call resolution; the first that supports a calling file resolves its calls.
+  registerCallResolver(resolver: ILanguageCallResolver): void {
+    this.callResolverList.push(resolver);
+  }
+
+  get callResolvers(): readonly ILanguageCallResolver[] {
+    return this.callResolverList;
+  }
+
+  // Per-language EXTENDS / IMPLEMENTS, run in registration order after the default lookup.
+  registerInheritanceResolver(resolver: ILanguageInheritanceResolver): void {
+    this.inheritanceResolverList.push(resolver);
+  }
+
+  get inheritanceResolvers(): readonly ILanguageInheritanceResolver[] {
+    return this.inheritanceResolverList;
+  }
+
+  // Ecosystem manifests (package.json, pyproject.toml, ...): the packages and config values they declare.
+  registerProjectManifestReader(reader: IProjectManifestReader): void {
+    this.projectManifestReaderList.push(reader);
+  }
+
+  get projectManifestReaders(): readonly IProjectManifestReader[] {
+    return this.projectManifestReaderList;
   }
 }

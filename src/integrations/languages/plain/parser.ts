@@ -2,8 +2,13 @@ import path from "node:path";
 import { open, readFile, stat } from "node:fs/promises";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
 import type { GraphNode, ParsedSourceFile } from "../../../core/graph/model.js";
-import { lockfiles } from "../../../core/scan/file-classification.js";
-import { CODE_LANGUAGES, type FileLanguage, type SupportedLanguage } from "../../../core/scan/language.js";
+import { combineConventions } from "../../../core/scan/language.js";
+import { cppLanguages } from "../cpp/descriptor.js";
+import { goLanguages } from "../go/descriptor.js";
+import { jsTsLanguages } from "../js-ts/descriptor.js";
+import { pythonLanguages } from "../python/descriptor.js";
+import { rustLanguages } from "../rust/descriptor.js";
+import { plainLanguages } from "./descriptor.js";
 import type { GrammarName } from "../syntax/tree-sitter.js";
 import { syntaxErrorLines } from "../syntax/syntax-errors.js";
 import { readCMake } from "./cmake.js";
@@ -18,6 +23,9 @@ import { protoGraph } from "./proto-graph.js";
 // errors: the node is kept and the scan reports a warning. Their contents are
 // not read for declarations here; a file of unknown type whose first bytes
 // hold a NUL is an `asset`.
+
+// Lockfiles of every language: they are never read.
+const lockfiles = combineConventions([...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages, ...plainLanguages]).lockfiles;
 
 const SNIFF_BYTES = 8000;
 
@@ -112,17 +120,13 @@ async function parsePlainFile(rootPath: string, filePath: string, language: File
   return parsed;
 }
 
-const fileLanguages: FileLanguage[] = [
-  "css", "scss", "less", "json", "yaml", "toml", "markdown",
-  "shell", "powershell", "dockerfile", "makefile", "cmake", "sql", "proto",
-  "other", "asset",
-];
+type FileLanguage = string;
+
+const fileLanguages: FileLanguage[] = plainLanguages.map((descriptor) => descriptor.id);
 
 export const plainFileParsers: LanguageParser[] = fileLanguages.map((language) => ({
   language,
   parse: (rootPath, filePath) => parsePlainFile(rootPath, filePath, language),
 }));
 
-export function isPlainLanguage(language: SupportedLanguage): language is FileLanguage {
-  return !CODE_LANGUAGES.has(language);
-}
+export { isPlainLanguage } from "./descriptor.js";

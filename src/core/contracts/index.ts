@@ -8,3 +8,6 @@ export type { GraphStatsOptions, GraphStatsRow, IQueryEngine, QueryParameters } 
 export type { IGraphStore } from "./graph-store.js";
 export type { ChangeSet, ChangeSourceOptions, IChangeSource } from "./change-source.js";
 export type { ISourceReader } from "./source-reader.js";
+export type { CallResolutionSession, ILanguageCallResolver, ILanguageInheritanceResolver, InheritanceContext, ResolvedCallTarget } from "./call-resolver.js";
+export type { DetectedFile, FileConventions, LanguageDescriptor } from "./language-descriptor.js";
+export type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "./project-manifest.js";

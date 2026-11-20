@@ -1,15 +1,15 @@
+import type { ILanguageInheritanceResolver, InheritanceContext } from "../../contracts/call-resolver.js";
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
-import { addCppRelationships } from "./cpp-calls.js";
-import { addGoImplementsRelationships } from "./go-calls.js";
-import { addPythonInheritanceRelationships } from "./python-inheritance.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
   indexNodesByFileAndName,
 } from "./indexes.js";
 
-export function addInheritanceRelationships(graph: IGraphContributor): void {
+// `languages` add the relationships their own way after the default
+// `extendsNames` / `implementsNames` lookup, in registration order.
+export function addInheritanceRelationships(graph: IGraphContributor, languages: readonly ILanguageInheritanceResolver[]): void {
   const relationshipIndex = createResolutionRelationshipIndex(graph);
   const classesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Class"), relationshipIndex.fileByClassId, "Class");
   const interfacesByFileAndName = indexNodesByFileAndName(graph.nodesWithLabel("Interface"), relationshipIndex.fileByInterfaceId, "Interface");
@@ -18,8 +18,7 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
   for (const node of graph.nodesWithLabel("Class")) {
     const fileId = relationshipIndex.fileByClassId.get(node.id);
     if (!fileId) continue;
-    // Python bases are looked up through its import bindings and re-exports.
-    if (fileId.endsWith(".py")) continue;
+    if (languages.some((language) => language.ownsClassesIn?.(fileId))) continue;
 
     for (const extendsName of parseNameList(node.properties.extendsNames)) {
       const targetClassId = resolveNamedNode(
@@ -58,26 +57,15 @@ export function addInheritanceRelationships(graph: IGraphContributor): void {
     }
   }
 
-  addGoImplementsRelationships(graph, relationshipIndex);
-  addCppRelationships(graph, relationshipIndex);
-  addPythonInheritanceRelationships(graph, relationshipIndex, classesByFileAndName, interfacesByFileAndName, importsByFile);
-
-  // Rust: `impl Trait for Type` blocks the parser recorded on the file (the
-  // type and the trait may live in other files, found through its `use`s).
-  for (const node of graph.nodesWithLabel("File")) {
-    if (typeof node.properties.rustImpls !== "string") continue;
-    const impls = JSON.parse(node.properties.rustImpls) as Array<{ type: string; trait: string }>;
-    delete node.properties.rustImpls;
-    const seen = new Set<string>();
-    for (const impl of impls) {
-      const classId = resolveNamedNode(impl.type, node.id, classesByFileAndName, importsByFile, relationshipIndex.resolvedFileByImportId);
-      const traitId = resolveNamedNode(impl.trait, node.id, interfacesByFileAndName, importsByFile, relationshipIndex.resolvedFileByImportId);
-      if (classId && traitId && !seen.has(`${classId}\0${traitId}`)) {
-        seen.add(`${classId}\0${traitId}`);
-        graph.addRelationship({ from: classId, to: traitId, type: "IMPLEMENTS", properties: {} });
-      }
-    }
-  }
+  const context: InheritanceContext = {
+    index: relationshipIndex,
+    classesByFileAndName,
+    interfacesByFileAndName,
+    importsByFile,
+    resolveNamedNode: (name, fileId, nodesByFileAndName) =>
+      resolveNamedNode(name, fileId, nodesByFileAndName, importsByFile, relationshipIndex.resolvedFileByImportId),
+  };
+  for (const language of languages) language.addRelationships(graph, context);
 }
 
 function resolveNamedNode(

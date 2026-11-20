@@ -25,9 +25,15 @@ export {
   type ScanStatus,
   type ScanWarning,
 } from "./core/scan/index.js";
-export { graphSummary } from "./core/queries/summary.js";
+import { defaultLanguageTable } from "./composition/default-registry.js";
+import { graphSummary as coreGraphSummary } from "./core/queries/summary.js";
+import type { IQueryEngine as SummaryEngine } from "./core/contracts/query-engine.js";
+export const graphSummary = (engine: SummaryEngine) => coreGraphSummary(engine, { codeLanguages: defaultLanguageTable.codeLanguages });
+export { defaultLanguageTable };
 export { nodeLabels, nodeTables, relationshipTables, type NodeTable, type RelationshipTable } from "./adapters/store/schema.js";
 export { matchName, type MatchType } from "./core/queries/match.js";
 export type { ISourceReader } from "./core/contracts/source-reader.js";
 export { findUnusedExports, type FindUnusedExportsOptions, type UnusedExport, type UnusedExportsResult } from "./core/queries/unused.js";
+export { defaultUnusedExportRules } from "./composition/unused-rules.js";
+export type { IUnusedExportRules } from "./core/contracts/unused-rules.js";
 export { findImportCycles, type ImportCycle, type ImportCyclesResult } from "./core/queries/cycles.js";

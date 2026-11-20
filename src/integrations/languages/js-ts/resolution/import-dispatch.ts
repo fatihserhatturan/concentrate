@@ -2,8 +2,8 @@ import path from "node:path";
 import type { JsTsResolutionConfig } from "./config.js";
 import {
   isJsTsFile,
-} from "../../../../core/scan/resolution/file-kind.js";
-import { createRelativeImportCandidates } from "../../../../core/scan/resolution/import-candidates.js";
+} from "../../file-kind.js";
+import { createRelativeImportCandidates } from "./import-candidates.js";
 import { resolveJsTsConfiguredImport } from "./js-ts-imports.js";
 
 export function resolveImport(

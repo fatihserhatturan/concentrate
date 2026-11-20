@@ -1,18 +1,16 @@
+import type { CallResolutionSession, ILanguageCallResolver } from "../../contracts/call-resolver.js";
 import type { IGraphContributor } from "../../contracts/graph-contributor.js";
 import type { GraphNode } from "../../graph/model.js";
 import { resolveCall, resolveDeclaration, resolveImportedFreeCall } from "./call-targets.js";
-import { cppIndexFor, resolveCppCall, type CppIndex } from "./cpp-calls.js";
-import { isCppFile, isGoFile, isPythonFile, isRustFile } from "./file-kind.js";
-import { createPythonCallIndex, resolvePythonCall, type PythonCallIndex } from "./python-calls.js";
-import { createRustCallIndex, resolveRustCall, type RustCallIndex } from "./rust-calls.js";
-import { createGoCallIndex, resolveGoCall, type GoCallIndex } from "./go-calls.js";
 import {
   createResolutionRelationshipIndex,
   indexImportNodesByFile,
   indexNodesByFileAndName,
 } from "./indexes.js";
 
-export function addCallResolutionRelationships(graph: IGraphContributor): {
+// `languages` resolve the calls of the files they support; every other call
+// goes through the name and import lookup below.
+export function addCallResolutionRelationships(graph: IGraphContributor, languages: readonly ILanguageCallResolver[]): {
   resolved: number;
   unresolved: number;
 } {
@@ -33,10 +31,7 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
     resolvedFileByImportId: relationshipIndex.resolvedFileByImportId,
   };
   const scopes = indexScopes(graph, functionsByFileAndName, importNodesByFile);
-  let goIndex: GoCallIndex | null = null;
-  let rustIndex: RustCallIndex | null = null;
-  let cppIndex: CppIndex | null = null;
-  let pythonIndex: PythonCallIndex | null = null;
+  const sessions = new Map<ILanguageCallResolver, CallResolutionSession>();
 
   let resolved = 0;
   let unresolved = 0;
@@ -60,42 +55,14 @@ export function addCallResolutionRelationships(graph: IGraphContributor): {
       continue;
     }
 
-    if (isCppFile(callerFileId)) {
-      cppIndex ??= cppIndexFor(graph, relationshipIndex);
-      const targets = resolveCppCall(node, callerFileId, callerFunctionId, cppIndex);
-      for (const target of targets) {
-        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
+    const language = languages.find((candidate) => candidate.supports(callerFileId));
+    if (language) {
+      let session = sessions.get(language);
+      if (!session) {
+        session = language.createSession(graph, relationshipIndex);
+        sessions.set(language, session);
       }
-      if (targets.length > 0) resolved++;
-      else unresolved++;
-      continue;
-    }
-
-    if (isGoFile(callerFileId)) {
-      goIndex ??= createGoCallIndex(graph, relationshipIndex);
-      const targets = resolveGoCall(node, callerFileId, goIndex);
-      for (const target of targets) {
-        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
-      }
-      if (targets.length > 0) resolved++;
-      else unresolved++;
-      continue;
-    }
-
-    if (isRustFile(callerFileId)) {
-      rustIndex ??= createRustCallIndex(graph, relationshipIndex);
-      const targets = resolveRustCall(node, callerFileId, callerFunctionId, rustIndex);
-      for (const target of targets) {
-        graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
-      }
-      if (targets.length > 0) resolved++;
-      else unresolved++;
-      continue;
-    }
-
-    if (isPythonFile(callerFileId)) {
-      pythonIndex ??= createPythonCallIndex(graph, relationshipIndex);
-      const targets = resolvePythonCall(node, callerFileId, callerFunctionId, pythonIndex);
+      const targets = session(node, callerFileId, callerFunctionId);
       for (const target of targets) {
         graph.addRelationship({ from: node.id, to: target.functionId, type: "CALL_RESOLVES_TO", properties: target.via ? { via: target.via } : {} });
       }

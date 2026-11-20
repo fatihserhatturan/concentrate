@@ -3,8 +3,10 @@ import path from "node:path";
 import { before, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { normalizeCppType } from "../src/integrations/languages/cpp/types.js";
-import { detectLanguage } from "../src/core/scan/language.js";
-import { filterSupportedSourceFiles } from "../src/core/scan/source-files.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
+const detectLanguage = (file: string, overrides?: ReadonlyMap<string, string>) => defaultLanguageTable.detect(file, overrides);
+import { filterSupportedSourceFiles as filterFiles } from "../src/core/scan/source-files.js";
+const filterSupportedSourceFiles = (files: string[], max: number | undefined) => filterFiles(files, max, defaultLanguageTable);
 import { classifyFile } from "../src/core/scan/file-classification.js";
 
 type Scan = Awaited<ReturnType<typeof buildCodeGraph>>;
@@ -51,9 +53,9 @@ describe("C and C++ languages", () => {
   });
 
   it("classifies C and C++ test files", () => {
-    for (const file of ["a/foo_test.cc", "a/foo_unittest.cpp", "a/test_foo.c", "a/FooTest.cpp", "tests/x.cpp"]) assert.equal(classifyFile(file).isTest, true, file);
-    assert.equal(classifyFile("src/latest.cpp").isTest, false);
-    assert.equal(classifyFile("src/x.cpp", false, true, true).isTest, true);
+    for (const file of ["a/foo_test.cc", "a/foo_unittest.cpp", "a/test_foo.c", "a/FooTest.cpp", "tests/x.cpp"]) assert.equal(classifyFile(file, defaultLanguageTable.conventions).isTest, true, file);
+    assert.equal(classifyFile("src/latest.cpp", defaultLanguageTable.conventions).isTest, false);
+    assert.equal(classifyFile("src/x.cpp", defaultLanguageTable.conventions, false, true, true).isTest, true);
   });
 });
 

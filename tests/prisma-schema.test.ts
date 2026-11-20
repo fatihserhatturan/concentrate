@@ -143,7 +143,8 @@ describe("Prisma schema scan", () => {
 
   it("counts tables in the graph summary", async () => {
     const { graphSummary } = await import("../src/core/queries/summary.js");
-    assert.deepEqual((await graphSummary(store)).tablesByLibrary, { knex: 1, prisma: 4 });
+    const { defaultLanguageTable } = await import("../src/composition/default-registry.js");
+    assert.deepEqual((await graphSummary(store, { codeLanguages: defaultLanguageTable.codeLanguages })).tablesByLibrary, { knex: 1, prisma: 4 });
   });
 });
 

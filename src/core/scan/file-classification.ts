@@ -1,4 +1,5 @@
 import path from "node:path";
+import type { FileConventions } from "../contracts/language-descriptor.js";
 
 export type FileSourceType = "production" | "test" | "fixture" | "support" | "generated" | "docs";
 
@@ -13,13 +14,11 @@ export type FileClassification = {
 
 export type FileClassificationCounts = Record<FileSourceType, number>;
 
-// Lockfiles are written by package managers.
-export const lockfiles: ReadonlySet<string> = new Set(["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lockb", "bun.lock", "go.sum", "Cargo.lock", "poetry.lock", "Pipfile.lock", "uv.lock", "composer.lock", "Gemfile.lock"]);
-
 // `code` is false for the files no language parser reads (styles, JSON,
 // Markdown, assets, …): only those can be `docs`, so example code under
 // `docs/` stays production code.
-export function classifyFile(relativePath: string, generatedContent = false, code = true, testContent = false): FileClassification {
+// `conventions` carries the languages' file-name rules (test, generated, support, lockfiles).
+export function classifyFile(relativePath: string, conventions: FileConventions, generatedContent = false, code = true, testContent = false): FileClassification {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const segments = normalizedPath.split("/");
   const fileName = segments.at(-1) ?? normalizedPath;
@@ -33,7 +32,7 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
     "dist",
     "build",
     "coverage",
-  ]) || /(?:^|[.-])(generated|gen)\.[cm]?[jt]sx?$/u.test(fileName) || lockfiles.has(fileName);
+  ]) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
 
   const isFixture = hasSegment(segments, [
     "fixture",
@@ -50,9 +49,7 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
     "__tests__",
     "spec",
     "specs",
-  ]) || /\.(?:test|spec)\.[cm]?[jt]sx?$/u.test(fileName) || fileName.endsWith("_test.go") || /^tests\.rs$|_tests?\.rs$/u.test(fileName) || /^(?:test_.*|.*_test|conftest|tests)\.py$/u.test(fileName)
-    // C and C++: `foo_test.cc`, `foo_unittest.cpp`, `test_foo.c`, `FooTest.cpp`; a file of GoogleTest or Catch2 tests is one too.
-    || /(?:_(?:unit)?tests?|[a-z]Tests?)\.(?:c|cc|cpp|cxx)$|^test_.+\.(?:c|cc|cpp|cxx)$/u.test(fileName)
+  ]) || conventions.testFile(fileName)
     || testContent;
 
   const isSupport = hasSegment(segments, [
@@ -63,10 +60,10 @@ export function classifyFile(relativePath: string, generatedContent = false, cod
     "stubs",
     "__stubs__",
     "support",
-  ]) || /(?:^|[.-])(mock|mocks|stub|stubs|setup|setupTests)\.[cm]?[jt]sx?$/u.test(fileName);
+  ]) || conventions.supportFile(fileName);
 
   const isDocs = !code && (
-    (/\.(?:md|mdx|markdown|rst|adoc|txt)$/iu.test(fileName) && fileName !== "CMakeLists.txt")
+    (/\.(?:md|mdx|markdown|rst|adoc|txt)$/iu.test(fileName) && !conventions.claimedFileNames.has(fileName))
     || /^(?:LICEN[CS]E|COPYING|NOTICE|AUTHORS|CONTRIBUTORS|CHANGELOG|CHANGES|HISTORY|README|CODE_OF_CONDUCT|CONTRIBUTING|SECURITY)(?:[.-].*)?$/iu.test(fileName)
     || hasSegment(segments, ["docs", "doc"])
   );

@@ -4,6 +4,7 @@ import type { GraphNode } from "../../../core/graph/model.js";
 import type { PythonParsePlugin } from "../../languages/python/parser.js";
 import { walk } from "../../languages/tree-sitter-utils.js";
 import { classifyFile } from "../../../core/scan/file-classification.js";
+import { pythonConventions } from "../../languages/python/descriptor.js";
 import { ENV_VALUE_FILES, readEnvFiles } from "../js-ts/env-files.js";
 import type { PythonContext } from "./context.js";
 import { argsOf, compact, createOwnerOf, lastSegment, stringConstants, stringOnly, stringValue, unwrap } from "./syntax.js";
@@ -41,7 +42,7 @@ export const pythonHttpPlugin: PythonParsePlugin = ({ fileNodeId, relativePath, 
   const source = root.text;
   if (!/\brequests\b|\bhttpx\b|\baiohttp\b/u.test(source)) return;
   // A test drives the app in process (a client of `app=app`, fixtures): not an outbound request.
-  if (classifyFile(relativePath, false, true).isTest) return;
+  if (classifyFile(relativePath, pythonConventions, false, true).isTest) return;
   const constants = stringConstants(root);
   const ownerOf = createOwnerOf(fileNodeId, functions);
   const functionById = new Map(functions.map((fn) => [fn.node.id, fn]));

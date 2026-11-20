@@ -1,6 +1,6 @@
 import path from "node:path";
 import { readFile } from "node:fs/promises";
-import { findWorkspacePackageJsons } from "../../../../core/scan/glob.js";
+import { findWorkspacePackageJsons } from "../project.js";
 import { extractPackageExportTargets } from "./package-json-exports.js";
 
 export type JsTsPackageJsonResolutionConfig = {
@@ -145,7 +145,7 @@ export function createJsTsWorkspacePackageImportBasePaths(
   return candidates;
 }
 
-async function readJsonObject(
+export async function readJsonObject(
   filePath: string,
   onWarning?: ConfigWarningSink,
 ): Promise<Record<string, unknown> | null> {
@@ -182,7 +182,7 @@ function packageJsonConfigFromObject(parsed: Record<string, unknown>): JsTsPacka
   };
 }
 
-function extractWorkspacePatterns(parsed: Record<string, unknown> | null): string[] {
+export function extractWorkspacePatterns(parsed: Record<string, unknown> | null): string[] {
   if (!parsed) return [];
 
   const workspaces = parsed.workspaces;
@@ -200,7 +200,7 @@ function extractWorkspacePatterns(parsed: Record<string, unknown> | null): strin
   return [];
 }
 
-async function readPnpmWorkspacePatterns(rootPath: string, onWarning?: ConfigWarningSink): Promise<string[]> {
+export async function readPnpmWorkspacePatterns(rootPath: string, onWarning?: ConfigWarningSink): Promise<string[]> {
   const pnpmWorkspacePath = path.join(rootPath, "pnpm-workspace.yaml");
   let raw: string;
   try {

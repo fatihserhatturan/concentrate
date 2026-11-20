@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { collectGarbageAfterGrowth } from "../src/composition/garbage.js";
 import { GraphBuilder } from "../src/core/graph/builder.js";
 import type { ParsedSourceFile } from "../src/core/graph/model.js";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
 import { addParseResultsToGraph, OrderedParseResults } from "../src/core/scan/parse-results.js";
 import type { ParseResult } from "../src/core/scan/parse-source.js";
 import { createScanReport } from "../src/core/scan/report.js";
@@ -39,7 +40,7 @@ function newGraph(): GraphBuilder {
 function addInOrder(results: ParseResult[], arrival: number[], continueOnError: boolean) {
   const graph = newGraph();
   const report = createScanReport(results.length, results.length, 0);
-  const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, continueOnError);
+  const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, continueOnError, defaultLanguageTable);
   for (const index of arrival) sink.set(index, results[index]!);
   return { graph, report, complete: sink.complete };
 }
@@ -59,7 +60,7 @@ describe("scan memory", () => {
     const results = ["a.ts", "b.ts", "c.ts", "d.ts", "e.ts"].map(parsedFile);
     const graph = newGraph();
     const report = createScanReport(results.length, results.length, 0);
-    assert.equal(addParseResultsToGraph(graph, repoNodeId, rootPath, results, report, true), true);
+    assert.equal(addParseResultsToGraph(graph, repoNodeId, rootPath, results, report, true, defaultLanguageTable), true);
     const expected = snapshot(graph, report);
 
     for (const arrival of [[4, 3, 2, 1, 0], [1, 0, 3, 2, 4], [2, 4, 0, 1, 3]]) {
@@ -73,7 +74,7 @@ describe("scan memory", () => {
     const results = ["a.ts", "b.ts", "c.ts"].map(parsedFile);
     const graph = newGraph();
     const report = createScanReport(3, 3, 0);
-    const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, true);
+    const sink = new OrderedParseResults(graph, repoNodeId, rootPath, report, true, defaultLanguageTable);
     sink.set(1, results[1]!);
     assert.equal(report.parsedFiles, 0, "b.ts waits for a.ts");
     sink.set(0, results[0]!);
@@ -87,7 +88,7 @@ describe("scan memory", () => {
     for (const continueOnError of [false, true]) {
       const graph = newGraph();
       const report = createScanReport(results.length, results.length, 0);
-      const complete = addParseResultsToGraph(graph, repoNodeId, rootPath, results, report, continueOnError);
+      const complete = addParseResultsToGraph(graph, repoNodeId, rootPath, results, report, continueOnError, defaultLanguageTable);
       const streamed = addInOrder(results, [3, 2, 1, 0], continueOnError);
       assert.equal(streamed.complete, complete);
       assert.equal(complete, continueOnError);

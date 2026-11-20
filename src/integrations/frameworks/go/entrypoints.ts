@@ -5,7 +5,7 @@ import type { ISemanticContributor } from "../../../core/contracts/semantic-cont
 import { analyzeMemberCallExpression, walkScoped } from "../../languages/tree-sitter-utils.js";
 import { createCallNodes, localTypes, type GoParsePlugin, type LocalType } from "../../languages/go/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createGoCallIndex, goInterfaceMethodNames, goValueMethods } from "../../../core/scan/resolution/go-calls.js";
+import { createGoCallIndex, goInterfaceMethodNames, goValueMethods } from "../../languages/go/calls.js";
 import { addClosures, closureFunctionNode } from "./closures.js";
 import { importedPackages, reference, type GoHandlerRef } from "./routes.js";
 import { resolveRef } from "./route-mounts.js";

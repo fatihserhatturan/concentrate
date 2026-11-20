@@ -2,6 +2,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import type { GraphNode } from "../../../core/graph/model.js";
 import type { JsTsParsedFile } from "../../languages/js-ts/index.js";
 import { classifyFile } from "../../../core/scan/file-classification.js";
+import { jsTsConventions } from "../../languages/js-ts/descriptor.js";
 import { joinPath, referenceName, routerImports, stringValue, unwrap } from "./react-router.js";
 
 // TanStack Router pages, in a file that imports `@tanstack/react-router` or
@@ -41,7 +42,7 @@ export function applyTanStackRouterSemantics({ fileNodeId, rootNode, parsed }: J
   const codeRoute = locals("createRoute");
   const relativePath = String(parsed.nodes.find((node) => node.id === fileNodeId)?.properties.relativePath ?? "");
   // The generated route tree (`routeTree.gen.ts`) repeats every route.
-  if (classifyFile(relativePath).isGenerated) return;
+  if (classifyFile(relativePath, jsTsConventions).isGenerated) return;
   const fileName = relativePath.split("/").pop() ?? "";
   const rootIsFileRoute = /^__root\./u.test(fileName);
 

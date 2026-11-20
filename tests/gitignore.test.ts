@@ -3,6 +3,7 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
+import { defaultLanguageTable } from "../src/composition/default-registry.js";
 import { discoverFiles } from "../src/core/scan/discover-files.js";
 import { GitIgnore } from "../src/core/scan/gitignore.js";
 
@@ -90,7 +91,7 @@ describe("discoverFiles", () => {
   }
 
   async function discover(root: string, options?: Parameters<typeof discoverFiles>[1]): Promise<string[]> {
-    return (await discoverFiles(root, options)).map((file) => path.relative(root, file).split(path.sep).join("/"));
+    return (await discoverFiles(root, { conventions: defaultLanguageTable.conventions, ...options })).map((file) => path.relative(root, file).split(path.sep).join("/"));
   }
 
   it("respects nested .gitignore files", async () => {

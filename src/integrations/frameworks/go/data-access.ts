@@ -5,7 +5,7 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GoParsePlugin } from "../../languages/go/parser.js";
 import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
-import { createGoCallIndex, firstResultType, goInterfaceMethodNames, resolveGoCall, resolveType } from "../../../core/scan/resolution/go-calls.js";
+import { createGoCallIndex, firstResultType, goInterfaceMethodNames, resolveGoCall, resolveType } from "../../languages/go/calls.js";
 import { importedPackages } from "./routes.js";
 import { sqlTableAccesses } from "./sql.js";
 import { createDefinitionLookup, descendantsOf, insideFunction, isPackageLevel, same, stringConstants, valueTypeText } from "./scope.js";

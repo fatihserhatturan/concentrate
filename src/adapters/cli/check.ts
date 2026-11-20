@@ -3,6 +3,7 @@ import { openGraphStore } from "../../composition/graph-store.js";
 import type { IGraphStore } from "../../core/contracts/graph-store.js";
 import { checkCycles, checkVerdict, MAX_LISTED_FINDINGS } from "../../core/queries/check.js";
 import { findImportCycles } from "../../core/queries/cycles.js";
+import { defaultUnusedExportRules } from "../../composition/unused-rules.js";
 import { findUnusedExports } from "../../core/queries/unused.js";
 import { nodeSourceReader } from "../fs/source-reader.js";
 import type { CliAdapterResult } from "./scan.js";
@@ -67,7 +68,7 @@ export async function runCyclesAdapter(options: CyclesAdapterOptions): Promise<C
 }
 
 export async function runUnusedAdapter(options: UnusedAdapterOptions): Promise<CliAdapterResult> {
-  const result = await withStore(options.database, (store) => findUnusedExports(store, nodeSourceReader, { file: options.file, includeTests: options.includeTests }));
+  const result = await withStore(options.database, (store) => findUnusedExports(store, nodeSourceReader, { file: options.file, includeTests: options.includeTests, rules: defaultUnusedExportRules }));
   const { count: total, exceeded } = checkVerdict(result.unusedExports.length, options.max);
   const exitCode = exceeded ? 1 : 0;
   const listed = result.unusedExports.slice(0, MAX_LISTED_FINDINGS);

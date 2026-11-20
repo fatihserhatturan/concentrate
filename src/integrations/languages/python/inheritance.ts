@@ -1,7 +1,7 @@
-import type { IGraphContributor } from "../../contracts/graph-contributor.js";
-import type { GraphNode } from "../../graph/model.js";
-import { createPythonNameLookup } from "./python-names.js";
-import type { ResolutionRelationshipIndex } from "./indexes.js";
+import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
+import { createPythonNameLookup } from "./names.js";
+import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 
 // Python classes: `class A(B)` is EXTENDS when B is a class of the scan and
 // IMPLEMENTS when B is an interface (a Protocol or ABC). A class that has

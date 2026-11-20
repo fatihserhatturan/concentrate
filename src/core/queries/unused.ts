@@ -1,6 +1,7 @@
 import path from "node:path";
 import type { IQueryEngine } from "../contracts/query-engine.js";
 import type { ISourceReader } from "../contracts/source-reader.js";
+import type { IUnusedExportRules, UnusedAnalysisContext, UnusedLanguageSession } from "../contracts/unused-rules.js";
 import { loadFunctions, matchesFileOrDirectory } from "./graph.js";
 import { type Declaration, describeDeclaration, ExportIndex, type FileInfo, loadDeclarations, loadFiles, loadImports } from "./model.js";
 
@@ -11,10 +12,11 @@ type Row = Record<string, unknown>;
 // (namespace, dynamic or default imports, `export * as`).
 type SurfaceReason = "packageEntry" | "wholeFileImported";
 
-const LANGUAGES = new Set(["typescript", "javascript", "go", "rust", "python", "c", "cpp"]);
 const MAX_DEAD_FUNCTIONS = 100;
 
 export type FindUnusedExportsOptions = {
+  /** Per-language rules; files no rule supports are not judged. */
+  rules: readonly IUnusedExportRules[];
   /** File or directory path, or a path suffix, to check. */
   file?: string;
   /** Also check test and fixture files. */
@@ -46,9 +48,15 @@ export type UnusedExportsResult = {
 // plus file-level functions nothing uses at all. Both are candidates: uses
 // the graph cannot see (string-based lookups, framework conventions,
 // consumers outside the repository) are not counted.
-export async function findUnusedExports(engine: IQueryEngine, reader: ISourceReader, options: FindUnusedExportsOptions = {}): Promise<UnusedExportsResult> {
+export async function findUnusedExports(engine: IQueryEngine, reader: ISourceReader, options: FindUnusedExportsOptions): Promise<UnusedExportsResult> {
   const file = options.file;
   const includeTests = options.includeTests ?? false;
+  const languages = new Set(options.rules.flatMap((rule) => rule.languages));
+  const ruleCache = new Map<string, IUnusedExportRules | undefined>();
+  const ruleFor = (target: string) => {
+    if (!ruleCache.has(target)) ruleCache.set(target, options.rules.find((rule) => rule.supports(target)));
+    return ruleCache.get(target);
+  };
 
   const [declarations, imports, files, packages, functions, links] = await Promise.all([
     loadDeclarations(engine),
@@ -81,11 +89,13 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
 
   // Without a package manifest the scan root counts as one package.
   const roots = packages.length > 0 ? packages : links.rootPath ? [{ path: links.rootPath, relativePath: "" }] : [];
-  for (const entry of await packageEntries(reader, roots, files)) markSurface(entry, "packageEntry");
+  for (const rule of options.rules) {
+    for (const entry of await rule.packageEntries?.(reader, roots, files) ?? []) markSurface(entry, "packageEntry");
+  }
   for (const edge of imports) {
     if (!edge.target || edge.isReExport) continue;
     // `from m import *` takes every public name of `m` (or its `__all__`).
-    if (edge.isWildcard && isPython(edge.file)) {
+    if (edge.isWildcard && ruleFor(edge.file)?.wildcardImportUsesWholeFile) {
       markSurface(edge.target, "wholeFileImported");
       continue;
     }
@@ -111,8 +121,8 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
   // Uses through calls, callbacks and class relations from other files (for
   // Go, other packages: its exports are what a package offers others).
   const fileOf = (id: string) => declarationsById.get(id)?.file ?? functions.get(id)?.file ?? null;
-  // C and C++: `foo.h` and `foo.cpp` are one unit (a header's names are used by its source).
-  const scopeOf = (file: string) => (isGo(file) ? path.posix.dirname(file) : isRust(file) ? (files.get(file)?.rustCrate ?? file) : isCpp(file) ? file.replace(/\.[^./]+$/u, "") : file);
+  // A language may group files into one unit (a Go package, a Rust crate, a C header with its source).
+  const scopeOf = (target: string) => ruleFor(target)?.unitOf?.(target, files.get(target)) ?? target;
   const calledAnywhere = new Set<string>();
   for (const link of links.uses) {
     calledAnywhere.add(link.target);
@@ -123,26 +133,39 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
 
   const inScope = (declaration: Declaration) => {
     const info = files.get(declaration.file);
-    return info !== undefined && LANGUAGES.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
+    return info !== undefined && languages.has(info.language ?? "") && (!file || matchesFileOrDirectory(declaration.file, file));
   };
-  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0, goMain: 0, rustBinary: 0, pythonEntry: 0 };
-  // Go names the graph has no edges for (types, variables, functions used as
-  // values) count as used when another package's Go file mentions them.
-  const goMentions = await goIdentifierIndex(reader, links.rootPath, files, declarations.some((declaration) => isGo(declaration.file)));
-  // Rust: identifier counts per crate, for items the graph has no edges for
-  // (types, consts, traits, enums).
-  const rustMentions = await identifierIndex(reader, links.rootPath, files, declarations.some((declaration) => isRust(declaration.file)), isRust, scopeOf);
-  // C and C++: identifier counts per unit; a function counts only where it
-  // is written in a source file (a prototype in a header is not a use).
-  const cppMentions = await cppIdentifierIndexes(reader, links.rootPath, files, declarations.some((declaration) => isCpp(declaration.file)), scopeOf);
+  const skipped: Record<string, number> = { packageEntry: 0, wholeFileImported: 0, defaultExports: 0, tests: 0, generated: 0, handlers: 0 };
+  for (const rule of options.rules) for (const reason of rule.skipReasons ?? []) skipped[reason] = 0;
+  // Per language, once the scan holds declarations of it: names the graph has
+  // no edges for that other units mention.
+  const sessions = new Map<IUnusedExportRules, UnusedLanguageSession>();
+  for (const rule of options.rules) {
+    if (!rule.createSession) continue;
+    const own = declarations.filter((declaration) => rule.supports(declaration.file));
+    if (own.length === 0) continue;
+    const context: UnusedAnalysisContext = {
+      rootPath: links.rootPath,
+      declarations: own,
+      unitOf: scopeOf,
+      forEachSource: async (include, visit) => {
+        if (!links.rootPath) return;
+        for (const candidate of files.keys()) {
+          if (!include(candidate)) continue;
+          const text = await reader.readFile(path.join(links.rootPath, candidate));
+          if (text !== undefined) visit(candidate, text);
+        }
+      },
+    };
+    sessions.set(rule, await rule.createSession(context));
+  }
   const skipReason = (declaration: Declaration, info: FileInfo): string | null => {
-    // A binary crate (main.rs, src/bin, examples, tests, benches) has no dependents.
-    if (isRust(declaration.file) && isRustBinaryCrate(info.rustCrate)) return "rustBinary";
+    const rule = ruleFor(declaration.file);
+    const binary = rule?.binaryReason?.(declaration, info);
+    if (binary) return binary;
     if (!includeTests && (info.isTest || info.isFixture)) return "tests";
-    // Nothing imports a Go main package; init and main run without a caller.
-    if (isGo(declaration.file) && (info.packageName === "main" || declaration.name === "init")) return "goMain";
-    // Python files that tools run or load by name, not by import.
-    if (isPython(declaration.file) && /(?:^|\/)(?:__main__|setup|manage|wsgi|asgi|conftest)\.py$/u.test(declaration.file)) return "pythonEntry";
+    const entry = rule?.entryReason?.(declaration, info);
+    if (entry) return entry;
     if (info.isGenerated) return "generated";
     if (links.handlers.has(declaration.id)) return "handlers";
     // Default exports are what tools and frameworks load by convention (configs, pages).
@@ -153,16 +176,9 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
   const unused: UnusedExport[] = [];
   for (const declaration of declarations) {
     if (!declaration.isExported || declaration.kind === "method" || used.has(declaration.id) || !inScope(declaration)) continue;
-    if (isGo(declaration.file) && mentionedOutside(goMentions, declaration.name, path.posix.dirname(declaration.file))) continue;
-    // Rust: only `pub` leaves the crate; test code is no API.
-    if (isRust(declaration.file)) {
-      if (declaration.visibility !== "pub" || declaration.testKind) continue;
-      if (mentionedOutside(rustMentions, declaration.name, scopeOf(declaration.file))) continue;
-    }
-    if (isCpp(declaration.file)) {
-      if (declaration.testKind) continue;
-      if (mentionedOutside(declaration.kind === "function" ? cppMentions.sources : cppMentions.all, declaration.name, scopeOf(declaration.file))) continue;
-    }
+    const rule = ruleFor(declaration.file);
+    if (rule?.isPublicApi && !rule.isPublicApi(declaration)) continue;
+    if (rule && sessions.get(rule)?.isMentionedElsewhere?.(declaration)) continue;
     const reason = skipReason(declaration, files.get(declaration.file)!);
     if (reason) {
       skipped[reason] = (skipped[reason] ?? 0) + 1;
@@ -189,11 +205,10 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
   const rootPath = links.rootPath;
   for (const declaration of deadCandidates) {
     if (deadFunctions.length >= MAX_DEAD_FUNCTIONS) break;
-    // A Go function is visible in every file of its package.
-    if (isGo(declaration.file)) {
-      if (declaration.name !== "init" && declaration.name !== "main" && (goMentions.get(declaration.name)?.get(path.posix.dirname(declaration.file)) ?? 0) <= 1) {
-        deadFunctions.push({ id: declaration.id, ...describeDeclaration(declaration) });
-      }
+    const rule = ruleFor(declaration.file);
+    const unitMentions = rule && sessions.get(rule)?.deadFunctionMentions;
+    if (unitMentions) {
+      if (unitMentions(declaration) <= 1) deadFunctions.push({ id: declaration.id, ...describeDeclaration(declaration) });
       continue;
     }
     let text = sources.get(declaration.file);
@@ -210,105 +225,6 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
     deadFunctions,
     skipped,
   };
-}
-
-function isGo(file: string): boolean {
-  return file.endsWith(".go");
-}
-
-function isPython(file: string): boolean {
-  return file.endsWith(".py");
-}
-
-function isRust(file: string): boolean {
-  return file.endsWith(".rs");
-}
-
-function isCpp(file: string): boolean {
-  return /\.(?:c|h|cc|cpp|cxx|hpp|hh|hxx|ipp|inl)$/u.test(file);
-}
-
-const CPP_HEADER = /\.(?:h|hpp|hh|hxx|ipp|inl)$/u;
-
-async function cppIdentifierIndexes(
-  reader: ISourceReader,
-  rootPath: string | null,
-  files: ReadonlyMap<string, FileInfo>,
-  needed: boolean,
-  scopeOf: (file: string) => string,
-): Promise<{ all: Map<string, Map<string, number>>; sources: Map<string, Map<string, number>> }> {
-  const all = new Map<string, Map<string, number>>();
-  const sources = new Map<string, Map<string, number>>();
-  if (!needed || !rootPath) return { all, sources };
-  for (const file of files.keys()) {
-    if (!isCpp(file)) continue;
-    const text = await reader.readFile(path.join(rootPath, file));
-    if (text === undefined) continue;
-    const scope = scopeOf(file);
-    for (const name of text.match(/[A-Za-z_]\w*/gu) ?? []) {
-      for (const index of CPP_HEADER.test(file) ? [all] : [all, sources]) {
-        let byScope = index.get(name);
-        if (!byScope) index.set(name, byScope = new Map());
-        byScope.set(scope, (byScope.get(scope) ?? 0) + 1);
-      }
-    }
-  }
-  return { all, sources };
-}
-
-function isRustBinaryCrate(crateRoot: string | null | undefined): boolean {
-  return crateRoot !== null && crateRoot !== undefined
-    && /(^|\/)(main\.rs|build\.rs)$|(^|\/)(src\/bin|examples|tests|benches)\//u.test(crateRoot);
-}
-
-// Identifier occurrences in the scan's files of one language: name -> scope -> count.
-async function identifierIndex(
-  reader: ISourceReader,
-  rootPath: string | null,
-  files: ReadonlyMap<string, FileInfo>,
-  needed: boolean,
-  matches: (file: string) => boolean,
-  scopeOf: (file: string) => string,
-): Promise<Map<string, Map<string, number>>> {
-  const index = new Map<string, Map<string, number>>();
-  if (!needed || !rootPath) return index;
-  for (const file of files.keys()) {
-    if (!matches(file)) continue;
-    const source = await reader.readFile(path.join(rootPath, file));
-    if (source === undefined) continue;
-    const scope = scopeOf(file);
-    for (const name of source.match(/[A-Za-z_]\w*/gu) ?? []) {
-      let byScope = index.get(name);
-      if (!byScope) index.set(name, byScope = new Map());
-      byScope.set(scope, (byScope.get(scope) ?? 0) + 1);
-    }
-  }
-  return index;
-}
-
-// Identifier occurrences in the scan's Go files: name -> directory -> count.
-async function goIdentifierIndex(reader: ISourceReader, rootPath: string | null, files: ReadonlyMap<string, FileInfo>, needed: boolean): Promise<Map<string, Map<string, number>>> {
-  const index = new Map<string, Map<string, number>>();
-  if (!needed || !rootPath) return index;
-  for (const file of files.keys()) {
-    if (!isGo(file)) continue;
-    const source = await reader.readFile(path.join(rootPath, file));
-    if (source === undefined) continue;
-    const dir = path.posix.dirname(file);
-    for (const name of source.match(/[A-Za-z_]\w*/gu) ?? []) {
-      let byDir = index.get(name);
-      if (!byDir) index.set(name, byDir = new Map());
-      byDir.set(dir, (byDir.get(dir) ?? 0) + 1);
-    }
-  }
-  return index;
-}
-
-function mentionedOutside(index: Map<string, Map<string, number>>, name: string, dir: string): boolean {
-  for (const mentionDir of index.get(name)?.keys() ?? []) {
-    if (mentionDir !== dir) return true;
-  }
-  return false;
 }
 
 type Links = {
@@ -360,45 +276,4 @@ async function loadLinks(engine: IQueryEngine): Promise<Links> {
     handlers: new Set(handlers!.flatMap((row) => id(row.target) ?? [])),
     rootPath: id(repo![0]?.path) ?? null,
   };
-}
-
-const SOURCE_EXTENSIONS = [".ts", ".tsx", ".mts", ".cts", ".js", ".jsx", ".mjs", ".cjs"];
-
-// Scan-relative files that are package entry points: the package.json
-// fields main, module, types, browser, bin and exports, mapped back from
-// build output to sources where the path does not exist, plus index and
-// src/index files at the package root.
-export async function packageEntries(reader: ISourceReader, packages: readonly Row[], files: ReadonlyMap<string, unknown>): Promise<string[]> {
-  const entries = new Set<string>();
-  for (const row of packages) {
-    if (typeof row.path !== "string") continue;
-    const base = typeof row.relativePath === "string" && row.relativePath !== "." ? row.relativePath : "";
-    const targets = ["index", "src/index"];
-    try {
-      const manifest = JSON.parse((await reader.readFile(path.join(row.path, "package.json"))) ?? "") as Record<string, unknown>;
-      for (const field of ["main", "module", "types", "typings", "browser", "bin", "exports"]) collectStrings(manifest[field], targets);
-    } catch {
-      // No readable manifest: the index fallbacks still apply.
-    }
-    for (const target of targets) {
-      const resolved = resolveEntry(path.posix.join(base, target.replace(/^\.\//, "")), files);
-      if (resolved) entries.add(resolved);
-    }
-  }
-  return [...entries];
-}
-
-function collectStrings(value: unknown, into: string[]): void {
-  if (typeof value === "string") into.push(value);
-  else if (Array.isArray(value)) for (const item of value) collectStrings(item, into);
-  else if (value && typeof value === "object") for (const item of Object.values(value)) collectStrings(item, into);
-}
-
-function resolveEntry(target: string, files: ReadonlyMap<string, unknown>): string | null {
-  const stem = target.replace(/\.d\.(?:m|c)?ts$/, "").replace(/\.(?:[mc]?[jt]sx?)$/, "");
-  const stems = [stem, stem.replace(/(^|\/)(?:dist|lib|build|out|esm|cjs)\//, "$1src/")];
-  for (const candidate of [target, ...stems.flatMap((item) => [...SOURCE_EXTENSIONS.map((extension) => item + extension), ...SOURCE_EXTENSIONS.map((extension) => `${item}/index${extension}`)])]) {
-    if (files.has(candidate)) return candidate;
-  }
-  return null;
 }

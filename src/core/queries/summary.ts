@@ -6,7 +6,12 @@ type Row = Record<string, unknown>;
 const TOP_DIRECTORIES = 15;
 const TOP_HUBS = 5;
 
-export async function graphSummary(engine: IQueryEngine): Promise<Record<string, unknown>> {
+export type GraphSummaryOptions = {
+  // The languages whose files count as code (`LanguageTable.codeLanguages`).
+  codeLanguages: ReadonlySet<string>;
+};
+
+export async function graphSummary(engine: IQueryEngine, options: GraphSummaryOptions): Promise<Record<string, unknown>> {
   const [schemaVersion, stats, repos, files, packages, routes, entrypoints, dataModels, tables, envVars, configValues] = await Promise.all([
     engine.schemaVersion(),
     engine.stats(),
@@ -31,7 +36,7 @@ export async function graphSummary(engine: IQueryEngine): Promise<Record<string,
   let testFiles = 0;
   let codeFiles = 0;
   for (const row of files) {
-    if (countsAsCodeFile(row.language)) codeFiles += 1;
+    if (countsAsCodeFile(row.language, options.codeLanguages)) codeFiles += 1;
     const language = String(row.language ?? "unknown");
     languages.set(language, (languages.get(language) ?? 0) + 1);
     if (row.isTest === true) testFiles += 1;
@@ -57,7 +62,7 @@ export async function graphSummary(engine: IQueryEngine): Promise<Record<string,
     tablesByLibrary: counts(tables),
     envVars: Number(envVars[0]?.count ?? 0),
     configValues: Number(configValues[0]?.count ?? 0),
-    hubs: topHubs(await loadFileGraph(engine), TOP_HUBS),
+    hubs: topHubs(await loadFileGraph(engine, options.codeLanguages), TOP_HUBS),
     stats,
   };
 }

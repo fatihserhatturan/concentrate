@@ -1,88 +1,44 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-import { GraphBuilder } from "../graph/builder.js";
+import type { IProjectManifestReader } from "../contracts/project-manifest.js";
+import type { IGraphContributor } from "../contracts/graph-contributor.js";
 import { addScanWarning, type ScanReport } from "./report.js";
 
+// The values the project's manifests declare (`package.json`, `tsconfig.json`, ...),
+// as ConfigValue nodes of the repository. The readers know the files; the order is theirs.
 export async function addProjectConfigNodes(
-  graph: GraphBuilder,
+  graph: IGraphContributor,
   repoNodeId: string,
   rootPath: string,
-  report?: ScanReport,
+  report: ScanReport | undefined,
+  readers: readonly IProjectManifestReader[] = [],
 ): Promise<void> {
-  await Promise.all([
-    addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "package.json"), "package.json", [
-      "name",
-      "version",
-      "type",
-      "main",
-      "module",
-      "types",
-    ], rootPath, report),
-    addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "tsconfig.json"), "tsconfig.json", [
-      "compilerOptions.target",
-      "compilerOptions.module",
-      "compilerOptions.baseUrl",
-      "compilerOptions.outDir",
-      "compilerOptions.rootDir",
-    ], rootPath, report),
-    addJsonConfigValues(graph, repoNodeId, path.join(rootPath, "jsconfig.json"), "jsconfig.json", [
-      "compilerOptions.baseUrl",
-      "compilerOptions.checkJs",
-    ], rootPath, report),
-  ]);
-}
-
-async function addJsonConfigValues(
-  graph: GraphBuilder,
-  repoNodeId: string,
-  filePath: string,
-  source: string,
-  keys: string[],
-  rootPath: string,
-  report?: ScanReport,
-): Promise<void> {
-  let parsed: unknown;
-  try {
-    parsed = JSON.parse(await readFile(filePath, "utf8")) as unknown;
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      if (report) addScanWarning(report, rootPath, filePath, error);
-    }
-    return;
-  }
-
-  for (const key of keys) {
-    const value = getPathValue(parsed, key);
-    if (typeof value !== "string" && typeof value !== "number" && typeof value !== "boolean") {
-      continue;
-    }
-
-    const node = {
-      id: `config:${source}:${key}`,
-      label: "ConfigValue" as const,
-      properties: {
-        name: `${source}:${key}`,
-        value: String(value),
-        valueType: typeof value,
-        line: 0,
+  for (const reader of readers) {
+    if (!reader.readConfig) continue;
+    const values = await reader.readConfig({
+      rootPath,
+      filePaths: [],
+      warn: (filePath, error) => {
+        if (report) addScanWarning(report, rootPath, filePath, error);
       },
-    };
-
-    graph.addNode(node);
-    graph.addRelationship({
-      from: repoNodeId,
-      to: node.id,
-      type: "DECLARES_CONFIG",
-      properties: {},
     });
-  }
-}
+    for (const { source, key, value } of values) {
+      const node = {
+        id: `config:${source}:${key}`,
+        label: "ConfigValue" as const,
+        properties: {
+          name: `${source}:${key}`,
+          value: String(value),
+          valueType: typeof value,
+          line: 0,
+        },
+      };
 
-function getPathValue(value: unknown, keyPath: string): unknown {
-  return keyPath.split(".").reduce((current: unknown, key) => {
-    if (!current || typeof current !== "object" || Array.isArray(current)) {
-      return undefined;
+      graph.addNode(node);
+      graph.addRelationship({
+        from: repoNodeId,
+        to: node.id,
+        type: "DECLARES_CONFIG",
+        properties: {},
+      });
     }
-    return (current as Record<string, unknown>)[key];
-  }, value);
+  }
 }

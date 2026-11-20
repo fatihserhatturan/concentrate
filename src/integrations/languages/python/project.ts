@@ -1,5 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import type { IProjectManifestReader } from "../../../core/contracts/project-manifest.js";
 import { parseToml } from "../rust/cargo.js";
 
 // The parts of a Python project's metadata the scan needs: its name, the
@@ -228,3 +229,19 @@ function array(value: unknown): unknown[] {
 function strings(value: unknown): string[] {
   return array(value).filter((entry): entry is string => typeof entry === "string");
 }
+
+// Python projects are packages too; the directory of a `package.json` is already declared by the js-ts reader.
+export const pythonManifestReader: IProjectManifestReader = {
+  id: "python",
+  async readPackages({ rootPath, filePaths }) {
+    return (await readPythonProjects(rootPath, filePaths)).map((project) => ({
+      dir: project.dir,
+      name: project.name,
+      version: project.version,
+      isPrivate: false,
+      manager: project.manager,
+      dependencies: project.dependencies.map((name) => ({ name, type: "dependencies" })),
+      metadataFile: path.posix.basename(project.files[0] ?? "project"),
+    }));
+  },
+};

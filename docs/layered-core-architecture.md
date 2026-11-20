@@ -147,8 +147,8 @@ is paid.
 
 | Ratchet | What counts as an offence | Allow-list | Paid down by |
 | --- | --- | --- | --- |
-| Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (8 files: discovery, glob, manifest hashing, parse cache, project config/settings, workspace packages, orchestrator) | `IFileSystem`, `IContentHasher` and `IParseCache` ports with node adapters |
-| Language knowledge in core | a file named after a language (`go-*.ts`), a per-language predicate (`isGoFile`), a `language === "<id>"` comparison, or an extension test (`.endsWith(".py")`) | `CORE_LANGUAGE_KNOWLEDGE_DEBT` (12 files, mostly `core/scan/resolution/*-calls.ts`, plus the per-language rules of `core/queries/unused.ts`) | per-language call and inheritance resolvers registered from `src/integrations/languages/<language>/` |
+| Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (6 files: discovery, glob, manifest hashing, parse cache, project settings, orchestrator) | `IFileSystem`, `IContentHasher` and `IParseCache` ports with node adapters |
+| Language knowledge in core | a file named after a language (`go-*.ts`), a per-language predicate (`isGoFile`), a `language === "<id>"` comparison, an extension test (`.endsWith(".py")`), or an ecosystem file name (`package.json`, `go.mod`, `node_modules`, `conftest`...) | `CORE_LANGUAGE_KNOWLEDGE_DEBT` (empty: core names no language) | — |
 | Adapter re-exports in the public API | `src/api.ts` re-exporting from `src/adapters/` | `API_ADAPTER_EXPORT_DEBT` (1 module: the store schema the UI reads) | a schema description owned by core |
 
 ## Graph Queries (`src/core/queries/`)
@@ -167,11 +167,34 @@ a composition use case (`composition/scan-into-store.ts`), since it wires the
 orchestrator and the store. CLI adapters may not import the MCP adapter, except
 `cli/mcp.ts`, which starts the server.
 
-Known debt the ratchets do not detect yet: the closed language vocabulary in
-`core/scan/language.ts` (the `CodeLanguage` union and extension table, which the
-contracts import as `SupportedLanguage`), and npm/pnpm workspace and
-`tsconfig.json` knowledge in `core/scan/workspace-packages.ts` and
-`core/scan/project-config.ts`.
+## Language Plug-in Points
+
+Core names no language. A language integration plugs in through the
+registry (`CoreIntegrationRegistry`, wired in
+`src/composition/default-registry.ts`):
+
+| Contract | What it supplies | Example |
+| --- | --- | --- |
+| `LanguageDescriptor` (`core/contracts/language-descriptor.ts`) | the language id, whether it is code, extensions and exact file names, a per-scan `refine` hook, and file conventions: test, generated and support file names, lockfiles, discovery ignores | `integrations/languages/cpp/descriptor.ts` (a `.h` is C++ when the project has C++ sources) |
+| `ILanguageParser` | `ParsedSourceFile` for one file | `integrations/languages/go/parser.ts` |
+| `ILanguageCallResolver`, `ILanguageInheritanceResolver` (`core/contracts/call-resolver.ts`) | call targets for the files it supports; EXTENDS / IMPLEMENTS after the default lookup | `integrations/languages/rust/resolvers.ts` |
+| `IProjectManifestReader` (`core/contracts/project-manifest.ts`) | declared packages and project config values | `integrations/languages/js-ts/project.ts` (npm, yarn, pnpm workspaces; package.json and tsconfig keys) |
+| `IUnusedExportRules` (`core/contracts/unused-rules.ts`) | units, public API, entry points and name mentions for `find_unused_exports` | `integrations/languages/go/unused.ts` |
+
+Core builds a `LanguageTable` from the descriptors (`core/scan/language.ts`,
+passed in `ScanDependencies.languages`); `SupportedLanguage` is a string.
+Core keeps the generic algorithms: detection precedence, the default name and
+import call lookup, the package graph from declared packages, the unused-export
+index. `tests/plugin-language.test.ts` registers a toy language from outside
+core and scans it end to end.
+
+Known debt the ratchets do not detect: the default JS/TS call lookup
+(`require`, `module.exports`, default exports) still lives in
+`core/scan/resolution/calls.ts` and `call-targets.ts` as the fallback for
+files no language resolver supports; import resolution
+(`integrations/resolution/imports.ts`) is one switch over languages rather than
+a per-language contract; and the graph schema is closed (`core/graph/model.ts`,
+`adapters/store/schema.ts`).
 
 ## Proposed Directory Shape
 

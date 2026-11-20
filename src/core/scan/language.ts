@@ -1,110 +1,101 @@
 import path from "node:path";
+import type { DetectedFile, FileConventions, LanguageDescriptor } from "../contracts/language-descriptor.js";
 
-// Languages with a parser that reads declarations, imports and calls.
-export type CodeLanguage = "javascript" | "typescript" | "html" | "vue" | "svelte" | "astro" | "python" | "go" | "rust" | "c" | "cpp";
+// A language is a string: the `id` of a registered descriptor.
+export type SupportedLanguage = string;
 
-// Every other file of a project is a `File` node too: a known format, `other`
-// (text) or `asset` (binary: images, fonts, media, archives).
-export type FileLanguage =
-  | "css" | "scss" | "less" | "json" | "yaml" | "toml" | "markdown"
-  | "shell" | "powershell" | "dockerfile" | "makefile" | "cmake" | "sql" | "proto"
-  | "other" | "asset";
+/**
+ * The languages a scan knows, built from descriptors. Detection precedence:
+ * extension overrides (lower case, from concentrate.json), the extension as
+ * written, exact and matched file names, the lower-case extension, then the
+ * fallback language.
+ */
+export class LanguageTable {
+  private readonly byId = new Map<string, LanguageDescriptor>();
+  private readonly byExtension = new Map<string, string>();
+  private readonly byFileName = new Map<string, string>();
+  private readonly nameMatchers: Array<{ id: string; match: (fileName: string) => boolean }> = [];
+  private readonly refiners: Array<(files: DetectedFile[]) => void> = [];
+  private readonly fallbackId: string;
 
-export type SupportedLanguage = CodeLanguage | FileLanguage;
+  /** Registering a language again replaces its descriptor; for a shared extension or file name the later descriptor wins. */
+  constructor(descriptors: readonly LanguageDescriptor[]) {
+    let fallback = "unknown";
+    for (const descriptor of descriptors) {
+      this.byId.set(descriptor.id, descriptor);
+      for (const extension of descriptor.extensions ?? []) this.byExtension.set(extension, descriptor.id);
+      for (const name of descriptor.fileNames ?? []) this.byFileName.set(name, descriptor.id);
+      if (descriptor.matchFileName) this.nameMatchers.push({ id: descriptor.id, match: descriptor.matchFileName });
+      if (descriptor.refine) this.refiners.push(descriptor.refine);
+      if (descriptor.fallback) fallback = descriptor.id;
+    }
+    this.fallbackId = fallback;
+  }
 
-export const CODE_LANGUAGES: ReadonlySet<SupportedLanguage> = new Set<CodeLanguage>([
-  "javascript", "typescript", "html", "vue", "svelte", "astro", "python", "go", "rust", "c", "cpp",
-]);
+  /** Every language id, code languages first. */
+  get names(): readonly string[] {
+    return [...this.codeLanguages, ...[...this.byId.keys()].filter((id) => !this.codeLanguages.has(id))];
+  }
 
-export const LANGUAGE_NAMES: readonly SupportedLanguage[] = [
-  ...CODE_LANGUAGES,
-  "css", "scss", "less", "json", "yaml", "toml", "markdown",
-  "shell", "powershell", "dockerfile", "makefile", "cmake", "sql", "proto",
-  "other", "asset",
-];
+  /** The ids of the languages whose files are parsed for declarations, imports and calls. */
+  get codeLanguages(): ReadonlySet<string> {
+    return new Set([...this.byId.values()].filter((descriptor) => descriptor.code).map((descriptor) => descriptor.id));
+  }
 
-export function isCodeLanguage(language: SupportedLanguage): language is CodeLanguage {
-  return CODE_LANGUAGES.has(language);
+  /** The file-name conventions of all languages together: a test, generated or support name of any language counts for every file. */
+  get conventions(): FileConventions {
+    return combineConventions([...this.byId.values()]);
+  }
+
+  has(language: string): boolean {
+    return this.byId.has(language);
+  }
+
+  isCode(language: string): boolean {
+    return this.byId.get(language)?.code === true;
+  }
+
+  // `overrides` (extension → language, lower case, from concentrate.json) win over the descriptors.
+  detect(filePath: string, overrides?: ReadonlyMap<string, SupportedLanguage>): SupportedLanguage {
+    const fileName = path.basename(filePath);
+    const extension = path.extname(fileName).toLowerCase();
+    return overrides?.get(extension)
+      ?? this.byExtension.get(path.extname(fileName))
+      ?? this.languageByName(fileName)
+      ?? this.byExtension.get(extension)
+      ?? this.fallbackId;
+  }
+
+  /** Detects every file, then lets the descriptors refine the result across files. */
+  detectAll(filePaths: readonly string[], overrides?: ReadonlyMap<string, SupportedLanguage>): DetectedFile[] {
+    const files = filePaths.map((filePath) => ({ filePath, language: this.detect(filePath, overrides) }));
+    for (const refine of this.refiners) refine(files);
+    return files;
+  }
+
+  private languageByName(fileName: string): string | undefined {
+    const exact = this.byFileName.get(fileName);
+    if (exact !== undefined) return exact;
+    return this.nameMatchers.find((matcher) => matcher.match(fileName))?.id;
+  }
 }
 
-const extensionToLanguage = new Map<string, SupportedLanguage>([
-  [".js", "javascript"],
-  [".jsx", "javascript"],
-  [".mjs", "javascript"],
-  [".cjs", "javascript"],
-  [".ts", "typescript"],
-  [".tsx", "typescript"],
-  [".mts", "typescript"],
-  [".cts", "typescript"],
-  [".html", "html"],
-  [".htm", "html"],
-  [".vue", "vue"],
-  [".svelte", "svelte"],
-  [".astro", "astro"],
-  [".py", "python"],
-  [".go", "go"],
-  [".rs", "rust"],
-  [".c", "c"],
-  // A header is C unless the project has C++ sources (see filterSupportedSourceFiles).
-  [".h", "c"],
-  [".cc", "cpp"],
-  [".cpp", "cpp"],
-  [".cxx", "cpp"],
-  [".hpp", "cpp"],
-  [".hh", "cpp"],
-  [".hxx", "cpp"],
-  [".ipp", "cpp"],
-  [".inl", "cpp"],
-  [".css", "css"],
-  [".scss", "scss"],
-  [".sass", "scss"],
-  [".less", "less"],
-  [".json", "json"],
-  [".jsonc", "json"],
-  [".json5", "json"],
-  [".yml", "yaml"],
-  [".yaml", "yaml"],
-  [".toml", "toml"],
-  [".md", "markdown"],
-  [".mdx", "markdown"],
-  [".markdown", "markdown"],
-  [".sh", "shell"],
-  [".bash", "shell"],
-  [".zsh", "shell"],
-  [".ps1", "powershell"],
-  [".psm1", "powershell"],
-  [".psd1", "powershell"],
-  [".dockerfile", "dockerfile"],
-  [".mk", "makefile"],
-  [".cmake", "cmake"],
-  [".sql", "sql"],
-  [".proto", "proto"],
-]);
+const never = () => false;
 
-// Binary formats by extension; any other file is sniffed by its parser.
-const assetExtensions = new Set([
-  ".png", ".jpg", ".jpeg", ".gif", ".webp", ".avif", ".bmp", ".ico", ".icns", ".tif", ".tiff", ".svg",
-  ".woff", ".woff2", ".ttf", ".otf", ".eot",
-  ".mp3", ".mp4", ".m4a", ".wav", ".ogg", ".webm", ".mov", ".avi", ".flac",
-  ".pdf", ".zip", ".gz", ".tgz", ".bz2", ".xz", ".7z", ".rar", ".tar", ".jar", ".war",
-  ".wasm", ".exe", ".dll", ".so", ".dylib", ".a", ".o", ".bin", ".class", ".pyc",
-  ".sqlite", ".db", ".psd", ".sketch", ".fig",
-]);
-
-function languageByName(fileName: string): SupportedLanguage | null {
-  if (fileName === "Dockerfile" || fileName.startsWith("Dockerfile.") || fileName === "Containerfile") return "dockerfile";
-  if (fileName === "Makefile" || fileName === "makefile" || fileName === "GNUmakefile") return "makefile";
-  if (fileName === "CMakeLists.txt") return "cmake";
-  return null;
-}
-
-// `overrides` (extension → language, lower case, from concentrate.json) win over the built-in table.
-export function detectLanguage(filePath: string, overrides?: ReadonlyMap<string, SupportedLanguage>): SupportedLanguage {
-  const fileName = path.basename(filePath);
-  const extension = path.extname(fileName).toLowerCase();
-  return overrides?.get(extension)
-    ?? extensionToLanguage.get(path.extname(fileName))
-    ?? languageByName(fileName)
-    ?? extensionToLanguage.get(extension)
-    ?? (assetExtensions.has(extension) ? "asset" : "other");
+/** Combines the descriptors' file conventions. With no descriptors nothing is a test, generated or support name, and nothing is ignored. */
+export function combineConventions(descriptors: readonly LanguageDescriptor[]): FileConventions {
+  const any = (pick: (descriptor: LanguageDescriptor) => ((fileName: string) => boolean) | undefined) => {
+    const tests = descriptors.map(pick).filter((test): test is (fileName: string) => boolean => test !== undefined);
+    return tests.length === 0 ? never : (fileName: string) => tests.some((test) => test(fileName));
+  };
+  const scoped = descriptors.map((descriptor) => descriptor.ignoredInDirectory).filter((hook) => hook !== undefined);
+  return {
+    testFile: any((descriptor) => descriptor.testFile),
+    generatedFile: any((descriptor) => descriptor.generatedFile),
+    supportFile: any((descriptor) => descriptor.supportFile),
+    lockfiles: new Set(descriptors.flatMap((descriptor) => descriptor.lockfiles ?? [])),
+    claimedFileNames: new Set(descriptors.flatMap((descriptor) => descriptor.fileNames ?? [])),
+    ignoredPatterns: descriptors.flatMap((descriptor) => descriptor.ignoredPatterns ?? []),
+    ignoredInDirectory: (entryNames) => scoped.flatMap((hook) => hook(entryNames)),
+  };
 }
