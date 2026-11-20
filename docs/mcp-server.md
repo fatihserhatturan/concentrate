@@ -176,7 +176,7 @@ even for large repositories; read it first to decide which tools to call.
 - `list_routes`: lists detected HTTP route declarations and handlers, Go
   ones included (`framework` `gin`, `echo`, `chi`, `fiber`, `gorilla/mux`,
   `routegroup`, `kratos` or `net/http`), and Rust ones (`axum`, `actix-web`, `rocket`
-  or `warp`; each route also carries its `layers` and the handler's `extractors`), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
+  or `warp`; each route also carries its `layers` and the handler's `extractors`), Java ones (`spring-mvc`, `jaxrs`, `micronaut` or `spring-webflux`; a path that is a constant has `path: null` and a `pathExpression`), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
   Registrations with a method or path computed at runtime
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,
@@ -212,7 +212,11 @@ even for large repositories; read it first to decide which tools to call.
 - `list_entrypoints`: lists non-HTTP backend entrypoints such as queues, cron
   jobs, events, realtime handlers, and schedulers; for Go also `main` /
   `init`, gRPC service methods (kind `grpc`, trigger `Service/Method`) and
-  cobra commands (kind `cli`, trigger the command path, `app serve`).
+  cobra commands (kind `cli`, trigger the command path, `app serve`); for Java gRPC
+  service methods (kind `grpc`, library `grpc-java`), `@SpringBootApplication`
+  classes (kind `spring-boot-application`), `@Scheduled` methods (kind
+  `scheduler`), Kafka, Rabbit and JMS listeners (kind `queue`), event listeners
+  (kind `event`) and picocli commands (kind `cli`).
 - `list_env_config`: lists environment variable usage and config declarations
   or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with

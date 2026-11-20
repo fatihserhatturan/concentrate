@@ -159,6 +159,14 @@ registry.registerSemanticContributor(contributor);
 Examples: `src/integrations/frameworks/go/` (routes, gRPC, entry points) and
 `src/integrations/frameworks/rust/`. The toy plugin has none.
 
+A contributor sees only the graph, which keeps no call arguments or call nesting.
+Facts that need the syntax tree come from a parse plugin instead. Java's
+`createJavaParser(plugins)` (`src/integrations/languages/java/parser.ts`) takes
+`JavaParsePlugin` functions that run on each file while its tree is alive and may
+add properties, nodes and relationships; the Java framework layer uses them for
+WebFlux functional routes and gRPC stub receivers
+(`src/integrations/frameworks/java/`).
+
 ### Project manifests
 
 If the language declares packages in an ecosystem file (`package.json`,
