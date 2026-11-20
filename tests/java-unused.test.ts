@@ -84,6 +84,48 @@ describe("Java unused exports (fixtures/java-unused)", () => {
     }
   });
 
+  it("keeps a member with a non-ASCII name that another method uses", async () => {
+    const project = path.join(root, "unicode");
+    await mkdir(path.join(project, "app"), { recursive: true });
+    await writeFile(path.join(project, "app/Cafe.java"), [
+      "package app;",
+      "class Cafe {",
+      "  private String café() { return \"x\"; }",
+      "  private void dead() {}",
+      "  String order() { return café(); }",
+      "}",
+      "",
+    ].join("\n"));
+    const graph = await buildCodeGraph(project, { continueOnError: false });
+    const projectStore = await openTestStore(path.join(root, "graph3"));
+    try {
+      await projectStore.reset();
+      await projectStore.write(graph.nodes, graph.relationships);
+      const result = await findUnusedExports(projectStore, {}, pageWindow("find_unused_exports", {}, 50));
+      const reported = result.unusedExports.map(label);
+      assert.equal(reported.includes("Cafe.café"), false, reported.join());
+      assert.equal(reported.includes("Cafe.dead"), true, reported.join());
+    } finally {
+      await projectStore.close();
+    }
+  });
+
+  it("issues no decorator queries for a project without Java", async () => {
+    const graph = await buildCodeGraph(path.resolve("fixtures/go-basic"), { continueOnError: false });
+    const goStore = await openTestStore(path.join(root, "graph4"));
+    try {
+      await goStore.reset();
+      await goStore.write(graph.nodes, graph.relationships);
+      const queries: string[] = [];
+      const recording = { query: (text: string, ...rest: unknown[]) => { queries.push(text); return (goStore.query as (...args: unknown[]) => Promise<unknown[]>)(text, ...rest); } } as unknown as typeof goStore;
+      await findUnusedExports(recording, {}, pageWindow("find_unused_exports", {}, 50));
+      assert.ok(queries.length > 0);
+      assert.equal(queries.filter((text) => /DECORATOR/u.test(text)).length, 0);
+    } finally {
+      await goStore.close();
+    }
+  });
+
   it("names the language in the tool note", () => {
     const note = unusedNote(coreIntegrationRegistry);
     assert.ok(note.includes("Java: public and protected"), note);

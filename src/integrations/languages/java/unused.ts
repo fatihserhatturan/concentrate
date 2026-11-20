@@ -58,6 +58,7 @@ export const javaUnusedRules: IUnusedExportRules = {
   id: "java",
   languages: ["java"],
   supports: isJavaFile,
+  usesAnnotations: true,
   // A package is one unit, whatever source root holds its files; the default package is its directory.
   unitOf: (file, info) => (info?.packageName ? info.packageName : path.posix.dirname(file.split("\\").join("/"))),
   // Package-private and private types, methods and fields (anonymous classes, named `Outer$1`, are no candidates).
@@ -73,11 +74,11 @@ export const javaUnusedRules: IUnusedExportRules = {
       const code = stripJavaComments(text);
       const fileKey = `f:${file}`;
       const unitKey = `u:${context.unitOf(file)}`;
-      for (const [name] of code.matchAll(/[A-Za-z_$][\w$]*/gu)) {
+      for (const [name] of code.matchAll(/[\p{L}_$][\p{L}\p{N}_$]*/gu)) {
         bump(counts, name, fileKey);
         bump(counts, name, unitKey);
       }
-      for (const match of code.matchAll(/(?<!\bnew\s+)(?<![\w$.])([A-Z][\w$]*)\s*\(/gu)) {
+      for (const match of code.matchAll(/(?<!\bnew\s+)(?<![\p{L}\p{N}_$.])(\p{Lu}[\p{L}\p{N}_$]*)\s*\(/gu)) {
         bump(constructors, match[1]!, fileKey);
         bump(constructors, match[1]!, unitKey);
       }
