@@ -58,6 +58,30 @@ export async function loadFunctions(engine: IQueryEngine, ids?: readonly string[
   return functions;
 }
 
+// Methods an interface declares (Java: `File -DEFINES_INTERFACE-> Interface -DEFINES_INTERFACE_METHOD-> Function`).
+// Calls on an interface-typed receiver resolve to them, so a change to one (impact_of) has callers. They are
+// kept out of `loadFunctions` because no other query wants a method with no body. Empty when the graph's
+// schema has no such relationship (the binder's missing-table error); any other error is thrown.
+export async function loadInterfaceMethods(engine: IQueryEngine): Promise<FunctionInfo[]> {
+  let rows: Row[];
+  try {
+    rows = await engine.query(`
+      MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function)
+      RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file,
+        fn.line AS line, fn.endLine AS endLine
+    `) as Row[];
+  } catch (error) {
+    // Only a store whose schema has no such relationship table (no Java integration registered) has none;
+    // every other failure is a real error and surfaces.
+    if (error instanceof Error && /Binder exception: Table DEFINES_INTERFACE_METHOD does not exist/u.test(error.message)) return [];
+    throw error;
+  }
+  return rows.flatMap((row) => {
+    const id = str(row.id);
+    return id ? [{ id, name: str(row.name) ?? "", className: str(row.className), file: str(row.file), line: num(row.line), endLine: num(row.endLine) }] : [];
+  });
+}
+
 // Resolved function-to-function calls: caller -[:CALLS]-> Call -[:CALL_RESOLVES_TO]-> callee.
 export async function loadCallEdges(engine: IQueryEngine): Promise<CallEdge[]> {
   const rows = await engine.query(`

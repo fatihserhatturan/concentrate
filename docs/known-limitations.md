@@ -2241,7 +2241,9 @@ the call recall leaves out:
 - `switch` and record patterns do not feed local types.
 - `module-info.java` records only the module name (`File.javaModule`); `requires`,
   `exports` and `opens` are not read.
-- Not read yet: frameworks (Phase 41 onward).
+- Frameworks: routes, entrypoints and dependency injection are read (see Java
+  frameworks below). Data access, config and outbound HTTP are not read yet
+  (Phase 42 onward).
 
 ### Java build systems
 
@@ -2281,6 +2283,140 @@ the call recall leaves out:
 - Source roots are reported even when the directory does not exist. They are
   stored on the `Package` node as JSON-string arrays (`sourceRoots`,
   `testSourceRoots`), not as list properties.
+
+### Java frameworks
+
+HTTP routes, framework entrypoints and dependency injection come from
+annotations and a few call shapes, in `src/integrations/frameworks/java/`. An
+annotation is matched by simple name and package, by one rule everywhere. Its
+package is known when it is written qualified, named by a single-type import, or
+written through an imported type (`@CommandLine.Command` with
+`import picocli.CommandLine;`). One whose package provably differs never counts.
+A name that stays unknown (wildcard import, same package, `java.lang`) still
+can, unless the scan declares a type of that name as a top-level type of the
+file's package, as a type of the file itself, or through a wildcard import of the
+file: it is then the user's own annotation, never a framework's. A wildcard import
+from another framework's package (a Micronaut `@Controller` under
+`io.micronaut.http.annotation.*`) is not Spring's. Nested classes are read.
+
+Routes (`list_routes`):
+
+- A handler is an instance method of a concrete class. Static and private methods
+  never get a route; JAX-RS and Micronaut handlers must also be `public`.
+- `spring-mvc`: `@RestController` and `@Controller` with `@RequestMapping`,
+  `@GetMapping`, `@PostMapping` and the other verb mappings. The class path and
+  the method path are joined; one `Route` per path and verb. A mapping without a
+  method is `ALL`. A method inherits the mapping of an implemented interface or a
+  superclass only when that supertype declares the same erased signature (simple
+  parameter type names, generics dropped); a parameter type that differs matches
+  only where the supertype's one is its own type variable. Overloads are told
+  apart by their parameter types.
+- `jaxrs`: javax and jakarta `@Path` with `@GET`, `@POST` and the other verbs
+  (RESTEasy, Quarkus, Jersey). A root resource is a class with its own `@Path` or
+  one implementing an interface that has `@Path`; a subclass of a `@Path` class
+  without its own `@Path` is not one (no duplicated routes). A method with `@Path`
+  and no verb is a sub-resource locator and gives no route.
+- `micronaut`: `@Controller` with `@Get`, `@Post` and the other verbs; `uri` and
+  `uris` are read.
+- `spring-webflux`: functional routers. A method returning `RouterFunction` built
+  with `RouterFunctions.route` and `andRoute`, `andNest`, or the `route()`
+  builder (`GET`, `POST`, `path`, `nest`, `.and`, `.or` predicates). Literal
+  `nest` and `path` prefixes are applied. The handler is a method reference or a
+  lambda that only calls the handler. The DSL calls (`route`, `andRoute`, `nest`,
+  `andNest`, `path` and the predicates) count only when written
+  `RouterFunctions.route(...)`, unqualified through a static import of
+  `RouterFunctions` or `RequestPredicates` that no method of the file shadows, or
+  chained on a router function or builder value (including the lambda parameter of
+  `nest` and `path`). A user's own helper `route(a, b)` is not the DSL.
+- A path that is a constant or an expression is not guessed: the route has
+  `path: null` and `pathExpression` holds the text.
+- Not read: meta-annotations (a custom annotation composed of `@RestController`),
+  context paths (`@ApplicationPath`, `server.servlet.context-path`,
+  `quarkus.rest.path`), a mapping inherited through `interface I extends J`, an
+  inherited method the subclass does not redeclare, a WebFlux router nested from
+  another method (`nest(path("/a"), other())`: its routes get no prefix), a
+  builder or router held in a local variable, a predicate held in a variable or
+  built by a helper (the route has no path), and a handler that is neither a
+  method reference nor a delegating lambda (the route has no handler). A nested
+  route whose method conflicts with the enclosing predicate
+  (`nest(GET("/a"), route(POST("/z"), h))`) can never match and gets no route.
+
+Entrypoints (`list_entrypoints`):
+
+- gRPC (kind `grpc`, library `grpc-java`, trigger `Service/method`): public
+  instance methods with a gRPC signature of a concrete class extending
+  `XGrpc.XImplBase` or implementing `XGrpc.AsyncService`. An abstract class is
+  skipped (a concrete subclass is the one that serves). When the generated class
+  is in the scan, the method must also be one its base declares. A call on a
+  blocking, future or async stub (a local, parameter or field, `this.field`,
+  `XGrpc.newBlockingStub(channel)` directly, through `.withX(...)` or held by a
+  `var`) gets `CALL_RESOLVES_TO` with `via: "grpc"` to the method of every class
+  serving the service, and a `.proto` rpc gets `RPC_IMPLEMENTED_BY` to those
+  methods.
+- `@SpringBootApplication` (kind `spring-boot-application`, library
+  `spring-boot`): runs the class's `main`. A class without a `main` is no
+  entrypoint.
+- `@Scheduled`, Spring and Micronaut (kind `scheduler`; trigger `cron=...`,
+  `fixedRate=...` or `fixedDelay=...` as written, one entrypoint per attribute).
+- `@KafkaListener`, `@RabbitListener` and `@JmsListener` (kind `queue`, one
+  entrypoint per topic or queue).
+- `@EventListener` and `@TransactionalEventListener` (kind `event`; trigger the
+  event type from `classes` or `value`, else the type of the single parameter).
+- picocli `@Command` classes (kind `cli`, library `picocli`; handled by `run()` or
+  `call()`) and `@Command` methods as subcommands.
+- `resolved` is true only when the trigger is a literal (a string, a number, a
+  `X.class`, the parameter's type). It is `false` for a constant, a `${...}` or
+  `#{...}` placeholder (the trigger keeps the written text), an event `value`
+  that is not a `.class` literal, and an unknown trigger (`topicPartitions`, no
+  destination: trigger null).
+- Not read: class-level `@KafkaListener` with `@KafkaHandler` methods,
+  `@Schedules`, a stub held in a field of a superclass, a receiver of unknown
+  type, an intermediate base class between the implementation and `XImplBase`,
+  and two services of the same name in different proto packages (both link).
+  `RPC_SERVED_BY` is not produced.
+
+Dependency injection (`INJECTS`):
+
+- A provider is a non-abstract class with `@Component`, `@Service`,
+  `@Repository`, `@Controller` (Spring's or Micronaut's), `@RestController`,
+  `@Configuration`, `@SpringBootApplication`, `@Named` or `@Singleton`
+  (`diStereotype`, `diBeanName` on the `Class`). A `@Bean` method provides its
+  return type (`diBean` on the method), named by the method or `@Bean("name")`.
+  An explicit name that is not a string literal (`@Component(Names.X)`,
+  `@Bean(NAME)`) leaves `diBeanName` or `diBean` unset: the bean wins no
+  qualifier or by-name decision and, as a possible match, makes the injection
+  point ambiguous.
+- Injection points are the `@Autowired` or `@Inject` constructor (else the only
+  constructor), `@Autowired`, `@Inject` and `@Resource` fields, `@Autowired` and
+  `@Inject` methods, and `@Bean` method parameters. `INJECTS` carries `fieldName`,
+  `via` (`constructor`, `field`, `setter` or `bean-parameter`) and `beanMethod`.
+- A scanned concrete class resolves to itself. An interface or abstract class
+  resolves to its implementations, narrowed by `@Qualifier`, `@Named` and
+  `@Resource(name=)`, then by the one `@Primary`, then by a bean named like the
+  field. `@Resource` without `name` resolves by the field (or setter property)
+  name first, even against `@Primary`, then by type. When several remain there is
+  no edge and `ambiguousInjections` on the consumer counts it. The consumer
+  itself is no candidate while another exists (self-injection is excluded), and
+  two `@Bean` methods returning the same type are ambiguous. `Optional`,
+  `ObjectProvider`, `Provider` and `ObjectFactory` are looked through; `List`,
+  `Set`, `Collection`, `Map<String, T>` and arrays inject every provider. The `T`
+  of a map must be a plain type (`Map<String, List<A>>` injects nothing). A type
+  outside the scan (`JdbcTemplate`) is ignored.
+- Generic type arguments are compared: for `Handler<Integer>` a provider must
+  write the same arguments (whitespace and package prefixes ignored) in the
+  `extends` or `implements` clause that names the wanted type directly. Different
+  arguments exclude it. A raw supertype, one reached through another interface
+  (the graph keeps no arguments there) and wildcard arguments (`Handler<?>`) are
+  not provable: the provider is excluded, and the point is counted as ambiguous
+  when that leaves no decision.
+- Not read: meta-annotations and custom stereotypes, Lombok `@RequiredArgsConstructor`
+  and record constructors, conditional beans (`@Profile`, `@ConditionalOn*`),
+  type variables of generic providers, CDI `@Produces` and `Instance<T>`, and
+  Micronaut `@Factory`.
+
+`impact_of` also seeds the methods an interface declares, so a change to
+`OrderRepository.save` reports the routes and entrypoints that reach it through a
+call on an interface-typed injected field.
 
 ## Non-code files
 

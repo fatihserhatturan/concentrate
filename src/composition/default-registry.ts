@@ -61,7 +61,7 @@ import { rustCallResolver, rustInheritanceResolver } from "../integrations/langu
 
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
-import { javaBuildContributor, javaEntrypointsContributor, javaTestsContributor } from "../integrations/frameworks/java/index.js";
+import { javaBuildContributor, javaDiContributor, javaEntrypointsContributor, javaFrameworkEntrypointsContributor, javaFrameworkParser, javaGrpcContributor, javaRoutesContributor, javaTestsContributor, javaWebfluxContributor } from "../integrations/frameworks/java/index.js";
 import { goUnusedRules } from "../integrations/languages/go/unused.js";
 import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
 import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
@@ -72,7 +72,6 @@ import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
 import { cppGraphSchema } from "../integrations/languages/cpp/schema.js";
 import { javaGraphSchema } from "../integrations/languages/java/schema.js";
 import { javaLanguages } from "../integrations/languages/java/descriptor.js";
-import { javaParser } from "../integrations/languages/java/parser.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -92,7 +91,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     registry.registerGraphSchema(extension);
   }
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaFrameworkParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
@@ -150,7 +149,12 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     pythonRoutesContributor,
     pythonEntrypointsContributor,
     javaEntrypointsContributor,
+    javaFrameworkEntrypointsContributor,
+    javaRoutesContributor,
+    javaWebfluxContributor,
+    javaGrpcContributor,
     javaTestsContributor,
+    javaDiContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,

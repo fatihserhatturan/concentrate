@@ -5804,6 +5804,11 @@
       },
       {
         "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": []
+      },
+      {
+        "method": "query",
         "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
         "params": {
           "symbol": "Button"
@@ -6774,6 +6779,11 @@
             "endLine": 7
           }
         ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": []
       },
       {
         "method": "query",
