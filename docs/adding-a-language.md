@@ -323,7 +323,9 @@ that judges what is not public sets `judges(declaration)`: Java does, for its
 package-private and private types, methods and fields. The session context
 (`UnusedAnalysisContext`) has `annotationsOf(declarationId)`, the annotation or
 decorator names written on a declaration, so a rule can skip what a framework
-calls (`@Test`, `@Bean`).
+calls (`@Test`, `@Bean`). A rule sets `usesAnnotations: true` on
+`IUnusedExportRules` to have annotations loaded; other rules get an empty
+`annotationsOf`.
 
 The `java-language` schema extension (`src/integrations/languages/java/schema.ts`)
 shows what a language may add: `DEFINES_INTERFACE_METHOD`,

@@ -171,7 +171,7 @@ describe("Java calls: java-declarations fixture", () => {
   it("makes an enum constant body extend the enum and resolves enum constructors and local classes", () => {
     assert.deepEqual(edges(result, "EXTENDS"), ["com.acme.decl.Level$1 -> com.acme.decl.Level"]);
     assert.deepEqual(calls.get("Level.java::com.acme.decl.Level.<clinit> new Level"), [["Level.java::com.acme.decl.Level.Level"], ["Level.java::com.acme.decl.Level.Level"]]);
-    assert.deepEqual(one(calls, "Outer.java::com.acme.decl.Outer$1.run new Local().v"), ["Outer.java::com.acme.decl.Outer.Local.v"]);
+    assert.deepEqual(one(calls, "Outer.java::com.acme.decl.Outer$1.run new Local().v"), ["Outer.java::com.acme.decl.Outer$1Local.v"]);
   });
 
   it("resolves a call inside an interface default method", () => {
@@ -356,6 +356,38 @@ describe("Java calls: captured locals", () => {
       assert.equal(resolved.length, 1, flat.join("\n"));
       assert.ok(resolved[0]!.includes("u.go"), flat.join("\n"));
       assert.ok(flat.some((line) => /h\.go => $/u.test(line)), flat.join("\n"));
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});
+
+describe("Java calls: local class scope", () => {
+  it("resolves a local class by the method that declares it, never across methods", async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), "concentrate-java-local-"));
+    try {
+      await mkdir(path.join(dir, "a"), { recursive: true });
+      await writeFile(path.join(dir, "a/Two.java"), [
+        "package a;",
+        "class Two {",
+        "  void first() {",
+        "    class L { void y() {} }",
+        "    new L().y();",
+        "  }",
+        "  void second() {",
+        "    class L { void y() {} }",
+        "    new L().y();",
+        "  }",
+        "  void outside() {",
+        "    new L().y();",
+        "  }",
+        "}",
+        "",
+      ].join("\n"));
+      const calls = callTargets(await scan(dir));
+      assert.deepEqual(one(calls, "Two.java::a.Two.first new L().y"), ["Two.java::a.Two$1L.y"]);
+      assert.deepEqual(one(calls, "Two.java::a.Two.second new L().y"), ["Two.java::a.Two$2L.y"]);
+      assert.deepEqual(one(calls, "Two.java::a.Two.outside new L().y"), []);
     } finally {
       await rm(dir, { recursive: true, force: true });
     }

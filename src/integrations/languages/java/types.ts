@@ -1,5 +1,5 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
-import type { GraphNode } from "../../../core/graph/model.js";
+import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { isJavaFile } from "../file-kind.js";
 
@@ -23,7 +23,8 @@ export type JavaType = {
   outer: string | null;
 };
 
-export type TypeScope = { fileId: string; typeId?: string | null };
+/** `fnLine`: the line of the method (or initializer) of `typeId` that holds the use site, when known; local classes are visible by it. */
+export type TypeScope = { fileId: string; typeId?: string | null; fnLine?: number };
 
 export type JavaTypeIndex = {
   types: readonly JavaType[];
@@ -102,10 +103,39 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): Ja
     return typeof written === "string" ? written : byFile.get(fileId)?.[0]?.packageName ?? "";
   };
 
+  const functionsByOwner = new Map<string, { line: number; endLine: number }[]>();
+  for (const relType of ["DEFINES_METHOD", "DEFINES_INTERFACE_METHOD"] as const) {
+    for (const relationship of graph.relationshipsOfType(relType as GraphRelationship["type"])) {
+      const fn = graph.node(relationship.to);
+      if (!fn || fn.label !== "Function" || !byId.has(relationship.from)) continue;
+      push(functionsByOwner, relationship.from, { line: Number(fn.properties.line), endLine: Number(fn.properties.endLine) });
+    }
+  }
+  // The line of the innermost function of `owner` whose body holds `line` (a local or anonymous class's declaring function).
+  const declaringFunctionLine = (type: JavaType): number | null => {
+    const owner = enclosing(type);
+    if (!owner) return null;
+    const line = Number(type.node.properties.line);
+    let best: number | null = null;
+    for (const fn of functionsByOwner.get(owner.id) ?? []) if (fn.line <= line && line <= fn.endLine && (best === null || fn.line >= best)) best = fn.line;
+    return best;
+  };
+  const localsByName = new Map<string, JavaType[]>();
+  for (const type of types) if (type.node.properties.nesting === "local") push(localsByName, type.name, type);
+
+  // A local class is visible only from code lexically inside the method that declares it.
+  const resolveLocal = (name: string, current: JavaType, fnLine: number | null): JavaType | null => {
+    if (fnLine === null) return null;
+    return localsByName.get(name)?.find((local) => local.fileId === current.fileId && local.outer === current.qualifiedName && declaringFunctionLine(local) === fnLine) ?? null;
+  };
+
   const resolveSimple = (name: string, scope: TypeScope): JavaType | null => {
     // The enclosing types, innermost first: the type itself, its member types, then the same for its outer types.
     const own = scope.typeId ? byId.get(scope.typeId) ?? null : null;
-    for (let current = own; current; current = enclosing(current)) {
+    let fnLine: number | null = scope.fnLine ?? null;
+    for (let current = own; current; fnLine = declaringFunctionLine(current), current = enclosing(current)) {
+      const local = localsByName.has(name) ? resolveLocal(name, current, fnLine) : null;
+      if (local) return local;
       if (current.name === name) return current;
       const nested = member(current, name) ?? inheritedMember(current, name, new Set());
       if (nested) return nested;

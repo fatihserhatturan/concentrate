@@ -128,7 +128,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     const name = normalizeJavaType(written);
     if (!name || name.endsWith("[]")) return null;
     if (!name.includes(".") && typeVariables(owner, fn).has(name)) return null;
-    return types.resolve(name, { fileId: owner.fileId, typeId: owner.id });
+    return types.resolve(name, { fileId: owner.fileId, typeId: owner.id, fnLine: fn ? Number(fn.properties.line) : undefined });
   };
 
   const norm = (text: string): string => normalizeJavaType(text) ?? unknownType;
@@ -291,7 +291,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       if (captured) {
         current = captured.value;
       } else {
-        const type = types.resolve(first.name, { fileId: scope.fileId, typeId: scope.type.id });
+        const type = types.resolve(first.name, { fileId: scope.fileId, typeId: scope.type.id, fnLine: scope.fn ? Number(scope.fn.properties.line) : undefined });
         if (type) {
           current = { type, isType: true };
         } else {
@@ -406,7 +406,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
           const outer = evaluate(receiver, scope);
           if (outer) type = types.byQualifiedName(`${outer.type.qualifiedName}.${callee}`) ?? types.resolve(callee, { fileId: outer.type.fileId, typeId: outer.type.id });
         }
-        if (!type) type = types.resolve(qualifier ? `${qualifier}.${callee}` : callee, { fileId: callerFileId, typeId: owner.id });
+        if (!type) type = types.resolve(qualifier ? `${qualifier}.${callee}` : callee, { fileId: callerFileId, typeId: owner.id, fnLine: scope.fn ? Number(scope.fn.properties.line) : undefined });
         return constructorsOf(type, arity);
       }
       default:
