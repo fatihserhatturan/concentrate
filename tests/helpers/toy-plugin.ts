@@ -14,7 +14,7 @@ import type { GraphNode, GraphRelationship } from "../../src/core/graph/model.js
 // `call name` calls one. Also a registry module: workers import this file and
 // call createRegistry(). `use name` imports another .toy file.
 
-export const toyDescriptor: LanguageDescriptor = { id: "toy", code: true, extensions: [".toy"] };
+export const toyDescriptor: LanguageDescriptor = { id: "toy", displayName: "Toy", code: true, extensions: [".toy"] };
 
 export function createToyParser(version?: string): ILanguageParser {
   return {
