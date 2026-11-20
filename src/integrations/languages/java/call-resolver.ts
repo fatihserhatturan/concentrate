@@ -115,7 +115,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     const names = new Set<string>();
     const add = (node: GraphNode | undefined) => {
       for (const written of parseStringList(node?.properties.typeParameters)) {
-        const name = /^[A-Za-z_$][\w$]*/u.exec(written)?.[0];
+        const name = /^[\p{L}_$][\p{L}\p{N}_$]*/u.exec(written)?.[0];
         if (name) names.add(name);
       }
     };
@@ -189,10 +189,34 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     return null;
   };
 
-  const findFieldInScope = (scope: Scope, name: string) => {
+  // The innermost method (or initializer) of the type enclosing `type` whose body holds `type`'s declaration:
+  // what an anonymous or local class captures its locals from.
+  const enclosingFunctionOf = (type: JavaType): { fn: GraphNode; owner: JavaType } | null => {
+    const owner = types.enclosing(type);
+    if (!owner) return null;
+    const line = Number(type.node.properties.line);
+    let best: GraphNode | null = null;
+    for (const fn of methodsByOwner.get(owner.id) ?? []) {
+      const start = Number(fn.properties.line);
+      const end = Number(fn.properties.endLine);
+      if (!(start <= line && line <= end)) continue;
+      if (!best || start >= Number(best.properties.line)) best = fn;
+    }
+    return best ? { fn: best, owner } : null;
+  };
+
+  // A first name seen from `scope`, innermost scope first: a field of the type, then the locals the
+  // type captures from its enclosing method. A captured local of unknown type is found with a null value.
+  const findInScopes = (scope: Scope, name: string): { value: Value | null } | null => {
     for (let current: JavaType | null = scope.type; current; current = types.enclosing(current)) {
-      const found = findField(current, name);
-      if (found) return found;
+      const field = findField(current, name);
+      if (field) return { value: valueOfField(field) };
+      const enclosing = enclosingFunctionOf(current);
+      const locals = enclosing ? localsOf(enclosing.fn) : null;
+      if (enclosing && locals?.has(name)) {
+        const type = typeOfName(locals.get(name)?.type, enclosing.owner, enclosing.fn);
+        return { value: type ? { type, isType: false } : null };
+      }
     }
     return null;
   };
@@ -263,9 +287,9 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       const type = typeOfName(scope.locals.get(first.name)?.type, scope.type, scope.fn);
       current = type ? { type, isType: false } : null;
     } else {
-      const field = findFieldInScope(scope, first.name);
-      if (field) {
-        current = valueOfField(field);
+      const captured = findInScopes(scope, first.name);
+      if (captured) {
+        current = captured.value;
       } else {
         const type = types.resolve(first.name, { fileId: scope.fileId, typeId: scope.type.id });
         if (type) {
@@ -410,7 +434,7 @@ function splitChain(text: string): Segment[] | null {
       segments.push({ kind: "new", typeName, argCount: countArguments(text.slice(end + 1, close)) });
       position = close + 1;
     } else {
-      const name = /^[A-Za-z_$][\w$]*/u.exec(text.slice(position))?.[0];
+      const name = /^[\p{L}_$][\p{L}\p{N}_$]*/u.exec(text.slice(position))?.[0];
       if (!name) return null;
       position += name.length;
       if (text[position] === "(") {

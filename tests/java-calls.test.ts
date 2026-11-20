@@ -314,3 +314,50 @@ public class Over {
     }
   });
 });
+
+describe("Java calls: captured locals", () => {
+  it("resolves a local captured by an anonymous or local class before a same-named field", async () => {
+    const dir = await mkdtemp(path.join(os.tmpdir(), "concentrate-java-capture-"));
+    try {
+      await mkdir(path.join(dir, "a"), { recursive: true });
+      await writeFile(path.join(dir, "a/Cap.java"), [
+        "package a;",
+        "class Cap {",
+        "  Other h;",
+        "  Other u;",
+        "  void make() {",
+        "    Helper h = new Helper();",
+        "    new Thread() { public void run() { h.go(); } };",
+        "  }",
+        "  void local() {",
+        "    Helper u = new Helper();",
+        "    class L { void run() { u.go(); } }",
+        "  }",
+        "  void unknown(java.util.List<Helper> items) {",
+        "    var h = items.get(0);",
+        "    new Thread() { public void run() { h.go(); } };",
+        "  }",
+        "  void field() {",
+        "    new Thread() { public void run() { u.go(); } };",
+        "  }",
+        "}",
+        "",
+      ].join("\n"));
+      await writeFile(path.join(dir, "a/Helper.java"), "package a;\nclass Helper { void go() {} }\n");
+      await writeFile(path.join(dir, "a/Other.java"), "package a;\nclass Other { void go() {} }\n");
+      const calls = callTargets(await scan(dir));
+      const all = [...calls.entries()].filter(([key]) => key.endsWith(" h.go") || key.endsWith(" u.go"));
+      const flat = all.map(([key, value]) => `${key} => ${value.map((v) => v.join(",")).join("|")}`);
+      // anonymous class capturing h, local class capturing u: Helper.go
+      assert.ok(flat.some((line) => line.includes("h.go => Helper.java::a.Helper.go")), flat.join("\n"));
+      assert.ok(flat.some((line) => line.includes("u.go => Helper.java::a.Helper.go")), flat.join("\n"));
+      // captured local of unknown type: unresolved, never Other.go; a real field still resolves to the field
+      const resolved = flat.filter((line) => line.includes("Other.go"));
+      assert.equal(resolved.length, 1, flat.join("\n"));
+      assert.ok(resolved[0]!.includes("u.go"), flat.join("\n"));
+      assert.ok(flat.some((line) => /h\.go => $/u.test(line)), flat.join("\n"));
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+});

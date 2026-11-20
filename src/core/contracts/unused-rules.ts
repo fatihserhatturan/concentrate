@@ -62,6 +62,8 @@ export interface IUnusedExportRules {
     packages: readonly { path?: unknown; relativePath?: unknown }[],
     files: ReadonlyMap<string, unknown>,
   ): Promise<string[]>;
+  /** The session reads `annotationsOf`; the analysis loads annotations only for rules that say so. */
+  readonly usesAnnotations?: boolean;
   /** Called once, only when the scan holds declarations the rule supports. */
   createSession?(context: UnusedAnalysisContext): Promise<UnusedLanguageSession>;
   /** The language's paragraph of the find_unused_exports note. */

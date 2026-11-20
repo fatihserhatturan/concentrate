@@ -145,13 +145,13 @@ export async function findUnusedExports(engine: IQueryEngine, reader: ISourceRea
     if (!rule.createSession) continue;
     const own = declarations.filter((declaration) => rule.supports(declaration.file));
     if (own.length === 0) continue;
-    annotations ??= await loadAnnotations(engine);
+    if (rule.usesAnnotations) annotations ??= await loadAnnotations(engine);
     const written = annotations;
     const context: UnusedAnalysisContext = {
       rootPath: links.rootPath,
       declarations: own,
       unitOf: scopeOf,
-      annotationsOf: (id) => written.get(id) ?? [],
+      annotationsOf: (id) => written?.get(id) ?? [],
       forEachSource: async (include, visit) => {
         if (!links.rootPath) return;
         for (const candidate of files.keys()) {
