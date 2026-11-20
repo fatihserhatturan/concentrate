@@ -44,6 +44,7 @@ import { pythonLanguages } from "../integrations/languages/python/descriptor.js"
 import { rustLanguages } from "../integrations/languages/rust/descriptor.js";
 import { jsTsManifestReader } from "../integrations/languages/js-ts/project.js";
 import { pythonManifestReader } from "../integrations/languages/python/project.js";
+import { javaManifestReader } from "../integrations/languages/java/project.js";
 import { LanguageTable } from "../core/scan/language.js";
 import { cppCallResolver, cppInheritanceResolver } from "../integrations/languages/cpp/resolvers.js";
 import { goCallResolver, goInheritanceResolver } from "../integrations/languages/go/resolvers.js";
@@ -60,7 +61,7 @@ import { rustCallResolver, rustInheritanceResolver } from "../integrations/langu
 
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
-import { javaEntrypointsContributor, javaTestsContributor } from "../integrations/frameworks/java/index.js";
+import { javaBuildContributor, javaEntrypointsContributor, javaTestsContributor } from "../integrations/frameworks/java/index.js";
 import { goUnusedRules } from "../integrations/languages/go/unused.js";
 import { jsTsUnusedRules } from "../integrations/languages/js-ts/unused.js";
 import { pythonUnusedRules } from "../integrations/languages/python/unused.js";
@@ -108,8 +109,8 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     registry.registerInheritanceResolver(resolver);
   }
 
-  // js-ts first: it owns a directory that has both a package.json and a pyproject.toml.
-  for (const reader of [jsTsManifestReader, pythonManifestReader]) {
+  // js-ts first: it owns a directory that has both a package.json and a pyproject.toml; Java comes last.
+  for (const reader of [jsTsManifestReader, pythonManifestReader, javaManifestReader]) {
     registry.registerProjectManifestReader(reader);
   }
 
@@ -161,6 +162,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     envFilesContributor,
     scriptsContributor,
     cppBuildContributor,
+    javaBuildContributor,
     stylesContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,

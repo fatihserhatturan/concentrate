@@ -2,6 +2,7 @@ import type { IGraphContributor } from "../../../core/contracts/graph-contributo
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { isJavaFile } from "../file-kind.js";
+import { javaModuleFilterOf } from "./module-visibility.js";
 
 // Type names of Java code, resolved straight from the graph nodes: a name
 // written in a file (simple, nested `Outer.Inner`, or fully qualified) is the
@@ -29,7 +30,8 @@ export type TypeScope = { fileId: string; typeId?: string | null; fnLine?: numbe
 export type JavaTypeIndex = {
   types: readonly JavaType[];
   byId: ReadonlyMap<string, JavaType>;
-  byQualifiedName(name: string): JavaType | null;
+  /** `fromFile`: prefer the declaration in a module that file sees (Maven/Gradle). */
+  byQualifiedName(name: string, fromFile?: string): JavaType | null;
   /** The type `name` means when written inside `scope`. */
   resolve(name: string, scope: TypeScope): JavaType | null;
   /** The type that encloses `type` (null for a top-level type). */
@@ -94,7 +96,14 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): Ja
     push(importsByFile, fileId, node);
   }
 
-  const byQualifiedName = (name: string): JavaType | null => byQualified.get(name)?.[0] ?? null;
+  const byQualifiedName = (name: string, fromFile?: string): JavaType | null => {
+    const list = byQualified.get(name);
+    if (!list || list.length === 0) return null;
+    const filter = fromFile === undefined || list.length === 1 ? undefined : javaModuleFilterOf(graph);
+    if (!filter) return list[0]!;
+    const visible = new Set(filter(fromFile!, list.map((type) => type.fileId)));
+    return list.find((type) => visible.has(type.fileId)) ?? list[0]!;
+  };
   const enclosing = (type: JavaType): JavaType | null => (type.outer === null ? null : byQualifiedName(type.outer));
   const member = (owner: JavaType, name: string): JavaType | null => byQualifiedName(`${owner.qualifiedName}.${name}`);
 
@@ -147,16 +156,16 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): Ja
       if (node.properties.isWildcard === true) continue;
       const source = String(node.properties.source ?? "");
       if (source.split(".").at(-1) === name) {
-        const found = byQualifiedName(source);
+        const found = byQualifiedName(source, scope.fileId);
         if (found) return found;
       }
     }
     const packageName = packageOfFile(scope.fileId);
-    const samePackage = byQualifiedName(packageName === "" ? name : `${packageName}.${name}`);
+    const samePackage = byQualifiedName(packageName === "" ? name : `${packageName}.${name}`, scope.fileId);
     if (samePackage) return samePackage;
     for (const node of imports) {
       if (node.properties.isWildcard !== true) continue;
-      const found = byQualifiedName(`${String(node.properties.source ?? "")}.${name}`);
+      const found = byQualifiedName(`${String(node.properties.source ?? "")}.${name}`, scope.fileId);
       if (found) return found;
     }
     return null;
@@ -179,7 +188,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): Ja
     const segments = name.split(".");
     let current = resolveSimple(segments[0]!, scope);
     for (let position = 1; current && position < segments.length; position += 1) current = member(current, segments[position]!) ?? inheritedMember(current, segments[position]!, new Set());
-    return current ?? byQualifiedName(name);
+    return current ?? byQualifiedName(name, scope.fileId);
   };
 
   const supertypeCache = new Map<string, JavaType[]>();

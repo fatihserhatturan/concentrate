@@ -1,4 +1,5 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import type { JavaModuleFilter } from "./module-visibility.js";
 import { JavaSourceRoots } from "./source-roots.js";
 
 // The package index of a scan: which files declare which package and which file declares which type.
@@ -34,12 +35,15 @@ export interface JavaPackageIndex {
   /** Longest prefix of a dotted name that is a known type: `a.b.C.m` -> `a.b.C`. */
   longestTypePrefix(dotted: string): string | undefined;
   /** Where an import points. */
-  resolveImport(shape: JavaImportShape): JavaImportTarget;
+  /** `fromFile` (the importer) lets the module filter prefer the files it sees. */
+  resolveImport(shape: JavaImportShape, fromFile?: string): JavaImportTarget;
 }
 
 export type JavaPackageIndexOptions = {
   /** Extra source roots, for example from a build file. */
   extraSourceRoots?: Iterable<string>;
+  /** Keeps the candidates of the modules the importer sees (Maven/Gradle). */
+  moduleFilter?: JavaModuleFilter;
 };
 
 export function buildJavaPackageIndex(
@@ -65,6 +69,7 @@ export function buildJavaPackageIndex(
   }
 
   const typeFiles = new Map<string, string>();
+  const allTypeFiles = new Map<string, string[]>();
   const typesByFile = new Map<string, string[]>();
   const typeNodes = new Map<string, { qualifiedName: string; nesting: unknown }>();
   for (const label of ["Class", "Interface"] as const) {
@@ -81,6 +86,9 @@ export function buildJavaPackageIndex(
       // Local and anonymous classes cannot be imported or named from another file.
       if (found.nesting === "local" || found.nesting === "anonymous") continue;
       if (!typeFiles.has(found.qualifiedName)) typeFiles.set(found.qualifiedName, relationship.from);
+      const declaring = allTypeFiles.get(found.qualifiedName) ?? [];
+      if (!declaring.includes(relationship.from)) declaring.push(relationship.from);
+      allTypeFiles.set(found.qualifiedName, declaring);
       const names = typesByFile.get(relationship.from) ?? [];
       names.push(found.qualifiedName);
       typesByFile.set(relationship.from, names);
@@ -109,13 +117,21 @@ export function buildJavaPackageIndex(
       return typeFiles.has(qualified) ? qualified : undefined;
     },
     longestTypePrefix,
-    resolveImport({ source, isWildcard, isStatic }) {
+    resolveImport({ source, isWildcard, isStatic }, fromFile) {
+      const filter = options.moduleFilter;
+      // Only duplicate declarations of one qualified name are filtered; a wildcard keeps its whole package.
+      const visible = (files: readonly string[]): readonly string[] => (filter && fromFile !== undefined ? filter(fromFile, files) : files);
       if (isJavaPlatformPackage(source)) return { fileIds: [], expected: false };
       // `import a.b.*` is the package a.b: every file, like a Go package import.
       if (isWildcard && !isStatic && filesByPackage.has(source)) return { fileIds: filesByPackage.get(source)!, expected: true };
       // Anything else names a type, with a member (static) or nested types possibly after it.
       const type = longestTypePrefix(source);
-      if (type !== undefined) return { fileIds: [typeFiles.get(type)!], expected: true };
+      if (type !== undefined) {
+        const first = typeFiles.get(type)!;
+        const seen = visible(allTypeFiles.get(type) ?? [first]);
+        // No visible declaration: the first one, as without a build model.
+        return { fileIds: [seen.includes(first) ? first : seen[0] ?? first], expected: true };
+      }
       // A project package missing the type counts as unresolved; a foreign package is external.
       const lastDot = source.lastIndexOf(".");
       const owner = isWildcard ? source : lastDot < 0 ? "" : source.slice(0, lastDot);

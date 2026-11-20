@@ -166,7 +166,8 @@ If the language declares packages in an ecosystem file (`package.json`,
 (`src/core/contracts/project-manifest.ts`) with
 `registry.registerProjectManifestReader(reader)`. Examples:
 `src/integrations/languages/js-ts/project.ts` and
-`src/integrations/languages/python/project.ts`. Core builds the package graph
+`src/integrations/languages/python/project.ts`. Java reads Maven and Gradle builds
+(`src/integrations/languages/java/project.ts`). Core builds the package graph
 from what the readers declare.
 
 ## 4. Resolvers

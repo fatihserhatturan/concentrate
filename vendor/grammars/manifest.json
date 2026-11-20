@@ -108,6 +108,12 @@
       "version": "0.23.5",
       "sha256": "6476728734128931bd50de2d1e5e9c75c506b51e278f54eaf709836a0de35759",
       "bytes": 415233
+    },
+    "xml": {
+      "package": "@tree-sitter-grammars/tree-sitter-xml",
+      "version": "0.7.0",
+      "sha256": "2edd39d0ef194dc70878fe99b277180547fabf252f85b58e537db5a11e3027fa",
+      "bytes": 47378
     }
   }
 }
