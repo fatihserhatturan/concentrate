@@ -212,8 +212,8 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 158,
       unresolvedRelativeImports: 0,
-      nodes: 13175,
-      relationships: 15240,
+      nodes: 3409,
+      relationships: 5474,
       fileClassifications: { production: 92, test: 91, fixture: 21, support: 0, generated: 0, docs: 9 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,
@@ -240,8 +240,8 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 10,
       unresolvedRelativeImports: 1,
-      nodes: 480,
-      relationships: 581,
+      nodes: 316,
+      relationships: 417,
       fileClassifications: { production: 25, test: 8, fixture: 0, support: 0, generated: 0, docs: 12 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,
@@ -268,8 +268,8 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 7,
       unresolvedRelativeImports: 0,
-      nodes: 107,
-      relationships: 144,
+      nodes: 83,
+      relationships: 120,
       fileClassifications: { production: 11, test: 3, fixture: 0, support: 0, generated: 1, docs: 1 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,
@@ -298,8 +298,8 @@ export const defaultSampleExpectations: SampleExpectation[] = [
       failedFiles: 0,
       resolvedImports: 134,
       unresolvedRelativeImports: 0,
-      nodes: 7372,
-      relationships: 9320,
+      nodes: 3030,
+      relationships: 4978,
       fileClassifications: { production: 41, test: 23, fixture: 0, support: 0, generated: 0, docs: 3 },
       graph: {
         schemaVersion: GRAPH_SCHEMA_VERSION,
