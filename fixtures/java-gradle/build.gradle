@@ -1,0 +1,4 @@
+allprojects {
+    group = 'com.acme.shop'
+    version = '1.2.0'
+}
