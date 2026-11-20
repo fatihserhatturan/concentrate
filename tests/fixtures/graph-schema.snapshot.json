@@ -53,6 +53,8 @@
     "rustModule": "STRING",
     "allNames": "STRING",
     "cppScope": "STRING",
+    "javaFileKind": "STRING",
+    "javaModule": "STRING",
     "unresolvedCalls": "STRING"
    }
   },
@@ -72,7 +74,8 @@
     "isModule": "BOOLEAN",
     "inlineModules": "STRING",
     "pathAttribute": "STRING",
-    "isSystem": "BOOLEAN"
+    "isSystem": "BOOLEAN",
+    "isStatic": "BOOLEAN"
    }
   },
   {
@@ -101,6 +104,9 @@
     "isVirtual": "BOOLEAN",
     "isOverride": "BOOLEAN",
     "isDeclaration": "BOOLEAN",
+    "isStatic": "BOOLEAN",
+    "parameterCount": "INT64",
+    "javaLocals": "STRING",
     "unresolvedCalls": "STRING"
    }
   },
@@ -121,7 +127,9 @@
     "attributes": "STRING",
     "bases": "STRING",
     "namespace": "STRING",
-    "qualifiedName": "STRING"
+    "qualifiedName": "STRING",
+    "outer": "STRING",
+    "nesting": "STRING"
    }
   },
   {
@@ -136,7 +144,11 @@
     "embeds": "STRING",
     "typeParameters": "STRING",
     "visibility": "STRING",
-    "kind": "STRING"
+    "kind": "STRING",
+    "namespace": "STRING",
+    "qualifiedName": "STRING",
+    "outer": "STRING",
+    "nesting": "STRING"
    }
   },
   {
@@ -190,7 +202,9 @@
     "receiverConstructor": "STRING",
     "receiverIsLocal": "BOOLEAN",
     "qualifier": "STRING",
-    "argCount": "INT64"
+    "argCount": "INT64",
+    "argumentCount": "INT64",
+    "callKind": "STRING"
    }
   },
   {
@@ -202,7 +216,9 @@
     "isReadonly": "BOOLEAN",
     "visibility": "STRING",
     "line": "INT64",
-    "isInjected": "BOOLEAN"
+    "isInjected": "BOOLEAN",
+    "declaredType": "STRING",
+    "fieldKind": "STRING"
    }
   },
   {
@@ -1212,6 +1228,24 @@
     "expression": "STRING",
     "model": "STRING"
    }
+  },
+  {
+   "type": "DEFINES_INTERFACE_METHOD",
+   "from": "Interface",
+   "to": "Function",
+   "properties": {}
+  },
+  {
+   "type": "DEFINES_INTERFACE_FIELD",
+   "from": "Interface",
+   "to": "Field",
+   "properties": {}
+  },
+  {
+   "type": "FIELD_HAS_DECORATOR",
+   "from": "Field",
+   "to": "Decorator",
+   "properties": {}
   }
  ],
  "nodeLabels": [
