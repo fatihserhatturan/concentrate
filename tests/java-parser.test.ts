@@ -139,7 +139,7 @@ describe("Java parser", () => {
   it("reads nested, inner, local and anonymous types", () => {
     assert.equal(named(parsed, "Class", "com.acme.model.Outer.Inner").properties.nesting, "inner");
     assert.equal(named(parsed, "Class", "com.acme.model.Outer.Nested").properties.nesting, "static");
-    assert.equal(named(parsed, "Class", "com.acme.model.Outer.Loc").properties.nesting, "local");
+    assert.equal(named(parsed, "Class", "com.acme.model.Outer$1Loc").properties.nesting, "local");
     const anonymous = named(parsed, "Class", "com.acme.model.Outer$1");
     assert.equal(anonymous.properties.nesting, "anonymous");
     assert.deepEqual(JSON.parse(String(anonymous.properties.extendsNames)), ["Runnable"]);
@@ -294,5 +294,42 @@ public class Broken {
     const plain = await parse("Plain.java", "class Plain { void run() {} }\n");
     assert.equal(named(plain, "Class", "Plain").properties.visibility, "package");
     assert.equal(plain.nodes[0]!.properties.packageName, undefined);
+  });
+  it("keeps declarations and calls of a very deep concatenation", async () => {
+    const terms = Array.from({ length: 5000 }, () => '"x"').join(" + ");
+    const deep = await parse("Deep.java", `package p;
+public class Deep {
+  String field = ${terms} + helper();
+  String method() { return ${terms} + other(); }
+}
+`);
+    assert.equal(deep.warnings, undefined);
+    assert.ok(named(deep, "Class", "p.Deep"));
+    assert.equal(byLabel(deep, "Field").length, 1);
+    named(deep, "Function", "p.Deep.method");
+    assert.equal(calls(deep, "helper").length, 1);
+    assert.equal(calls(deep, "other").length, 1);
+  });
+
+  it("gives local classes with the same name distinct javac-style names", async () => {
+    const parsed = await parse("Cap.java", `package a;
+public class Cap {
+  void one() { class L { void m() { inner(); } } new L().m(); class M {} }
+  void two() { class L { int f; void m() { again(); } } }
+}
+`);
+    const locals = byLabel(parsed, "Class").filter((node) => node.properties.nesting === "local");
+    assert.deepEqual(locals.map((node) => node.properties.qualifiedName), ["a.Cap$1L", "a.Cap$1M", "a.Cap$2L"]);
+    assert.ok(locals.every((node) => node.properties.name === "L" || node.properties.name === "M"));
+    assert.equal(new Set(parsed.nodes.map((node) => node.id)).size, parsed.nodes.length);
+    named(parsed, "Function", "a.Cap$1L.m");
+    named(parsed, "Function", "a.Cap$2L.m");
+    assert.equal(related(parsed, "DEFINES_FIELD", named(parsed, "Class", "a.Cap$2L")).length, 1);
+    assert.equal(related(parsed, "CALLS", named(parsed, "Function", "a.Cap$2L.m"))[0]!.properties.expression, "again");
+  });
+
+  it("accepts unicode identifiers in types", () => {
+    assert.equal(normalizeJavaType("java.util.Liste<Ünï>"), "java.util.Liste");
+    assert.equal(normalizeJavaType("Größe[]"), "Größe[]");
   });
 });

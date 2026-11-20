@@ -48,6 +48,8 @@ type Owner = {
   relativeName: string;
   exported: boolean;
   anonymousCount: number;
+  // Local classes seen so far by simple name: javac numbers them `Outer$1L`, `Outer$2L`.
+  localCounts: Map<string, number>;
   staticInit: SyntaxNode[];
   instanceInit: SyntaxNode[];
   fields: Array<{ name: string; type: string | null; visibility: JavaVisibility; isStatic: boolean }>;
@@ -141,7 +143,14 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
     ): Owner => {
       const isInterface = kind === "interface" || kind === "annotation";
       // An anonymous class `Outer$1` stands next to `Outer`, not under it.
-      const suffix = nesting === "anonymous" ? name.slice(name.lastIndexOf("$")) : `.${name}`;
+      // A local class takes javac's binary name `Outer$1L`; the counter is per simple name.
+      let suffix = `.${name}`;
+      if (nesting === "anonymous") suffix = name.slice(name.lastIndexOf("$"));
+      else if (nesting === "local" && outer) {
+        const index = (outer.localCounts.get(name) ?? 0) + 1;
+        outer.localCounts.set(name, index);
+        suffix = `$${index}${name}`;
+      }
       const qualifiedName = outer ? `${outer.qualifiedName}${suffix}` : qualify(packageName, name);
       const relativeName = outer ? `${outer.relativeName}${suffix}` : name;
       const line = node.startPosition.row + 1;
@@ -185,7 +194,7 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
       add(ownerNode, fileNodeId, isInterface ? "DEFINES_INTERFACE" : "DEFINES_CLASS");
       return {
         id, node: ownerNode, isInterface, kind, name, qualifiedName, relativeName, exported,
-        anonymousCount: 0, staticInit: [], instanceInit: [], fields: [], methodNames: [], hasEnumConstants: false,
+        anonymousCount: 0, localCounts: new Map(), staticInit: [], instanceInit: [], fields: [], methodNames: [], hasEnumConstants: false,
       };
     };
 
@@ -228,33 +237,49 @@ async function parseJavaFile(rootPath: string, filePath: string): Promise<Parsed
         nodes.push(call);
         relationships.push({ from: fn.id, to: call.id, type: "CALLS", properties: {} });
       };
-      const visit = (node: SyntaxNode): void => {
-        if (typeDeclarationTypes.has(node.type)) {
-          const local = handleType(node, owner, "local");
-          if (local) finish(local);
-          return;
-        }
-        if (node.type === "object_creation_expression") {
-          const call = createCallNode(fn.id, node, locals);
-          addCall(call);
-          for (const child of node.namedChildren) {
-            if (child.type === "class_body") handleAnonymous(node, child, owner, normalizeJavaType(typeText(node.childForFieldName("type"))));
-            else visit(child);
+      // Iterative pre-order walk (a long `a + b + c ...` chain is a very deep tree). A step is
+      // a node to visit or an action to run at that point of the order.
+      type Step = SyntaxNode | (() => void);
+      const walk = (root: SyntaxNode): void => {
+        const stack: Step[] = [root];
+        while (stack.length > 0) {
+          const step = stack.pop()!;
+          if (typeof step === "function") {
+            step();
+            continue;
           }
-          return;
-        }
-        if (node.type === "enum_constant") {
-          addCall(createEnumConstantCall(fn.id, node, owner.qualifiedName, locals));
-          for (const child of node.namedChildren) {
-            if (child.type === "class_body") handleAnonymous(node, child, owner, owner.qualifiedName);
-            else if (child.type !== "identifier" && child.type !== "modifiers") visit(child);
+          const node = step;
+          if (typeDeclarationTypes.has(node.type)) {
+            const local = handleType(node, owner, "local");
+            if (local) finish(local);
+            continue;
           }
-          return;
+          if (node.type === "object_creation_expression") {
+            addCall(createCallNode(fn.id, node, locals));
+            const steps: Step[] = [];
+            for (const child of node.namedChildren) {
+              if (child.type === "class_body") steps.push(() => handleAnonymous(node, child, owner, normalizeJavaType(typeText(node.childForFieldName("type")))));
+              else steps.push(child);
+            }
+            for (let i = steps.length - 1; i >= 0; i--) stack.push(steps[i]!);
+            continue;
+          }
+          if (node.type === "enum_constant") {
+            addCall(createEnumConstantCall(fn.id, node, owner.qualifiedName, locals));
+            const steps: Step[] = [];
+            for (const child of node.namedChildren) {
+              if (child.type === "class_body") steps.push(() => handleAnonymous(node, child, owner, owner.qualifiedName));
+              else if (child.type !== "identifier" && child.type !== "modifiers") steps.push(child);
+            }
+            for (let i = steps.length - 1; i >= 0; i--) stack.push(steps[i]!);
+            continue;
+          }
+          if (callLikeTypes.has(node.type)) addCall(createCallNode(fn.id, node, locals));
+          const children = node.namedChildren;
+          for (let i = children.length - 1; i >= 0; i--) stack.push(children[i]!);
         }
-        if (callLikeTypes.has(node.type)) addCall(createCallNode(fn.id, node, locals));
-        for (const child of node.namedChildren) visit(child);
       };
-      for (const root of roots) visit(root);
+      for (const root of roots) walk(root);
     };
 
     const addFunction = (owner: Owner, spec: {
