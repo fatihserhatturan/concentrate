@@ -30,6 +30,7 @@ const INDEXED_TYPES: GraphRelationship["type"][] = [
   "DEFINES_VARIABLE",
   "INITIALIZED_BY",
   "DEFINES_METHOD",
+  "DEFINES_INTERFACE_METHOD" as GraphRelationship["type"],
 ];
 
 // Pass the graph to read only the types needed through its lookups; a plain
@@ -72,6 +73,12 @@ export function createResolutionRelationshipIndex(
     if (fileId) {
       index.fileByFunctionId.set(rel.to, fileId);
     }
+  }
+
+  // Methods an interface declares (Java: abstract, default and static ones) are made in its file too.
+  for (const rel of of.relationshipsOfType("DEFINES_INTERFACE_METHOD" as GraphRelationship["type"])) {
+    const fileId = index.fileByInterfaceId.get(rel.from);
+    if (fileId) index.fileByFunctionId.set(rel.to, fileId);
   }
 
   return index;
