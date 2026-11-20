@@ -82,7 +82,7 @@ export async function readJavaBuildModel(rootPath: string, relativeFiles: Iterab
   return model;
 }
 
-function containedIn(dir: string, file: string): boolean {
+export function containedIn(dir: string, file: string): boolean {
   return dir === "." || dir === "" || file === dir || file.startsWith(`${dir}/`);
 }
 
