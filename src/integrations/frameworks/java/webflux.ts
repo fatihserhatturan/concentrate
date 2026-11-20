@@ -23,7 +23,16 @@ import { javaMethods } from "./shared.js";
 // router is built wherever a `RouterFunction` is returned (helper methods composed by another
 // bean), and a `@Bean` returning anything else does not build routes.
 //
-// What stays out, never guessed: a nested router in another method (`nest(path("/a"), other())`: its
+// Only the router DSL counts. `route`, `andRoute`, `nest`, `andNest` and `path` (with their arguments)
+// are DSL calls when written `RouterFunctions.route(…)`, unqualified through a static import of
+// `RouterFunctions` / `RequestPredicates` that no method of the file shadows, or chained on a router
+// function or builder value (`route(…).andRoute(…)`, `route().GET(…)`, the lambda parameter of
+// `.nest(…, b -> …)` / `.path(…, b -> …)`). Predicates (`GET("/x")`) follow the same rule. A user's own
+// helper `route(a, b)` is not the DSL, and a builder verb on any other receiver is not a route.
+// A nested route whose method conflicts with the enclosing predicate's (`nest(GET("/a"), route(POST("/z"), h))`)
+// can never match and gets no Route.
+//
+// What stays out, never guessed: a builder or router held in a local variable (its calls are not read), a nested router in another method (`nest(path("/a"), other())`: its
 // routes get no prefix), a predicate held in a variable or built by a helper (route with no path,
 // `pathExpression` the text), a handler that is not a method reference or a delegating lambda (Route
 // with no handler).
@@ -37,15 +46,49 @@ const MAX_ALTERNATIVES = 8;
 
 type Part = { text: string; resolved: boolean };
 type Alternative = { method: string | null; path: Part | null; opaque: boolean };
-type Context = { parts: Part[]; method: string | null };
+type Context = { parts: Part[]; method: string | null; builders: ReadonlySet<string> };
+// What the file's imports and declarations say about the DSL names.
+type Env = { dsl(owner: "RouterFunctions" | "RequestPredicates", name: string, object: SyntaxNode | null): boolean };
 type HandlerRef = { kind: "ref" | "call"; line: number; column: number; name: string } | { kind: "none" };
 type RouteRecord = { method: string; path: string | null; pathExpression: string | null; line: number; handler: HandlerRef };
 
 const isComment = (node: SyntaxNode) => node.type.endsWith("comment");
 const argsOf = (call: SyntaxNode): SyntaxNode[] => call.childForFieldName("arguments")?.namedChildren.filter((child) => !isComment(child)) ?? [];
 const compactText = (node: SyntaxNode): string => node.text.replace(/\s+/gu, " ").trim();
-// `RequestPredicates.GET`, `org.…server.RequestPredicates.GET` or a bare static import.
-const isPredicateScope = (object: SyntaxNode | null): boolean => object === null || /(?:^|\.)RequestPredicates$/u.test(object.text.replace(/\s+/gu, ""));
+const qualifiedBy = (object: SyntaxNode, owner: string): boolean => new RegExp(`(?:^|\\.)${owner}$`, "u").test(object.text.replace(/\s+/gu, ""));
+
+// The DSL names of one file: qualified with the class, or unqualified through a static import (named or
+// `.*`) that a method declared in the file does not shadow.
+function environmentOf(root: SyntaxNode): Env {
+  const imported = new Map<string, Set<string>>();
+  const declared = new Set<string>();
+  const walk = (node: SyntaxNode): void => {
+    if (node.type === "method_declaration") {
+      const name = node.childForFieldName("name")?.text;
+      if (name) declared.add(name);
+    }
+    if (node.type === "import_declaration" || node.type === "program" || node.type.endsWith("_declaration") || node.type.endsWith("_body")) {
+      for (const child of node.namedChildren) walk(child);
+    }
+  };
+  walk(root);
+  for (const node of root.namedChildren) {
+    if (node.type !== "import_declaration") continue;
+    const match = /^import\s+static\s+([\w.]+)\.(\*|\w+)\s*;?$/u.exec(compactText(node));
+    if (!match) continue;
+    const names = imported.get(match[1]!) ?? new Set<string>();
+    names.add(match[2]!);
+    imported.set(match[1]!, names);
+  }
+  return {
+    dsl(owner, name, object) {
+      if (object) return qualifiedBy(object, owner);
+      if (declared.has(name)) return false;
+      const names = imported.get(`${PACKAGE}.${owner}`);
+      return names !== undefined && (names.has("*") || names.has(name));
+    },
+  };
+}
 
 function partOf(node: SyntaxNode): Part {
   const [value] = annotationValue({ args: [node.text] }) ?? [];
@@ -59,7 +102,7 @@ function unwrap(node: SyntaxNode): SyntaxNode {
 }
 
 // The alternatives a predicate stands for: `GET("/a").and(accept(JSON))` is one (GET, /a), `GET("/a").or(GET("/b"))` two.
-function evaluatePredicate(raw: SyntaxNode): Alternative[] {
+function evaluatePredicate(raw: SyntaxNode, env: Env): Alternative[] {
   const node = unwrap(raw);
   const opaque: Alternative[] = [{ method: null, path: null, opaque: true }];
   if (node.type !== "method_invocation") return opaque;
@@ -68,8 +111,8 @@ function evaluatePredicate(raw: SyntaxNode): Alternative[] {
   const args = argsOf(node);
   if (name === "and" && object && args.length === 1) {
     const results: Alternative[] = [];
-    for (const left of evaluatePredicate(object)) {
-      for (const right of evaluatePredicate(args[0]!)) {
+    for (const left of evaluatePredicate(object, env)) {
+      for (const right of evaluatePredicate(args[0]!, env)) {
         if (left.method && right.method && left.method !== right.method) return opaque;
         const path = left.path && right.path ? { text: compactText(node), resolved: false } : left.path ?? right.path;
         results.push({ method: left.method ?? right.method, path, opaque: left.opaque || right.opaque });
@@ -78,10 +121,10 @@ function evaluatePredicate(raw: SyntaxNode): Alternative[] {
     return results.length > 0 && results.length <= MAX_ALTERNATIVES ? results : opaque;
   }
   if (name === "or" && object && args.length === 1) {
-    const results = [...evaluatePredicate(object), ...evaluatePredicate(args[0]!)];
+    const results = [...evaluatePredicate(object, env), ...evaluatePredicate(args[0]!, env)];
     return results.length <= MAX_ALTERNATIVES ? results : opaque;
   }
-  if (!isPredicateScope(object)) return opaque;
+  if (!env.dsl("RequestPredicates", name, object)) return opaque;
   if (VERBS.has(name) && args.length === 1) return [{ method: name, path: partOf(args[0]!), opaque: false }];
   if (name === "path" && args.length === 1) return [{ method: null, path: partOf(args[0]!), opaque: false }];
   if (name === "method" && args.length === 1) {
@@ -93,10 +136,10 @@ function evaluatePredicate(raw: SyntaxNode): Alternative[] {
 }
 
 // A builder verb's first argument is the path (`"/x"`, `BASE + "/x"`, a constant) or a RequestPredicate.
-function evaluateBuilderTarget(node: SyntaxNode): Alternative[] {
+function evaluateBuilderTarget(node: SyntaxNode, env: Env): Alternative[] {
   const target = unwrap(node);
   if (target.type === "string_literal" || target.type === "binary_expression") return [{ method: null, path: partOf(target), opaque: false }];
-  if (target.type === "method_invocation") return evaluatePredicate(target);
+  if (target.type === "method_invocation") return evaluatePredicate(target, env);
   // A constant naming the path (`USERS_PATH`) or a predicate variable: kept as written, never resolved.
   return [{ method: null, path: { text: compactText(target), resolved: false }, opaque: false }];
 }
@@ -131,12 +174,54 @@ function handlerOf(raw: SyntaxNode | undefined): HandlerRef {
   return { kind: "call", line: call.startPosition.row + 1, column: call.startPosition.column, name: call.childForFieldName("name")?.text ?? "" };
 }
 
-function routesOf(body: SyntaxNode): RouteRecord[] {
+const sameMethod = (inner: string | null, outer: string | null): boolean => inner === null || outer === null || inner === outer;
+
+// Does `node` evaluate to a RouterFunctions.Builder: `route()`, a builder lambda parameter, or a call chained on one?
+function isBuilder(node: SyntaxNode | null, context: Context, env: Env): boolean {
+  if (!node) return false;
+  const value = unwrap(node);
+  if (value.type === "identifier") return context.builders.has(value.text);
+  if (value.type !== "method_invocation") return false;
+  const name = value.childForFieldName("name")?.text ?? "";
+  const object = value.childForFieldName("object");
+  if (name === "route" && argsOf(value).length === 0) return env.dsl("RouterFunctions", name, object);
+  return name !== "build" && isBuilder(object, context, env);
+}
+
+// Does `node` evaluate to a RouterFunction written with the DSL: `route(a, b)`, `builder.build()` or a call chained on one?
+function isRouterValue(node: SyntaxNode | null, context: Context, env: Env): boolean {
+  if (!node) return false;
+  const value = unwrap(node);
+  if (value.type !== "method_invocation") return false;
+  const name = value.childForFieldName("name")?.text ?? "";
+  const object = value.childForFieldName("object");
+  const args = argsOf(value);
+  if (name === "route" && args.length === 2) return env.dsl("RouterFunctions", name, object);
+  if (name === "nest" && args.length === 2) return env.dsl("RouterFunctions", name, object);
+  if (name === "build" && args.length === 0) return isBuilder(object, context, env);
+  if ((name === "andRoute" && args.length === 2) || (name === "andNest" && args.length === 2)) return isRouterValue(object, context, env);
+  return false;
+}
+
+// A builder lambda `b -> …`: its body sees `b` as a builder.
+function withBuilder(node: SyntaxNode | undefined, context: Context): Context {
+  const lambda = node ? unwrap(node) : null;
+  if (!lambda || lambda.type !== "lambda_expression") return context;
+  const parameters = lambda.childForFieldName("parameters");
+  const names = parameters?.type === "identifier" ? [parameters.text]
+    : (parameters?.namedChildren ?? []).map((child) => child.type === "identifier" ? child.text : child.childForFieldName("name")?.text ?? "");
+  if (names.length !== 1 || names[0] === "") return context;
+  return { ...context, builders: new Set([...context.builders, names[0]!]) };
+}
+
+function routesOf(body: SyntaxNode, env: Env): RouteRecord[] {
   const routes: RouteRecord[] = [];
   const emit = (call: SyntaxNode, alternatives: Alternative[], handler: SyntaxNode | undefined, context: Context): void => {
     const line = (call.childForFieldName("name") ?? call).startPosition.row + 1;
     const handlerRef = handlerOf(handler);
     for (const alternative of alternatives) {
+      // Inside `nest(GET(…), …)` a POST route can never match.
+      if (!sameMethod(alternative.method, context.method)) continue;
       const parts = [...context.parts, ...(alternative.path ? [alternative.path] : [])];
       // A predicate held in a variable or built by a helper: the path is not visible.
       if (alternative.opaque && !alternative.path) parts.push({ text: compactText(call.childForFieldName("arguments")?.namedChildren[0] ?? call), resolved: false });
@@ -148,9 +233,10 @@ function routesOf(body: SyntaxNode): RouteRecord[] {
   };
   const nested = (predicate: SyntaxNode, inner: SyntaxNode | undefined, context: Context): void => {
     if (!inner) return;
-    for (const alternative of evaluatePredicate(predicate)) {
+    for (const alternative of evaluatePredicate(predicate, env)) {
+      if (!sameMethod(alternative.method, context.method)) continue;
       const parts = alternative.opaque && !alternative.path ? [...context.parts, { text: compactText(predicate), resolved: false }] : [...context.parts, ...(alternative.path ? [alternative.path] : [])];
-      visit(inner, { parts, method: alternative.method ?? context.method });
+      visit(inner, withBuilder(inner, { ...context, parts, method: alternative.method ?? context.method }));
     }
   };
   function visit(node: SyntaxNode, context: Context): void {
@@ -165,34 +251,45 @@ function routesOf(body: SyntaxNode): RouteRecord[] {
     const object = node.childForFieldName("object");
     const args = argsOf(node);
     if (object) visit(object, context);
-    if ((name === "route" || name === "andRoute") && args.length === 2) {
-      emit(node, evaluatePredicate(args[0]!), args[1], context);
+    const staticRouter = (): boolean => env.dsl("RouterFunctions", name, object);
+    if (name === "route" && args.length === 2 && staticRouter()) {
+      emit(node, evaluatePredicate(args[0]!, env), args[1], context);
       visitAll(args.slice(1), context);
-    } else if (VERBS.has(name) && object && !isPredicateScope(object) && args.length >= 1) {
-      const target = args.length >= 2 && args[0] ? evaluateBuilderTarget(args[0]) : [{ method: null, path: null, opaque: false }];
-      emit(node, target.map((alternative) => ({ ...alternative, method: name })), args.at(-1), context);
-    } else if ((name === "nest" || name === "andNest") && args.length === 2) {
+    } else if (name === "route" && args.length === 1 && staticRouter()) {
+      visit(args[0]!, withBuilder(args[0], context));
+    } else if (name === "andRoute" && args.length === 2 && isRouterValue(object, context, env)) {
+      emit(node, evaluatePredicate(args[0]!, env), args[1], context);
+      visitAll(args.slice(1), context);
+    } else if (VERBS.has(name) && object && args.length >= 1 && isBuilder(object, context, env)) {
+      const target = args.length >= 2 && args[0] ? evaluateBuilderTarget(args[0], env) : [{ method: null, path: null, opaque: false }];
+      // The verb is the method; a predicate that names another one never matches.
+      emit(node, target.filter((alternative) => sameMethod(alternative.method, name)).map((alternative) => ({ ...alternative, method: name })), args.at(-1), context);
+    } else if (name === "nest" && args.length === 2 && (object ? isBuilder(object, context, env) || qualifiedBy(object, "RouterFunctions") : staticRouter())) {
       nested(args[0]!, args[1], context);
-    } else if (name === "path" && object && args.length === 2) {
+    } else if (name === "andNest" && args.length === 2 && isRouterValue(object, context, env)) {
+      nested(args[0]!, args[1], context);
+    } else if (name === "path" && object && args.length === 2 && isBuilder(object, context, env)) {
       // The builder's `.path("/api", b -> …)`; the one-argument `path("/api")` is a predicate.
-      for (const alternative of evaluateBuilderTarget(args[0]!)) {
-        visit(args[1]!, { parts: [...context.parts, ...(alternative.path ? [alternative.path] : [])], method: context.method });
+      for (const alternative of evaluateBuilderTarget(args[0]!, env)) {
+        if (!sameMethod(alternative.method, context.method)) continue;
+        visit(args[1]!, withBuilder(args[1], { ...context, parts: [...context.parts, ...(alternative.path ? [alternative.path] : [])], method: alternative.method ?? context.method }));
       }
     } else {
       visitAll(args, context);
     }
   }
-  visit(body, { parts: [], method: null });
+  visit(body, { parts: [], method: null, builders: new Set() });
   return routes;
 }
 
 export const javaWebfluxPlugin: JavaParsePlugin = ({ root, functions }) => {
   if (!root.text.includes(PACKAGE)) return;
+  const env = environmentOf(root);
   for (const { syntax, node } of functions) {
     if (!/(?:^|\.)RouterFunction\b/u.test(String(node.properties.returnType ?? ""))) continue;
     const body = syntax.childForFieldName("body");
     if (!body) continue;
-    const routes = routesOf(body);
+    const routes = routesOf(body, env);
     if (routes.length > 0) node.properties.javaWebfluxRoutes = JSON.stringify(routes);
   }
 };

@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { before, describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
@@ -82,5 +84,26 @@ describe("gRPC Java (fixtures/java-grpc)", () => {
     const unrelated = graph.nodes.filter((node) => node.label === "Call" && /^(other|cache)\.get$/u.test(String(node.properties.expression)));
     assert.equal(unrelated.length, 2);
     for (const call of unrelated) assert.ok(!graph.relationships.some((rel) => rel.from === call.id && rel.properties.via === "grpc"));
+  });
+});
+
+describe("gRPC Java: abstract services", () => {
+  it("makes no EntryPoint of an abstract class extending the generated base, only of the concrete one", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "grpc-abstract-"));
+    try {
+      await writeFile(path.join(root, "UserGrpc.java"), `package g;
+public final class UserGrpc { public static abstract class UserImplBase { public void get(Req r, io.grpc.stub.StreamObserver<Resp> o) {} } }`);
+      await writeFile(path.join(root, "S.java"), `package g;
+import io.grpc.stub.StreamObserver;
+public abstract class S extends UserGrpc.UserImplBase { @Override public void get(Req r, StreamObserver<Resp> o) {} }
+class U extends UserGrpc.UserImplBase { @Override public void get(Req r, StreamObserver<Resp> o) {} }`);
+      const graph = await buildCodeGraph(root, { continueOnError: false });
+      const entries = graph.relationships
+        .filter((rel) => rel.type === "ENTRYPOINT_HANDLED_BY")
+        .map((rel) => String(graph.nodes.find((node) => node.id === rel.to)!.properties.qualifiedName));
+      assert.deepEqual(entries, ["g.U.get"]);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });
