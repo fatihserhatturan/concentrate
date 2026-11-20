@@ -1,3 +1,4 @@
+import type { IFileSystem } from "../contracts/file-system.js";
 import type { IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { IGraphContributor } from "../contracts/graph-contributor.js";
 import { addScanWarning, type ScanReport } from "./report.js";
@@ -9,12 +10,14 @@ export async function addProjectConfigNodes(
   repoNodeId: string,
   rootPath: string,
   report: ScanReport | undefined,
+  fileSystem: IFileSystem,
   readers: readonly IProjectManifestReader[] = [],
 ): Promise<void> {
   for (const reader of readers) {
     if (!reader.readConfig) continue;
     const values = await reader.readConfig({
       rootPath,
+      fileSystem,
       filePaths: [],
       warn: (filePath, error) => {
         if (report) addScanWarning(report, rootPath, filePath, error);

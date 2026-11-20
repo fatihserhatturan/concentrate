@@ -1,3 +1,4 @@
+import { nodeFileSystem } from "../src/adapters/fs/node-file-system.js";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, symlink, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -112,13 +113,13 @@ describe("walkFiles", () => {
 
   it("lists files as sorted POSIX paths, including dotfiles", async () => {
     const root = await tree(["b.ts", "a/c.ts", "a/.hidden", ".env", "a/b/d.ts"]);
-    assert.deepEqual(await walkFiles(root), [".env", "a/.hidden", "a/b/d.ts", "a/c.ts", "b.ts"]);
+    assert.deepEqual(await walkFiles(root, nodeFileSystem), [".env", "a/.hidden", "a/b/d.ts", "a/c.ts", "b.ts"]);
   });
 
   it("skips rejected directories without entering them", async () => {
     const root = await tree(["src/a.ts", "node_modules/x/index.js", "src/node_modules/y.js"]);
     const entered: string[] = [];
-    const files = await walkFiles(root, {
+    const files = await walkFiles(root, nodeFileSystem, {
       enterDirectory: (directory) => { entered.push(directory); },
       accept: (relativePath, isDirectory) => !isDirectory || path.posix.basename(relativePath) !== "node_modules",
     });
@@ -128,7 +129,7 @@ describe("walkFiles", () => {
 
   it("starts from the given directories and ignores missing or nested ones", async () => {
     const root = await tree(["src/a.ts", "src/lib/b.ts", "lib/c.ts"]);
-    assert.deepEqual(await walkFiles(root, { start: ["src/lib", "src", "missing"] }), ["src/a.ts", "src/lib/b.ts"]);
+    assert.deepEqual(await walkFiles(root, nodeFileSystem, { start: ["src/lib", "src", "missing"] }), ["src/a.ts", "src/lib/b.ts"]);
   });
 
   it("lists symlinked files but does not follow symlinked directories", async () => {
@@ -136,7 +137,7 @@ describe("walkFiles", () => {
     await symlink(path.join(root, "b.ts"), path.join(root, "link.ts"));
     await symlink(path.join(root, "real"), path.join(root, "loop"));
     await symlink(path.join(root, "missing.ts"), path.join(root, "broken.ts"));
-    assert.deepEqual(await walkFiles(root), ["b.ts", "link.ts", "real/a.ts"]);
+    assert.deepEqual(await walkFiles(root, nodeFileSystem), ["b.ts", "link.ts", "real/a.ts"]);
   });
 
   it("finds workspace package.json files without descending into node_modules or past the pattern depth", async () => {
@@ -148,16 +149,16 @@ describe("walkFiles", () => {
       "packages/web/fixtures/nested/package.json",
       "apps/admin/package.json",
     ]);
-    assert.deepEqual(await findWorkspacePackageJsons(root, "packages/*"), [
+    assert.deepEqual(await findWorkspacePackageJsons(root, "packages/*", nodeFileSystem), [
       "packages/api/package.json",
       "packages/web/package.json",
     ]);
-    assert.deepEqual(await findWorkspacePackageJsons(root, "./apps/*/package.json"), ["apps/admin/package.json"]);
-    assert.deepEqual(await findWorkspacePackageJsons(root, "packages/**"), [
+    assert.deepEqual(await findWorkspacePackageJsons(root, "./apps/*/package.json", nodeFileSystem), ["apps/admin/package.json"]);
+    assert.deepEqual(await findWorkspacePackageJsons(root, "packages/**", nodeFileSystem), [
       "packages/api/package.json",
       "packages/web/fixtures/nested/package.json",
       "packages/web/package.json",
     ]);
-    assert.deepEqual(await findWorkspacePackageJsons(root, "!packages/web"), []);
+    assert.deepEqual(await findWorkspacePackageJsons(root, "!packages/web", nodeFileSystem), []);
   });
 });

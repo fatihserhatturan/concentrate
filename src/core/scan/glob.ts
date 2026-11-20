@@ -1,8 +1,8 @@
-import { readdir, stat } from "node:fs/promises";
 import path from "node:path";
+import type { IFileSystem } from "../contracts/file-system.js";
 
 /**
- * Glob matching and directory walking on `node:fs` only.
+ * Glob matching, and directory walking through an `IFileSystem`.
  *
  * Supported syntax: `**` (whole path segments), `*`, `?`, `[...]` / `[!...]`,
  * `{a,b}` (nestable) and `\` escapes. Dotfiles always match, like
@@ -206,7 +206,7 @@ export type WalkOptions = {
   /** Called once per directory, with its entry names, before the entries are filtered (e.g. to load a nested `.gitignore`). */
   enterDirectory?: (relativeDirectory: string, entryNames: string[]) => Promise<void> | void;
   /** Return false to skip a directory (with its whole subtree) or a file. */
-  accept?: (relativePath: string, isDirectory: boolean) => boolean;
+  accept?: (relativePath: string, isDirectory: boolean) => boolean | Promise<boolean>;
 };
 
 /**
@@ -214,16 +214,20 @@ export type WalkOptions = {
  * Symlinked files are listed; symlinked directories are not entered, which
  * rules out cycles.
  */
-export async function walkFiles(rootPath: string, options: WalkOptions = {}): Promise<string[]> {
+export async function walkFiles(
+  rootPath: string,
+  fileSystem: Pick<IFileSystem, "readDirectory" | "stat">,
+  options: WalkOptions = {},
+): Promise<string[]> {
   const files: string[] = [];
   const accept = options.accept ?? (() => true);
 
   async function visit(relativeDirectory: string): Promise<void> {
     let entries;
     try {
-      entries = await readdir(path.join(rootPath, relativeDirectory), { withFileTypes: true });
+      entries = await fileSystem.readDirectory(path.join(rootPath, relativeDirectory));
     } catch (error) {
-      const code = (error as NodeJS.ErrnoException).code;
+      const code = (error as { code?: string }).code;
       if (code === "ENOENT" || code === "ENOTDIR") return;
       throw error;
     }
@@ -232,13 +236,13 @@ export async function walkFiles(rootPath: string, options: WalkOptions = {}): Pr
     const subdirectories: string[] = [];
     for (const entry of entries) {
       const relativePath = relativeDirectory ? `${relativeDirectory}/${entry.name}` : entry.name;
-      let isFile = entry.isFile();
-      if (entry.isSymbolicLink()) {
-        isFile = await stat(path.join(rootPath, relativePath)).then((target) => target.isFile(), () => false);
+      let isFile = entry.isFile;
+      if (entry.isSymbolicLink) {
+        isFile = await fileSystem.stat(path.join(rootPath, relativePath)).then((target) => target.isFile, () => false);
       }
-      if (entry.isDirectory()) {
-        if (accept(relativePath, true)) subdirectories.push(relativePath);
-      } else if (isFile && accept(relativePath, false)) {
+      if (entry.isDirectory) {
+        if (await accept(relativePath, true)) subdirectories.push(relativePath);
+      } else if (isFile && await accept(relativePath, false)) {
         files.push(relativePath);
       }
     }

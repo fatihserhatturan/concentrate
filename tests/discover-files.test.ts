@@ -1,3 +1,4 @@
+import { nodeFileSystem } from "../src/adapters/fs/node-file-system.js";
 import assert from "node:assert/strict";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
@@ -13,7 +14,7 @@ describe("discoverFiles", () => {
       await writeFile(path.join(root, ".concentrate", "cache", "entry.json"), "{}");
       await writeFile(path.join(root, ".concentrate", "scan-manifest.json"), "{}");
       await writeFile(path.join(root, "a.ts"), "export const a = 1;\n");
-      const found = (await discoverFiles(root)).map((file) => path.relative(root, file));
+      const found = (await discoverFiles(root, nodeFileSystem)).map((file) => path.relative(root, file));
       assert.deepEqual(found, ["a.ts"]);
     } finally {
       await rm(root, { recursive: true, force: true });
@@ -31,10 +32,10 @@ describe("discoverFiles", () => {
       await writeFile(path.join(root, "a.ts"), "export const a = 1;\n");
       // Without a repository at the root, the clones inside it are the project (a folder of several clones).
       const rel = (files: string[]) => files.map((file) => path.relative(root, file));
-      assert.deepEqual(rel(await discoverFiles(root)), ["a.ts", "clone/copy.ts", "wt/copy.ts"]);
+      assert.deepEqual(rel(await discoverFiles(root, nodeFileSystem)), ["a.ts", "clone/copy.ts", "wt/copy.ts"]);
       await mkdir(path.join(root, ".git"));
-      assert.deepEqual(rel(await discoverFiles(root)), ["a.ts"]);
-      assert.deepEqual(rel(await discoverFiles(root, { include: ["**/*.ts", "wt/**"] })), ["a.ts", "wt/copy.ts"]);
+      assert.deepEqual(rel(await discoverFiles(root, nodeFileSystem)), ["a.ts"]);
+      assert.deepEqual(rel(await discoverFiles(root, nodeFileSystem, { include: ["**/*.ts", "wt/**"] })), ["a.ts", "wt/copy.ts"]);
     } finally {
       await rm(root, { recursive: true, force: true });
     }

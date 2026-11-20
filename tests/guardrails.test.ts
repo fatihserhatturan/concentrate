@@ -177,15 +177,8 @@ function assertRatchet(found: Iterable<string>, allowed: readonly string[], what
  */
 const CORE_PURE_BUILTINS: readonly string[] = ["node:path"];
 
-/** Core files that still touch the platform directly. Shrinks as I/O moves behind ports. */
-const CORE_PLATFORM_IO_DEBT: readonly string[] = [
-  "core/scan/discover-files.ts",
-  "core/scan/fs-reader.ts",
-  "core/scan/glob.ts",
-  "core/scan/orchestrator.ts",
-  "core/scan/parse-cache.ts",
-  "core/scan/project-settings.ts",
-];
+/** Core files that still touch the platform directly (empty: file system, hashing and the parse cache go through ports). */
+const CORE_PLATFORM_IO_DEBT: readonly string[] = [];
 
 /**
  * Core files that know a concrete language: named after one, branching on a

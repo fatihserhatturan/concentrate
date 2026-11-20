@@ -130,7 +130,7 @@ Enforced by `tests/guardrails.test.ts`:
 | `src/integrations/languages/` | `src/core/`, each other | `src/integrations/frameworks/`, `src/adapters/`, `src/commands/` |
 | `src/integrations/frameworks/` | `src/core/`, `src/integrations/languages/` | `src/commands/`, `src/adapters/` |
 | `src/commands/` | `src/adapters/cli/` | `src/core/`, `src/scanner/`, `src/graph/`, `src/parsers/`, `src/integrations/` |
-| `src/composition/` | `src/core/`, `src/integrations/`, `src/adapters/store/` (to build the store) — default registry and orchestrator wiring | `src/commands/` (not yet enforced by a test) |
+| `src/composition/` | `src/core/`, `src/integrations/`, `src/adapters/store/` (to build the store) and `src/adapters/fs/` (the node file system, hasher and parse cache) — default registry and orchestrator wiring | `src/commands/` (not yet enforced by a test) |
 | `src/adapters/` | anything — this is the platform adapter layer, except that `cli/` and `mcp/` reach the store only through `composition/` | — |
 
 Imports are read statically and from dynamic `import()` / `require()` calls
@@ -147,7 +147,7 @@ is paid.
 
 | Ratchet | What counts as an offence | Allow-list | Paid down by |
 | --- | --- | --- | --- |
-| Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (6 files: discovery, glob, manifest hashing, parse cache, project settings, orchestrator) | `IFileSystem`, `IContentHasher` and `IParseCache` ports with node adapters |
+| Platform I/O in core | any `node:` built-in other than `node:path` (fs, os, crypto, zlib, util...) | `CORE_PLATFORM_IO_DEBT` (empty) | — |
 | Language knowledge in core | a file named after a language (`go-*.ts`), a per-language predicate (`isGoFile`), a `language === "<id>"` comparison, an extension test (`.endsWith(".py")`), or an ecosystem file name (`package.json`, `go.mod`, `node_modules`, `conftest`...) | `CORE_LANGUAGE_KNOWLEDGE_DEBT` (empty: core names no language) | — |
 | Adapter re-exports in the public API | `src/api.ts` re-exporting from `src/adapters/` | `API_ADAPTER_EXPORT_DEBT` (1 module: the store schema the UI reads) | a schema description owned by core |
 
@@ -166,6 +166,20 @@ stay in the MCP adapter. I/O they need goes through ports: `ISourceReader`
 a composition use case (`composition/scan-into-store.ts`), since it wires the
 orchestrator and the store. CLI adapters may not import the MCP adapter, except
 `cli/mcp.ts`, which starts the server.
+
+## Platform Ports
+
+Core reaches the platform only through ports, which composition fills in
+`createScanDependencies` (`src/composition/orchestrator.ts`):
+
+| Port | Used for | Node implementation |
+| --- | --- | --- |
+| `IFileSystem`, `IContentHasher` (`core/contracts/file-system.ts`) | discovery and `.gitignore`s, the directory walk, `concentrate.json`, the manifest's content hashes; manifest readers get it in `ProjectManifestContext.fileSystem` | `adapters/fs/node-file-system.ts` |
+| `IParseCache` (`core/contracts/parse-cache.ts`), built by `ScanDependencies.createParseCache` | the on-disk parse cache | `adapters/fs/parse-cache.ts` (gzip under the cache directory) |
+| `ScanDependencies.parallelism` | parse concurrency and automatic worker count (`parseWorkerCount` is pure); 1 when absent | `os.availableParallelism()` |
+| `ISourceReader`, `IChangeSource` | source text for unused exports; `git diff` for detect_changes | `adapters/fs/source-reader.ts`, `adapters/git/change-source.ts` |
+
+The only `node:` import core keeps is `node:path`.
 
 ## Language Plug-in Points
 

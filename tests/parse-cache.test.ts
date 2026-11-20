@@ -6,7 +6,7 @@ import { gunzipSync } from "node:zlib";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { formatNormalizedGraph, normalizeGraph } from "../src/core/graph/normalize.js";
-import { ParseCache } from "../src/core/scan/parse-cache.js";
+import { ParseCache } from "../src/adapters/fs/parse-cache.js";
 import type { BuildCodeGraphResult } from "../src/core/scan/index.js";
 
 const fixturesRoot = path.join(import.meta.dirname, "../fixtures");

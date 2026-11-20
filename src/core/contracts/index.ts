@@ -11,3 +11,5 @@ export type { ISourceReader } from "./source-reader.js";
 export type { CallResolutionSession, ILanguageCallResolver, ILanguageInheritanceResolver, InheritanceContext, ResolvedCallTarget } from "./call-resolver.js";
 export type { DetectedFile, FileConventions, LanguageDescriptor } from "./language-descriptor.js";
 export type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "./project-manifest.js";
+export type { IParseCache } from "./parse-cache.js";
+export type { DirectoryEntry, FileStat, IContentHasher, IFileSystem } from "./file-system.js";

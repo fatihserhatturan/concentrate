@@ -1,6 +1,3 @@
-import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
-import os from "node:os";
 import path from "node:path";
 import { GraphBuilder } from "../graph/builder.js";
 import { runWithConcurrency } from "./concurrency.js";
@@ -11,22 +8,26 @@ import { parseFileWithContext } from "./parse-source.js";
 import { OrderedParseResults } from "./parse-results.js";
 import { addProjectConfigNodes } from "./project-config.js";
 import { createScanManifest, type ScanManifest } from "./manifest.js";
-import { ParseCache } from "./parse-cache.js";
 import { filterSupportedSourceFiles } from "./source-files.js";
 import type { LanguageTable } from "./language.js";
 import { addWorkspacePackageGraph } from "./workspace-packages.js";
 import type { IScanOrchestrator } from "../contracts/scan-orchestrator.js";
 import type { ILanguageParser } from "../contracts/language-parser.js";
 import type { IParserPool } from "../contracts/parser-pool.js";
+import type { IParseCache } from "../contracts/parse-cache.js";
+import type { IContentHasher, IFileSystem } from "../contracts/file-system.js";
 import type { IProjectManifestReader } from "../contracts/project-manifest.js";
 import type { ILanguageResolver } from "../contracts/language-resolver.js";
 import type { ISemanticContributor } from "../contracts/semantic-contributor.js";
-import type { ScanReport } from "./report.js";
+import type { ParseCacheReport, ScanReport } from "./report.js";
 import { createScanReport } from "./report.js";
 import { loadProjectSettings } from "./project-settings.js";
 import type { BuildCodeGraphOptions, BuildCodeGraphResult } from "./result.js";
 
 export interface ScanDependencies {
+  // Read access to the project, and the hash of its files' contents.
+  fileSystem: IFileSystem;
+  hasher: IContentHasher;
   // The languages of the scan: what a file is written in, and which languages are parsed as code.
   languages: LanguageTable;
   getParser: (language: string) => ILanguageParser;
@@ -45,6 +46,14 @@ export interface ScanDependencies {
   // Called between the steps of a scan, where the previous step's working
   // data has just become garbage; may run a garbage collection.
   collectGarbage?: () => void;
+  // Opens the disk cache of parse results, used only when options.cacheDirectory
+  // and parserFingerprint are both set. Counts into `report`.
+  createParseCache?: (cacheDirectory: string, rootPath: string, fingerprint: string, report: ParseCacheReport) => IParseCache;
+  // How many tasks the machine runs at once (CPU count). Sets the default
+  // options.concurrency and the automatic worker count. When absent the scan
+  // assumes 1: files are parsed one at a time on the main thread unless the
+  // caller asks for concurrency or workers explicitly.
+  parallelism?: number;
 }
 
 // Below this many files to parse, starting workers costs more than it saves.
@@ -54,11 +63,11 @@ const AUTO_WORKERS_MAX = 4;
 // Worker threads to parse `fileCount` files with: the requested count, or
 // automatically up to AUTO_WORKERS_MAX (leaving a core for the main thread)
 // once there are AUTO_WORKERS_MIN_FILES files. Zero parses on the main thread.
-export function parseWorkerCount(requested: number | undefined, fileCount: number, auto = true): number {
+export function parseWorkerCount(requested: number | undefined, fileCount: number, auto = true, parallelism = 1): number {
   if (fileCount === 0) return 0;
   if (requested !== undefined) return Math.max(0, Math.trunc(requested));
   if (!auto || fileCount < AUTO_WORKERS_MIN_FILES) return 0;
-  const count = Math.min(AUTO_WORKERS_MAX, os.availableParallelism() - 1);
+  const count = Math.min(AUTO_WORKERS_MAX, parallelism - 1);
   return count >= 2 ? count : 0;
 }
 
@@ -75,28 +84,28 @@ export async function buildCodeGraph(
   const repoNodeId = `repo:${rootPath}`;
   // concentrate.json: the command line's `--include` replaces its include list;
   // excludes and API origins are added to the file's.
-  const settings = await loadProjectSettings(rootPath, deps.languages);
+  const settings = await loadProjectSettings(rootPath, deps.languages, deps.fileSystem);
   const include = options.include && options.include.length > 0 ? options.include : settings.include;
   const exclude = [...settings.exclude, ...options.exclude ?? []];
   const apiOrigins = [...settings.apiOrigins, ...options.apiOrigins ?? []];
-  const files = await discoverFiles(rootPath, {
+  const files = await discoverFiles(rootPath, deps.fileSystem, {
     include: include.length > 0 ? include : undefined,
     exclude: exclude.length > 0 ? exclude : undefined,
     conventions: deps.languages.conventions,
   });
 
   const supportedFiles = filterSupportedSourceFiles(files, options.maxFiles, deps.languages, settings.extensions);
-  const manifest = await createScanManifest(rootPath, supportedFiles);
+  const manifest = await createScanManifest(rootPath, supportedFiles, deps.fileSystem, deps.hasher);
 
   const graph = new GraphBuilder();
   const codeFiles = supportedFiles.filter((file) => deps.languages.isCode(file.language)).length;
   const report = createScanReport(files.length, codeFiles, supportedFiles.length - codeFiles);
-  const cache = options.cacheDirectory && deps.parserFingerprint
-    ? new ParseCache(options.cacheDirectory, rootPath, await deps.parserFingerprint(), report.parseCache)
+  const cache = options.cacheDirectory && deps.parserFingerprint && deps.createParseCache
+    ? deps.createParseCache(options.cacheDirectory, rootPath, await deps.parserFingerprint(), report.parseCache)
     : null;
   report.parseCache.enabled = cache !== null;
   const contentHashes = new Map(manifest.files.map((file) => [file.path, file.hash]));
-  const concurrency = options.concurrency ?? os.availableParallelism();
+  const concurrency = options.concurrency ?? deps.parallelism ?? 1;
 
   graph.addNode({
     id: repoNodeId,
@@ -107,7 +116,7 @@ export async function buildCodeGraph(
       ...(settings.deprioritize.length > 0 ? { deprioritize: JSON.stringify(settings.deprioritize) } : {}),
     },
   });
-  await addProjectConfigNodes(graph, repoNodeId, rootPath, report, deps.manifestReaders);
+  await addProjectConfigNodes(graph, repoNodeId, rootPath, report, deps.fileSystem, deps.manifestReaders);
 
   let progressCount = 0;
   const progress = (filePath: string) =>
@@ -143,7 +152,7 @@ export async function buildCodeGraph(
   // Pass 2: parse the rest, on worker threads when there are enough code
   // files among them (the other files only become `File` nodes).
   const codeMisses = misses.filter((index) => deps.languages.isCode(supportedFiles[index]!.language)).length;
-  const workers = deps.createParserPool ? parseWorkerCount(options.workers, codeMisses, deps.autoParseWorkers ?? true) : 0;
+  const workers = deps.createParserPool ? parseWorkerCount(options.workers, codeMisses, deps.autoParseWorkers ?? true, deps.parallelism) : 0;
   const pool = workers > 0 ? deps.createParserPool!(workers) : null;
   report.parseWorkers = workers;
   try {
@@ -158,7 +167,7 @@ export async function buildCodeGraph(
         // Store before the scan adds to the result, and only if the file still
         // has the content the manifest hashed (it may change during the scan).
         const entry = cacheKey(filePath);
-        if (entry && await hashFile(filePath) === entry.contentHash) await cache!.write(entry.key, parsed);
+        if (entry && await hashFile(filePath, deps) === entry.contentHash) await cache!.write(entry.key, parsed);
         parseResults.set(index, { ok: true, parsed, filePath });
       } catch (error) {
         parseResults.set(index, { ok: false, error, filePath });
@@ -175,7 +184,7 @@ export async function buildCodeGraph(
 
   await cache?.prune();
   deps.collectGarbage?.();
-  await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.manifestReaders);
+  await addWorkspacePackageGraph(graph, repoNodeId, rootPath, report, deps.fileSystem, deps.manifestReaders);
   await finalizeGraphRelationships(graph, rootPath, report, deps.resolvers, deps.contributors, files, { apiOrigins }, deps.collectGarbage);
   if (!options.keepCallSites) compactUnresolvedCalls(graph);
   report.status = report.failedFiles.length > 0 ? "partial" : "success";
@@ -183,8 +192,8 @@ export async function buildCodeGraph(
   return createResult(rootPath, graph, report, manifest);
 }
 
-async function hashFile(filePath: string): Promise<string> {
-  return createHash("sha256").update(await readFile(filePath)).digest("hex");
+async function hashFile(filePath: string, deps: Pick<ScanDependencies, "fileSystem" | "hasher">): Promise<string> {
+  return deps.hasher.hash(await deps.fileSystem.readFile(filePath));
 }
 
 function createResult(

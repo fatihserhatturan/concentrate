@@ -24,8 +24,12 @@ export type ProjectConfigValue = {
   value: string | number | boolean;
 };
 
+import type { IFileSystem } from "./file-system.js";
+
 export type ProjectManifestContext = {
   rootPath: string;
+  // Read access to the project, for finding manifests (`walkFiles`).
+  fileSystem: IFileSystem;
   // Files of the project, relative to the scan root, posix. Empty when config values are read
   // (before the files are parsed).
   filePaths: readonly string[];
