@@ -16,11 +16,15 @@ import { javaMethods } from "./shared.js";
 //     method parameters (the bean's class, else the declaring configuration class, is the consumer);
 //   - `consumer -INJECTS-> provider` with `fieldName` (parameter or field name), `via` (constructor,
 //     field, setter, bean-parameter) and `beanMethod` (set when a `@Bean` method is the provider; the
-//     edge then goes to the bean's class when it is scanned, else to the configuration class).
+//     edge then goes to the bean's class when it is a scanned class, else (an interface return type) to
+//     the configuration class; a `@Bean` of a type outside the scan yields no edge at all).
 // A written type that is a scanned class is the provider itself; an interface or abstract class is the
 // providers that implement it (transitively), narrowed by `@Qualifier`/`@Named`/`@Resource(name=)`
 // against bean names and qualifiers, then by the one `@Primary`, then by a bean named like the
-// field/parameter. Several left: no edge, `ambiguousInjections` on the consumer counts it. `Optional`,
+// field/parameter. Several left: when every one is `@Profile`-gated (distinct alternatives, one active at
+// runtime) an edge goes to each (a static over-approximation, like class hierarchy analysis for calls),
+// after dropping those whose profiles share nothing with the consumer's own `@Profile`; otherwise no edge,
+// `ambiguousInjections` on the consumer counts it. `Optional`,
 // `ObjectProvider`, `Provider` and `ObjectFactory` are looked through; `List`, `Set`, `Collection`,
 // `Map<String, T>` and arrays inject every provider (an edge to each); the `T` of a map must be a plain
 // type (`Map<String, List<A>>` injects nothing). Types outside the scan (`JdbcTemplate`) and scanned
@@ -36,8 +40,12 @@ import { javaMethods } from "./shared.js";
 // the wanted type directly; different arguments exclude it, a raw or indirect supertype (through an
 // interface, whose arguments the graph does not keep) is not provable: excluded, and the point counted
 // when that leaves no decision. Wildcard arguments (`Handler<?>`) are not provable either.
+// Consumers that are no providers: classes implementing `ConstraintValidator` (Spring's validator factory
+// autowires them) and the class a `@Bean` method returns (fields and setters; its constructor is the
+// method's business, so it is not scanned).
 // Not handled: meta-annotations (a custom stereotype), Lombok-generated constructors, Micronaut
-// `@Factory`, conditional beans (`@Profile`, `@ConditionalOn*`), type variables of generic providers.
+// `@Factory`, `@ConditionalOn*` beans, profile expressions (`!dev`, `a & b`: compatible with anything),
+// `@Bean` returning `new X()` under an interface type, type variables of generic providers.
 
 const STEREOTYPES: ReadonlyArray<readonly [string, readonly string[]]> = [
   ["Component", ["org.springframework.stereotype"]],
@@ -74,6 +82,8 @@ type Candidate = {
   beanMethod: string | null;
   /** The written type of a `@Bean` method's return (with its type arguments); null for a class provider. */
   returnText: string | null;
+  /** `@Profile` values of the bean (its method, else its class); null when it is not profile-gated. */
+  profiles: Set<string> | null;
 };
 
 type Point = {
@@ -88,6 +98,18 @@ type Point = {
 // java.beans.Introspector: `URLService` stays, `UserService` becomes `userService`.
 function decapitalize(name: string): string {
   return name.length > 1 && name[0] === name[0]!.toUpperCase() && name[1] === name[1]!.toUpperCase() ? name : name.charAt(0).toLowerCase() + name.slice(1);
+}
+
+function profilesOf(list: readonly JavaAnnotationInfo[]): Set<string> | null {
+  const anns = findAnnotations(list, "Profile", ["org.springframework.context.annotation"]);
+  if (anns.length === 0) return null;
+  return new Set(anns.flatMap((ann) => literals(ann).values));
+}
+
+// Two profile sets can be active together: they share a name, or either holds an expression or no known name.
+function profilesCompatible(a: ReadonlySet<string>, b: ReadonlySet<string>): boolean {
+  const opaque = (set: ReadonlySet<string>) => set.size === 0 || [...set].some((name) => /[!&|()]/u.test(name));
+  return opaque(a) || opaque(b) || [...a].some((name) => b.has(name));
 }
 
 function literals(ann: AnnotationLike | undefined, key = "value"): { values: string[]; unresolved: boolean } {
@@ -214,23 +236,54 @@ export const javaDiContributor: ISemanticContributor = {
         names: new Set([...(beanName === null ? [] : [beanName]), ...explicit.values, ...named.values]),
         nameUnknown,
         returnText: null,
+        profiles: profilesOf(list),
         qualifiers: new Set(findAnnotations(list, "Qualifier").flatMap((ann) => literals(ann).values)),
         primary: hasAnnotation(list, "Primary", ["org.springframework.context.annotation"]),
         beanMethod: null,
       });
     }
 
+    // Consumers that are no providers: constraint validators (all injection points) and @Bean return
+    // classes (fields and setters only).
+    const scanTypes = new Map(providerTypes);
+    const validators = new Set<string>();
+    const isScannable = (type: JavaType) => !type.isInterface && type.node.label === "Class" && type.node.properties.isAbstract !== true && type.node.properties.kind === "class" && !isTestFile(type.fileId);
+    for (const type of types.types) {
+      if (providerTypes.has(type.id) || !isScannable(type)) continue;
+      let bases: unknown;
+      try {
+        bases = JSON.parse(String(type.node.properties.bases ?? "[]"));
+      } catch {
+        continue;
+      }
+      if (Array.isArray(bases) && (bases as Array<{ name?: unknown }>).some((base) => typeof base.name === "string" && /(?:^|\.)ConstraintValidator$/u.test(base.name))) {
+        scanTypes.set(type.id, type);
+        validators.add(type.id);
+      }
+    }
+    const beanClasses = new Set<string>();
+    for (const { node, owner } of javaMethods(graph)) {
+      if (!providerTypes.has(owner.id) || node.properties.kind !== "method" || !hasAnnotation(reader.annotationsOf(node), "Bean", ["org.springframework.context.annotation"])) continue;
+      const returned = injectedType(String(node.properties.returnType ?? ""));
+      const ownerType = providerTypes.get(owner.id)!;
+      const returnType = returned && !returned.many ? types.resolve(returned.name, { fileId: ownerType.fileId, typeId: owner.id }) : null;
+      if (returnType && !providerTypes.has(returnType.id) && !validators.has(returnType.id) && isScannable(returnType)) {
+        scanTypes.set(returnType.id, returnType);
+        beanClasses.add(returnType.id);
+      }
+    }
+
     const points: Point[] = [];
     const methodsByOwner = new Map<string, GraphNode[]>();
     for (const { node, owner } of javaMethods(graph)) {
-      if (!providerTypes.has(owner.id)) continue;
+      if (!scanTypes.has(owner.id)) continue;
       const list = methodsByOwner.get(owner.id);
       if (list) list.push(node);
       else methodsByOwner.set(owner.id, [node]);
     }
 
     for (const [ownerId, methods] of methodsByOwner) {
-      const owner = providerTypes.get(ownerId)!;
+      const owner = scanTypes.get(ownerId)!;
       // ---- @Bean methods: providers, and injection points for their parameters.
       for (const method of methods) {
         if (method.properties.kind !== "method") continue;
@@ -253,6 +306,7 @@ export const javaDiContributor: ISemanticContributor = {
             names: new Set(names),
             nameUnknown,
             returnText: String(method.properties.returnType ?? ""),
+            profiles: profilesOf(list) ?? profilesOf(reader.annotationsOf(owner.node)),
             qualifiers: new Set(findAnnotations(list, "Qualifier").flatMap((ann) => literals(ann).values)),
             primary: hasAnnotation(list, "Primary", ["org.springframework.context.annotation"]),
             beanMethod: String(method.properties.name),
@@ -268,7 +322,7 @@ export const javaDiContributor: ISemanticContributor = {
       const isAutowired = (list: readonly JavaAnnotationInfo[]) => hasAnnotation(list, "Autowired", ["org.springframework.beans.factory.annotation"]) || hasAnnotation(list, "Inject", INJECT_PACKAGES);
       const annotated = constructors.filter((ctor) => isAutowired(reader.annotationsOf(ctor)));
       const chosen = annotated.length === 1 ? annotated[0] : annotated.length === 0 && constructors.length === 1 ? constructors[0] : undefined;
-      if (chosen) {
+      if (chosen && !beanClasses.has(ownerId)) {
         for (const parameter of parameterList(chosen)) {
           points.push({ consumer: owner.node, scope: owner, type: parameter.type, name: parameter.name, via: "constructor", annotations: parameter.annotations });
         }
@@ -295,7 +349,7 @@ export const javaDiContributor: ISemanticContributor = {
 
     // ---- fields
     for (const rel of graph.relationshipsOfType("DEFINES_FIELD")) {
-      const owner = providerTypes.get(rel.from);
+      const owner = scanTypes.get(rel.from);
       const field = graph.node(rel.to);
       if (!owner || !field || field.properties.isStatic === true || typeof field.properties.declaredType !== "string") continue;
       const list = reader.annotationsOf(field);
@@ -427,7 +481,13 @@ export const javaDiContributor: ISemanticContributor = {
       }
       if (matches.length === 0) continue;
       if (new Set(matches.map((match) => `${match.target.id}\0${match.beanMethod ?? ""}`)).size === 1) link(point, matches[0]!);
-      else countAmbiguous(point.consumer);
+      else if (matches.every((match) => match.profiles !== null)) {
+        // Profile-gated alternatives: one is active at runtime, which one is not known here.
+        const own = profilesOf(reader.annotationsOf(point.scope.node));
+        const compatible = own ? matches.filter((match) => profilesCompatible(own, match.profiles!)) : matches;
+        if (compatible.length === 0) countAmbiguous(point.consumer);
+        else for (const match of compatible) link(point, match);
+      } else countAmbiguous(point.consumer);
     }
 
     for (const relationship of relationships) graph.addRelationship(relationship);
