@@ -101,7 +101,10 @@ function callGraph(calls: Array<{ file: string; line: number; callee: string; ta
 describe("accuracy comparator: constructor overloads", () => {
   const ctor = (line: number) => ({ file: "b.ts", name: "Foo", className: "Foo", line });
   it("tells overloads apart when the label carries a line", () => {
-    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }, { file: "a.ts", line: 1, callee: "Foo", target: ctor(20) }]);
+    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
+    const callId = graph.nodes.find((entry) => entry.label === "Call")!.id;
+    graph.nodes.push(node("file:b.ts:function:Foo:Foo:20", "Function", { name: "Foo", className: "Foo", line: 20 }));
+    graph.relationships.push(rel(callId, "CALL_RESOLVES_TO", "file:b.ts:function:Foo:Foo:20"));
     const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo", line: 20 } }] });
     assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 0]);
   });
