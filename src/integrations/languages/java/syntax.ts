@@ -7,7 +7,11 @@ export type JavaVisibility = "public" | "protected" | "package" | "private";
 
 // What a name is known to hold: a declared (or `new`-inferred) type, or nothing
 // known (`null`: the name is a local, its type is not).
-export type JavaLocal = { type: string };
+// `fullType` keeps the generic arguments of a declared type (`Optional<Limiter.Listener>`); `lambda` says which
+// call a lambda parameter without a declared type is an argument of (its type comes from that call's parameter).
+export type JavaLambdaContext = { callee: string; receiver: string | null; arity: number; arg: number; param: number };
+// A key `#line:column` (not a name) holds the argument expressions of the call at that position: `args`.
+export type JavaLocal = { type?: string; fullType?: string; lambda?: JavaLambdaContext; args?: Array<string | null> };
 
 // `annotations` (only when the parameter has some): `@Qualifier("x")` is { name: "Qualifier", args: [`"x"`] },
 // the same name and args as a Decorator node.
@@ -110,6 +114,13 @@ export function normalizeJavaType(text: string | null | undefined): string | nul
   type = stripped.replace(/\bfinal\b/gu, " ").replace(/\.\.\./gu, "[]").replace(/\s+/gu, "").trim();
   if (type === "" || type === "var" || type === "?" || type.startsWith("?")) return null;
   return /^[\p{L}_$][\p{L}\p{N}_$]*(?:\.[\p{L}_$][\p{L}\p{N}_$]*)*(?:\[\])*$/u.test(type) ? type : null;
+}
+
+// `Optional<@Nullable Foo>` as written without annotations and spacing; null when the type has no generic arguments.
+export function genericTypeText(text: string | null | undefined): string | null {
+  if (!text || !text.includes("<")) return null;
+  const type = text.replace(/@[\p{L}\p{N}_$.]+(?:\s*\([^)]*\))?/gu, " ").replace(/\bfinal\b/gu, " ").replace(/\s+/gu, " ").replace(/\s*([<>,.])\s*/gu, "$1").trim();
+  return type.includes("<") && !type.startsWith("var") ? type : null;
 }
 
 export function lastSegment(name: string): string {

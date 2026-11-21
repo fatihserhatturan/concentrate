@@ -5,6 +5,7 @@ import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/
 import { isJavaFile } from "../file-kind.js";
 import { normalizeJavaType } from "./syntax.js";
 import { createJavaTypeIndex, parseStringList, type JavaType } from "./types.js";
+import { jdkFunctionalParameter, jdkResultOf, jdkElementMethods, jdkPackageOf, parseGeneric, type ParsedType } from "./generics.js";
 
 // Java calls. A call reaches the declarations it names through what is known
 // of the receiver:
@@ -29,13 +30,20 @@ import { createJavaTypeIndex, parseStringList, type JavaType } from "./types.js"
 type Param = { name: string; type: string; varargs?: boolean };
 type Candidate = { fn: GraphNode; owner: JavaType };
 type Value = { type: JavaType; isType: boolean; exact?: boolean; superRef?: boolean };
+// A declared type with its generic arguments: `type` is the class of the scan it names (null for a JDK or unknown
+// type, or a type variable the context does not bind), `args` the arguments (null when unknown).
+type Ty = { name: string; type: JavaType | null; args: Array<Ty | null>; jdk: string | null };
+type LambdaContext = { callee: string; receiver: string | null; arity: number; arg: number; param: number };
+type Local = { type?: string; fullType?: string; lambda?: LambdaContext } | null;
 type Scope = {
   call: GraphNode;
   fileId: string;
   type: JavaType;
   fn: GraphNode | undefined;
-  locals: Map<string, { type: string } | null>;
+  locals: Map<string, Local>;
 };
+type Walked = { value: Value | null; ty: Ty | null };
+const primitiveTypes: ReadonlySet<string> = new Set(["int", "long", "double", "float", "boolean", "char", "short", "byte"]);
 type Segment =
   | { kind: "name"; name: string }
   | { kind: "call"; name: string; argCount: number }
@@ -94,6 +102,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     return params;
   };
   const localsCache = new Map<string, Scope["locals"]>();
+  const callArguments = new Map<string, Array<string | null>>();
   const localsOf = (fn: GraphNode | undefined): Scope["locals"] => {
     if (!fn) return new Map();
     let locals = localsCache.get(fn.id);
@@ -101,7 +110,21 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       locals = new Map();
       try {
         const parsed = typeof fn.properties.javaLocals === "string" ? JSON.parse(fn.properties.javaLocals) : {};
-        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown } | null>)) locals.set(name, value && typeof value.type === "string" ? { type: value.type } : null);
+        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown; fullType?: unknown; lambda?: unknown; args?: unknown } | null>)) {
+          if (name.startsWith("#")) {
+            if (Array.isArray(value?.args)) callArguments.set(`${fn.id}${name}`, value.args.map((item: unknown) => (typeof item === "string" ? item : null)));
+            continue;
+          }
+          if (!value) {
+            locals.set(name, null);
+            continue;
+          }
+          const local: NonNullable<Local> = {};
+          if (typeof value.type === "string") local.type = value.type;
+          if (typeof value.fullType === "string") local.fullType = value.fullType;
+          if (value.lambda && typeof value.lambda === "object") local.lambda = value.lambda as LambdaContext;
+          locals.set(name, local.type !== undefined || local.lambda !== undefined ? local : null);
+        }
       } catch {
         locals = new Map();
       }
@@ -132,6 +155,131 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
   };
 
   const norm = (text: string): string => normalizeJavaType(text) ?? unknownType;
+
+  // ---- Generic arguments (a small, conservative substitution) ----
+  const buildTy = (parsed: ParsedType | null, owner: JavaType, fn: GraphNode | undefined, env: ReadonlyMap<string, Ty | null> | undefined): Ty | null => {
+    if (!parsed || parsed.name.endsWith("[]")) return null;
+    const simple = !parsed.name.includes(".");
+    if (simple && env?.has(parsed.name)) return env.get(parsed.name) ?? null;
+    if (simple && typeVariables(owner, fn).has(parsed.name)) return null;
+    const args = parsed.args.map((argument) => buildTy(argument, owner, fn, env));
+    const type = types.resolve(parsed.name, { fileId: owner.fileId, typeId: owner.id, fnLine: fn ? Number(fn.properties.line) : undefined });
+    return { name: parsed.name, type, args, jdk: type ? null : jdkNameIn(parsed.name, owner.fileId) };
+  };
+  const tyOfText = (text: string | null | undefined, owner: JavaType, fn?: GraphNode, env?: ReadonlyMap<string, Ty | null>): Ty | null =>
+    text && text.includes("<") ? buildTy(parseGeneric(text), owner, fn, env) : null;
+  const tyValue = (ty: Ty | null): Value | null => (ty?.type ? { type: ty.type, isType: false } : null);
+
+  // The JDK generic a type is (`Optional`, `Function`, ...), when the file imports it from the JDK and no class of the scan has the name.
+  const jdkNameIn = (name: string, fileId: string): string | null => {
+    const dot = name.lastIndexOf(".");
+    const simple = name.slice(dot + 1);
+    const pkg = jdkPackageOf(simple);
+    if (!pkg) return null;
+    if (dot >= 0) return name === `${pkg}.${simple}` ? simple : null;
+    if (pkg === "java.lang") return simple;
+    return (importsByFile.get(fileId) ?? []).some((node) => {
+      if (node.properties.isStatic === true) return false;
+      const source = String(node.properties.source ?? "");
+      return source === `${pkg}.${simple}` || (node.properties.isWildcard === true && source === pkg);
+    }) ? simple : null;
+  };
+
+  const superTexts = (type: JavaType): string[] => {
+    try {
+      const parsed = typeof type.node.properties.bases === "string" ? JSON.parse(type.node.properties.bases) : [];
+      return Array.isArray(parsed) ? parsed.flatMap((item) => (typeof item?.text === "string" ? [item.text as string] : [])) : [];
+    } catch {
+      return [];
+    }
+  };
+  const typeParameterNames = (type: JavaType): string[] =>
+    parseStringList(type.node.properties.typeParameters).flatMap((written) => /^[\p{L}_$][\p{L}\p{N}_$]*/u.exec(written)?.[0] ?? []);
+
+  // The type arguments `target` has when seen from `from` through `extends Base<..., X>` clauses (null when `target` is not a superclass or is reached raw).
+  const bindingsFor = (from: JavaType, target: JavaType): Map<string, Ty | null> | null => {
+    const walkUp = (type: JavaType, env: Map<string, Ty | null>, seen: Set<string>): Map<string, Ty | null> | null => {
+      if (type.id === target.id) return env;
+      if (seen.has(type.id)) return null;
+      seen.add(type.id);
+      for (const text of superTexts(type)) {
+        const parsed = parseGeneric(text);
+        if (!parsed) continue;
+        const parent = types.resolve(parsed.name, { fileId: type.fileId, typeId: type.id });
+        if (!parent || parent.id === type.id) continue;
+        const names = typeParameterNames(parent);
+        const next = new Map<string, Ty | null>();
+        parsed.args.forEach((argument, position) => {
+          const name = names[position];
+          if (name) next.set(name, buildTy(argument, type, undefined, env));
+        });
+        const found = walkUp(parent, next, seen);
+        if (found) return found;
+      }
+      return null;
+    };
+    return walkUp(from, new Map(), new Set());
+  };
+
+  const returnTyOf = (candidates: Candidate[], receiver: JavaType | null): Ty | null => {
+    let result: Ty | null = null;
+    let written: string | null = null;
+    for (const { fn, owner } of candidates) {
+      const text = typeof fn.properties.returnType === "string" ? fn.properties.returnType : null;
+      if (written !== null && text !== written) return null;
+      written = text;
+      if (!text) return null;
+      result = tyOfText(text, owner, fn, receiver ? bindingsFor(receiver, owner) ?? undefined : undefined);
+    }
+    return result;
+  };
+
+  const walkDepth = { value: 0 };
+  // The type of a lambda parameter without a declared type: from the call the lambda is an argument of.
+  const lambdaTy = (context: LambdaContext, scope: Scope): Ty | null => {
+    if (walkDepth.value > 6) return null;
+    walkDepth.value += 1;
+    try {
+      let candidates: Candidate[] = [];
+      let from: JavaType | null = null;
+      if (context.receiver !== null) {
+        const receiver = walk(context.receiver, scope);
+        const jdk = receiver.ty?.jdk ?? null;
+        if (jdk) {
+          const element = jdkElementMethods(jdk, context.callee);
+          return element && context.arg === 0 && context.param === 0 ? receiver.ty!.args[0] ?? null : null;
+        }
+        if (!receiver.value) return null;
+        from = receiver.value.type;
+        candidates = findMethods(from, context.callee, context.arity);
+      } else {
+        const found = bareMethods(scope, context.callee, context.arity);
+        if (!found) return null;
+        from = found.value.type;
+        candidates = found.candidates;
+      }
+      if (candidates.length !== 1) return null;
+      const { fn, owner } = candidates[0]!;
+      const parameter = paramsOf(fn)[context.arg];
+      if (!parameter || parameter.varargs) return null;
+      const declared = tyOfText(parameter.type, owner, fn, bindingsFor(from, owner) ?? undefined);
+      const functional = declared?.jdk ?? null;
+      return functional ? declared!.args[jdkFunctionalParameter(functional, context.param) ?? -1] ?? null : null;
+    } finally {
+      walkDepth.value -= 1;
+    }
+  };
+
+  const tyOfLocal = (local: Local, scope: Scope): Ty | null => {
+    if (!local) return null;
+    if (local.fullType) return tyOfText(local.fullType, scope.type, scope.fn);
+    return local.lambda ? lambdaTy(local.lambda, scope) : null;
+  };
+  const localValue = (local: Local, scope: Scope): Walked => {
+    const ty = tyOfLocal(local, scope);
+    const type = typeOfName(local?.type, scope.type, scope.fn) ?? ty?.type ?? null;
+    return { value: type ? { type, isType: false } : null, ty };
+  };
 
   const accepts = (fn: GraphNode, arity: number | undefined): boolean => {
     if (arity === undefined) return true;
@@ -207,15 +355,14 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
 
   // A first name seen from `scope`, innermost scope first: a field of the type, then the locals the
   // type captures from its enclosing method. A captured local of unknown type is found with a null value.
-  const findInScopes = (scope: Scope, name: string): { value: Value | null } | null => {
+  const findInScopes = (scope: Scope, name: string): Walked | null => {
     for (let current: JavaType | null = scope.type; current; current = types.enclosing(current)) {
       const field = findField(current, name);
-      if (field) return { value: valueOfField(field) };
+      if (field) return { value: valueOfField(field), ty: tyOfText(String(field.field.properties.declaredType ?? ""), field.owner) };
       const enclosing = enclosingFunctionOf(current);
       const locals = enclosing ? localsOf(enclosing.fn) : null;
       if (enclosing && locals?.has(name)) {
-        const type = typeOfName(locals.get(name)?.type, enclosing.owner, enclosing.fn);
-        return { value: type ? { type, isType: false } : null };
+        return localValue(locals.get(name) ?? null, { call: scope.call, fileId: scope.fileId, type: enclosing.owner, fn: enclosing.fn, locals: locals! });
       }
     }
     return null;
@@ -265,31 +412,37 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
   };
 
   // The type or value an expression (a receiver) stands for, or null when it cannot be typed.
-  const evaluate = (text: string, scope: Scope): Value | null => {
+  const evaluate = (text: string, scope: Scope): Value | null => walk(text, scope).value;
+  const walk = (text: string, scope: Scope): Walked => {
+    const none: Walked = { value: null, ty: null };
     const segments = splitChain(text);
-    if (!segments || segments.length === 0) return null;
+    if (!segments || segments.length === 0) return none;
     const first = segments[0]!;
     let current: Value | null = null;
+    let ty: Ty | null = null;
     let position = 1;
     if (first.kind === "new") {
       const type = typeOfName(first.typeName, scope.type, scope.fn);
-      if (!type) return null;
+      if (!type) return none;
       current = { type, isType: false, exact: true };
     } else if (first.kind === "call") {
       const found = bareMethods(scope, first.name, first.argCount);
       current = found ? resultOf(found.candidates) : null;
+      ty = found ? returnTyOf(found.candidates, found.value.type) : null;
+      current ??= tyValue(ty);
     } else if (first.name === "this") {
       current = { type: scope.type, isType: false };
     } else if (first.name === "super") {
       const parent = superclassOf(scope.type);
       current = parent ? { type: parent, isType: false, superRef: true } : null;
     } else if (scope.locals.has(first.name)) {
-      const type = typeOfName(scope.locals.get(first.name)?.type, scope.type, scope.fn);
-      current = type ? { type, isType: false } : null;
+      ({ value: current, ty } = localValue(scope.locals.get(first.name) ?? null, scope));
     } else {
       const captured = findInScopes(scope, first.name);
       if (captured) {
         current = captured.value;
+        ty = captured.ty;
+        current ??= tyValue(ty);
       } else {
         const type = types.resolve(first.name, { fileId: scope.fileId, typeId: scope.type.id, fnLine: scope.fn ? Number(scope.fn.properties.line) : undefined });
         if (type) {
@@ -310,10 +463,21 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       }
     }
     for (; position < segments.length; position += 1) {
-      if (!current) return null;
+      if (!current && !ty) return none;
       const segment = segments[position]!;
       if (segment.kind === "call") {
-        current = resultOf(findMethods(current.type, segment.name, segment.argCount));
+        if (current) {
+          const candidates = findMethods(current.type, segment.name, segment.argCount);
+          ty = returnTyOf(candidates, current.type);
+          current = resultOf(candidates) ?? tyValue(ty);
+        } else {
+          const jdk = ty?.jdk ?? null;
+          const result = jdk ? jdkResultOf(jdk, segment.name, segment.argCount) : null;
+          ty = result === null ? null : ty!.args[result] ?? null;
+          current = tyValue(ty);
+        }
+      } else if (!current) {
+        return none;
       } else if (segment.kind === "name") {
         if (segment.name === "this" && current.isType) {
           current = { type: current.type, isType: false };
@@ -323,12 +487,56 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
           const nested = current.isType ? types.byQualifiedName(`${current.type.qualifiedName}.${segment.name}`) : null;
           const field: ReturnType<typeof findField> = nested ? null : findField(current.type, segment.name);
           current = nested ? { type: nested, isType: true } : field ? valueOfField(field) : null;
+          ty = field && !nested ? tyOfText(String(field.field.properties.declaredType ?? ""), field.owner) : null;
         }
       } else {
-        return null;
+        return none;
       }
     }
-    return current;
+    return { value: current, ty };
+  };
+
+  // Overloads of one arity told apart by the arguments whose type is certain (a class of the scan, a String or
+  // primitive literal) against parameters whose type is certain too. Keeps every candidate when none would be left.
+  type Kind = { kind: "scan"; type: JavaType } | { kind: "string" } | { kind: "primitive" };
+  const argumentKind = (text: string | null, scope: Scope): Kind | null => {
+    if (text === null) return null;
+    if (text.startsWith("\"")) return { kind: "string" };
+    if (/^(?:-?\d|true$|false$|')/u.test(text)) return { kind: "primitive" };
+    const value = evaluate(text, scope);
+    return value && !value.isType ? { kind: "scan", type: value.type } : null;
+  };
+  const parameterKind = (param: Param, owner: JavaType, fn: GraphNode): Kind | null => {
+    if (param.varargs) return null;
+    const name = normalizeJavaType(param.type);
+    if (!name) return null;
+    if (primitiveTypes.has(name)) return { kind: "primitive" };
+    const type = typeOfName(param.type, owner, fn);
+    if (type) return { kind: "scan", type };
+    return name === "String" ? { kind: "string" } : null;
+  };
+  const incompatible = (argument: Kind, parameter: Kind): boolean => {
+    if (argument.kind === "scan" && parameter.kind === "scan") return argument.type.id !== parameter.type.id && !types.subtypes(parameter.type).some((sub) => sub.id === argument.type.id);
+    if (argument.kind === "primitive" && parameter.kind === "primitive") return false;
+    return argument.kind !== parameter.kind;
+  };
+  const argumentTextsOf = (call: GraphNode, scope: Scope): Array<string | null> | null =>
+    scope.fn ? callArguments.get(`${scope.fn.id}#${String(call.properties.line)}:${String(call.properties.columnNumber)}`) ?? null : null;
+  const narrow = (candidates: Candidate[], scope: Scope): Candidate[] => {
+    const texts = argumentTextsOf(scope.call, scope);
+    if (candidates.length < 2 || !texts) return candidates;
+    const kinds = texts.map((text) => argumentKind(text, scope));
+    if (kinds.every((kind) => kind === null)) return candidates;
+    const kept = candidates.filter(({ fn, owner }) => {
+      const params = paramsOf(fn);
+      return !kinds.some((argument, position) => {
+        const param = params[position];
+        if (!argument || !param) return false;
+        const parameter = parameterKind(param, owner, fn);
+        return parameter !== null && incompatible(argument, parameter);
+      });
+    });
+    return kept.length > 0 ? kept : candidates;
   };
 
   const dispatchTargets = (candidate: Candidate, receiver: Value, add: (fn: GraphNode, via?: string) => void): void => {
@@ -358,19 +566,20 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     return [...targets.values()];
   };
 
-  const constructorsOf = (type: JavaType | null, arity: number | undefined): ResolvedCallTarget[] => {
+  const constructorsOf = (type: JavaType | null, arity: number | undefined, scope?: Scope): ResolvedCallTarget[] => {
     if (!type || type.isInterface) return [];
-    const constructors = (methodsByOwner.get(type.id) ?? []).filter((fn) => fn.properties.kind === "constructor" && accepts(fn, arity));
-    return constructors.map((fn) => (constructors.length > 1 ? { functionId: fn.id, via: "overload" } : { functionId: fn.id }));
+    let candidates: Candidate[] = (methodsByOwner.get(type.id) ?? []).filter((fn) => fn.properties.kind === "constructor" && accepts(fn, arity)).map((fn) => ({ fn, owner: type }));
+    if (scope) candidates = narrow(candidates, scope);
+    return candidates.map(({ fn }) => (candidates.length > 1 ? { functionId: fn.id, via: "overload" } : { functionId: fn.id }));
   };
 
-  const methodsOn = (value: Value | null, name: string, arity: number | undefined, preferStatic: boolean): ResolvedCallTarget[] => {
+  const methodsOn = (value: Value | null, name: string, arity: number | undefined, preferStatic: boolean, scope?: Scope): ResolvedCallTarget[] => {
     if (!value) return [];
     let candidates = findMethods(value.type, name, arity);
     if (preferStatic && value.isType && candidates.some((candidate) => candidate.fn.properties.isStatic === true)) {
       candidates = candidates.filter((candidate) => candidate.fn.properties.isStatic === true);
     }
-    return toTargets(candidates, value);
+    return toTargets(scope ? narrow(candidates, scope) : candidates, value);
   };
 
   return (call, callerFileId, callerFunctionId) => {
@@ -386,9 +595,9 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       case "method": {
         if (receiver === null) {
           const found = bareMethods(scope, callee, arity);
-          return found ? toTargets(found.candidates, found.value) : [];
+          return found ? toTargets(narrow(found.candidates, scope), found.value) : [];
         }
-        return methodsOn(evaluate(receiver, scope), callee, arity, true);
+        return methodsOn(evaluate(receiver, scope), callee, arity, true, scope);
       }
       case "methodReference":
         return receiver === null ? [] : methodsOn(evaluate(receiver, scope), callee, undefined, false);
@@ -397,7 +606,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
         return value?.isType ? constructorsOf(value.type, undefined) : [];
       }
       case "explicitConstructor":
-        return constructorsOf(callee === "super" ? superclassOf(owner) : owner, arity);
+        return constructorsOf(callee === "super" ? superclassOf(owner) : owner, arity, scope);
       case "constructor": {
         const qualifier = typeof call.properties.qualifier === "string" ? call.properties.qualifier : null;
         let type: JavaType | null = null;
@@ -407,7 +616,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
           if (outer) type = types.byQualifiedName(`${outer.type.qualifiedName}.${callee}`) ?? types.resolve(callee, { fileId: outer.type.fileId, typeId: outer.type.id });
         }
         if (!type) type = types.resolve(qualifier ? `${qualifier}.${callee}` : callee, { fileId: callerFileId, typeId: owner.id, fnLine: scope.fn ? Number(scope.fn.properties.line) : undefined });
-        return constructorsOf(type, arity);
+        return constructorsOf(type, arity, scope);
       }
       default:
         return [];
@@ -433,6 +642,8 @@ function splitChain(text: string): Segment[] | null {
       if (!typeName || close < 0) return null;
       segments.push({ kind: "new", typeName, argCount: countArguments(text.slice(end + 1, close)) });
       position = close + 1;
+      // An anonymous class body, cut down to `{}` by the parser.
+      if (text.startsWith("{}", position)) position += 2;
     } else {
       const name = /^[\p{L}_$][\p{L}\p{N}_$]*/u.exec(text.slice(position))?.[0];
       if (!name) return null;

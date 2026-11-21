@@ -5,7 +5,7 @@ import { createJavaModuleFilter, setJavaModuleFilter } from "./module-visibility
 import { buildJavaPackageIndex } from "./packages.js";
 
 // A Java import goes through the package index: a type import reaches the file declaring the type, a
-// wildcard import every file of the package, a static import the file of its class. JDK and unknown
+// wildcard import of a package no file (it names a package), a static import the file of its class. JDK and unknown
 // packages stay unresolved without counting against the scan.
 export const javaImportResolver: ILanguageImportResolver = {
   id: "java",
@@ -29,14 +29,12 @@ export const javaImportResolver: ILanguageImportResolver = {
     setJavaModuleFilter(graph, moduleFilter);
     const index = buildJavaPackageIndex(graph, { extraSourceRoots: roots, ...(moduleFilter ? { moduleFilter } : {}) });
     return (node, importerFileId, source) => {
-      const target = index.resolveImport(
-        {
-          source,
-          isWildcard: node.properties.isWildcard === true,
-          isStatic: node.properties.isStatic === true,
-        },
-        importerFileId,
-      );
+      const isWildcard = node.properties.isWildcard === true;
+      const isStatic = node.properties.isStatic === true;
+      // An on-demand import (`import a.b.*`) names a package, not a file: no RESOLVES_TO to any one file of it.
+      // The call resolver reads the Import node itself to find the types the package offers.
+      if (isWildcard && !isStatic && index.hasPackage(source)) return { fileIds: [], expected: false };
+      const target = index.resolveImport({ source, isWildcard, isStatic }, importerFileId);
       return { fileIds: target.fileIds.filter((id) => id !== importerFileId), expected: target.expected };
     };
   },
