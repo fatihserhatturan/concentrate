@@ -1,0 +1,20 @@
+{
+  "sample": "internet-java-grpc-examples",
+  "$comment": "grpc-java examples helloworld and routeguide (5 Java files), the examples protos and the examples Gradle files. Scope: examples/src/main/java and examples/src/main/proto. Stub: labels are added by later Phase 43 tracks.",
+  "calls": {
+    "files": [],
+    "items": []
+  },
+  "imports": {
+    "scope": [],
+    "items": []
+  },
+  "rpcs": {
+    "scope": [],
+    "items": []
+  },
+  "env": {
+    "scope": [],
+    "items": []
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "sample": "internet-java-spring-petclinic-rest",
+  "$comment": "Spring Boot REST service with JPA, JDBC and Spring Data repositories (src/main/java), src/test is out of scope. Scope of every kind: the main sources, imports and calls limited to the files that are labeled. Stub: labels are added by later Phase 43 tracks.",
+  "routes": {
+    "scope": [],
+    "items": []
+  },
+  "calls": {
+    "files": [],
+    "items": []
+  },
+  "imports": {
+    "scope": [],
+    "items": []
+  },
+  "injections": {
+    "scope": [],
+    "items": []
+  },
+  "dataAccess": {
+    "scope": [],
+    "items": []
+  },
+  "env": {
+    "scope": [],
+    "items": []
+  }
+}

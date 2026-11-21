@@ -1,0 +1,28 @@
+{
+  "sample": "internet-java-spring-realworld",
+  "$comment": "Spring MVC + MyBatis + GraphQL (DGS) RealWorld backend. Scope: src/main/java and src/main/resources (MyBatis mapper XML, application.properties); tests are out of scope. Stub: labels are added by later Phase 43 tracks.",
+  "routes": {
+    "scope": [],
+    "items": []
+  },
+  "calls": {
+    "files": [],
+    "items": []
+  },
+  "imports": {
+    "scope": [],
+    "items": []
+  },
+  "injections": {
+    "scope": [],
+    "items": []
+  },
+  "dataAccess": {
+    "scope": [],
+    "items": []
+  },
+  "env": {
+    "scope": [],
+    "items": []
+  }
+}

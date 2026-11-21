@@ -1,0 +1,24 @@
+{
+  "sample": "internet-java-gradle-multimodule",
+  "$comment": "Netflix concurrency-limits: 5 Gradle subprojects (core, grpc, servlet, servlet-jakarta, spectator). Scope: the main sources of every subproject; tests are out of scope. Stub: labels are added by later Phase 43 tracks.",
+  "calls": {
+    "files": [],
+    "items": []
+  },
+  "imports": {
+    "scope": [],
+    "items": []
+  },
+  "injections": {
+    "scope": [],
+    "items": []
+  },
+  "env": {
+    "scope": [],
+    "items": []
+  },
+  "buildTargets": {
+    "scope": [],
+    "items": []
+  }
+}
