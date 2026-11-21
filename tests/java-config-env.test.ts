@@ -268,6 +268,7 @@ public class Env {
   it("redacts the value of a secret key but keeps a placeholder", async () => {
     const graph = await scan({
       "src/main/resources/application.properties": "db.password=hunter2\ndb.token=${TOKEN}\napp.secret-name=plain\ndb.user=me\n",
+      "src/main/java/a/Plain.java": "package a;\npublic class Plain { }\n",
     });
     const value = (name: string) => graph.nodes.find((node) => node.label === "ConfigValue" && node.properties.name === name)?.properties.value;
     assert.equal(value("db.password"), "<redacted>");

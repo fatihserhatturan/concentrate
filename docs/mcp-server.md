@@ -219,7 +219,7 @@ even for large repositories; read it first to decide which tools to call.
   (kind `event`) and picocli commands (kind `cli`). A Java trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
   destination is `resolved: false`.
 - `list_env_config`: lists environment variable usage and config declarations
-  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`). `unread: true` lists instead the variables the scanned env
+  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys (also in a root `config/` directory, test resources for test readers only; secret values are stored as `<redacted>`) with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
   the env file and line) and the ones code reads that no env file declares
   (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
