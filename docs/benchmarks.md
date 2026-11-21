@@ -750,3 +750,59 @@ collects after every step):
 
 The probe's own collections already kept its heap low, so its peak moves
 less than the scan's; what it lost is the main-thread TurboFan spike.
+
+## Java samples (Phase 43)
+
+`npm run bench:release -- --sample internet-java-spring-petclinic-rest --sample
+internet-java-spring-realworld --sample internet-java-grpc-examples --sample
+internet-java-gradle-multimodule --runs 5 --out bench/results/0.1.0-2026-11-21-java.json` on the same
+Apple M4 (10 CPUs), Node v24.13.0, recorded 2026-11-21 for 0.1.0
+([`bench/results/0.1.0-2026-11-21-java.json`](../bench/results/0.1.0-2026-11-21-java.json)).
+`bench-release.ts` has a case for `explore` and `trace_calls` now (it refused to run without one
+since those tools were added), so the JSON has 26 tools. The gRPC sample is a sparse checkout of the
+helloworld and routeguide examples and their protos.
+
+| Sample | Java files | Nodes | Rels | Cold scan ms | Cold peak RSS MB | Warm scan ms | Warm peak RSS MB |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-java-spring-petclinic-rest | 109 | 3637 | 7752 | 472 | 274 | 347 | 158 |
+| internet-java-spring-realworld | 116 | 3181 | 7169 | 415 | 264 | 312 | 148 |
+| internet-java-grpc-examples | 5 | 375 | 537 | 216 | 131 | 176 | 96 |
+| internet-java-gradle-multimodule | 79 | 3187 | 5191 | 335 | 157 | 294 | 149 |
+
+Peak RSS of the cold scans is `/usr/bin/time -l` (median of 5): on this machine the
+`scan-probe.mjs` preload that `bench:release` uses read about 61 MB for the cold runs of two
+samples (PetClinic REST and grpc-java; the JSON keeps that value as `maxRssMbProbe`), so the cold column is the re-measured
+one; the probe and `time -l` agree on the warm runs and on the other two cold ones. These
+RSS values are well below the C and C++ table above (cJSON measured again the same way on
+this day peaks at 214–250 MB, against 749 MB on 2026-11-12), so compare the Java rows with each other, not with the C and C++ rows.
+
+Tool latency, p50 / p95 ms (20 calls; a selection, the JSON has every tool):
+
+| Tool | PetClinic REST | RealWorld | grpc-java | concurrency-limits |
+| --- | ---: | ---: | ---: | ---: |
+| graph_stats | 1.95 / 2.54 | 1.49 / 2.21 | 0.37 / 0.41 | 1.24 / 2.21 |
+| find_callers | 9.22 / 13.87 | 6.22 / 12.09 | 1.13 / 2.64 | 11.94 / 14.16 |
+| list_routes | 0.27 / 0.31 | 0.33 / 0.4 | 0.15 / 0.17 | 0.18 / 0.21 |
+| impact_of | 7.38 / 13.28 | 6.43 / 9.36 | 1.71 / 3.23 | 5.92 / 7.72 |
+| find_unused_exports | 23.7 / 25.84 | 24.47 / 26.23 | 2.83 / 4.78 | 21.45 / 23.85 |
+| detect_changes | 26.9 / 31.97 | 28.56 / 31.78 | 22.79 / 24.15 | 24.39 / 26.56 |
+
+**What the Java grammar costs.** The peak RSS of `concentrate scan --no-cache` (`/usr/bin/time -l`),
+five runs each, with and without the Java sources (`--exclude '**/*.java'`), parsing on the main thread
+(`--workers 0`) so the number is the grammar and the parse and not the worker pool:
+
+| Sample | Without Java sources | With | Cost |
+| --- | ---: | ---: | ---: |
+| internet-java-spring-petclinic-rest | 124–126 MB | 194–199 MB | +68–75 MB |
+| internet-java-spring-realworld | 113–116 MB | 161–170 MB | +45–57 MB |
+| internet-java-grpc-examples | 119–120 MB | 129–137 MB | +9–18 MB |
+| internet-java-gradle-multimodule | 116–120 MB | 156–163 MB | +36–47 MB |
+
+A scan of a tiny project (one file) peaks at 85 MB with a `.java` file and 88–89 MB with a `.ts` file:
+loading the Java grammar is not what costs memory; the parse of many files is. With the default worker
+pool the cold scans peak at 131–274 MB (table above).
+
+- A Java scan costs less per file than the C and C++ ones: 79 to 116 Java files scan in 335–472 ms
+  cold (3.2k to 3.6k nodes), the five-file gRPC sample in 216 ms. Every tool's p50 is under 30 ms;
+  `detect_changes` (it runs `git`, 22–29 ms) and `find_unused_exports` (21–25 ms) are the slowest.
+- The warm scan of every Java sample is 96–158 MB, and 0.29–0.35 s for the three larger ones.

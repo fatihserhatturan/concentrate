@@ -1,0 +1,480 @@
+{
+  "version": "0.1.0",
+  "recordedAt": "2026-11-21T09:06:56.149Z",
+  "node": "v24.13.0",
+  "platform": "darwin-arm64",
+  "cpus": 10,
+  "runs": 5,
+  "toolRuns": 20,
+  "results": [
+    {
+      "sample": "internet-java-spring-petclinic-rest",
+      "nodes": 3637,
+      "relationships": 7752,
+      "scanCold": {
+        "ms": 472,
+        "maxRssMb": 274,
+        "maxRssMbProbe": 61
+      },
+      "scanWarm": {
+        "ms": 347,
+        "maxRssMb": 158
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.95,
+          "p95": 2.54
+        },
+        "find_definitions": {
+          "p50": 1.17,
+          "p95": 1.79
+        },
+        "find_callers": {
+          "p50": 9.22,
+          "p95": 13.87
+        },
+        "list_exports": {
+          "p50": 1.64,
+          "p95": 4.37
+        },
+        "trace_import_chain": {
+          "p50": 1.04,
+          "p95": 3.91
+        },
+        "list_routes": {
+          "p50": 0.27,
+          "p95": 0.31
+        },
+        "list_entrypoints": {
+          "p50": 0.41,
+          "p95": 3.3
+        },
+        "list_env_config": {
+          "p50": 0.54,
+          "p95": 0.62
+        },
+        "list_data_access": {
+          "p50": 4.89,
+          "p95": 7.2
+        },
+        "list_tables": {
+          "p50": 1.6,
+          "p95": 3.13
+        },
+        "list_rpcs": {
+          "p50": 0.79,
+          "p95": 1.82
+        },
+        "impact_of": {
+          "p50": 7.38,
+          "p95": 13.28
+        },
+        "detect_changes": {
+          "p50": 26.9,
+          "p95": 31.97
+        },
+        "route_details": {
+          "p50": 4.91,
+          "p95": 7.75
+        },
+        "get_symbol_source": {
+          "p50": 0.64,
+          "p95": 2.62
+        },
+        "get_file_outline": {
+          "p50": 1.71,
+          "p95": 3.41
+        },
+        "search_symbols": {
+          "p50": 2.35,
+          "p95": 4.52
+        },
+        "find_references": {
+          "p50": 7.51,
+          "p95": 17.79
+        },
+        "find_import_cycles": {
+          "p50": 2.42,
+          "p95": 4.94
+        },
+        "find_unused_exports": {
+          "p50": 23.7,
+          "p95": 25.84
+        },
+        "architecture_overview": {
+          "p50": 12.8,
+          "p95": 17.72
+        },
+        "list_pages": {
+          "p50": 0.58,
+          "p95": 2.44
+        },
+        "list_stores": {
+          "p50": 0.25,
+          "p95": 0.3
+        },
+        "api_consumers": {
+          "p50": 3.37,
+          "p95": 5.43
+        },
+        "explore": {
+          "p50": 10.65,
+          "p95": 15.9
+        },
+        "trace_calls": {
+          "p50": 3.21,
+          "p95": 6.06
+        }
+      }
+    },
+    {
+      "sample": "internet-java-spring-realworld",
+      "nodes": 3181,
+      "relationships": 7169,
+      "scanCold": {
+        "ms": 415,
+        "maxRssMb": 264,
+        "maxRssMbProbe": 265
+      },
+      "scanWarm": {
+        "ms": 312,
+        "maxRssMb": 148
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.49,
+          "p95": 2.21
+        },
+        "find_definitions": {
+          "p50": 1.29,
+          "p95": 4.23
+        },
+        "find_callers": {
+          "p50": 6.22,
+          "p95": 12.09
+        },
+        "list_exports": {
+          "p50": 1.67,
+          "p95": 3.81
+        },
+        "trace_import_chain": {
+          "p50": 1.4,
+          "p95": 4.84
+        },
+        "list_routes": {
+          "p50": 0.33,
+          "p95": 0.4
+        },
+        "list_entrypoints": {
+          "p50": 0.33,
+          "p95": 0.46
+        },
+        "list_env_config": {
+          "p50": 0.43,
+          "p95": 0.48
+        },
+        "list_data_access": {
+          "p50": 4.96,
+          "p95": 7.3
+        },
+        "list_tables": {
+          "p50": 1.74,
+          "p95": 2.83
+        },
+        "list_rpcs": {
+          "p50": 0.78,
+          "p95": 0.85
+        },
+        "impact_of": {
+          "p50": 6.43,
+          "p95": 9.36
+        },
+        "detect_changes": {
+          "p50": 28.56,
+          "p95": 31.78
+        },
+        "route_details": {
+          "p50": 4.97,
+          "p95": 9.52
+        },
+        "get_symbol_source": {
+          "p50": 0.62,
+          "p95": 0.71
+        },
+        "get_file_outline": {
+          "p50": 1.58,
+          "p95": 3.57
+        },
+        "search_symbols": {
+          "p50": 2.16,
+          "p95": 4.39
+        },
+        "find_references": {
+          "p50": 8.16,
+          "p95": 10.79
+        },
+        "find_import_cycles": {
+          "p50": 2.88,
+          "p95": 5.6
+        },
+        "find_unused_exports": {
+          "p50": 24.47,
+          "p95": 26.23
+        },
+        "architecture_overview": {
+          "p50": 12.96,
+          "p95": 22.42
+        },
+        "list_pages": {
+          "p50": 0.55,
+          "p95": 0.58
+        },
+        "list_stores": {
+          "p50": 0.23,
+          "p95": 0.28
+        },
+        "api_consumers": {
+          "p50": 2.39,
+          "p95": 4.62
+        },
+        "explore": {
+          "p50": 7.15,
+          "p95": 9.17
+        },
+        "trace_calls": {
+          "p50": 2.18,
+          "p95": 6.71
+        }
+      }
+    },
+    {
+      "sample": "internet-java-grpc-examples",
+      "nodes": 375,
+      "relationships": 537,
+      "scanCold": {
+        "ms": 216,
+        "maxRssMb": 131,
+        "maxRssMbProbe": 61
+      },
+      "scanWarm": {
+        "ms": 176,
+        "maxRssMb": 96
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 0.37,
+          "p95": 0.41
+        },
+        "find_definitions": {
+          "p50": 0.42,
+          "p95": 1.89
+        },
+        "find_callers": {
+          "p50": 1.13,
+          "p95": 2.64
+        },
+        "list_exports": {
+          "p50": 0.52,
+          "p95": 2.29
+        },
+        "list_routes": {
+          "p50": 0.15,
+          "p95": 0.17
+        },
+        "list_entrypoints": {
+          "p50": 0.27,
+          "p95": 0.29
+        },
+        "list_env_config": {
+          "p50": 0.23,
+          "p95": 0.24
+        },
+        "list_data_access": {
+          "p50": 0.24,
+          "p95": 0.26
+        },
+        "list_tables": {
+          "p50": 0.24,
+          "p95": 0.26
+        },
+        "list_rpcs": {
+          "p50": 0.46,
+          "p95": 1.79
+        },
+        "impact_of": {
+          "p50": 1.71,
+          "p95": 3.23
+        },
+        "detect_changes": {
+          "p50": 22.79,
+          "p95": 24.15
+        },
+        "get_symbol_source": {
+          "p50": 0.36,
+          "p95": 0.42
+        },
+        "get_file_outline": {
+          "p50": 0.81,
+          "p95": 2.2
+        },
+        "search_symbols": {
+          "p50": 0.67,
+          "p95": 2.04
+        },
+        "find_references": {
+          "p50": 1.39,
+          "p95": 3.58
+        },
+        "find_import_cycles": {
+          "p50": 0.25,
+          "p95": 0.28
+        },
+        "find_unused_exports": {
+          "p50": 2.83,
+          "p95": 4.78
+        },
+        "architecture_overview": {
+          "p50": 1.53,
+          "p95": 3.41
+        },
+        "list_pages": {
+          "p50": 0.26,
+          "p95": 0.28
+        },
+        "list_stores": {
+          "p50": 0.14,
+          "p95": 0.16
+        },
+        "api_consumers": {
+          "p50": 0.58,
+          "p95": 2.19
+        },
+        "explore": {
+          "p50": 1.85,
+          "p95": 3.78
+        },
+        "trace_calls": {
+          "p50": 0.43,
+          "p95": 0.46
+        }
+      }
+    },
+    {
+      "sample": "internet-java-gradle-multimodule",
+      "nodes": 3187,
+      "relationships": 5191,
+      "scanCold": {
+        "ms": 335,
+        "maxRssMb": 157,
+        "maxRssMbProbe": 155
+      },
+      "scanWarm": {
+        "ms": 294,
+        "maxRssMb": 149
+      },
+      "tools": {
+        "graph_stats": {
+          "p50": 1.24,
+          "p95": 2.21
+        },
+        "find_definitions": {
+          "p50": 1.05,
+          "p95": 1.47
+        },
+        "find_callers": {
+          "p50": 11.94,
+          "p95": 14.16
+        },
+        "list_exports": {
+          "p50": 1.2,
+          "p95": 2.89
+        },
+        "trace_import_chain": {
+          "p50": 0.64,
+          "p95": 2.51
+        },
+        "list_routes": {
+          "p50": 0.18,
+          "p95": 0.21
+        },
+        "list_entrypoints": {
+          "p50": 0.25,
+          "p95": 2.42
+        },
+        "list_env_config": {
+          "p50": 0.27,
+          "p95": 0.29
+        },
+        "list_data_access": {
+          "p50": 0.26,
+          "p95": 0.31
+        },
+        "list_tables": {
+          "p50": 0.29,
+          "p95": 0.32
+        },
+        "list_rpcs": {
+          "p50": 0.72,
+          "p95": 2.34
+        },
+        "impact_of": {
+          "p50": 5.92,
+          "p95": 7.72
+        },
+        "detect_changes": {
+          "p50": 24.39,
+          "p95": 26.56
+        },
+        "get_symbol_source": {
+          "p50": 0.65,
+          "p95": 0.91
+        },
+        "get_file_outline": {
+          "p50": 0.81,
+          "p95": 1.76
+        },
+        "search_symbols": {
+          "p50": 1.99,
+          "p95": 3.16
+        },
+        "find_references": {
+          "p50": 6.69,
+          "p95": 12.85
+        },
+        "find_import_cycles": {
+          "p50": 1.52,
+          "p95": 3.67
+        },
+        "find_unused_exports": {
+          "p50": 21.45,
+          "p95": 23.85
+        },
+        "architecture_overview": {
+          "p50": 8.86,
+          "p95": 10.51
+        },
+        "list_pages": {
+          "p50": 0.6,
+          "p95": 0.65
+        },
+        "list_stores": {
+          "p50": 0.16,
+          "p95": 0.18
+        },
+        "api_consumers": {
+          "p50": 3.44,
+          "p95": 5.51
+        },
+        "explore": {
+          "p50": 10.02,
+          "p95": 13.12
+        },
+        "trace_calls": {
+          "p50": 3.43,
+          "p95": 5.18
+        }
+      }
+    }
+  ],
+  "memoryNote": "Cold peak RSS re-measured with /usr/bin/time -l (median of 5): scripts/scan-probe.mjs reported about 61 MB for two samples' cold runs on this machine (maxRssMbProbe keeps its value); warm values are the probe's and agree with /usr/bin/time -l."
+}
