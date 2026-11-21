@@ -50,8 +50,8 @@ describe("Java imports", () => {
     const main = "app/com/acme/app/Main.java";
     const imp = (source: string) => targets(bySource(main, source).id);
     assert.deepEqual(imp("com.acme.model.User"), ["core/com/acme/model/User.java"]);
-    // The package: every file of it, package-info left out.
-    assert.deepEqual(imp("com.acme.model"), ["core/com/acme/model/Address.java", "core/com/acme/model/User.java"]);
+    // A wildcard import names a package, not a file: it resolves to none.
+    assert.deepEqual(imp("com.acme.model"), []);
     assert.deepEqual(imp("com.acme.util.Strings"), ["core/com/acme/util/Strings.java"]);
     assert.deepEqual(imp("com.acme.util.Strings.upper"), ["core/com/acme/util/Strings.java"]);
     assert.deepEqual(imp("com.acme.util.Ids"), ["core/com/acme/util/Ids.java"]);

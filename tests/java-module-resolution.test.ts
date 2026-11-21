@@ -94,11 +94,10 @@ describe("Java module-aware resolution", () => {
       const { targets } = await scanRoot(root);
       const app = "app/src/main/java/com/app/Use.java";
       assert.deepEqual(targets(app, "com.x.Dup"), ["a/src/main/java/com/x/Dup.java"]);
-      // A wildcard import is never narrowed: both declarations stay.
-      assert.deepEqual(targets(app, "com.x"), ["a/src/main/java/com/x/Dup.java", "b/src/main/java/com/x/Dup.java"]);
-      // No visible candidate: the package import keeps both files, the type import the first one.
+      // A wildcard import names a package, not a file: it resolves to none.
+      assert.deepEqual(targets(app, "com.x"), []);
+      // No visible candidate: the type import takes the first one.
       const c = "c/src/main/java/com/c/Use.java";
-      assert.deepEqual(targets(c, "com.x"), ["a/src/main/java/com/x/Dup.java", "b/src/main/java/com/x/Dup.java"]);
       assert.equal(targets(c, "com.x.Dup").length, 1);
     } finally {
       await rm(root, { recursive: true, force: true });
@@ -120,7 +119,7 @@ describe("Java module-aware resolution", () => {
     return root;
   };
 
-  it("never narrows a wildcard import of a split package", async () => {
+  it("resolves a wildcard import of a split package to no file", async () => {
     // app does not list lib as a dependency (a build reader miss), yet `com.x.*` keeps Lib.java.
     const root = await project(["app", "lib"], {
       "app/pom.xml": pomOf("app"),
@@ -131,7 +130,7 @@ describe("Java module-aware resolution", () => {
     });
     try {
       const { targets } = await scanRoot(root);
-      assert.deepEqual(targets("app/src/main/java/com/app/Use.java", "com.x"), ["app/src/main/java/com/x/Own.java", "lib/src/main/java/com/x/Lib.java"]);
+      assert.deepEqual(targets("app/src/main/java/com/app/Use.java", "com.x"), []);
     } finally {
       await rm(root, { recursive: true, force: true });
     }
