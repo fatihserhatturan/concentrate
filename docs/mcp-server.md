@@ -228,7 +228,7 @@ even for large repositories; read it first to decide which tools to call.
   lists data-access operations by source, model, library, and operation. Each
   row has the model's `table` when one is known. Go gorm, ent, sqlc,
   `database/sql` and sqlx accesses are included, and Rust sqlx, diesel and
-  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one), and Java JPA, Spring Data, JDBC and MyBatis ones (`library: jpa`, `spring-data`, `jdbc`, `mybatis`). Rows with `direct: true`
+  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one), and Java JPA (and Spring Data repository), JDBC and MyBatis ones (`library: jpa`, `jdbc`, `mybatis`; Spring Data accesses are `jpa` rows on the entity's model, and the `spring-data` models of the repositories carry no access rows). Rows with `direct: true`
   (the file or function that makes the call) come first; the others are the
   callers, routes and entrypoints that reach it. `line` is in `accessFile`,
   the file of the call, which differs from the source's `file` on a

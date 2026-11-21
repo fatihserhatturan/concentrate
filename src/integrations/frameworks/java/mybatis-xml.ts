@@ -8,7 +8,8 @@ import { decodeXmlEntities } from "../../languages/java/build/xml.js";
 //   - comments, the prolog, `<!DOCTYPE …>` (with an internal subset) and processing instructions are dropped;
 //     CDATA is text as written (not entity-decoded);
 //   - dynamic tags (`<if>`, `<where>`, `<foreach>`, `<choose>`, `<when>`, `<otherwise>`, `<trim>`, `<set>`,
-//     `<selectKey>`, any unknown tag) are removed and the text they hold is kept; `<bind>` is dropped;
+//     any unknown tag) are removed and the text they hold is kept; `<bind>` is dropped; `<selectKey>` is not part
+//     of the statement: its SQL is kept apart (`keySql`; `SELECT max(id) FROM t` is a read of its own);
 //   - `<include refid="x"/>` is replaced by the text of `<sql id="x">` of the same file (or `ns.x` of
 //     another mapper file); `<property>` children and `${…}` fragment properties are not substituted; a
 //     cycle or more than eight levels of includes stops, leaving the include out;
@@ -25,6 +26,8 @@ export type MapperStatement = {
   sql: string;
   /** 1-based line of the statement's start tag. */
   line: number;
+  /** The SQL of the statement's `<selectKey>` elements, as `sql`. */
+  keySql: string[];
 };
 
 export type MapperFile = {
@@ -36,6 +39,7 @@ export type MapperFile = {
 };
 
 const STATEMENTS = new Set(["select", "insert", "update", "delete"]);
+const TAG_START = /<[A-Za-z_][\w.:-]*(?=[\s/>])/uy;
 
 function parse(source: string): XmlTag {
   const root: XmlTag = { name: "#document", attributes: {}, children: [], line: 1 };
@@ -90,8 +94,10 @@ function parse(source: string): XmlTag {
       }
       advance(end === -1 ? source.length : end + 1);
     } else {
-      // `a < b`, `a <= b` in SQL (a mapper should write `&lt;`, but not every one does): text.
-      if (/^[\s=\d?#$]/u.test(source[pos + 1] ?? " ")) {
+      // `a < b`, `a <= b`, `a <#{b}` in SQL (a mapper should write `&lt;`, but not every one does): text. A tag is `<`,
+      // a name, then whitespace, `/` or `>`.
+      TAG_START.lastIndex = pos;
+      if (!TAG_START.test(source)) {
         addText("<", false);
         advance(pos + 1);
         continue;
@@ -145,7 +151,7 @@ export function readMapperFile(source: string): MapperFile | null {
 
 const MAX_INCLUDE_DEPTH = 8;
 
-function render(tag: XmlTag, own: MapperFile, all: ReadonlyMap<string, XmlTag>, depth: number, seen: ReadonlySet<XmlTag>): string {
+function render(tag: XmlTag, own: MapperFile, all: ReadonlyMap<string, XmlTag>, depth: number, seen: ReadonlySet<XmlTag>, keys: string[]): string {
   let text = "";
   for (const child of tag.children) {
     if ("text" in child) {
@@ -153,9 +159,11 @@ function render(tag: XmlTag, own: MapperFile, all: ReadonlyMap<string, XmlTag>, 
     } else if (child.name === "include") {
       const refid = (child.attributes.refid ?? "").replace(/\$\{[^}]*\}/gu, "");
       const fragment = own.fragments.get(refid) ?? all.get(refid);
-      if (fragment && depth < MAX_INCLUDE_DEPTH && !seen.has(fragment)) text += ` ${render(fragment, own, all, depth + 1, new Set([...seen, fragment]))} `;
+      if (fragment && depth < MAX_INCLUDE_DEPTH && !seen.has(fragment)) text += ` ${render(fragment, own, all, depth + 1, new Set([...seen, fragment]), keys)} `;
+    } else if (child.name === "selectKey") {
+      keys.push(render(child, own, all, depth, seen, keys));
     } else if (child.name !== "bind" && child.name !== "property") {
-      text += ` ${render(child, own, all, depth, seen)} `;
+      text += ` ${render(child, own, all, depth, seen, keys)} `;
     }
   }
   return text;
@@ -172,6 +180,10 @@ export function mapperStatements(files: readonly MapperFile[]): MapperFile[] {
   for (const file of files) for (const [id, tag] of file.fragments) all.set(`${file.namespace}.${id}`, tag);
   return files.map((file) => ({
     ...file,
-    statements: file.statementTags.map(({ tag, kind }) => ({ id: tag.attributes.id!, kind, sql: collapse(render(tag, file, all, 0, new Set())), line: tag.line })),
+    statements: file.statementTags.map(({ tag, kind }) => {
+      const keys: string[] = [];
+      const sql = collapse(render(tag, file, all, 0, new Set(), keys));
+      return { id: tag.attributes.id!, kind, sql, line: tag.line, keySql: keys.map(collapse) };
+    }),
   }));
 }

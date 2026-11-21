@@ -6,18 +6,20 @@ import { compactExpression, modifiersOf, normalizeJavaType } from "../../languag
 import { createJavaTypeIndex, parseStringList, type JavaType } from "../../languages/java/types.js";
 import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import { annotationEnum, annotationValue, findAnnotations, hasAnnotation, javaAnnotationReader, type JavaAnnotationInfo } from "./annotations.js";
-import { javaDataModel, javaDataModelId, javaTable, normalizeTableName, recordJavaDataAccesses, sqlAccesses, type JavaDataAccess, type JavaDataOperation } from "./data-shared.js";
+import { javaDataModel, javaDataModelId, javaTable, javaTableModel, normalizeTableName, recordJavaDataAccesses, sqlAccesses, type JavaDataAccess, type JavaDataOperation } from "./data-shared.js";
 import { createJavaReceiverResolver, receiverMatches } from "./receivers.js";
 import { javaMethods } from "./shared.js";
-import { createJavaStringResolver, javaStringFromText, readJavaString, readLocalStrings, type JavaStringTemplate } from "./strings.js";
+import { createJavaStringResolver, javaLocalNames, javaStringFromText, readJavaString, readLocalStrings, type JavaStringScope, type JavaStringTemplate } from "./strings.js";
 
 // Java JPA / Hibernate and Spring Data (`javax.persistence` and `jakarta.persistence`).
 //
 // Entities. A class with `@Entity` is a DataModel (library `jpa`, id `datamodel:jpa:<package>:<Class>`)
 // with MAPS_TO_TABLE to its Table (`table:java:-:<name>`). The table is `@Table(name, schema)`, else the entity
-// name (`@Entity(name = "X")`, else the class name) in snake_case, Spring Boot's physical naming
-// (`CatalogProduct` is `catalog_product`); an explicit `@Table` / `@Column` / `@JoinColumn` name is kept as
-// written. The Table's `columns` (name, column, type, optional, list, isId, isUnique, references) come from
+// name (`@Entity(name = "X")`, else the class name), all in snake_case, Spring Boot's physical naming
+// (`CatalogProduct` and `@Table(name = "OrderItems")` are `catalog_product` and `order_items`; the same for
+// `@Column`, `@JoinColumn` and `@JoinTable` names); a quoted name (`@Table(name = "\"Items\"")`, backticks) is kept
+// as written minus the quotes. A name given by a constant (`@Table(name = Tables.ITEMS)`) is resolved with the
+// string resolver. The Table's `columns` (name, column, type, optional, list, isId, isUnique, references) come from
 // the non-static, non-`transient`, non-`@Transient` fields of the class and of its `@MappedSuperclass`
 // ancestors (their fields first); an `@Embedded` / `@EmbeddedId` field, or a field whose type is a scanned
 // `@Embeddable`, adds the embeddable's fields (a column for each, no prefix); `@ManyToOne` / the owning side
@@ -57,16 +59,19 @@ import { createJavaStringResolver, javaStringFromText, readJavaString, readLocal
 //     resolves to it, else directly from the caller.
 // `EntityManager` (and Hibernate `Session`) calls: `persist` `create`, `merge` `upsert`, `remove` `delete`, `find`,
 // `getReference`, `refresh` `read` of the entity of the class literal or of the argument's type, `createQuery` (JPQL) and
-// `createNativeQuery` (SQL) with a literal or constant string, from the calling function.
+// `createNativeQuery` / `createSQLQuery` (SQL) with a literal or constant string, from the calling function.
+// `nativeQuery` is a literal, `Boolean.TRUE` / `FALSE` or a boolean constant; when it is none of them, the
+// query counts as native if the SQL reader finds a table in it, else as JPQL.
 // A name from another package than `javax.persistence` / `jakarta.persistence` (an own `@Entity`) is no entity.
 //
 // Not handled: property access (annotations on getters), `@AttributeOverride`, composite `@JoinColumns`,
 // `@OneToMany` join columns or tables, `@SecondaryTable`, `@ElementCollection`, a discriminator column,
-// `orm.xml`, `@NamedQuery` / `@Query(name = …)`, `@Procedure`, Criteria API, Specifications, Querydsl,
+// `orm.xml`, `@NamedQuery` / `@Query(name = …)`, `createNamedQuery`, `@Procedure`, Criteria API, Specifications, Querydsl,
 // query-by-example, the Spring `JpaRepository` typed through its generic base at the use site
 // (`BaseRepository<Customer, Long> repo`), repositories declared as classes, `@RepositoryDefinition`,
 // fragments (`CustomerRepositoryCustom` + `Impl`), `@EnableJpaRepositories` filters, same-named entities of
-// different packages in JPQL (the name is then left out), `JpaRepository` typed by a wildcard-imported
+// different packages in JPQL (the name is then left out), one table name in two schemas (one Table, the first
+// schema stays), `JpaRepository` typed by a wildcard-imported
 // scanned type that cannot be told from a framework one.
 //
 // A parse plugin keeps what the graph does not: the type arguments of an interface's `extends`
@@ -83,8 +88,8 @@ const CRUD_BASES = new Set(["CrudRepository", "ListCrudRepository", "PagingAndSo
 
 // ---------------------------------------------------------------- parse plugin
 
-const QUERY_METHODS = new Set(["createQuery", "createNativeQuery"]);
-const PERSISTENCE_CALLS = new Set(["persist", "merge", "remove", "find", "getReference", "refresh", "createQuery", "createNativeQuery", "save", "saveOrUpdate", "update", "delete", "get", "load"]);
+const QUERY_METHODS = new Set(["createQuery", "createNativeQuery", "createSQLQuery"]);
+const PERSISTENCE_CALLS = new Set(["persist", "merge", "remove", "find", "getReference", "refresh", "createQuery", "createNativeQuery", "createSQLQuery", "save", "saveOrUpdate", "update", "delete", "get", "load"]);
 
 type JpaArg = { s: JavaStringTemplate } | { c: string } | { e: string };
 
@@ -101,8 +106,8 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
     // Two calls of one name at one position (`a.find(x).find(y)`) cannot be told apart.
     calls.set(key, calls.has(key) ? null : node);
   }
-  const localStrings = new Map<SyntaxNode, Map<string, JavaStringTemplate>>();
-  const localsAt = (node: SyntaxNode): Map<string, JavaStringTemplate> | undefined => {
+  const localStrings = new Map<SyntaxNode, JavaStringScope>();
+  const localsAt = (node: SyntaxNode): JavaStringScope | undefined => {
     let best: SyntaxNode | null = null;
     for (const fn of functions) {
       const syntax = fn.syntax;
@@ -112,7 +117,8 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
     let locals = localStrings.get(best);
     if (!locals) {
       const body = best.childForFieldName("body");
-      locals = body ? readLocalStrings([body]) : new Map();
+      const dynamic = body ? javaLocalNames([body]) : undefined;
+      locals = body ? { locals: readLocalStrings([body], dynamic), dynamic } : {};
       localStrings.set(best, locals);
     }
     return locals;
@@ -144,7 +150,7 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
       const read = args.map((arg): JpaArg => {
         if (arg.type === "class_literal") return { c: compactExpression(arg.text).replace(/\.class$/u, "") };
         if (QUERY_METHODS.has(callee) && arg === args[0]) {
-          const template = readJavaString(arg, { locals: localsAt(arg) });
+          const template = readJavaString(arg, localsAt(arg));
           if (template) return { s: template };
         }
         return { e: compactExpression(arg.text) };
@@ -154,7 +160,7 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
   }
 };
 
-export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "1" });
+export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "2" });
 
 // ---------------------------------------------------------------- helpers
 
@@ -191,6 +197,9 @@ function stringArg(ann: JavaAnnotationInfo | undefined, key: string): string | n
   const value = ann ? annotationValue(ann, key)?.[0] : undefined;
   return value?.resolved ? value.value : null;
 }
+
+// Spring Boot's physical naming for an explicit name: snake_case, unless the name is quoted.
+const physical = (name: string): string => (/["`]/u.test(name) ? name.replace(/["`]/gu, "") : snake(name));
 
 const flagArg = (ann: JavaAnnotationInfo | undefined, key: string): boolean | null => {
   const value = ann ? annotationEnum(ann, key)?.[0] : undefined;
@@ -239,6 +248,12 @@ function jpqlSources(jpql: string): { verb: "select" | "update" | "delete" | "in
   const sources: JpqlSource[] = [];
   const name = String.raw`[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*`;
   const entry = new RegExp(String.raw`\s*(${name})(?:\s+(?:as\s+)?([A-Za-z_$][\w$]*))?`, "iyu");
+  // `delete Entity e where …`: the entity follows `delete` directly.
+  if (verb === "delete" && !/^\(?\s*delete\s+from\b/iu.test(text)) {
+    entry.lastIndex = text.search(/delete/iu) + 6;
+    const found = entry.exec(text);
+    if (found) sources.push({ name: found[1]!, alias: found[2] && !JPQL_KEYWORDS.has(found[2].toLowerCase()) ? found[2] : null, join: false });
+  }
   for (const match of text.matchAll(/\b(from|update|into|join)\s+(?:fetch\s+)?/giu)) {
     const keyword = match[1]!.toLowerCase();
     let at = match.index + match[0].length;
@@ -268,6 +283,32 @@ export const javaDataJpaContributor: ISemanticContributor = {
     const strings = createJavaStringResolver(graph);
     const receivers = createJavaReceiverResolver(graph);
     const methods = new Map(javaMethods(graph).map((method) => [method.node.id, method]));
+    // A name argument of a mapping annotation: a literal, or a constant the string resolver follows.
+    const nameArg = (ann: JavaAnnotationInfo | undefined, key: string, owner: JavaType): string | null => {
+      const value = ann ? annotationValue(ann, key)?.[0] : undefined;
+      if (!value) return null;
+      if (value.resolved) return value.value || null;
+      const template = javaStringFromText(value.value);
+      if (!template) return null;
+      const parts = strings.resolveParts(template, { fileId: owner.fileId, typeId: owner.id });
+      return parts.every((part) => "text" in part) ? parts.map((part) => ("text" in part ? part.text : "")).join("") || null : null;
+    };
+    // An explicit name in Spring Boot's physical naming (`physical`); null when absent, empty or unknown.
+    const explicitName = (ann: JavaAnnotationInfo | undefined, key: string, owner: JavaType): string | null => {
+      const name = nameArg(ann, key, owner);
+      return name ? physical(name) : null;
+    };
+    // `nativeQuery`: a literal, `Boolean.TRUE` / `FALSE` or a boolean constant; null when unknown.
+    const nativeFlag = (ann: JavaAnnotationInfo, owner: JavaType): boolean | null => {
+      const text = annotationValue(ann, "nativeQuery")?.[0]?.value.trim();
+      if (text === undefined) return false;
+      const bool = (value: string): boolean | null => (/^(?:java\.lang\.)?Boolean\.TRUE$|^true$/u.test(value) ? true : /^(?:java\.lang\.)?Boolean\.FALSE$|^false$/u.test(value) ? false : null);
+      const direct = bool(text);
+      if (direct !== null) return direct;
+      const constant = strings.constant(text, { fileId: owner.fileId, typeId: owner.id });
+      const rendered = constant?.every((part) => "text" in part) ? constant.map((part) => ("text" in part ? part.text : "")).join("").trim() : null;
+      return rendered === null ? null : bool(rendered);
+    };
 
     // The temporary properties of the parse plugin are read, then removed.
     const basesOf = new Map<string, string[]>();
@@ -322,7 +363,7 @@ export const javaDataJpaContributor: ISemanticContributor = {
     }
     const entityTypes = types.types.filter((type) => kinds.get(type.id) === "entity");
     const annotationsOf = (type: JavaType) => reader.annotationsOf(type.node);
-    const entityNameOf = (type: JavaType): string => stringArg(findAnnotations(annotationsOf(type), "Entity", JPA)[0], "name") ?? type.name;
+    const entityNameOf = (type: JavaType): string => nameArg(findAnnotations(annotationsOf(type), "Entity", JPA)[0], "name", type) ?? type.name;
 
     // The topmost @Entity of the superclass chain, through @MappedSuperclass classes.
     const rootOf = (type: JavaType): JavaType => {
@@ -347,14 +388,14 @@ export const javaDataJpaContributor: ISemanticContributor = {
       const ownTable = root.id === type.id || strategy !== "SINGLE_TABLE";
       const tableType = ownTable ? type : root;
       const tableAnn = findAnnotations(annotationsOf(tableType), "Table", JPA)[0];
-      const tableName = stringArg(tableAnn, "name") ?? snake(entityNameOf(tableType));
+      const tableName = explicitName(tableAnn, "name", tableType) ?? snake(entityNameOf(tableType));
       const entity: Entity = {
         type,
         entityName: entityNameOf(type),
         root: undefined as unknown as Entity,
         strategy,
         tableName: normalizeTableName(tableName),
-        schema: stringArg(tableAnn, "schema") || null,
+        schema: nameArg(tableAnn, "schema", tableType),
         tableId: "",
         modelId: javaDataModelId("jpa", type.name, type.packageName),
       };
@@ -364,7 +405,7 @@ export const javaDataJpaContributor: ISemanticContributor = {
     for (const entity of entities.values()) entity.root = entities.get(rootOf(entity.type).id)!;
 
     const visibleType = (name: string, owner: JavaType): JavaType | null => types.resolve(name, { fileId: owner.fileId, typeId: owner.id });
-    const columnName = (field: FieldInfo): string => stringArg(findAnnotations(field.anns, "Column", JPA)[0], "name") ?? snake(field.name);
+    const columnName = (field: FieldInfo): string => explicitName(findAnnotations(field.anns, "Column", JPA)[0], "name", field.owner) ?? snake(field.name);
     const isStaticOrTransient = (field: FieldInfo): boolean => field.node.properties.isStatic === true || transientFields.has(field.node.id) || hasAnnotation(field.anns, "Transient", JPA);
     const isCollection = (field: FieldInfo): boolean => COLLECTIONS.has(field.type.split(".").at(-1)!) || (field.type.endsWith("[]") && !/^(?:byte|char|Byte|Character)\[\]$/u.test(field.type));
     const relationOf = (field: FieldInfo): Relation | null => {
@@ -418,11 +459,11 @@ export const javaDataJpaContributor: ISemanticContributor = {
           if (relation.mappedBy !== null || relation.kind === "many") continue;
           const joinAnn = findAnnotations(field.anns, "JoinColumn", JPA)[0];
           const target = relation.target ? entities.get(relation.target.id) : undefined;
-          const refColumn = stringArg(joinAnn, "referencedColumnName") ?? (target ? idColumnOf(target) : "id");
+          const refColumn = explicitName(joinAnn, "referencedColumnName", field.owner) ?? (target ? idColumnOf(target) : "id");
           const optional = flagArg(relation.ann, "optional") !== false && flagArg(joinAnn, "nullable") !== false;
           columns.push({
             name: field.name,
-            column: stringArg(joinAnn, "name") ?? `${snake(field.name)}_${refColumn}`,
+            column: explicitName(joinAnn, "name", field.owner) ?? `${snake(field.name)}_${refColumn}`,
             type: relation.target?.name ?? field.type,
             optional,
             list: false,
@@ -484,7 +525,6 @@ export const javaDataJpaContributor: ISemanticContributor = {
       } else {
         entity.tableId = entity.root.tableId || javaTable(graph, entity.root.tableName, { library: "jpa", schemaName: entity.root.schema, declaredIn: relativeOf(entity.root.type.fileId), line: Number(entity.root.type.node.properties.line), columns: tableColumns(entity.root) });
       }
-      entity.tableName = String(graph.node(entity.tableId)?.properties.name ?? entity.tableName);
     }
     // Subclasses of a single table were created after their root or before it: make them agree.
     for (const entity of entities.values()) if (entity.root !== entity && entity.strategy === "SINGLE_TABLE") entity.tableId = entity.root.tableId;
@@ -508,23 +548,23 @@ export const javaDataJpaContributor: ISemanticContributor = {
         const joinAnn = findAnnotations(field.anns, "JoinColumn", JPA)[0];
         const owner = relation.mappedBy === null;
         let foreignKeys: string[] = [];
-        if (owner && relation.kind === "one") foreignKeys = [stringArg(joinAnn, "name") ?? `${snake(field.name)}_${stringArg(joinAnn, "referencedColumnName") ?? idColumnOf(target)}`];
+        if (owner && relation.kind === "one") foreignKeys = [explicitName(joinAnn, "name", field.owner) ?? `${snake(field.name)}_${explicitName(joinAnn, "referencedColumnName", field.owner) ?? idColumnOf(target)}`];
         const onDeleteValue = annotationEnum(findAnnotations(field.anns, "OnDelete", HIBERNATE)[0] ?? { args: [] }, "action")?.[0];
         relate(entity.modelId, target.modelId, field.name, relation.kind, foreignKeys, onDeleteValue ?? null);
 
         // The join table of the owning side of a many-to-many.
         if (relation.via === "ManyToMany" && owner) {
           const joinTable = findAnnotations(field.anns, "JoinTable", JPA)[0];
-          const names = (key: string): string[] => (annotationValue(joinTable ?? { args: [] }, key) ?? []).flatMap((value) => [...value.value.matchAll(/\bname\s*=\s*"([^"]*)"/gu)].map((match) => match[1]!));
+          const names = (key: string): string[] => (annotationValue(joinTable ?? { args: [] }, key) ?? []).flatMap((value) => [...value.value.matchAll(/\bname\s*=\s*"((?:[^"\\]|\\.)*)"/gu)].map((match) => physical(match[1]!.replace(/\\"/gu, '"'))));
           const ownerPk = idColumnOf(entity);
           const targetPk = idColumnOf(target);
-          const joinName = stringArg(joinTable, "name") ?? `${entity.tableName}_${target.tableName}`;
+          const joinName = explicitName(joinTable, "name", field.owner) ?? `${entity.tableName}_${target.tableName}`;
           const left = names("joinColumns")[0] ?? `${snake(entity.entityName)}_${ownerPk}`;
           const right = names("inverseJoinColumns")[0] ?? `${snake(field.name)}_${targetPk}`;
           const column = (name: string, type: string, references: string): Column => ({ name, column: name, type, optional: false, list: false, isId: false, isUnique: false, references });
           javaTable(graph, joinName, {
             library: "jpa",
-            schemaName: stringArg(joinTable, "schema") || null,
+            schemaName: nameArg(joinTable, "schema", field.owner),
             declaredIn: relativeOf(field.owner.fileId),
             line: field.line,
             columns: [column(left, "Long", `${entity.tableName}.${ownerPk}`), column(right, "Long", `${target.tableName}.${targetPk}`)],
@@ -644,9 +684,7 @@ export const javaDataJpaContributor: ISemanticContributor = {
       sqlAccesses(sql).map((access) => {
         const known = modelByTable.get(normalizeTableName(access.table).toLowerCase());
         if (known) return { modelId: known, operation: access.operation };
-        const table = javaTable(graph, access.table, { library: "jpa" });
-        const name = String(graph.node(table)?.properties.name ?? access.table);
-        return { modelId: javaDataModel(graph, { name, library: "jpa", table }), operation: access.operation };
+        return { modelId: javaTableModel(graph, javaTable(graph, access.table, { library: "jpa" }), "jpa"), operation: access.operation };
       });
     const stringOf = (template: JavaStringTemplate, scope: JavaType): string | null => strings.resolve(template, { fileId: scope.fileId, typeId: scope.id });
     const lineOf = (node: GraphNode): number => Number(node.properties.line);
@@ -674,7 +712,11 @@ export const javaDataJpaContributor: ISemanticContributor = {
           const template = value.resolved ? null : javaStringFromText(value.value);
           const sql = value.resolved ? value.value : template ? stringOf(template, repository.type) : null;
           if (!sql) continue;
-          found = flagArg(query, "nativeQuery") === true ? sqlModels(sql) : jpqlAccesses(sql, repository.type, entity);
+          const native = nativeFlag(query, repository.type);
+          found = native === true ? sqlModels(sql) : native === false ? jpqlAccesses(sql, repository.type, entity) : (() => {
+            const asSql = sqlModels(sql);
+            return asSql.length > 0 ? asSql : jpqlAccesses(sql, repository.type, entity);
+          })();
           if (hasAnnotation(anns, "Modifying", ["org.springframework.data.jpa.repository"]) && found.length > 0 && found.every((item) => item.operation === "read")) found = [{ ...found[0]!, operation: "update" }, ...found.slice(1)];
         } else {
           const match = DERIVED.exec(String(fn.properties.name));
@@ -747,12 +789,12 @@ export const javaDataJpaContributor: ISemanticContributor = {
       const args = callArgs.get(call.id) ?? [];
       const scope = types.byId.get(method.owner.id) ?? null;
       if (!scope) continue;
-      if (callee === "createQuery" || callee === "createNativeQuery") {
+      if (callee === "createQuery" || callee === "createNativeQuery" || callee === "createSQLQuery") {
         const first = args[0];
         if (!first || !("s" in first)) continue;
         const text = stringOf(first.s, scope);
         if (!text) continue;
-        const found = callee === "createNativeQuery" ? sqlModels(text) : jpqlAccesses(text, scope, null);
+        const found = callee !== "createQuery" ? sqlModels(text) : jpqlAccesses(text, scope, null);
         for (const access of found) accesses.push({ ...base, modelId: access.modelId, operation: access.operation });
         continue;
       }

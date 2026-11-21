@@ -6,12 +6,13 @@ import { sqlTableAccesses, type SqlTableAccess } from "../go/sql.js";
 // The one place that makes the Table and DataModel nodes and the MAPS_TO_TABLE and ACCESSES_DATA
 // relationships of Java data access, so JPA, Spring Data, JDBC and MyBatis meet on the same tables.
 //
-//   - A Table is `table:java:-:<name>` (`kind: "table"`, `columns`, `declaredIn`, `line`: the shape the Go,
-//     Rust and C++ contributors use). One per table name, whatever the case: the spelling that
-//     reaches the graph first stays (`Users` then `users` is the one `Users`), so a JPA `@Table(name =
-//     "USERS")` and `SELECT … FROM users` are one node, which `sql.schema` then fills with the columns.
-//     Quotes and a schema prefix are not part of the name (`"public"."users"` is `users`; the schema is the
-//     Table's `schemaName`).
+//   - A Table is `table:java:-:<name>` with the lower-cased name (`kind: "table"`, `columns`, `declaredIn`,
+//     `line`: the shape the Go, Rust and C++ contributors use). One per table name, whatever the case, so a JPA
+//     `@Table(name = "USERS")` and `SELECT … FROM users` are one node, which `sql.schema` then fills with the
+//     columns. Its `name` is the spelling of a declaration (a JPA entity or `@Table`; of several, the smallest
+//     spelling, then the first by file and line) when there is one, else the lower-cased name: nothing depends on the order the files
+//     were read in. Quotes and a schema prefix are not part of the name (`"public"."users"` is `users`; the
+//     schema is the Table's `schemaName`; one table name in two schemas is one Table, the first schema stays).
 //   - A DataModel (`name`, `library`, `declaredIn`, `line`) is the entity, mapper or table-named stand-in
 //     of a library (`jpa`, `spring-data`, `jdbc`, `mybatis`); `MAPS_TO_TABLE` ties it to its table. A
 //     model whose table is only named by literal SQL (`sqlModelAccesses`) is `datamodel:<library>:<table>`.
@@ -38,7 +39,7 @@ export type JavaTableExtra = {
 const TABLE_PREFIX = "table:java:-:";
 const tablesByGraph = new WeakMap<object, Map<string, string>>();
 
-export const javaTableId = (name: string): string => `${TABLE_PREFIX}${name}`;
+export const javaTableId = (name: string): string => `${TABLE_PREFIX}${name.toLowerCase()}`;
 
 /** A table name as the SQL layer writes it: no quotes, no schema (`"public"."Users"` is `Users`). */
 export function normalizeTableName(raw: string): string {
@@ -52,7 +53,7 @@ function knownTables(graph: IGraphContributor): Map<string, string> {
   if (!known) {
     known = new Map();
     for (const node of graph.nodesWithLabel("Table")) {
-      if (node.id.startsWith(TABLE_PREFIX)) known.set(String(node.properties.name).toLowerCase(), node.id);
+      if (node.id.startsWith(TABLE_PREFIX)) known.set(node.id.slice(TABLE_PREFIX.length), node.id);
     }
     tablesByGraph.set(graph, known);
   }
@@ -60,9 +61,9 @@ function knownTables(graph: IGraphContributor): Map<string, string> {
 }
 
 /**
- * The id of the Table of `name`, created on first use. A table that exists keeps its spelling and gets
- * `declaredIn`, `line`, `schemaName` and `columns` from `extra` when it has none (an entity's declaration
- * after a query's mention).
+ * The id of the Table of `name`, created on first use. `name` is the display spelling only when `extra.declaredIn`
+ * is given (a declaration); of several, the smallest spelling wins (then the first by file and line), and brings its `library`, `line` and
+ * `columns`. A mention (a query) fills in `schemaName` when the table has none.
  */
 export function javaTable(graph: IGraphContributor, name: string, extra: JavaTableExtra = {}): string {
   const clean = normalizeTableName(name);
@@ -71,8 +72,11 @@ export function javaTable(graph: IGraphContributor, name: string, extra: JavaTab
   const existing = known.get(key);
   if (existing) {
     const node = graph.node(existing);
-    if (node && extra.declaredIn && (node.properties.declaredIn === null || node.properties.declaredIn === undefined)) {
-      Object.assign(node.properties, { library: extra.library ?? node.properties.library, declaredIn: extra.declaredIn, line: extra.line ?? null, columns: JSON.stringify(extra.columns ?? []) });
+    if (node && extra.declaredIn) {
+      const current = node.properties.declaredIn;
+      const spelling = String(node.properties.name);
+      const earlier = typeof current !== "string" || clean < spelling || (clean === spelling && (extra.declaredIn < current || (extra.declaredIn === current && (extra.line ?? 0) < Number(node.properties.line ?? 0))));
+      if (earlier) Object.assign(node.properties, { name: clean, library: extra.library ?? node.properties.library, declaredIn: extra.declaredIn, line: extra.line ?? null, columns: JSON.stringify(extra.columns ?? []) });
     }
     if (node && extra.schemaName && (node.properties.schemaName === null || node.properties.schemaName === undefined)) node.properties.schemaName = extra.schemaName;
     return existing;
@@ -83,7 +87,7 @@ export function javaTable(graph: IGraphContributor, name: string, extra: JavaTab
     id,
     label: "Table",
     properties: {
-      name: clean,
+      name: extra.declaredIn ? clean : key,
       kind: "table",
       library: extra.library ?? "sql",
       schemaName: extra.schemaName ?? null,
@@ -123,6 +127,12 @@ export function javaDataModel(graph: IGraphContributor, input: JavaDataModelInpu
   return id;
 }
 
+/** The stand-in DataModel of a library for a table (`datamodel:<library>:<lower-cased name>`), created on first use. */
+export function javaTableModel(graph: IGraphContributor, table: string, library: string): string {
+  const name = String(graph.node(table)?.properties.name ?? table.slice(TABLE_PREFIX.length));
+  return javaDataModel(graph, { name, library, id: javaDataModelId(library, name.toLowerCase()), table });
+}
+
 /** The tables a literal SQL statement reads and writes: `SELECT … JOIN`, `INSERT`, `UPDATE`, `DELETE`, CTEs. */
 export function sqlAccesses(sql: string): SqlTableAccess[] {
   return sqlTableAccesses(sql);
@@ -138,8 +148,7 @@ export type SqlModelAccess = { modelId: string; table: string; operation: JavaDa
 export function sqlModelAccesses(graph: IGraphContributor, sql: string, library: string): SqlModelAccess[] {
   return sqlTableAccesses(sql).map((access) => {
     const table = javaTable(graph, access.table, { library });
-    const name = String(graph.node(table)?.properties.name ?? access.table);
-    return { modelId: javaDataModel(graph, { name, library, table }), table, operation: access.operation };
+    return { modelId: javaTableModel(graph, table, library), table, operation: access.operation };
   });
 }
 
@@ -169,12 +178,19 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
   for (const relationship of graph.relationshipsOfType("CALLS")) callerByCall.set(relationship.to, relationship.from);
   const handlers = new Map<string, string[]>();
   for (const type of ["ROUTE_HANDLED_BY", "ENTRYPOINT_HANDLED_BY"] as const) {
-    for (const relationship of graph.relationshipsOfType(type)) handlers.set(relationship.to, [...handlers.get(relationship.to) ?? [], relationship.from]);
+    for (const relationship of graph.relationshipsOfType(type)) {
+      const list = handlers.get(relationship.to);
+      if (list) list.push(relationship.from);
+      else handlers.set(relationship.to, [relationship.from]);
+    }
   }
   const callersOf = new Map<string, string[]>();
   for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
     const caller = callerByCall.get(relationship.from);
-    if (caller && caller !== relationship.to) callersOf.set(relationship.to, [...callersOf.get(relationship.to) ?? [], caller]);
+    if (!caller || caller === relationship.to) continue;
+    const list = callersOf.get(relationship.to);
+    if (list) list.push(caller);
+    else callersOf.set(relationship.to, [caller]);
   }
   const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
 
@@ -195,21 +211,26 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
   };
 
   const byFunction = new Map<string, Array<{ access: JavaDataAccess; site: string }>>();
+  const push = (functionId: string, entry: { access: JavaDataAccess; site: string }): void => {
+    const list = byFunction.get(functionId);
+    if (list) list.push(entry);
+    else byFunction.set(functionId, [entry]);
+  };
   for (const access of accesses) {
     const site = access.callId ?? access.functionId;
     const functionId = access.functionId ?? (access.callId ? callerByCall.get(access.callId) : undefined);
     if (!site || !functionId) continue;
-    if (record(functionId, access, site, true)) byFunction.set(functionId, [...byFunction.get(functionId) ?? [], { access, site }]);
+    if (record(functionId, access, site, true)) push(functionId, { access, site });
     for (const source of handlers.get(functionId) ?? []) record(source, access, site, false);
   }
   const queue = [...byFunction.keys()];
-  while (queue.length > 0) {
-    const functionId = queue.shift()!;
+  for (let head = 0; head < queue.length; head += 1) {
+    const functionId = queue[head]!;
     for (const caller of callersOf.get(functionId) ?? []) {
       let changed = false;
       for (const { access, site } of byFunction.get(functionId) ?? []) {
         if (!record(caller, access, site, false)) continue;
-        byFunction.set(caller, [...byFunction.get(caller) ?? [], { access, site }]);
+        push(caller, { access, site });
         for (const source of handlers.get(caller) ?? []) record(source, access, site, false);
         changed = true;
       }

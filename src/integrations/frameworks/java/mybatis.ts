@@ -1,6 +1,9 @@
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import { createResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
+import { MAX_PARSED_BYTES } from "../../languages/plain/parser.js";
+import { createJavaTypeIndex } from "../../languages/java/types.js";
 import { annotationValue, findAnnotations, javaAnnotationReader } from "./annotations.js";
 import { sqlModelAccesses, type JavaDataAccess } from "./data-shared.js";
 import { mapperStatements, readMapperFile, type MapperFile } from "./mybatis-xml.js";
@@ -14,7 +17,10 @@ import { createJavaStringResolver, javaStringFromText, javaStringLiteralValue } 
 //     reach the tables through CALL_RESOLVES_TO as for any call;
 //   - mapper XML (any `.xml` file with a `<mapper namespace="a.b.UserMapper">` root, see `mybatis-xml.ts`):
 //     each `<select|insert|update|delete id="findById">` is linked to the method `findById` of the scanned
-//     interface `a.b.UserMapper` (every overload of that name; MyBatis allows one statement per name).
+//     interface `a.b.UserMapper` (every overload of that name, declared in the interface or inherited from its
+//     scanned super-interfaces; MyBatis allows one statement per name). A `<selectKey>` of a statement is read
+//     as a `read` of its own, not as part of the statement's SQL. XML files over `MAX_PARSED_BYTES` and the
+//     ones under a `target/` or `build/` directory are skipped.
 // A mapper needs no `@Mapper`: an annotated statement or an XML namespace that names the interface makes it one.
 // Not handled: `@SelectProvider` / `@InsertProvider` / `@UpdateProvider` / `@DeleteProvider` (the SQL is built
 // by a method), `@MapperScan` (a mapper without annotated statements or XML has no SQL anyway),
@@ -37,10 +43,19 @@ export async function mybatisAccesses(graph: IGraphContributor, rootPath: string
     interfaces.set(qualified, entry);
   }
   const accesses: JavaDataAccess[] = [];
-  const record = (functionId: string, sql: string, line: number, expression: string): void => {
+  const record = (functionId: string, sql: string, line: number, expression: string, operation?: JavaDataAccess["operation"]): void => {
     for (const access of sqlModelAccesses(graph, clean(sql), "mybatis")) {
-      accesses.push({ functionId, modelId: access.modelId, operation: access.operation, library: "mybatis", line, expression });
+      accesses.push({ functionId, modelId: access.modelId, operation: operation ?? access.operation, library: "mybatis", line, expression });
     }
+  };
+  // The methods of an interface and of its scanned super-interfaces.
+  const types = createJavaTypeIndex(graph, createResolutionRelationshipIndex(graph));
+  const byOwner = new Map([...interfaces.values()].map((entry) => [entry.id, entry.methods]));
+  const methodsOf = (ownerId: string, seen = new Set<string>()): Array<{ id: string; name: string }> => {
+    if (seen.has(ownerId)) return [];
+    seen.add(ownerId);
+    const type = types.byId.get(ownerId);
+    return [...byOwner.get(ownerId) ?? [], ...(type ? types.supertypes(type).filter((parent) => parent.isInterface).flatMap((parent) => methodsOf(parent.id, seen)) : [])];
   };
 
   // Annotations.
@@ -74,10 +89,14 @@ export async function mybatisAccesses(graph: IGraphContributor, rootPath: string
   // Mapper XML.
   const mappers: Array<{ file: MapperFile; relative: string }> = [];
   for (const absolute of [...files].filter((file) => file.endsWith(".xml")).sort()) {
+    const relative = path.relative(rootPath, absolute).split(path.sep).join("/");
+    if (relative.split("/").slice(0, -1).some((segment) => segment === "target" || segment === "build")) continue;
+    const info = await stat(absolute).catch(() => null);
+    if (!info || info.size > MAX_PARSED_BYTES) continue;
     const source = await readFile(absolute, "utf8").catch(() => null);
     if (source === null) continue;
     const mapper = readMapperFile(source);
-    if (mapper) mappers.push({ file: mapper, relative: path.relative(rootPath, absolute).split(path.sep).join("/") });
+    if (mapper) mappers.push({ file: mapper, relative });
   }
   const resolved = mapperStatements(mappers.map((entry) => entry.file));
   resolved.forEach((mapper, index) => {
@@ -85,7 +104,10 @@ export async function mybatisAccesses(graph: IGraphContributor, rootPath: string
     if (!target) return;
     const base = path.posix.basename(mappers[index]!.relative);
     for (const statement of mapper.statements) {
-      for (const method of target.methods.filter((candidate) => candidate.name === statement.id)) record(method.id, statement.sql, statement.line, `${base}#${statement.id}`);
+      for (const method of methodsOf(target.id).filter((candidate) => candidate.name === statement.id)) {
+        record(method.id, statement.sql, statement.line, `${base}#${statement.id}`);
+        for (const key of statement.keySql) record(method.id, key, statement.line, `${base}#${statement.id}`, "read");
+      }
     }
   });
   return accesses;

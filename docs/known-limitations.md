@@ -2425,40 +2425,63 @@ Data access (`list_data_access`, `find_table_usage`):
   reach that function get it too. Receivers are matched by declared type
   (a field, parameter or local), so an unrelated `query(...)` is ignored.
 - JPA (library `jpa`): a class with `@Entity` (`javax` or `jakarta`) is a
-  DataModel mapped to its table: `@Table(name, schema)`, else the entity name in
-  snake_case (Spring Boot's naming: `CatalogProduct` is `catalog_product`).
-  Columns come from the non-transient fields of the class and its
+  DataModel mapped to its table: `@Table(name, schema)`, else the entity name.
+  Names follow Spring Boot's physical naming: snake_case, lower case
+  (`CatalogProduct` and `@Table(name = "OrderItems")` are `catalog_product` and
+  `order_items`; `@Column`, `@JoinColumn` and `@JoinTable` names too). A quoted
+  name (`"\"Items\""`, backticks) is kept as written, minus the quotes. A name
+  that is a constant (`@Table(name = Tables.ITEMS)`) is resolved; an empty
+  `@Table(name = "")` falls back to the entity name. Columns come from the non-transient fields of the class and its
   `@MappedSuperclass` ancestors, `@Embedded` / `@Embeddable` fields, the foreign
   key of `@ManyToOne` and the owning side of `@OneToOne`, and the join table of
   `@ManyToMany`. `@Inheritance` SINGLE_TABLE, JOINED and TABLE_PER_CLASS are
   followed. `RELATES_TO` links the entities. `EntityManager` and Hibernate
   `Session` calls (`persist`, `merge`, `remove`, `find`, `createQuery`,
-  `createNativeQuery`, ...) are accesses.
-- Spring Data (library `spring-data`): an interface extending `Repository`,
+  `createNativeQuery`, `createSQLQuery`, ...) are accesses. A JPQL
+  `delete Entity e where ...` (no `FROM`) is a delete.
+- Spring Data: an interface extending `Repository`,
   `CrudRepository`, `PagingAndSortingRepository` or `JpaRepository` (through
-  scanned interfaces too) over a scanned entity. Derived query methods
+  scanned interfaces too) over a scanned entity is a DataModel of library
+  `spring-data` (mapped to the entity's table, `RELATES_TO` the entity). Its
+  accesses are recorded on the entity's DataModel with `library: jpa`, so
+  `list_data_access` with `library: spring-data` finds no access rows (the
+  repository models carry none); use `library: jpa`. Derived query methods
   (`findBy...`, `countBy...`, `deleteBy...`), `@Query` (JPQL against the entity
-  names, or SQL with `nativeQuery = true`) and the inherited CRUD methods, seen
+  names, or SQL with `nativeQuery = true`, a `Boolean.TRUE` or a boolean
+  constant; when the flag is not readable, the query is native if the SQL
+  reader finds a table in it, else JPQL) and the inherited CRUD methods, seen
   at the call on a repository-typed field, parameter or local, are accesses. A
   repository of another store (`MongoRepository`) is left out.
 - JDBC (library `jdbc`): `JdbcTemplate` and `NamedParameterJdbcTemplate` (and
-  their `...Operations`), `JdbcClient.sql`, `SimpleJdbcInsert.withTableName`,
-  `Connection.prepareStatement` / `prepareCall` and `Statement.execute*`. The
+  their `...Operations`), `JdbcClient.sql`, `SimpleJdbcInsert.withTableName`
+  (also after `withSchemaName`), `Connection.prepareStatement` / `prepareCall`
+  and `Statement.execute*`; every `String` argument of `batchUpdate(String...)`
+  is read. A method parameter or local that has the name of a constant is
+  never taken for it. The
   SQL is a literal, a text block, a concatenation, a single-assignment local or
   a constant, read by the SQL layer. A dynamic part names no table; a statement
   that is wholly dynamic is skipped.
 - MyBatis (library `mybatis`): `@Select`, `@Insert`, `@Update` and `@Delete` on a
   mapper interface method, and the statements of a mapper XML file linked to the
-  method of the same name in the interface its `namespace` names. In XML, dynamic
+  method of the same name in the interface its `namespace` names, declared there
+  or inherited from a scanned super-interface. In XML, dynamic
   tags are removed and their text kept, `<include refid>` is replaced by the
-  `<sql>` text, and `#{...}` and `${...}` become `?`.
-- A table keeps the spelling it was first created with, whichever library names
-  it first. JPA defaults are snake_case, so an entity and a SQL string that
-  spell a table differently can leave two Tables.
+  `<sql>` text, and `#{...}` and `${...}` become `?`. The SQL of a `<selectKey>`
+  is not part of the statement; it is a `read` of its own. A `<` is a tag only
+  when a name and whitespace, `/` or `>` follow. XML files over 1 MB and under
+  `target/` or `build/` are skipped.
+- A table is one node per lower-cased name: `table:java:-:<lower-cased name>`.
+  Its `name` is the spelling of a declaration (a JPA entity or `@Table`; of
+  several, the smallest spelling) when there is one, else the lower-cased name,
+  so the result does not depend on the order of the files. JDBC and MyBatis
+  accesses go to a DataModel of their library named after the table
+  (`datamodel:jdbc:<table>`), mapped to the same Table as the entity's, not to
+  the entity's DataModel; the access keeps its own `library`.
+- One table name in different schemas is one Table (the first schema is kept).
 - Not handled in JPA: property access (annotations on getters),
   `@AttributeOverride`, composite `@JoinColumns`, `@OneToMany` join columns,
   `@SecondaryTable`, `@ElementCollection`, discriminator columns, `orm.xml`,
-  `@NamedQuery` and `@Query(name = ...)`, `@Procedure`, the Criteria API,
+  `@NamedQuery`, `@Query(name = ...)` and `createNamedQuery`, `@Procedure`, the Criteria API,
   Specifications, Querydsl, query by example, a repository typed through its
   generic base at the use site (`BaseRepository<Customer, Long>`), repositories
   declared as classes, `@RepositoryDefinition`, repository fragments
@@ -2468,8 +2491,7 @@ Data access (`list_data_access`, `find_table_usage`):
   (`dataSource.getConnection().prepareStatement(...)`, `getJdbcTemplate()`, a
   `var` bound to a call), SQL read from a file or built by `StringBuilder`,
   `MessageFormat` or a method, `SimpleJdbcCall` and stored procedure names,
-  `SimpleJdbcInsert` with `withSchemaName` before `withTableName`, and Spring
-  `@Sql` scripts.
+  and Spring `@Sql` scripts.
 - Not handled in MyBatis: `@SelectProvider` and the other providers, `@MapperScan`,
   `@Lang`, `<script>` blocks inside annotations (read as text, tags left in),
   XML statements whose namespace names no scanned interface, `<include>`

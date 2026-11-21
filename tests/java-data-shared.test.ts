@@ -20,11 +20,11 @@ describe("Java tables and data models", () => {
   it("makes one Table per name, whatever the case, with the shape the other languages use", () => {
     const graph = new GraphBuilder();
     const id = javaTable(graph, "Users", { library: "jpa" });
-    assert.equal(id, "table:java:-:Users");
+    assert.equal(id, "table:java:-:users");
     assert.equal(javaTable(graph, "users"), id);
     assert.equal(javaTable(graph, '"public"."USERS"'), id);
     assert.deepEqual(graph.node(id)!.properties, {
-      name: "Users", kind: "table", library: "jpa", schemaName: null, provider: null, declaredIn: null, line: null, columns: "[]",
+      name: "users", kind: "table", library: "jpa", schemaName: null, provider: null, declaredIn: null, line: null, columns: "[]",
     });
     assert.equal(graph.nodesWithLabel("Table").length, 1);
     assert.equal(javaTableId("a"), "table:java:-:a");
@@ -40,8 +40,23 @@ describe("Java tables and data models", () => {
       ["jpa", "src/Order.java", 7, "shop", '[{"name":"id","column":"id","isId":true}]'],
     );
     // Declared once: a later declaration does not replace it.
-    javaTable(graph, "orders", { declaredIn: "other.java", line: 1 });
+    javaTable(graph, "orders", { declaredIn: "zzz.java", line: 1 });
     assert.equal(graph.node(id)!.properties.declaredIn, "src/Order.java");
+  });
+
+  it("is deterministic: the id is lower-cased and the name is a declaration's spelling (the smallest), whatever the order", () => {
+    const build = (order: Array<[string, { declaredIn?: string; line?: number }]>) => {
+      const graph = new GraphBuilder();
+      for (const [name, extra] of order) javaTable(graph, name, extra);
+      return graph.nodesWithLabel("Table").map((table) => [table.id, table.properties.name, table.properties.declaredIn]);
+    };
+    const declared: Array<[string, { declaredIn: string; line: number }]> = [["Items", { declaredIn: "a/Item.java", line: 3 }], ["ITEMS", { declaredIn: "b/Item2.java", line: 3 }]];
+    const expected = [["table:java:-:items", "ITEMS", "b/Item2.java"]];
+    assert.deepEqual(build([...declared, ["items", {}]]), expected);
+    assert.deepEqual(build([["items", {}], ...declared].reverse() as typeof declared), expected);
+    assert.deepEqual(build([["ITEMS", {}], declared[1]!, declared[0]!]), expected);
+    // A table only a query names is lower-cased.
+    assert.deepEqual(build([["Orders", {}]]), [["table:java:-:orders", "orders", null]]);
   });
 
   it("creates a DataModel mapped to its table, once", () => {
@@ -60,7 +75,7 @@ describe("Java tables and data models", () => {
     javaTable(graph, "Orders", { library: "jpa" });
     const accesses = sqlModelAccesses(graph, "insert into orders select * from archive", "jdbc");
     assert.deepEqual(accesses.map((access) => [access.modelId, access.table, access.operation]), [
-      ["datamodel:jdbc:Orders", "table:java:-:Orders", "create"],
+      ["datamodel:jdbc:orders", "table:java:-:orders", "create"],
       ["datamodel:jdbc:archive", "table:java:-:archive", "read"],
     ]);
     assert.equal(graph.nodesWithLabel("Table").length, 2);

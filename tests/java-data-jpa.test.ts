@@ -111,9 +111,9 @@ import javax.persistence.*;
 @Entity(name = "Audit") public class AuditEntry extends Base { String actorName; }
 `,
     });
-    assert.deepEqual(tables(graph), ["Users", "audit"]);
-    assert.deepEqual(columnsOf(graph, "Users").map((column) => column.column), ["id", "mail", "active"]);
-    assert.deepEqual(columnsOf(graph, "Users").map((column) => [column.isId, column.optional]), [[true, false], [false, true], [false, false]]);
+    assert.deepEqual(tables(graph), ["audit", "users"]);
+    assert.deepEqual(columnsOf(graph, "users").map((column) => column.column), ["id", "mail", "active"]);
+    assert.deepEqual(columnsOf(graph, "users").map((column) => [column.isId, column.optional]), [[true, false], [false, true], [false, false]]);
     assert.deepEqual(columnsOf(graph, "audit").map((column) => column.column), ["id", "actor_name"]);
     assert.deepEqual(models(graph), ["jpa:app:AuditEntry", "jpa:app:UserAccount"]);
   });
@@ -287,5 +287,92 @@ public class Fake { private EntityManager em; void a(Item item) { em.persist(ite
       "d delete Item",
       "e create Item",
     ]);
+  });
+});
+
+describe("JPA review fixes (phase 42)", () => {
+  const entity = (name: string, annotations: string, fields = "") => `package app;
+import jakarta.persistence.*;
+@Entity ${annotations} public class ${name} { @Id Long id; ${fields} }
+`;
+
+  it("applies Spring Boot's physical naming to explicit unquoted names and keeps quoted ones, with lower-cased ids", async () => {
+    const graph = await scanSources({
+      "A.java": entity("A", '@Table(name = "OrderItems")', '@Column(name = "firstName") String first; @ManyToOne @JoinColumn(name = "ownerId", referencedColumnName = "ownerKey") B owner;'),
+      "B.java": entity("B", '@Table(name = "\\"Quoted\\"")', '@Column(name = "\\"MixedCase\\"") String mixed;'),
+      "C.java": entity("C", '@Table(name = "")'),
+      "D.java": entity("D", "", '@ManyToMany @JoinTable(name = "UserRoles", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId")) java.util.List<A> as;'),
+    });
+    assert.deepEqual(tables(graph), ["Quoted", "c", "d", "order_items", "user_roles"]);
+    assert.deepEqual(graph.nodes.filter((node) => node.label === "Table").map((node) => node.id).sort(), ["table:java:-:c", "table:java:-:d", "table:java:-:order_items", "table:java:-:quoted", "table:java:-:user_roles"]);
+    assert.deepEqual(columnsOf(graph, "order_items").map((column) => column.column), ["id", "first_name", "owner_id"]);
+    assert.deepEqual(columnsOf(graph, "Quoted").map((column) => column.column), ["id", "MixedCase"]);
+    assert.deepEqual(columnsOf(graph, "user_roles").map((column) => column.column), ["user_id", "role_id"]);
+  });
+
+  it("resolves constants in @Table and @Column names", async () => {
+    const graph = await scanSources({
+      "Tables.java": `package app; public final class Tables { public static final String ITEMS = "ItemTable"; public static final String LABEL = "item_label"; }`,
+      "A.java": entity("A", "@Table(name = Tables.ITEMS)", "@Column(name = Tables.LABEL) String label;"),
+      "B.java": entity("B", "@Table(name = Tables.MISSING)"),
+    });
+    assert.deepEqual(tables(graph), ["b", "item_table"]);
+    assert.deepEqual(columnsOf(graph, "item_table").map((column) => column.column), ["id", "item_label"]);
+  });
+
+  it("makes ids and names independent of the file order", async () => {
+    const upper = entity("Upper", '@Table(name = "\\"USERS\\"")');
+    const mixed = entity("Mixed", '@Table(name = "\\"Users\\"")');
+    const one = await scanSources({ "A.java": upper, "B.java": mixed });
+    const two = await scanSources({ "A.java": mixed, "B.java": upper });
+    const summary = (graph: Graph) => graph.nodes.filter((node) => node.label === "Table").map((node) => `${node.id} ${String(node.properties.name)}`);
+    assert.deepEqual(summary(one), ["table:java:-:users USERS"]);
+    assert.deepEqual(summary(two), summary(one));
+  });
+
+  it("records a JPQL delete without FROM", async () => {
+    const graph = await scanSources({
+      "Item.java": ENTITY(),
+      "Repo.java": `package app;
+import org.springframework.data.jpa.repository.*;
+public interface Repo extends JpaRepository<Item, Long> {
+  @Query("delete Item i where i.label = ?1") @Modifying void a(String l);
+  @Query("delete from Item where id = 1") @Modifying void b();
+  @Query("delete Item") @Modifying void c();
+}
+`,
+    });
+    assert.deepEqual(accesses(graph, true), ["a delete Item", "b delete Item", "c delete Item"]);
+  });
+
+  it("resolves nativeQuery constants and Boolean.TRUE, and falls back on what the SQL reader finds", async () => {
+    const graph = await scanSources({
+      "Item.java": ENTITY(),
+      "Flags.java": `package app; public final class Flags { public static final boolean NATIVE = true; public static final boolean JPQL = false; }`,
+      "Repo.java": `package app;
+import org.springframework.data.jpa.repository.*;
+public interface Repo extends JpaRepository<Item, Long> {
+  @Query(value = "select * from raw1", nativeQuery = Flags.NATIVE) Object a();
+  @Query(value = "select * from raw2", nativeQuery = Boolean.TRUE) Object b();
+  @Query(value = "select i from Item i", nativeQuery = Flags.JPQL) Object c();
+  @Query(value = "select * from raw3", nativeQuery = unknown()) Object d();
+  @Query(value = "select i from Item i", nativeQuery = unknown()) Object e();
+}
+`,
+    });
+    assert.deepEqual(accesses(graph, true), ["a read raw1", "b read raw2", "c read Item", "d read raw3", "e read Item"]);
+  });
+
+  it("reads Hibernate createSQLQuery as native SQL", async () => {
+    const graph = await scanSources({
+      "Item.java": ENTITY(),
+      "Svc.java": `package app;
+import org.hibernate.Session;
+public class Svc {
+  void a(Session s) { s.createSQLQuery("delete from item"); s.createNamedQuery("byName"); }
+}
+`,
+    });
+    assert.deepEqual(accesses(graph, true), ["a delete Item"]);
   });
 });

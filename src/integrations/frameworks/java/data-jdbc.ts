@@ -3,11 +3,11 @@ import type { ISemanticContributor } from "../../../core/contracts/semantic-cont
 import type { GraphNode } from "../../../core/graph/model.js";
 import type { JavaParsePlugin } from "../../languages/java/parser.js";
 import { typeDeclarationTypes } from "../../languages/java/syntax.js";
-import { javaDataModel, javaTable, normalizeTableName, recordJavaDataAccesses, sqlModelAccesses, type JavaDataAccess } from "./data-shared.js";
+import { javaTable, javaTableModel, normalizeTableName, recordJavaDataAccesses, sqlModelAccesses, type JavaDataAccess } from "./data-shared.js";
 import { mybatisAccesses } from "./mybatis.js";
 import { createJavaReceiverResolver, receiverMatches, type JavaReceiverType } from "./receivers.js";
 import { javaMethods } from "./shared.js";
-import { createJavaStringResolver, parseJavaString, readJavaString, readLocalStrings, serializeJavaString } from "./strings.js";
+import { createJavaStringResolver, javaLocalNames, parseJavaString, readJavaString, readLocalStrings, serializeJavaString, type JavaStringScope } from "./strings.js";
 
 // Java JDBC and MyBatis data access (Phase 42, track B): the tables of the SQL a Java service runs, as
 // ACCESSES_DATA from the function that runs it (library `jdbc`; `mybatis` for MyBatis), which `js-ts.data-access`
@@ -20,9 +20,10 @@ import { createJavaStringResolver, parseJavaString, readJavaString, readLocalStr
 // (`strings.ts`) and reads the tables with the SQL layer (`sqlModelAccesses`):
 //   - Spring `JdbcTemplate` / `JdbcOperations` and `NamedParameterJdbcTemplate` / `...Operations`: `query`,
 //     `queryForObject`, `queryForList`, `queryForMap`, `queryForRowSet`, `queryForStream`, `update`,
-//     `batchUpdate`, `execute`;
+//     `batchUpdate` (every `String` argument of `batchUpdate(String...)`), `execute`;
 //   - `JdbcClient.sql("…")` (the statement's SQL; the fluent calls after it add nothing);
-//   - `SimpleJdbcInsert.withTableName("t")`: a `create` of the table;
+//   - `SimpleJdbcInsert.withTableName("t")`: a `create` of the table (`new SimpleJdbcInsert(ds).withSchemaName("s")
+//     .withTableName("t")` too: the receiver of `withTableName` is typed by the chain's start);
 //   - `java.sql.Connection.prepareStatement` / `prepareCall` and `Statement.executeQuery` / `executeUpdate` /
 //     `executeLargeUpdate` / `execute` / `addBatch` (the SQL given to the `Statement`; `PreparedStatement`'s
 //     own `execute*()` have none, the SQL came with `prepareStatement`).
@@ -32,8 +33,7 @@ import { createJavaStringResolver, parseJavaString, readJavaString, readLocalStr
 //
 // Not handled: a receiver the declared types do not show (`dataSource.getConnection().prepareStatement(…)`,
 // `getJdbcTemplate()` of `JdbcDaoSupport`, `var x = factory()`, an injected field of an untyped base), SQL
-// loaded from a file or built by `StringBuilder` / `MessageFormat` / a method, `SimpleJdbcInsert` with
-// `withSchemaName(…)` before `withTableName` (the chain's receiver is a call), `SimpleJdbcCall` and stored
+// loaded from a file or built by `StringBuilder` / `MessageFormat` / a method, `SimpleJdbcCall` and stored
 // procedure names (`{call p(?)}` names no table), `JdbcTemplate` calls through a `PreparedStatementCreator`
 // lambda whose SQL is the lambda's own `prepareStatement(sql)` call (that call is read), Spring `@Sql`
 // scripts, and MyBatis `@*Provider` annotations, `@MapperScan`, `<include>` properties, `databaseId`.
@@ -64,7 +64,7 @@ const readSites: JavaParsePlugin = ({ root, functions }) => {
   for (const { syntax, node } of functions) {
     const body = syntax.childForFieldName("body");
     if (!body) continue;
-    let locals: ReturnType<typeof readLocalStrings> | null = null;
+    let scope: JavaStringScope | null = null;
     const sites: Site[] = [];
     const stack: SyntaxNode[] = [body];
     while (stack.length > 0) {
@@ -72,11 +72,18 @@ const readSites: JavaParsePlugin = ({ root, functions }) => {
       if (isNested(current)) continue;
       if (current.type === "method_invocation") {
         const name = current.childForFieldName("name")?.text;
-        const first = current.childForFieldName("arguments")?.namedChildren.find((child) => !child.type.endsWith("comment"));
+        const args = current.childForFieldName("arguments")?.namedChildren.filter((child) => !child.type.endsWith("comment")) ?? [];
+        const first = args[0];
         if (name && PLUGIN_METHODS.has(name) && first && current.childForFieldName("object")) {
-          locals ??= readLocalStrings([body]);
-          const template = readJavaString(first, { locals });
-          if (template) sites.push([current.startPosition.row + 1, current.startPosition.column, name, serializeJavaString(template)]);
+          if (!scope) {
+            const dynamic = javaLocalNames([body]);
+            scope = { locals: readLocalStrings([body], dynamic), dynamic };
+          }
+          // `batchUpdate(String... sql)` carries SQL in every argument; the others only in the first.
+          for (const arg of name === "batchUpdate" ? args : [first]) {
+            const template = readJavaString(arg, scope);
+            if (template) sites.push([current.startPosition.row + 1, current.startPosition.column, name, serializeJavaString(template)]);
+          }
         }
       }
       for (const child of current.namedChildren) stack.push(child);
@@ -85,7 +92,7 @@ const readSites: JavaParsePlugin = ({ root, functions }) => {
   }
 };
 
-export const javaDataJdbcPlugin: JavaParsePlugin & { version: string } = Object.assign(readSites, { version: "1" });
+export const javaDataJdbcPlugin: JavaParsePlugin & { version: string } = Object.assign(readSites, { version: "2" });
 
 // Whether the call `callee` on a receiver of this type is one that carries SQL.
 function carriesSql(callee: string, type: JavaReceiverType | null): "sql" | "table" | null {
@@ -136,7 +143,7 @@ export const javaDataJdbcContributor: ISemanticContributor = {
             const name = normalizeTableName(text.trim());
             if (!identifier.test(name)) continue;
             const table = javaTable(graph, name, { library: "jdbc" });
-            const model = javaDataModel(graph, { name: String(graph.node(table)?.properties.name ?? name), library: "jdbc", table });
+            const model = javaTableModel(graph, table, "jdbc");
             accesses.push({ callId: call.id, modelId: model, operation: "create", library: "jdbc", line: call.properties.line, expression });
             continue;
           }

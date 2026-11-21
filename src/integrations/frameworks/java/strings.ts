@@ -23,6 +23,11 @@ import { createJavaTypeIndex, type JavaType, type JavaTypeIndex, type TypeScope 
 //     `String.join(sep, a, b)` with a literal separator;
 //   - a single-assignment local (`readLocalStrings`: `String url = "/a/" + id;` never assigned
 //     again) by its value;
+//   - a method parameter or any other local (assigned twice, built by a call, a lambda parameter, a loop
+//     variable) is an `expr` even when a field or constant has its name, for a reader that passes `javaLocalNames`
+//     of the method as the scope's `dynamic` (the data readers: `String BASE` as a parameter never takes the
+//     constant `BASE`'s value); a reader that wants a parameter to stay a `ref` (the config and HTTP readers: a
+//     `@Value` parameter) leaves `dynamic` out;
 //   - any other name is a `ref`, anything else an `expr`.
 // A `static`/instance `final` String (or int/long/char) field with an initializer keeps its template on
 // the Field node (`stringConstant`), written by `javaStringConstantsPlugin`.
@@ -42,7 +47,7 @@ export type JavaStringPart = { text: string } | { expr: string } | { ref: string
 export type JavaStringTemplate = JavaStringPart[];
 
 const MAX_DEPTH = 8;
-const CONSTANT_TYPES = new Set(["String", "java.lang.String", "int", "long", "short", "char", "Integer", "Long"]);
+const CONSTANT_TYPES = new Set(["String", "java.lang.String", "int", "long", "short", "char", "Integer", "Long", "boolean", "Boolean"]);
 // Methods of a string (or number) that do not change what the text is known to be.
 const PASS_THROUGH = new Set(["toString", "trim", "strip", "intern", "stripLeading", "stripTrailing"]);
 
@@ -121,6 +126,8 @@ export function javaStringLiteralValue(literal: string): string | null {
 export type JavaStringScope = {
   /** Single-assignment locals of the method (`readLocalStrings`). */
   locals?: ReadonlyMap<string, JavaStringTemplate>;
+  /** Names of the method's parameters and locals (`javaLocalNames`): `expr`, never a constant, whatever the fields are called. */
+  dynamic?: ReadonlySet<string>;
 };
 
 const dynamic = (node: SyntaxNode): JavaStringTemplate => [{ expr: compactExpression(node.text) }];
@@ -217,8 +224,15 @@ function partsOf(raw: SyntaxNode, scope: JavaStringScope): JavaStringTemplate {
       return [{ text: unescape(node.text.slice(1, -1)) }];
     case "decimal_integer_literal":
       return [{ text: node.text.replace(/_/gu, "").replace(/[lL]$/u, "") }];
-    case "identifier":
-      return scope.locals?.get(node.text) ?? [{ ref: node.text }];
+    case "identifier": {
+      const local = scope.locals?.get(node.text);
+      if (local) return local;
+      if (scope.dynamic?.has(node.text)) return [{ expr: node.text }];
+      return [{ ref: node.text }];
+    }
+    case "true":
+    case "false":
+      return [{ text: node.text }];
     case "field_access":
     case "scoped_identifier": {
       const name = dottedName(node);
@@ -234,7 +248,8 @@ function partsOf(raw: SyntaxNode, scope: JavaStringScope): JavaStringTemplate {
 /** The template of a string expression; null when it holds no literal text and no name that could be a constant. */
 export function readJavaString(node: SyntaxNode, scope: JavaStringScope = {}): JavaStringTemplate | null {
   const template = tidy(partsOf(node, scope));
-  return template.some((part) => "text" in part || "ref" in part) ? template : null;
+  // A plain name (a parameter, a local) still counts as a name: `id + n` is `${id}${n}`, as before they shadowed constants.
+  return template.some((part) => "text" in part || "ref" in part || /^[A-Za-z_$][\w$]*$/u.test(part.expr)) ? template : null;
 }
 
 // A local assigned more than once (or declared twice) is not a constant.
@@ -262,11 +277,50 @@ function assignedNames(roots: readonly SyntaxNode[]): { declared: Map<string, Sy
   return { declared, assigned };
 }
 
+/** The names a method declares: its parameters and every local, loop, catch, resource and lambda variable (`roots`: the method's body). */
+export function javaLocalNames(roots: readonly SyntaxNode[]): Set<string> {
+  const names = new Set<string>();
+  const add = (name: string | undefined): void => {
+    if (name) names.add(name);
+  };
+  const stack: SyntaxNode[] = [...roots];
+  for (const root of roots) {
+    const parameters = root.parent?.childForFieldName("parameters");
+    if (parameters) stack.push(parameters);
+  }
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    switch (node.type) {
+      case "local_variable_declaration":
+        for (const declarator of node.childrenForFieldName("declarator")) add(declarator.childForFieldName("name")?.text);
+        break;
+      case "spread_parameter":
+        for (const child of node.namedChildren) if (child.type === "variable_declarator") add(child.childForFieldName("name")?.text);
+        break;
+      case "formal_parameter":
+      case "catch_formal_parameter":
+      case "enhanced_for_statement":
+      case "resource":
+        add(node.childForFieldName("name")?.text);
+        break;
+      case "lambda_expression": {
+        const parameters = node.childForFieldName("parameters");
+        if (parameters?.type === "identifier") add(parameters.text);
+        else if (parameters?.type === "inferred_parameters") for (const child of parameters.namedChildren) if (child.type === "identifier") add(child.text);
+        break;
+      }
+      default:
+    }
+    for (const child of node.namedChildren) stack.push(child);
+  }
+  return names;
+}
+
 /**
  * The locals of a method body that are declared once with a value and never assigned again, by template
  * (`String url = BASE + "/users/" + id;`), in declaration order so a local may use an earlier one.
  */
-export function readLocalStrings(roots: readonly SyntaxNode[]): Map<string, JavaStringTemplate> {
+export function readLocalStrings(roots: readonly SyntaxNode[], dynamic?: ReadonlySet<string>): Map<string, JavaStringTemplate> {
   const { declared, assigned } = assignedNames(roots);
   const locals = new Map<string, JavaStringTemplate>();
   const declarations: SyntaxNode[] = [];
@@ -285,7 +339,7 @@ export function readLocalStrings(roots: readonly SyntaxNode[]): Map<string, Java
       const name = declarator.childForFieldName("name")?.text;
       const value = declarator.childForFieldName("value");
       if (!name || !value || assigned.has(name) || (declared.get(name)?.length ?? 0) !== 1) continue;
-      const template = readJavaString(value, { locals });
+      const template = readJavaString(value, { locals, dynamic });
       if (template && hasLiteralText(template)) locals.set(name, template);
     }
   }
@@ -369,7 +423,7 @@ const readConstants: JavaParsePlugin = ({ fileNodeId, root, nodes }) => {
   }
 };
 
-export const javaStringConstantsPlugin: JavaParsePlugin & { version: string } = Object.assign(readConstants, { version: "1" });
+export const javaStringConstantsPlugin: JavaParsePlugin & { version: string } = Object.assign(readConstants, { version: "2" });
 
 // ---------------------------------------------------------------- resolution
 
