@@ -87,7 +87,7 @@ const titles: Record<Kind, string> = {
   styleLinks: "Class links (CSS Modules and template class names)",
   sqlTables: "SQL tables (columns, keys, references)",
   rpcs: "Proto rpcs (messages, Go server interface, implementations)",
-  buildTargets: "Build targets (CMake and Make: targets, sources, links)",
+  buildTargets: "Build targets (CMake, Make, Gradle, Maven: targets, sources, links)",
   includes: "C and C++ #include resolution",
   imports: "Java import resolution",
   injections: "Java dependency injection (INJECTS)",
