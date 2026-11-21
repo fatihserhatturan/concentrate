@@ -134,8 +134,12 @@ export function javaTableModel(graph: IGraphContributor, table: string, library:
 }
 
 /** The tables a literal SQL statement reads and writes: `SELECT … JOIN`, `INSERT`, `UPDATE`, `DELETE`, CTEs. */
-export function sqlAccesses(sql: string): SqlTableAccess[] {
-  return sqlTableAccesses(sql);
+export function sqlAccesses(sql: string): Array<{ table: string; operation: JavaDataOperation }> {
+  const accesses = sqlTableAccesses(sql);
+  // `SELECT COUNT(*) FROM t …` aggregates (JDBC, MyBatis, native `@Query`), as JPQL's `SELECT COUNT(x) FROM T` does. With
+  // several tables (a join, a subquery) which of them the aggregate runs over is unknown: they stay reads.
+  const aggregate = accesses.length === 1 && accesses[0]!.operation === "read" && aggregateSelect.test(sql);
+  return aggregate ? accesses.map((access) => ({ ...access, operation: "aggregate" as JavaDataOperation })) : accesses;
 }
 
 export type SqlModelAccess = { modelId: string; table: string; operation: JavaDataOperation };
@@ -146,14 +150,10 @@ export type SqlModelAccess = { modelId: string; table: string; operation: JavaDa
  * statements record.
  */
 export function sqlModelAccesses(graph: IGraphContributor, sql: string, library: string): SqlModelAccess[] {
-  const accesses = sqlTableAccesses(sql);
-  // JDBC `SELECT COUNT(*) FROM t …` aggregates, as JPQL's `SELECT COUNT(x) FROM T` does (MyBatis and native `@Query` keep
-  // reading, as their labels do). With several tables (a join, a
-  // subquery) which of them the aggregate runs over is unknown: they stay reads.
-  const aggregate = library === "jdbc" && accesses.length === 1 && accesses[0]!.operation === "read" && aggregateSelect.test(sql);
+  const accesses = sqlAccesses(sql);
   return accesses.map((access) => {
     const table = javaTable(graph, access.table, { library });
-    return { modelId: javaTableModel(graph, table, library), table, operation: aggregate ? "aggregate" : access.operation };
+    return { modelId: javaTableModel(graph, table, library), table, operation: access.operation };
   });
 }
 

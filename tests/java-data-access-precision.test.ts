@@ -100,4 +100,44 @@ public class Dao {
     });
     assert.deepEqual(accesses, ["distinct: pets:aggregate:jdbc", "rows: visits:read:jdbc", "total: owners:aggregate:jdbc"]);
   });
+
+  it("reads an aggregate-only single-table SELECT as aggregate in MyBatis XML, annotations and native @Query", async () => {
+    const { accesses } = await scan({
+      "src/Mapper.java": `package com.acme;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+@Mapper public interface Mapper {
+  int countXml(String id);
+  Object joined(String id);
+  @Select("select count(1) from pets where owner_id = #{id}") int countAnnotated(String id);
+}
+`,
+      "src/main/resources/mapper/Mapper.xml": `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acme.Mapper">
+  <select id="countXml" resultType="int">select count(1) from owners where id = #{id}</select>
+  <select id="joined" resultType="map">select o.id, count(p.id) from owners o join pets p on p.owner_id = o.id group by o.id</select>
+</mapper>
+`,
+      "src/Pet.java": `package com.acme;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+@Entity public class Pet { @Id Integer id; }
+`,
+      "src/PetRepository.java": `package com.acme;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+public interface PetRepository extends JpaRepository<Pet, Integer> {
+  @Query(value = "SELECT COUNT(*) FROM pet", nativeQuery = true) long countNative();
+}
+`,
+    });
+    const own = accesses.filter((a) => /^(countXml|countAnnotated|countNative|joined):/u.test(a));
+    assert.deepEqual(own.filter((a) => !a.startsWith("joined")), [
+      "countAnnotated: pets:aggregate:mybatis",
+      "countNative: Pet:aggregate:jpa",
+      "countXml: owners:aggregate:mybatis",
+    ]);
+    assert.ok(own.filter((a) => a.startsWith("joined")).every((a) => a.includes(":read:")), own.join("\n"));
+  });
 });

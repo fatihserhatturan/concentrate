@@ -74,7 +74,7 @@ describe("JPA entities and Spring Data (fixtures/java-spring-data-jpa)", () => {
       "products read Product",
       "register upsert Customer",
       "search read Customer",
-      "stats read order_products",
+      "stats aggregate order_products",
       "updateStatus update Customer",
       "withOrders read Customer",
       "withOrders read Order",
