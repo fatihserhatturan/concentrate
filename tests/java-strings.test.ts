@@ -8,6 +8,7 @@ import { GraphBuilder } from "../src/core/graph/builder.js";
 import { withSyntaxTree, type SyntaxNode } from "../src/integrations/languages/syntax/tree-sitter.js";
 import {
   createJavaStringResolver,
+  javaLocalNames,
   javaStringFromText,
   javaStringLiteralValue,
   readJavaString,
@@ -31,6 +32,17 @@ async function render(expression: string, before = ""): Promise<string | null> {
     const locals = readLocalStrings([body]);
     const template = readJavaString(declarations[0]!.childForFieldName("value")!, { locals });
     return template ? renderJavaString(template) : null;
+  });
+}
+
+// The parts of the initializer of `Object x` in method `m` of `source`.
+async function partsOfX(source: string): Promise<JavaStringTemplate | null> {
+  return withSyntaxTree("java", source, (tree) => {
+    const method = tree.rootNode.descendantsOfType("method_declaration").find((node) => node.childForFieldName("name")?.text === "m")!;
+    const body = method.childForFieldName("body")!;
+    const initializer = body.descendantsOfType("variable_declarator").find((node) => node.childForFieldName("name")?.text === "x")!;
+    const dynamic = javaLocalNames([body]);
+    return readJavaString(initializer.childForFieldName("value")!, { locals: readLocalStrings([body], dynamic), dynamic });
   });
 }
 
@@ -93,6 +105,26 @@ describe("Java string templates at parse time", () => {
     assert.equal(await render('url + "/x"', 'String url = "a"; url = "b";'), "${url}/x");
     assert.equal(await render('url + "/x"', 'String url = "a"; if (n > 0) { String url = "b"; }'), "${url}/x");
     assert.equal(await render('b + "!"', 'final var a = "x"; var b = a + "y";'), "xy!");
+  });
+
+  it("never takes a parameter or a local for a constant of the same name", async () => {
+    // A field named like the name used stays a `ref`; parameters and locals are `expr`.
+    const source = (signature: string, body: string) => `class A { static final String BASE = "/v1"; void m(${signature}) { ${body} } }`;
+    assert.deepEqual(await partsOfX(source("int n", "Object x = BASE + \"/a\";")), [{ ref: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("String BASE", "Object x = BASE + \"/a\";")), [{ expr: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("String... BASE", "Object x = BASE + \"/a\";")), [{ expr: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("int n", "String BASE = compute(); Object x = BASE + \"/a\";")), [{ expr: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("int n", "String BASE = \"a\"; BASE = \"b\"; Object x = BASE + \"/a\";")), [{ expr: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("java.util.List<String> l", "for (String BASE : l) { Object x = BASE + \"/a\"; }")), [{ expr: "BASE" }, { text: "/a" }]);
+    assert.deepEqual(await partsOfX(source("java.util.List<String> l", "l.forEach(BASE -> { Object x = BASE + \"/a\"; });")), [{ expr: "BASE" }, { text: "/a" }]);
+    // A single-assignment literal local is its value.
+    assert.deepEqual(await partsOfX(source("int n", "String BASE = \"/local\"; Object x = BASE + \"/a\";")), [{ text: "/local/a" }]);
+  });
+
+  it("reads boolean constants", async () => {
+    const graph = await scan({ "src/main/java/A.java": `class A { static final boolean NATIVE = true; static final Boolean OFF = false; }` });
+    const constants = graph.nodesWithLabel("Field").map((field) => `${field.properties.name}=${String(field.properties.stringConstant)}`).sort();
+    assert.deepEqual(constants, ['NATIVE=[{"text":"true"}]', 'OFF=[{"text":"false"}]']);
   });
 
   it("reads a string kept as text, as annotation arguments are", () => {

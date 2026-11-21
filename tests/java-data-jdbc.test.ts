@@ -280,3 +280,78 @@ public interface Mapper { @Select("SELECT * FROM mine") Object x(); }
     assert.deepEqual(accesses, []);
   });
 });
+
+describe("JDBC and MyBatis review fixes (phase 42)", () => {
+  it("does not take a parameter or a local for the constant of the same name", async () => {
+    const accesses = await contributorAccesses({
+      "src/Dao.java": dao(JDBC, `
+  void a() { jdbc.update("DELETE FROM " + T); }
+  void b(String T) { jdbc.update("DELETE FROM " + T); }
+  void c() { String T = compute(); jdbc.update("DELETE FROM " + T); }
+  String compute() { return "x"; }`, `private final JdbcTemplate jdbc; static final String T = "users";`),
+    });
+    assert.deepEqual(accesses, ["a: users:delete"]);
+  });
+
+  it("reads every String argument of batchUpdate(String...) and SimpleJdbcInsert after withSchemaName", async () => {
+    const accesses = await contributorAccesses({
+      "src/Dao.java": `package com.acme;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+public class Dao {
+  private final JdbcTemplate jdbc;
+  Dao(JdbcTemplate jdbc) { this.jdbc = jdbc; }
+  void a() { jdbc.batchUpdate("UPDATE b1 SET a = 1", "DELETE FROM b2", "INSERT INTO b3 (a) VALUES (1)"); }
+  void b() { jdbc.batchUpdate("UPDATE b4 SET a = ?", java.util.List.of()); }
+  void c(javax.sql.DataSource ds) { new SimpleJdbcInsert(ds).withSchemaName("s").withTableName("b5").execute(java.util.Map.of()); }
+}
+`,
+    });
+    assert.deepEqual(accesses, ["a: b1:update", "a: b2:delete", "a: b3:create", "b: b4:update", "c: b5:create"]);
+  });
+
+  it("keeps the library of a JDBC or MyBatis access on its own stand-in DataModel, mapped to the entity's table", async () => {
+    await withProject({
+      "src/main/java/app/Item.java": `package app; import jakarta.persistence.*; @Entity @Table(name = "Items") public class Item { @Id Long id; }`,
+      "src/main/java/app/Dao.java": dao(JDBC, `void a() { jdbc.update("DELETE FROM ITEMS"); }`),
+    }, async (dir) => {
+      const result = await buildCodeGraph(dir, { continueOnError: true, concurrency: 1, workers: 0 });
+      assert.deepEqual(result.nodes.filter((node) => node.label === "Table").map((node) => node.id), ["table:java:-:items"]);
+      const models = result.nodes.filter((node) => node.label === "DataModel").map((node) => node.id).sort();
+      assert.deepEqual(models, ["datamodel:jdbc:items", "datamodel:jpa:app:Item"]);
+      assert.deepEqual(result.relationships.filter((rel) => rel.type === "MAPS_TO_TABLE").map((rel) => `${rel.from} ${rel.to}`).sort(), ["datamodel:jdbc:items table:java:-:items", "datamodel:jpa:app:Item table:java:-:items"]);
+    });
+  });
+
+  it("keeps <selectKey> out of the statement and reads it as a read, and takes `<` before a non-name as text", () => {
+    const file = readMapperFile(`<mapper namespace="a.B">
+  <insert id="add"><selectKey keyProperty="id" order="BEFORE" resultType="long">SELECT max(id) + 1 FROM counters</selectKey>INSERT INTO accounts (id) VALUES (#{id})</insert>
+  <select id="lt">SELECT * FROM t WHERE a <#{x} AND b <1 AND c<=2 AND d < 3</select>
+  <select id="tag">SELECT * FROM t <where><if test="a != null">a = 1</if></where></select>
+</mapper>`)!;
+    const [mapper] = mapperStatements([file]);
+    const byId = Object.fromEntries(mapper!.statements.map((statement) => [statement.id, statement]));
+    assert.equal(byId.add!.sql, "INSERT INTO accounts (id) VALUES (?)");
+    assert.deepEqual(byId.add!.keySql, ["SELECT max(id) + 1 FROM counters"]);
+    assert.equal(byId.lt!.sql, "SELECT * FROM t WHERE a <? AND b <1 AND c<=2 AND d < 3");
+    assert.equal(byId.tag!.sql, "SELECT * FROM t a = 1");
+  });
+
+  it("records selectKey reads, XML statements of inherited mapper methods, and skips big or built XML", async () => {
+    const accesses = await directAccesses({
+      "src/main/java/com/acme/BaseMapper.java": `package com.acme; public interface BaseMapper { Object byId(long id); int add(String n); }`,
+      "src/main/java/com/acme/UserMapper.java": `package com.acme; public interface UserMapper extends BaseMapper { Object own(); }`,
+      "src/main/resources/UserMapper.xml": `<mapper namespace="com.acme.UserMapper">
+  <select id="byId">SELECT * FROM inherited_t WHERE id = #{id}</select>
+  <insert id="add"><selectKey keyProperty="id" order="BEFORE" resultType="long">SELECT max(id) FROM keys_t</selectKey>INSERT INTO added_t (n) VALUES (#{n})</insert>
+</mapper>`,
+      "target/classes/UserMapper.xml": `<mapper namespace="com.acme.UserMapper"><select id="own">SELECT * FROM built_t</select></mapper>`,
+      "src/main/resources/Big.xml": `<mapper namespace="com.acme.UserMapper"><!-- ${"x".repeat(1_100_000)} --><select id="own">SELECT * FROM big_t</select></mapper>`,
+    });
+    assert.deepEqual(accesses, [
+      "add: added_t:create:mybatis",
+      "add: keys_t:read:mybatis",
+      "byId: inherited_t:read:mybatis",
+    ]);
+  });
+});
