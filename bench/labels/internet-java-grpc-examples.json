@@ -1,20 +1,1051 @@
 {
   "sample": "internet-java-grpc-examples",
-  "$comment": "grpc-java examples helloworld and routeguide (5 Java files), the examples protos and the examples Gradle files. Scope: examples/src/main/java and examples/src/main/proto. Stub: labels are added by later Phase 43 tracks.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. The sample is the grpc-java repository; scope is examples/src/main/java (the five Java files of the helloworld and routeguide examples) and examples/src/main/proto (the four protos). The generated gRPC and protobuf classes (GreeterGrpc, RouteGuideGrpc, Point, Feature, ...) are not in the scan. Rpcs: all 10 rpcs of the four protos with their messages as written and streaming kind. The methods that implement an rpc are the overrides in a class that extends the generated `<Service>ImplBase`: HelloWorldServer.GreeterImpl.sayHello and the four RouteGuideServer.RouteGuideService methods; Echo and StreamingGreeter have no server in this sample. served is null (no generated Go interface). Calls: every call site of the five files whose callee is a function, method or explicit constructor of this repository (including this(...) constructor calls), labeled with its definition (checked by searching each in-repository method name in the five files); calls into gRPC, protobuf, Guava and the JDK, and `new X()` of a class without an explicit constructor (GreeterImpl, HelloWorldServer, TestHelper), are not labeled, so any target they get counts as a false positive. A call through a generated stub (blockingStub.sayHello, asyncStub.recordRoute) runs the service implementation, which is its target (as in the C++ sample); a call on the TestHelper interface has the interface method as its only target (no implementation in the scan). Imports: the non-JDK imports of the five files, all null (generated classes, gRPC, protobuf, Guava: nothing resolves inside the scan); JDK imports are not labeled, so a resolution of any import counts as a false positive. Env: the Java sources read no environment variable or system property (no getenv or getProperty call in the sample's Java code), so the scope has no items and any USES_ENV from a Java file is a false positive.",
   "calls": {
-    "files": [],
-    "items": []
+    "files": [
+      "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+      "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+      "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+      "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+      "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java"
+    ],
+    "items": [
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 51,
+        "callee": "sayHello",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+          "name": "sayHello",
+          "className": "HelloWorldServer.GreeterImpl"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 91,
+        "callee": "HelloWorldClient",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+          "name": "HelloWorldClient",
+          "className": "HelloWorldClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 92,
+        "callee": "greet",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+          "name": "greet",
+          "className": "HelloWorldClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 60,
+        "callee": "stop",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+          "name": "stop",
+          "className": "HelloWorldServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 94,
+        "callee": "start",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+          "name": "start",
+          "className": "HelloWorldServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 95,
+        "callee": "blockUntilShutdown",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+          "name": "blockUntilShutdown",
+          "className": "HelloWorldServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 61,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 67,
+        "callee": "getFeature",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "getFeature",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 69,
+        "callee": "onMessage",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onMessage",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 72,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 74,
+        "callee": "onRpcError",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onRpcError",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 78,
+        "callee": "exists",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "exists",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 79,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 81,
+        "callee": "getLatitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLatitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 82,
+        "callee": "getLongitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLongitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 84,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 85,
+        "callee": "getLatitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLatitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 86,
+        "callee": "getLongitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLongitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 95,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 104,
+        "callee": "listFeatures",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "listFeatures",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 107,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 109,
+        "callee": "onMessage",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onMessage",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 113,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 115,
+        "callee": "onRpcError",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onRpcError",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 126,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 131,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 135,
+        "callee": "onMessage",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onMessage",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 141,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 143,
+        "callee": "onRpcError",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onRpcError",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 150,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 155,
+        "callee": "recordRoute",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "recordRoute",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 161,
+        "callee": "getLatitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLatitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 161,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 162,
+        "callee": "getLongitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLongitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 182,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 191,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 194,
+        "callee": "routeChat",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "routeChat",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 197,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 200,
+        "callee": "onMessage",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onMessage",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 206,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 208,
+        "callee": "onRpcError",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "onRpcError",
+          "className": "RouteGuideClient.TestHelper"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 215,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 222,
+        "callee": "newNote",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "newNote",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 222,
+        "callee": "newNote",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "newNote",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 223,
+        "callee": "newNote",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "newNote",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 223,
+        "callee": "newNote",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "newNote",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 226,
+        "callee": "info",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "info",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 257,
+        "callee": "getDefaultFeaturesFile",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getDefaultFeaturesFile",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 257,
+        "callee": "parseFeatures",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "parseFeatures",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 266,
+        "callee": "RouteGuideClient",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "RouteGuideClient",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 268,
+        "callee": "getFeature",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "getFeature",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 271,
+        "callee": "getFeature",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "getFeature",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 274,
+        "callee": "listFeatures",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "listFeatures",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 277,
+        "callee": "recordRoute",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "recordRoute",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 280,
+        "callee": "routeChat",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "routeChat",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 283,
+        "callee": "warning",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+          "name": "warning",
+          "className": "RouteGuideClient"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 55,
+        "callee": "getDefaultFeaturesFile",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getDefaultFeaturesFile",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 55,
+        "callee": "this",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "RouteGuideServer",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 60,
+        "callee": "this",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "RouteGuideServer",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 61,
+        "callee": "parseFeatures",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "parseFeatures",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 67,
+        "callee": "RouteGuideService",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "RouteGuideService",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 81,
+        "callee": "stop",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "stop",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 110,
+        "callee": "RouteGuideServer",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "RouteGuideServer",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 111,
+        "callee": "start",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "start",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 112,
+        "callee": "blockUntilShutdown",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "blockUntilShutdown",
+          "className": "RouteGuideServer"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 138,
+        "callee": "checkFeature",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "checkFeature",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 156,
+        "callee": "exists",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "exists",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 188,
+        "callee": "checkFeature",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "checkFeature",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 188,
+        "callee": "exists",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "exists",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 194,
+        "callee": "calcDistance",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "calcDistance",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 227,
+        "callee": "getOrCreateNotes",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+          "name": "getOrCreateNotes",
+          "className": "RouteGuideServer.RouteGuideService"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 287,
+        "callee": "getLatitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLatitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 288,
+        "callee": "getLatitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLatitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 289,
+        "callee": "getLongitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLongitude",
+          "className": "RouteGuideUtil"
+        }
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 290,
+        "callee": "getLongitude",
+        "target": {
+          "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+          "name": "getLongitude",
+          "className": "RouteGuideUtil"
+        }
+      }
+    ]
   },
   "imports": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "examples/src/main/java/"
+    ],
+    "items": [
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 19,
+        "source": "io.grpc.Grpc",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 20,
+        "source": "io.grpc.InsecureServerCredentials",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 21,
+        "source": "io.grpc.Server",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java",
+        "line": 22,
+        "source": "io.grpc.stub.StreamObserver",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 19,
+        "source": "io.grpc.Channel",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 20,
+        "source": "io.grpc.Grpc",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 21,
+        "source": "io.grpc.InsecureChannelCredentials",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 22,
+        "source": "io.grpc.ManagedChannel",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldClient.java",
+        "line": 23,
+        "source": "io.grpc.StatusRuntimeException",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideUtil.java",
+        "line": 19,
+        "source": "com.google.protobuf.util.JsonFormat",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 28,
+        "source": "io.grpc.Grpc",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 29,
+        "source": "io.grpc.InsecureServerCredentials",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 30,
+        "source": "io.grpc.Server",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 31,
+        "source": "io.grpc.ServerBuilder",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
+        "line": 32,
+        "source": "io.grpc.stub.StreamObserver",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 19,
+        "source": "com.google.common.annotations.VisibleForTesting",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 20,
+        "source": "com.google.protobuf.Message",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 21,
+        "source": "io.grpc.Channel",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 22,
+        "source": "io.grpc.Grpc",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 23,
+        "source": "io.grpc.InsecureChannelCredentials",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 24,
+        "source": "io.grpc.ManagedChannel",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 25,
+        "source": "io.grpc.Status",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 26,
+        "source": "io.grpc.StatusRuntimeException",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 27,
+        "source": "io.grpc.examples.routeguide.RouteGuideGrpc.RouteGuideBlockingStub",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 28,
+        "source": "io.grpc.examples.routeguide.RouteGuideGrpc.RouteGuideStub",
+        "target": null
+      },
+      {
+        "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideClient.java",
+        "line": 29,
+        "source": "io.grpc.stub.StreamObserver",
+        "target": null
+      }
+    ]
   },
   "rpcs": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "examples/src/main/proto/"
+    ],
+    "items": [
+      {
+        "file": "examples/src/main/proto/grpc/examples/echo/echo.proto",
+        "service": "grpc.examples.echo.Echo",
+        "name": "BidirectionalStreamingEcho",
+        "request": "EchoRequest",
+        "response": "EchoResponse",
+        "streaming": "both",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/src/main/proto/grpc/examples/echo/echo.proto",
+        "service": "grpc.examples.echo.Echo",
+        "name": "ClientStreamingEcho",
+        "request": "EchoRequest",
+        "response": "EchoResponse",
+        "streaming": "client",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/src/main/proto/grpc/examples/echo/echo.proto",
+        "service": "grpc.examples.echo.Echo",
+        "name": "ServerStreamingEcho",
+        "request": "EchoRequest",
+        "response": "EchoResponse",
+        "streaming": "server",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/src/main/proto/grpc/examples/echo/echo.proto",
+        "service": "grpc.examples.echo.Echo",
+        "name": "UnaryEcho",
+        "request": "EchoRequest",
+        "response": "EchoResponse",
+        "streaming": "none",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/src/main/proto/hello_streaming.proto",
+        "service": "manualflowcontrol.StreamingGreeter",
+        "name": "SayHelloStreaming",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "both",
+        "served": null,
+        "implementations": []
+      },
+      {
+        "file": "examples/src/main/proto/helloworld.proto",
+        "service": "helloworld.Greeter",
+        "name": "SayHello",
+        "request": "HelloRequest",
+        "response": "HelloReply",
+        "streaming": "none",
+        "served": null,
+        "implementations": [
+          "examples/src/main/java/io/grpc/examples/helloworld/HelloWorldServer.java#HelloWorldServer.GreeterImpl.sayHello"
+        ]
+      },
+      {
+        "file": "examples/src/main/proto/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "GetFeature",
+        "request": "Point",
+        "response": "Feature",
+        "streaming": "none",
+        "served": null,
+        "implementations": [
+          "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java#RouteGuideServer.RouteGuideService.getFeature"
+        ]
+      },
+      {
+        "file": "examples/src/main/proto/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "ListFeatures",
+        "request": "Rectangle",
+        "response": "Feature",
+        "streaming": "server",
+        "served": null,
+        "implementations": [
+          "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java#RouteGuideServer.RouteGuideService.listFeatures"
+        ]
+      },
+      {
+        "file": "examples/src/main/proto/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "RecordRoute",
+        "request": "Point",
+        "response": "RouteSummary",
+        "streaming": "client",
+        "served": null,
+        "implementations": [
+          "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java#RouteGuideServer.RouteGuideService.recordRoute"
+        ]
+      },
+      {
+        "file": "examples/src/main/proto/route_guide.proto",
+        "service": "routeguide.RouteGuide",
+        "name": "RouteChat",
+        "request": "RouteNote",
+        "response": "RouteNote",
+        "streaming": "both",
+        "served": null,
+        "implementations": [
+          "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java#RouteGuideServer.RouteGuideService.routeChat"
+        ]
+      }
+    ]
   },
   "env": {
-    "scope": [],
+    "scope": [
+      "examples/src/main/java/"
+    ],
     "items": []
   }
 }
