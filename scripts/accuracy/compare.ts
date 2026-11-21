@@ -7,7 +7,10 @@
 import type { GraphNode, GraphRelationship } from "../../src/core/graph/model.js";
 
 export type RouteLabel = { method: string; path: string; file: string; line: number };
-export type CallTarget = { file: string; name: string; className?: string } | null;
+// `line` (optional) is the target's declaration line: when a label carries one
+// the found target must be declared on that line, which tells constructor
+// overloads (same name and class) apart. Labels without a line match any.
+export type CallTarget = { file: string; name: string; className?: string; line?: number } | null;
 // dynamic: the target is only known at runtime (a generated method, a
 // framework-set prototype); the call site is matched but not scored.
 // targets: every function a call dispatches to (a Go interface method has one
@@ -265,6 +268,7 @@ export function scanCalls(graph: Graph, files: readonly string[]): FoundCall[] {
           file: targetFile,
           name: String(target.properties.name),
           ...(typeof target.properties.className === "string" ? { className: target.properties.className } : {}),
+          ...(typeof target.properties.line === "number" ? { line: target.properties.line } : {}),
         }]
         : [];
     });
@@ -282,7 +286,9 @@ function unresolvedSites(node: { properties: Record<string, unknown> }): Array<[
 const sameTarget = (label: CallTarget, found: CallTarget) => {
   if (label === null || found === null) return label === found;
   if (label.file !== found.file) return false;
-  if (label.name === found.name && (label.className ?? null) === (found.className ?? null)) return true;
+  if (label.name === found.name && (label.className ?? null) === (found.className ?? null)) {
+    return label.line === undefined || found.line === undefined || label.line === found.line;
+  }
   return label.name === "constructor" && found.name === label.className && found.className === undefined;
 };
 
@@ -836,24 +842,60 @@ export function compareRpcs(graph: Graph, labels: NonNullable<Labels["rpcs"]>): 
 }
 
 // Targets as atoms: the target itself (build file, system, name, kind), each
-// source it compiles and each target it links.
+// source it compiles and each target it links. Java build modules (Gradle,
+// Maven) are targets too: kind "module" ("aggregator" for a root that only
+// aggregates), no sources, and a link per unique dependency module and scope,
+// written `<module> (<scope>)`. The scanner emits every inter-module
+// dependency twice (once with its declared scope, again as `internalImport`);
+// the `internalImport` duplicate counts only when no scoped edge covers the pair.
 export function scanBuildTargets(graph: Graph): BuildTargetLabel[] {
   const byId = new Map(graph.nodes.map((node) => [node.id, node]));
   const targets = new Map<string, BuildTargetLabel>();
+  const modules = new Set<string>();
   for (const node of graph.nodes) {
-    if (node.label !== "Package" || (node.properties.manager !== "cmake" && node.properties.manager !== "make")) continue;
+    if (node.label !== "Package") continue;
+    const manager = node.properties.manager;
+    if (manager === "gradle" || manager === "maven") {
+      if (typeof node.properties.buildFile !== "string") continue;
+      modules.add(node.id);
+      targets.set(node.id, {
+        file: node.properties.buildFile,
+        system: manager,
+        name: String(node.properties.name),
+        kind: node.properties.aggregator === true ? "aggregator" : "module",
+        sources: [],
+        links: [],
+      });
+      continue;
+    }
+    if (manager !== "cmake" && manager !== "make") continue;
     targets.set(node.id, {
       file: String(node.properties.buildFile),
-      system: String(node.properties.manager),
+      system: String(manager),
       name: String(node.properties.name),
       kind: node.properties.targetType === "executable" ? "executable" : "library",
       sources: [],
       links: [],
     });
   }
+  const scoped = new Set<string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "PACKAGE_IMPORTS_PACKAGE" && modules.has(rel.from) && rel.properties.dependencyType !== "internalImport") scoped.add(`${rel.from}|${rel.to}`);
+  }
+  const seenLinks = new Set<string>();
   for (const rel of graph.relationships) {
     const target = targets.get(rel.from);
     if (!target) continue;
+    if (modules.has(rel.from)) {
+      if (rel.type !== "PACKAGE_IMPORTS_PACKAGE") continue;
+      const scope = String(rel.properties.dependencyType);
+      if (scope === "internalImport" && scoped.has(`${rel.from}|${rel.to}`)) continue;
+      const link = `${String(byId.get(rel.to)?.properties.name)} (${scope})`;
+      if (seenLinks.has(`${rel.from}|${link}`)) continue;
+      seenLinks.add(`${rel.from}|${link}`);
+      target.links.push(link);
+      continue;
+    }
     if (rel.type === "PACKAGE_CONTAINS_FILE") target.sources.push(rel.to.replace(/^file:/u, ""));
     else if (rel.type === "PACKAGE_IMPORTS_PACKAGE") target.links.push(String(byId.get(rel.to)?.properties.name));
   }

@@ -1,6 +1,6 @@
 {
   "sample": "internet-java-gradle-multimodule",
-  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Netflix concurrency-limits: five Gradle subprojects (core, grpc, servlet, servlet-jakarta, spectator) under a root build.gradle and settings.gradle (include of the five directories). Scope: the main sources of the four satellite modules (grpc 6 files, servlet 2, servlet-jakarta 2, spectator 1) and, in core, the five limiter classes BlockingLimiter, SimpleLimiter, AbstractLimiter, AbstractPartitionedLimiter and LifoBlockingLimiter (imports) with BlockingLimiter and SimpleLimiter (calls); tests are out of scope. Calls: every call site of those files whose callee is a method, constructor or `this(...)`/`super(...)` call of this repository, labeled with every definition it can run (class hierarchy analysis over the whole repository: a call on the Limiter interface runs Limiter.acquire and the acquire of BlockingLimiter, LifoBlockingLimiter, AbstractPartitionedLimiter and SimpleLimiter; a call on Limiter.Listener runs the interface method and the seven implementations - the named SimpleLimiter.Listener and the anonymous classes AbstractLimiter$1 (NOOP_LISTENER) and $2, AbstractPartitionedLimiter$1, BlockingLimiter$1 and LifoBlockingLimiter$1, numbered per enclosing class in source order; MetricRegistry.distribution runs the default method, EmptyMetricRegistry and SpectatorMetricRegistry; GrpcServerRequestContext and GrpcClientRequestContext methods run the interface method and the anonymous class of the interceptor). The type of a lambda parameter (`context` in `partitionResolver(context -> context.getHeaders()...)`, `listener` in `.map(listener -> ...)`) is the one the generic signature gives. Calls into gRPC, the servlet API, spectator, slf4j, Guava and the JDK (Optional, Predicate, Semaphore, ...) are not labeled, so any target they get counts as a false positive; `new` of an interface (anonymous classes) and of a class without an explicit constructor are not call sites with a target. Imports: the in-repository imports of those files (cross-module ones resolve into concurrency-limits-core) with the target file; the non-JDK imports that leave the repository are labeled null; JDK imports are not labeled, so any resolution of an unlabeled import counts as a false positive. Injections: none - no class of the sample is a Spring, Guice or other container component (no @Inject, @Autowired, @Component, @Service or @Bean anywhere), so the scope is the main sources of every subproject and any INJECTS edge is a false positive. Env: no Java source reads an environment variable or system property (no getenv or getProperty call in main code); the env variables of the smoke report come from the GitHub Actions workflows (GITHUB_TOKEN and the ORG_* secrets of nebula-ci, nebula-publish and nebula-snapshot, and their DECLARES_ENV settings), not from Java code, and the harness env kind only counts file-level reads, so the scope is the main sources and has no items; the harness does not distinguish a system property from an environment variable. Build targets: the harness kind scores CMake and Make targets only (scanBuildTargets reads Package nodes of manager cmake or make), so Gradle projects cannot be labeled in it. Ground truth for a future Gradle build-target kind: settings.gradle includes :concurrency-limits-core, -grpc, -servlet, -servlet-jakarta and -spectator; inter-project dependencies are grpc -> core (implementation project), grpc -> spectator (testImplementation), servlet -> core (api), servlet -> spectator (testImplementation), servlet-jakarta -> core (api), servlet-jakarta -> spectator (testImplementation), spectator -> core (implementation); core has none.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Netflix concurrency-limits: five Gradle subprojects (core, grpc, servlet, servlet-jakarta, spectator) under a root build.gradle and settings.gradle (include of the five directories). Scope: the main sources of the four satellite modules (grpc 6 files, servlet 2, servlet-jakarta 2, spectator 1) and, in core, the five limiter classes BlockingLimiter, SimpleLimiter, AbstractLimiter, AbstractPartitionedLimiter and LifoBlockingLimiter (imports) with BlockingLimiter and SimpleLimiter (calls); tests are out of scope. Calls: every call site of those files whose callee is a method, constructor or `this(...)`/`super(...)` call of this repository, labeled with every definition it can run (class hierarchy analysis over the whole repository: a call on the Limiter interface runs Limiter.acquire and the acquire of BlockingLimiter, LifoBlockingLimiter, AbstractPartitionedLimiter and SimpleLimiter; a call on Limiter.Listener runs the interface method and the seven implementations - the named SimpleLimiter.Listener and the anonymous classes AbstractLimiter$1 (NOOP_LISTENER) and $2, AbstractPartitionedLimiter$1, BlockingLimiter$1 and LifoBlockingLimiter$1, numbered per enclosing class in source order; MetricRegistry.distribution runs the default method, EmptyMetricRegistry and SpectatorMetricRegistry; GrpcServerRequestContext and GrpcClientRequestContext methods run the interface method and the anonymous class of the interceptor). The type of a lambda parameter (`context` in `partitionResolver(context -> context.getHeaders()...)`, `listener` in `.map(listener -> ...)`) is the one the generic signature gives. Calls into gRPC, the servlet API, spectator, slf4j, Guava and the JDK (Optional, Predicate, Semaphore, ...) are not labeled, so any target they get counts as a false positive; `new` of an interface (anonymous classes) and of a class without an explicit constructor are not call sites with a target. Imports: the in-repository imports of those files (cross-module ones resolve into concurrency-limits-core) with the target file; the non-JDK imports that leave the repository are labeled null; JDK imports are not labeled, so any resolution of an unlabeled import counts as a false positive. Injections: none - no class of the sample is a Spring, Guice or other container component (no @Inject, @Autowired, @Component, @Service or @Bean anywhere), so the scope is the main sources of every subproject and any INJECTS edge is a false positive. Env: no Java source reads an environment variable or system property (no getenv or getProperty call in main code); the env variables of the smoke report come from the GitHub Actions workflows (GITHUB_TOKEN and the ORG_* secrets of nebula-ci, nebula-publish and nebula-snapshot, and their DECLARES_ENV settings), not from Java code, and the harness env kind only counts file-level reads, so the scope is the main sources and has no items; the harness does not distinguish a system property from an environment variable. Build targets: Gradle modules are scored as build targets (scanBuildTargets reads Package nodes of manager gradle or maven): one target per subproject build file (kind module, no sources), and one link per unique (dependency module, scope) written `<module> (<scope>)`; the scanner's internalImport duplicate of each dependency is not counted. settings.gradle includes :concurrency-limits-core, -grpc, -servlet, -servlet-jakarta and -spectator; inter-project dependencies are grpc -> core (implementation project), grpc -> spectator (testImplementation), servlet -> core (api), servlet -> spectator (testImplementation), servlet-jakarta -> core (api), servlet-jakarta -> spectator (testImplementation), spectator -> core (implementation); core has none. The root build.gradle is an aggregator and out of scope. Interface-call convention: a call through an interface is labeled with the interface method declaration plus every implementer in the scan (javac binds invokeinterface to the declared method, which is a real node). A constructor target carries the constructor's declaration line, so an overload is told apart (ConcurrencyLimitServerInterceptor.java:89 runs the private Builder constructor at line 109).",
   "calls": {
     "files": [
       "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
@@ -932,7 +932,8 @@
         "target": {
           "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
           "name": "ConcurrencyLimitServerInterceptor",
-          "className": "ConcurrencyLimitServerInterceptor"
+          "className": "ConcurrencyLimitServerInterceptor",
+          "line": 109
         }
       },
       {
@@ -2545,7 +2546,65 @@
     "items": []
   },
   "buildTargets": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "concurrency-limits-core/",
+      "concurrency-limits-grpc/",
+      "concurrency-limits-servlet/",
+      "concurrency-limits-servlet-jakarta/",
+      "concurrency-limits-spectator/"
+    ],
+    "items": [
+      {
+        "file": "concurrency-limits-core/build.gradle",
+        "system": "gradle",
+        "name": ":concurrency-limits-core",
+        "kind": "module",
+        "sources": [],
+        "links": []
+      },
+      {
+        "file": "concurrency-limits-grpc/build.gradle",
+        "system": "gradle",
+        "name": ":concurrency-limits-grpc",
+        "kind": "module",
+        "sources": [],
+        "links": [
+          ":concurrency-limits-core (implementation)",
+          ":concurrency-limits-spectator (testImplementation)"
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet/build.gradle",
+        "system": "gradle",
+        "name": ":concurrency-limits-servlet",
+        "kind": "module",
+        "sources": [],
+        "links": [
+          ":concurrency-limits-core (api)",
+          ":concurrency-limits-spectator (testImplementation)"
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/build.gradle",
+        "system": "gradle",
+        "name": ":concurrency-limits-servlet-jakarta",
+        "kind": "module",
+        "sources": [],
+        "links": [
+          ":concurrency-limits-core (api)",
+          ":concurrency-limits-spectator (testImplementation)"
+        ]
+      },
+      {
+        "file": "concurrency-limits-spectator/build.gradle",
+        "system": "gradle",
+        "name": ":concurrency-limits-spectator",
+        "kind": "module",
+        "sources": [],
+        "links": [
+          ":concurrency-limits-core (implementation)"
+        ]
+      }
+    ]
   }
 }

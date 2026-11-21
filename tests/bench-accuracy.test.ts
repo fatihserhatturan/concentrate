@@ -6,7 +6,9 @@ import { samplesDirectory } from "../src/adapters/cli/smoke.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import {
   compareCalls,
+  compareBuildTargets,
   compareComponents,
+  scanBuildTargets,
   compareDataAccess,
   compareEnvDeclarations,
   compareImports,
@@ -80,21 +82,67 @@ describe("accuracy comparator: routes", () => {
   });
 });
 
-function callGraph(calls: Array<{ file: string; line: number; callee: string; target?: { file: string; name: string; className?: string; label?: GraphNode["label"] } }>): Graph {
+function callGraph(calls: Array<{ file: string; line: number; callee: string; target?: { file: string; name: string; className?: string; line?: number; label?: GraphNode["label"] } }>): Graph {
   const graph: Graph = { nodes: files("a.ts", "b.ts"), relationships: [] };
   calls.forEach((call, index) => {
     const id = `file:${call.file}:function:1:main:call:${call.line}:${index}:${call.callee}`;
     graph.nodes.push(node(id, "Call", { callee: call.callee, line: call.line }));
     if (call.target) {
-      const targetId = `file:${call.target.file}:${call.target.label ?? "function"}:${call.target.className ?? ""}:${call.target.name}`;
+      const targetId = `file:${call.target.file}:${call.target.label ?? "function"}:${call.target.className ?? ""}:${call.target.name}${call.target.line === undefined ? "" : `:${call.target.line}`}`;
       if (!graph.nodes.some((entry) => entry.id === targetId)) {
-        graph.nodes.push(node(targetId, call.target.label ?? "Function", { name: call.target.name, ...(call.target.className ? { className: call.target.className } : {}) }));
+        graph.nodes.push(node(targetId, call.target.label ?? "Function", { name: call.target.name, ...(call.target.className ? { className: call.target.className } : {}), ...(call.target.line === undefined ? {} : { line: call.target.line }) }));
       }
       graph.relationships.push(rel(id, "CALL_RESOLVES_TO", targetId));
     }
   });
   return graph;
 }
+
+describe("accuracy comparator: constructor overloads", () => {
+  const ctor = (line: number) => ({ file: "b.ts", name: "Foo", className: "Foo", line });
+  it("tells overloads apart when the label carries a line", () => {
+    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
+    const callId = graph.nodes.find((entry) => entry.label === "Call")!.id;
+    graph.nodes.push(node("file:b.ts:function:Foo:Foo:20", "Function", { name: "Foo", className: "Foo", line: 20 }));
+    graph.relationships.push(rel(callId, "CALL_RESOLVES_TO", "file:b.ts:function:Foo:Foo:20"));
+    const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo", line: 20 } }] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 0]);
+  });
+  it("keeps labels without a line matching any overload", () => {
+    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
+    const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo" } }] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 0, 0]);
+  });
+});
+
+describe("accuracy comparator: Gradle build targets", () => {
+  const pkg = (name: string, extra: Record<string, unknown> = {}) => node(`package:${name}`, "Package", { name, manager: "gradle", buildFile: `${name}/build.gradle`, aggregator: false, ...extra });
+  const graph = (): Graph => ({
+    nodes: [pkg("core"), pkg("app"), pkg("root", { aggregator: true, buildFile: "build.gradle" })],
+    relationships: [
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "implementation" }),
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "internalImport" }),
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "testImplementation" }),
+    ],
+  });
+  it("dedupes the internalImport duplicate and keeps each scope", () => {
+    const app = scanBuildTargets(graph()).find((target) => target.name === "app")!;
+    assert.deepEqual(app.links, ["core (implementation)", "core (testImplementation)"]);
+    assert.equal(app.kind, "module");
+    assert.equal(scanBuildTargets(graph()).find((target) => target.name === "root")!.kind, "aggregator");
+  });
+  it("scores modules and scoped links within scope", () => {
+    const score = compareBuildTargets(graph(), { scope: ["app/", "core/"], items: [
+      { file: "core/build.gradle", system: "gradle", name: "core", kind: "module", sources: [], links: [] },
+      { file: "app/build.gradle", system: "gradle", name: "app", kind: "module", sources: [], links: ["core (implementation)"] },
+    ] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [3, 1, 0]);
+  });
+  it("keeps CMake targets unchanged", () => {
+    const cmake: Graph = { nodes: [node("package:t", "Package", { name: "t", manager: "cmake", buildFile: "CMakeLists.txt", targetType: "executable" })], relationships: [] };
+    assert.deepEqual(scanBuildTargets(cmake), [{ file: "CMakeLists.txt", system: "cmake", name: "t", kind: "executable", sources: [], links: [] }]);
+  });
+});
 
 describe("accuracy comparator: calls", () => {
   const labels = (items: NonNullable<Labels["calls"]>["items"]) => ({ files: ["a.ts"], items });
