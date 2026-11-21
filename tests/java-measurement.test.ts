@@ -16,11 +16,9 @@ async function project(files: Record<string, string>): Promise<string> {
 }
 
 const graphOf = async (files: Record<string, string>) => buildCodeGraph(await project(files), { continueOnError: false });
-const TODO = { todo: "wave 2 fix" };
 
 // Fixes found by the Phase 43 measurement of the Java samples get a regression
 // test here, one `it` per fix, the way tests/cpp-measurement.test.ts does.
-// Tests marked `todo` pin a rule a parallel wave-2 track implements.
 describe("Java measurement fixes (Phase 43)", () => {
   it("resolves an import to its file and injects a constructor dependency", async () => {
     const root = await project({
@@ -71,7 +69,7 @@ public class Service {
     assert.deepEqual(targets, ["FileStore.save", "MemoryStore.save", "Store.save"]);
   });
 
-  it("leaves a wildcard import unresolved", TODO, async () => {
+  it("leaves a wildcard import unresolved", async () => {
     const graph = await graphOf({
       "src/main/java/app/model/Pet.java": `package app.model;
 public class Pet {}
@@ -86,7 +84,7 @@ public class Use { Pet pet; }
     assert.equal(wildcard.target, null);
   });
 
-  it("counts em.remove(em.merge(x)) as a delete only", TODO, async () => {
+  it("counts em.remove(em.merge(x)) as a delete only", async () => {
     const graph = await graphOf({
       "src/main/java/app/Pet.java": `package app;
 import jakarta.persistence.Entity;
@@ -114,7 +112,7 @@ public class PetRepo {
     }
   });
 
-  it("attributes a SimpleJdbcInsert create to the method that executes it", TODO, async () => {
+  it("attributes a SimpleJdbcInsert create to the method that executes it", async () => {
     const graph = await graphOf({
       "src/main/java/app/OwnerRepo.java": `package app;
 import javax.sql.DataSource;
@@ -135,7 +133,7 @@ public class OwnerRepo {
     assert.deepEqual(creates.map((item) => item.function), ["save"]);
   });
 
-  it("counts a JDBC COUNT query as an aggregate", TODO, async () => {
+  it("counts a JDBC COUNT query as an aggregate", async () => {
     const graph = await graphOf({
       "src/main/java/app/OwnerRepo.java": `package app;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -152,7 +150,7 @@ public class OwnerRepo {
     assert.deepEqual(accesses.map((item) => `${item.table}:${item.operation}`), ["owners:aggregate"]);
   });
 
-  it("injects every profile-gated candidate of an interface", TODO, async () => {
+  it("injects every profile-gated candidate of an interface", async () => {
     const graph = await graphOf({
       "src/main/java/app/Greeter.java": `package app;
 public interface Greeter {}
@@ -184,7 +182,7 @@ public class Consumer {
     assert.deepEqual(providers, ["app.DevGreeter", "app.ProdGreeter"]);
   });
 
-  it("injects the fields of a ConstraintValidator the container autowires", TODO, async () => {
+  it("injects the fields of a ConstraintValidator the container autowires", async () => {
     const graph = await graphOf({
       "src/main/java/app/UserRepo.java": `package app;
 import org.springframework.stereotype.Repository;
