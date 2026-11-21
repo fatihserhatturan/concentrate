@@ -216,11 +216,11 @@ describe("Java parser", () => {
   it("records the declared types of parameters and locals per function", () => {
     const get = named(parsed, "Function", "com.acme.model.Outer.get");
     const locals = JSON.parse(String(get.properties.javaLocals)) as Record<string, { type: string } | null>;
-    assert.deepEqual(locals.m, { type: "Map" });
+    assert.equal(locals.m?.type, "Map");
     assert.deepEqual(locals.arr, { type: "int[]" });
-    assert.deepEqual(locals.z, { type: "Thing" });
-    assert.deepEqual(locals.f, { type: "Foo" });
-    assert.deepEqual(locals.s, { type: "Supplier" });
+    assert.equal(locals.z?.type, "Thing");
+    assert.equal(locals.f?.type, "Foo");
+    assert.equal(locals.s?.type, "Supplier");
   });
 
   it("reads method calls with receivers, qualifiers and argument counts", () => {

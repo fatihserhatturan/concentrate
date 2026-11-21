@@ -349,6 +349,8 @@ async function parseJavaFile(rootPath: string, filePath: string, plugins: readon
       addDecorators(fn.id, "HAS_METHOD_DECORATOR", spec.annotations);
       if (spec.kind !== "initializer") owner.methodNames.push(spec.name);
       walkCode(spec.roots, fn, owner, locals);
+      // Call sites add the argument expressions of their calls to the locals.
+      fn.properties.javaLocals = JSON.stringify(Object.fromEntries(locals));
       return fn;
     };
 
@@ -558,6 +560,7 @@ async function parseJavaFile(rootPath: string, filePath: string, plugins: readon
       };
       add(fn, owner.id, owner.isInterface ? "DEFINES_INTERFACE_METHOD" : "DEFINES_METHOD");
       walkCode(items, fn, owner, locals);
+      fn.properties.javaLocals = JSON.stringify(Object.fromEntries(locals));
     };
 
     const finishedOwners = new WeakSet<GraphNode>();
