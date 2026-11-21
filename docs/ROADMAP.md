@@ -33,7 +33,8 @@ the only runtime dependency left is `web-tree-sitter`.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
   frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10), the Rust
-  ecosystem (M11), the Python ecosystem (M12) and the C/C++ ecosystem (M13).
+  ecosystem (M11), the Python ecosystem (M12), the C/C++ ecosystem (M13), then the Java (M14) and C#
+  (M15) ecosystems.
 
 ### Dependency replacement map
 
@@ -62,11 +63,13 @@ the only runtime dependency left is `web-tree-sitter`.
 | M11 – Rust ecosystem | 26–29 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
 | M12 – Python ecosystem | 30–33 | Python packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer entrypoints; SQLAlchemy, Django ORM, env, HTTP clients and DI; measured on pinned samples. |
 | M13 – C/C++ ecosystem | 34–37 | C and C++ includes, headers, namespaces, classes and virtual calls; CMake, Make and `compile_commands.json` targets; Drogon, Crow, Pistache, cpp-httplib, gRPC and Qt; SQL, env and libcurl; measured on pinned samples. |
+| M14 – Java ecosystem | 38–43 | Language seams (import resolution, file kinds, unused rules) are registry plug-ins with an add-a-language guide; Java packages, imports, classes, generics, annotations and typed calls; Maven and Gradle modules; Spring MVC/WebFlux, JAX-RS, Micronaut and gRPC routes and Spring DI; JPA, Spring Data, JDBC, MyBatis, config, env and HTTP clients; measured on pinned samples. |
+| M15 – C# ecosystem | 44–48 | C# namespaces, usings, partial classes, extension methods and typed calls; `.sln`/`.csproj` projects; ASP.NET Core controllers and minimal APIs, gRPC, SignalR, hosted services, Azure Functions and DI; EF Core, Dapper, ADO.NET, IConfiguration/IOptions and HttpClient/Refit; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9 (Go), M10 (non-code files), M11 (Rust), M12 (Python) and M13 (C/C++) are done: every planned phase
-(M1–M13) is finished.
+M9 (Go), M10 (non-code files), M11 (Rust), M12 (Python) and M13 (C/C++) are done. Next: M14 (Java,
+starting with the language plug-in readiness of Phase 38), then M15 (C#).
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1624,6 +1627,432 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 - [ ] Accuracy, performance and agent results for C/C++ are reproducible from scripts
 - [x] README shows the C/C++ coverage
+
+## M14: Java ecosystem
+
+Phase 38 first turns the remaining hard-coded language seams (import resolution, file kinds, unused-export rules) into registry plug-ins and documents how to add a language. Phases 39–43 then add Java: a vendored grammar, package and import resolution, classes, interfaces, generics, annotations and typed calls, Maven and Gradle modules, Spring MVC/WebFlux, JAX-RS, Micronaut and gRPC routes, Spring DI, JPA, Spring Data, JDBC, MyBatis, config, env and HTTP clients. Kotlin is not parsed. The decisions of M9 apply.
+
+## Phase 38: Language plug-in readiness (import resolver contract, unused rules in the registry, add-a-language guide) ([#278](https://github.com/fatihserhatturan/concentrate/issues/278))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** None
+
+**Goal:** Make a language a pure plug-in before Java and C# arrive: import resolution, file kinds and unused-export rules come from the registry, and a guide explains how to add a language.
+
+- Since #275/#276 and the plugin host, core names no language, but some seams are still hard-coded:
+  - `src/integrations/resolution/imports.ts` resolves imports in one if-chain (styles, proto, Rust, C/C++, Python, Go, then JS/TS); `docs/layered-core-architecture.md` lists it as known debt.
+  - `src/integrations/languages/file-kind.ts` has one `isXFile` predicate per language.
+  - Unused-export rules live in a separate list in `src/composition/unused-rules.ts`, not in the registry.
+  - `NOTE_LANGUAGES` in `src/adapters/mcp/analysis-tools/unused.ts` is a hand-written string.
+  - `tests/contracts.test.ts` checks five parsers by name.
+- There is no "add a language" guide; `tests/helpers/toy-plugin.ts` is the best template today.
+
+### Import resolution as a contract
+
+- [ ] `ILanguageImportResolver` in `src/core/contracts/` with `registerImportResolver` on the registry and in `describeIntegrations()`
+- [ ] Each branch of `imports.ts` moves to its language or format package; the core loop only dispatches
+- [ ] Golden graphs and golden queries unchanged
+
+### Other seams
+
+- [ ] File-kind checks go through the language descriptor instead of `isXFile` where core or shared code uses them
+- [ ] Unused-export rules registered through the registry (and rebuilt in workers by the registry module)
+- [ ] `NOTE_LANGUAGES` derived from the registered rules
+- [ ] `contracts.test.ts` iterates the registered parsers
+
+### Guide
+
+- [ ] `docs/adding-a-language.md`: grammar (`scripts/build-grammars.mjs`), descriptor, parser and plugins, import/call/inheritance resolvers, schema extension, unused rules, fixtures, golden files, samples, bench labels, UI highlight map
+- [ ] Stale "Migration Snapshot" notes in `docs/layered-core-architecture.md` and the source layout in `docs/architecture.md` updated
+
+### Acceptance criteria
+
+- [ ] The toy plugin resolves its imports with no change in core or `src/integrations/resolution/`
+- [ ] `npm run verify:rc` passes with no golden diff
+
+## Phase 39: Java language foundation (packages, imports, classes, interfaces, generics, annotations, tests) ([#279](https://github.com/fatihserhatturan/concentrate/issues/279))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 38
+
+**Goal:** Add Java as a language: vendored grammar, package and import resolution, declarations and call resolution, so Phases 40–43 can build on them.
+
+- There is no Java support today; `.java` files are plain `File` nodes.
+- `tree-sitter-java` 0.23.5 (December 2024) is on npm and can be vendored with `scripts/build-grammars.mjs`.
+- Java resolves by package, not by directory: a file's `package` declaration and the source roots decide where a type lives. Build files (Phase 40) add module source roots; this phase works from conventions.
+- `tests/guardrails.test.ts` already expects `java` file names and `isJavaFile`.
+
+### Grammar and files
+
+- [ ] Vendor `tree-sitter-java` 0.23.5; record the bytes added to `vendor/grammars`
+- [ ] Extension `.java`; `module-info.java` and `package-info.java` recognised
+- [ ] A file with `ERROR` nodes keeps a partial graph and gets a scan warning
+
+### Packages and imports
+
+- [ ] Source roots from conventions (`src/main/java`, `src/test/java`) or inferred from the `package` path
+- [ ] `import a.b.C`, `import a.b.*`, `import static a.b.C.m` and same-package types without import
+- [ ] JDK (`java.*`, `javax.*`, `jakarta.*`) and unresolved packages are external imports
+
+### Declarations
+
+- [ ] Classes, interfaces, enums, records and annotation types; nested, inner and anonymous classes
+- [ ] `extends` / `implements` as `EXTENDS` / `IMPLEMENTS`; generic parameters recorded
+- [ ] Fields, constructors and methods with visibility (`public`, `protected`, package-private, `private`) and `static`
+- [ ] Annotations as `Decorator` nodes with their arguments
+
+### Calls
+
+- [ ] Static and qualified calls (`Type.m()`, static imports)
+- [ ] Methods on typed receivers (fields, locals, parameters, `var x = new T()`, `this`, `super`)
+- [ ] Overloads told apart by argument count; ambiguous ones counted, not guessed
+- [ ] Interface and override dispatch reaches every implementation, marked as such
+- [ ] Method references (`Foo::bar`, `this::bar`) and constructor calls (`new T()`)
+
+### Entrypoints and tests
+
+- [ ] `public static void main(String[])` as an `EntryPoint`
+- [ ] JUnit 4/5 (`@Test`, `@ParameterizedTest`) and TestNG files classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers non-`private` types and methods with Java public-API rules
+
+### Acceptance criteria
+
+- [ ] Java fixtures with packages, interfaces, generics, overloads and overrides have golden graphs
+- [ ] Calls resolve across packages through imports; unresolved calls are counted, never guessed
+
+## Phase 40: Java build systems (Maven, Gradle, multi-module, XML grammar) ([#280](https://github.com/fatihserhatturan/concentrate/issues/280))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 39
+
+**Goal:** Read Maven and Gradle builds so the graph knows modules, their source roots and their links, and Phase 39 resolves imports per module.
+
+- There is no XML support today. `@tree-sitter-grammars/tree-sitter-xml` 0.7.0 can be vendored; it also serves `.csproj` (Phase 45), MyBatis mappers (Phase 42) and plain `.xml` files as M10 did for other formats.
+- There is no Gradle grammar on npm, so `build.gradle` / `build.gradle.kts` get a small line reader, as CMake did in #212.
+- `ui/server/api/fs.ts` already treats `pom.xml` and `build.gradle` as project manifests.
+
+### XML
+
+- [ ] Vendor `@tree-sitter-grammars/tree-sitter-xml`; `.xml` files become `File` nodes with the plain-file parser
+
+### Maven
+
+- [ ] `pom.xml` modules, `<parent>`, `<dependencies>` between modules, `<sourceDirectory>` / `<testSourceDirectory>`
+- [ ] `${property}` values expanded from `<properties>` and the parent; anything else counted as unresolved
+
+### Gradle
+
+- [ ] `settings.gradle(.kts)` `include`; `implementation(project(":x"))` / `api(project(...))` links
+- [ ] `sourceSets` overrides and `application { mainClass }`
+
+### Modules in the graph
+
+- [ ] Modules as `Package` nodes (`PACKAGE_CONTAINS_FILE`, `PACKAGE_IMPORTS_PACKAGE` from module dependencies)
+- [ ] Module source roots passed to Java import resolution
+- [ ] A `mainClass` (Maven exec / Spring Boot plugin, Gradle `application`) is an `EntryPoint` with `RUNS` to its `main`
+- [ ] Manifest reader reports declared packages and config values
+
+### Acceptance criteria
+
+- [ ] Maven and Gradle fixtures with two library modules and an application have golden modules, links and source roots
+- [ ] Moving sources to a non-default root does not lose any resolved import of the Phase 39 fixtures
+
+## Phase 41: Java HTTP routes, entrypoints and DI (Spring MVC/WebFlux, JAX-RS, Micronaut, gRPC, picocli) ([#281](https://github.com/fatihserhatturan/concentrate/issues/281))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 40
+
+**Goal:** Find the routes, entrypoints and dependency injection of Java services, reusing the nodes and relationships of M9.
+
+- Java frameworks declare almost everything with annotations; Phase 39 records them as `Decorator` nodes with arguments.
+- gRPC Java generates `XGrpc.XImplBase` base classes and `XGrpc.XBlockingStub` / `XStub` clients; `src/integrations/frameworks/go/grpc.ts` already links Go clients to servers.
+
+### HTTP routes
+
+- [ ] Spring MVC: `@RestController` / `@Controller` with `@RequestMapping`, `@GetMapping`, `@PostMapping`, …; class and method paths joined
+- [ ] Spring WebFlux functional routes (`RouterFunctions.route()`, `RequestPredicates`)
+- [ ] JAX-RS / Jakarta REST (`@Path`, `@GET`, …), which also covers Quarkus RESTEasy
+- [ ] Micronaut (`@Controller`, `@Get`, …)
+
+### RPC and other entrypoints
+
+- [ ] gRPC Java: a subclass of `XImplBase` is an `EntryPoint` per method; stub calls link to the implementations (`via: "grpc"`)
+- [ ] `@SpringBootApplication` main class
+- [ ] `@Scheduled`, `@KafkaListener`, `@RabbitListener`, `@JmsListener`, `@EventListener` methods
+- [ ] picocli `@Command` classes
+
+### Dependency injection
+
+- [ ] Spring stereotypes (`@Component`, `@Service`, `@Repository`, `@Controller`, `@Configuration`) and `@Bean` methods as providers
+- [ ] Constructor, field and setter injection (`@Autowired`, `@Inject`, single-constructor)
+- [ ] An interface with one provider resolves to it; `@Qualifier` / `@Primary` honoured; anything else counted as ambiguous
+
+### Acceptance criteria
+
+- [ ] Spring Boot, JAX-RS, Micronaut and gRPC Java fixtures have golden graphs
+- [ ] `list_routes` and impact queries through injected dependencies answer for Java services
+
+## Phase 42: Java data access, config and outbound HTTP (JPA, Spring Data, JDBC, MyBatis, env, RestTemplate/WebClient/Feign) ([#282](https://github.com/fatihserhatturan/concentrate/issues/282))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 41
+
+**Goal:** Find the tables, configuration, env and outbound HTTP of Java services, reusing the nodes and relationships of M9.
+
+- SQL strings are mapped to tables by the SQL layer (`src/integrations/frameworks/sql`) already used by Go, Python, Rust and C/C++.
+- MyBatis mappers live in XML; Phase 40 vendors the XML grammar.
+
+### Data access
+
+- [ ] JPA / Hibernate `@Entity` / `@Table` / `@Column` as `DataModel` linked to `Table`
+- [ ] Spring Data repositories (`JpaRepository<T, ID>`, `CrudRepository`, …) linked to their entity; derived query methods and `@Query` SQL/JPQL mapped to tables
+- [ ] `JdbcTemplate`, `NamedParameterJdbcTemplate` and `PreparedStatement` SQL strings
+- [ ] MyBatis `@Select` / `@Insert` / … and mapper XML statements linked to their mapper interface methods
+
+### Config and env
+
+- [ ] `System.getenv` as `USES_ENV`
+- [ ] `@Value("${…}")` and `@ConfigurationProperties` linked to keys in `application.properties` / `application*.yml` as `ConfigValue`; `${ENV}` placeholders as `USES_ENV`
+
+### Outbound HTTP
+
+- [ ] `RestTemplate`, `RestClient`, `WebClient`, `java.net.http.HttpClient` and OkHttp calls as `REQUESTS`
+- [ ] OpenFeign `@FeignClient` interfaces: each method a request with base URL and path
+
+### Acceptance criteria
+
+- [ ] Fixtures for Spring Data JPA, JDBC, MyBatis, config/env and Feign have golden graphs
+- [ ] `find_table_usage`, `find_env_usage` and outbound request queries answer for Java services
+
+## Phase 43: Java ecosystem measurement (samples, accuracy, agent benchmark, README) ([#283](https://github.com/fatihserhatturan/concentrate/issues/283))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 42
+
+**Goal:** Prove the Java graph with the same measurements as the other ecosystems: pinned samples, hand labels, the agent benchmark and README numbers.
+
+- There are no Java samples, labels or agent questions today.
+
+### Samples and labels
+
+- [ ] Pin a Spring Boot REST + JPA service (for example spring-petclinic), a Gradle multi-module library and a gRPC Java sample in `scripts/samples.json`
+- [ ] Hand labels for routes, calls, imports, DI, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] Java rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the Java samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] Java questions (routes, callers, impact, DI, modules, tables, env) in `bench/agent/questions-java.json`; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs and UI
+
+- [ ] README "What it sees" table and languages line cover Java
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated (Lombok-generated members, reflection, annotation-processor output, Kotlin not parsed)
+- [ ] Java in the UI highlight map (`ui/web/src/lib/highlight.ts`)
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for Java are reproducible from scripts
+- [ ] README shows the Java coverage
+
+## M15: C# ecosystem
+
+Phases 44–48 add C#: a vendored grammar, namespace and using resolution (including `global using` and implicit usings per project), partial classes, extension methods and typed calls, `.sln`/`.csproj` projects, ASP.NET Core controllers and minimal APIs, gRPC .NET, SignalR, hosted services, Azure Functions, Microsoft.Extensions.DependencyInjection, EF Core, Dapper, ADO.NET, IConfiguration/IOptions and HttpClient/Refit. Razor files and source generators are not read. The decisions of M9 apply.
+
+## Phase 44: C# language foundation (namespaces, usings, partial classes, properties, extension methods, attributes, tests) ([#284](https://github.com/fatihserhatturan/concentrate/issues/284))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 43 (and Phase 38)
+
+**Goal:** Add C# as a language: vendored grammar, namespace and using resolution, declarations and call resolution, so Phases 45–48 can build on them.
+
+- There is no C# support today; `.cs` files are plain `File` nodes.
+- `tree-sitter-c-sharp` 0.24.0 was published on 2026-11-18, under two weeks ago, so pin 0.23.5 (April 2026) and revisit 0.24.0 afterwards.
+- C# resolves by namespace, not by directory: one namespace spans many files and projects, and `partial` types span files. `global using` and SDK implicit usings apply project-wide (projects come in Phase 45; this phase treats the scan as one project).
+
+### Grammar and files
+
+- [ ] Vendor `tree-sitter-c-sharp` 0.23.5; record the bytes added to `vendor/grammars`
+- [ ] Extensions `.cs` and `.csx`; `*.g.cs`, `*.Designer.cs` and files under `obj/` are generated
+- [ ] A file with `ERROR` nodes keeps a partial graph and gets a scan warning
+
+### Namespaces and usings
+
+- [ ] Block-scoped and file-scoped namespaces
+- [ ] `using`, `using static`, `using Alias = …` and `global using`
+- [ ] A namespace resolves to every file that declares it; `System.*`, `Microsoft.*` and unresolved namespaces are external imports
+
+### Declarations
+
+- [ ] Classes, structs, interfaces, records, enums and delegates; nested types
+- [ ] `partial` types merged into one `Class` node with every file linked
+- [ ] Base class and interfaces as `EXTENDS` / `IMPLEMENTS`; generic parameters and constraints recorded
+- [ ] Methods, constructors, properties, indexers and events with visibility (`public`, `internal`, `protected`, `private`)
+- [ ] Attributes as `Decorator` nodes with their arguments
+
+### Calls
+
+- [ ] Static and qualified calls, `using static` members
+- [ ] Methods on typed receivers (fields, properties, locals, parameters, `var x = new T()`, target-typed `new()`, `this`, `base`)
+- [ ] Extension methods (`this T` parameter) resolved on their receiver type
+- [ ] Interface and virtual/override dispatch reaches every implementation, marked as such
+- [ ] Overloads told apart by argument count; ambiguous ones counted, not guessed
+
+### Entrypoints and tests
+
+- [ ] `static Main` and top-level statements as an `EntryPoint`
+- [ ] xUnit (`[Fact]`, `[Theory]`), NUnit (`[Test]`, `[TestCase]`) and MSTest (`[TestMethod]`) files classified as tests
+
+### MCP
+
+- [ ] `find_unused_exports` covers `public` and `internal` types and members with C# rules
+
+### Acceptance criteria
+
+- [ ] C# fixtures with namespaces, partial classes, extension methods, interfaces and overrides have golden graphs
+- [ ] Calls resolve across namespaces through usings; unresolved calls are counted, never guessed
+
+## Phase 45: C# projects and solutions (.sln/.slnx, .csproj, Directory.Build.props, ProjectReference) ([#285](https://github.com/fatihserhatturan/concentrate/issues/285))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 44 (XML grammar from Phase 40)
+
+**Goal:** Read .NET solutions and projects so the graph knows projects, their references and settings, and Phase 44 applies usings and namespaces per project.
+
+- `.csproj`, `.slnx` and `Directory.Build.props` are XML; the XML grammar is vendored in Phase 40.
+- `.sln` is a line format and gets a small line reader.
+
+### Projects
+
+- [ ] `.csproj` `Sdk` (`Microsoft.NET.Sdk`, `.Web`, `.Worker`), `OutputType`, `RootNamespace`, `ImplicitUsings`, `<Using Include>`
+- [ ] `ProjectReference` between projects; `PackageReference` recorded as external packages
+- [ ] `Directory.Build.props` / `Directory.Packages.props` inherited by the projects below them
+- [ ] `$(Property)` values expanded from the project and its props; anything else counted as unresolved
+
+### Solutions
+
+- [ ] `.sln` and `.slnx` list their projects; projects outside a solution are still found
+
+### Projects in the graph
+
+- [ ] Projects as `Package` nodes (`PACKAGE_CONTAINS_FILE`, `PACKAGE_IMPORTS_PACKAGE` from `ProjectReference`)
+- [ ] Implicit and `global` usings scoped to their project
+- [ ] An `Exe` or Web/Worker SDK project is an `EntryPoint` with `RUNS` to `Main` or the top-level statements
+- [ ] Manifest reader reports declared packages and config values
+- [ ] `.csproj` and `.sln` added to the UI project manifests (`ui/server/api/fs.ts`)
+
+### Acceptance criteria
+
+- [ ] A solution fixture with two class libraries, a web project and a test project has golden projects, references and entrypoints
+- [ ] Global usings in one project do not resolve names in another
+
+## Phase 46: C# HTTP routes, entrypoints and DI (ASP.NET Core controllers and minimal APIs, gRPC, SignalR, hosted services, Azure Functions) ([#286](https://github.com/fatihserhatturan/concentrate/issues/286))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 45
+
+**Goal:** Find the routes, entrypoints and dependency injection of .NET services, reusing the nodes and relationships of M9.
+
+- ASP.NET Core declares routes with attributes on controllers or with `Map*` calls on the app (minimal APIs).
+- gRPC .NET generates `X.XBase` base classes and `X.XClient` clients; `src/integrations/frameworks/go/grpc.ts` already links Go clients to servers.
+
+### HTTP routes
+
+- [ ] Controllers: `[ApiController]` / `ControllerBase` with `[Route]` and `[HttpGet]`, `[HttpPost]`, …; `[controller]` / `[action]` tokens resolved; class and method templates joined
+- [ ] Minimal APIs: `app.MapGet/MapPost/MapPut/MapDelete/MapMethods` with `MapGroup` prefixes and handlers linked to methods or lambdas
+
+### RPC and other entrypoints
+
+- [ ] gRPC .NET: a subclass of `X.XBase` is an `EntryPoint` per method (registered with `MapGrpcService<T>`); `XClient` calls link to the implementations (`via: "grpc"`)
+- [ ] SignalR `Hub` methods (`MapHub<T>`)
+- [ ] `BackgroundService` / `IHostedService` registered with `AddHostedService<T>`
+- [ ] Azure Functions `[Function]` triggers (HTTP, timer, queue)
+- [ ] `System.CommandLine` commands
+
+### Dependency injection
+
+- [ ] `services.AddScoped/AddTransient/AddSingleton<IFoo, Foo>()` and factory registrations as providers
+- [ ] Constructor and primary-constructor injection, `[FromServices]` parameters and minimal-API handler parameters
+- [ ] An interface with one registration resolves to it; anything else counted as ambiguous
+
+### Acceptance criteria
+
+- [ ] Fixtures for controllers, minimal APIs, gRPC .NET, SignalR, a hosted service and Azure Functions have golden graphs
+- [ ] `list_routes` and impact queries through injected dependencies answer for .NET services
+
+## Phase 47: C# data access, config and outbound HTTP (EF Core, Dapper, ADO.NET, IConfiguration/IOptions, HttpClient/Refit) ([#287](https://github.com/fatihserhatturan/concentrate/issues/287))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 46
+
+**Goal:** Find the tables, configuration, env and outbound HTTP of .NET services, reusing the nodes and relationships of M9.
+
+- SQL strings are mapped to tables by the SQL layer (`src/integrations/frameworks/sql`) already used by the other ecosystems.
+- `appsettings*.json` files are already JSON `File` nodes (M10).
+
+### Data access
+
+- [ ] EF Core `DbContext` with `DbSet<T>` as `DataModel` linked to `Table` (`[Table]`, `ToTable()` in `OnModelCreating`, conventions)
+- [ ] Access through `DbSet<T>` (LINQ queries, `Add`, `Remove`) as `ACCESSES_DATA`; `FromSqlRaw` / `ExecuteSqlRaw` SQL mapped to tables
+- [ ] Dapper (`Query<T>`, `QueryAsync`, `Execute`) and ADO.NET (`SqlCommand`, `NpgsqlCommand`, `MySqlCommand`) SQL strings
+
+### Config and env
+
+- [ ] `Environment.GetEnvironmentVariable` as `USES_ENV`
+- [ ] `IConfiguration["A:B"]`, `GetSection`, `GetValue<T>`, `GetConnectionString` and `IOptions<T>` + `Configure<T>(GetSection(...))` linked to keys in `appsettings*.json` as `ConfigValue`; `A__B` env overrides noted
+
+### Outbound HTTP
+
+- [ ] `HttpClient` calls (`GetAsync`, `PostAsJsonAsync`, `SendAsync`, …) as `REQUESTS`
+- [ ] `IHttpClientFactory` named and typed clients with their `BaseAddress`
+- [ ] Refit interfaces: each method a request with base URL and path
+
+### Acceptance criteria
+
+- [ ] Fixtures for EF Core, Dapper, ADO.NET, configuration/options and HttpClient/Refit have golden graphs
+- [ ] `find_table_usage`, `find_env_usage` and outbound request queries answer for .NET services
+
+## Phase 48: C# ecosystem measurement (samples, accuracy, agent benchmark, README) ([#288](https://github.com/fatihserhatturan/concentrate/issues/288))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 47
+
+**Goal:** Prove the C# graph with the same measurements as the other ecosystems: pinned samples, hand labels, the agent benchmark and README numbers.
+
+- There are no C# samples, labels or agent questions today.
+
+### Samples and labels
+
+- [ ] Pin a multi-project ASP.NET Core solution (for example eShop or a Clean Architecture template), a minimal-API service and a gRPC .NET sample in `scripts/samples.json`
+- [ ] Hand labels for routes, calls, usings, DI, data access and env in `bench/labels/`
+- [ ] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [ ] C# rows in every `bench:accuracy` section; precision 100%, recall reported
+- [ ] Scan time and memory for the C# samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [ ] C# questions (routes, callers, impact, DI, projects, tables, config) in `bench/agent/questions-csharp.json`; results per category committed and documented (cost estimate and approval before paid runs)
+
+### Docs and UI
+
+- [ ] README "What it sees" table and languages line cover C#
+- [ ] `docs/accuracy.md` and `docs/known-limitations.md` updated (source generators, Razor `.cshtml` / `.razor`, reflection-based DI scanning)
+- [ ] C# in the UI highlight map (`ui/web/src/lib/highlight.ts`)
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for C# are reproducible from scripts
+- [ ] README shows the C# coverage
 
 ## Verification (every milestone)
 
