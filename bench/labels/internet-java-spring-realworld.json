@@ -148,6 +148,7 @@
         "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
         "line": 26,
         "callee": "save",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
@@ -175,6 +176,7 @@
         "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
         "line": 35,
         "callee": "save",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
@@ -202,6 +204,7 @@
         "file": "src/main/java/io/spring/application/user/UserService.java",
         "line": 42,
         "callee": "save",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
@@ -229,6 +232,7 @@
         "file": "src/main/java/io/spring/application/user/UserService.java",
         "line": 55,
         "callee": "save",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
@@ -246,6 +250,7 @@
         "file": "src/main/java/io/spring/application/user/UserService.java",
         "line": 81,
         "callee": "findByEmail",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
@@ -263,6 +268,7 @@
         "file": "src/main/java/io/spring/application/user/UserService.java",
         "line": 84,
         "callee": "findByUsername",
+        "target": null,
         "targets": [
           {
             "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
