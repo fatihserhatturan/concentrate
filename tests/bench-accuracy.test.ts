@@ -9,6 +9,8 @@ import {
   compareComponents,
   compareDataAccess,
   compareEnvDeclarations,
+  compareImports,
+  compareInjections,
   comparePages,
   compareRenders,
   compareRequests,
@@ -508,5 +510,70 @@ describe("accuracy comparator: scripts and infrastructure", () => {
     const result = compareEnvDeclarations(graph, { scope: ["Makefile"], items: [{ file: "Makefile", line: 1, name: "A" }, { file: "Makefile", line: 2, name: "C" }] });
     assert.deepEqual([result.tp, result.fp, result.fn], [1, 0, 1]);
     assert.deepEqual(result.falseNegatives, ["Makefile:2 C"]);
+  });
+});
+
+describe("accuracy comparator: Java imports and injections", () => {
+  const importNode = (file: string, line: number, source: string, wildcard = false) =>
+    node(`file:${file}:import:${line}:${source}`, "Import", { source, line, isWildcard: wildcard, isStatic: false });
+  const a = "src/a/A.java";
+  const b = "src/a/B.java";
+  const importGraph = (): Graph => {
+    const graph: Graph = { nodes: files(a, b), relationships: [] };
+    const link = (file: string, line: number, source: string, target?: string, wildcard = false) => {
+      const item = importNode(file, line, source, wildcard);
+      graph.nodes.push(item);
+      graph.relationships.push(rel(`file:${file}`, "IMPORTS", item.id));
+      if (target) graph.relationships.push(rel(item.id, "RESOLVES_TO", `file:${target}`));
+    };
+    link(a, 1, "x.B", b);
+    link(a, 2, "java.util.List");
+    link(a, 3, "x.Wrong", b);
+    link(b, 1, "x.A", a);
+    return graph;
+  };
+
+  it("scores resolved imports against the labeled target, in scope only", () => {
+    const result = compareImports(importGraph(), {
+      scope: [a],
+      items: [
+        { file: a, line: 1, source: "x.B", target: b },
+        { file: a, line: 2, source: "java.util.List", target: null },
+        { file: a, line: 3, source: "x.Wrong", target: a },
+        { file: a, line: 4, source: "x.Missing", target: b },
+      ],
+    });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 1, 1]);
+    assert.deepEqual(result.falsePositives, [`${a}:3 x.Wrong -> ${b} (labeled ${a})`]);
+    assert.deepEqual(result.falseNegatives, [`${a}:4 x.Missing -> ${b} (import not found)`]);
+  });
+
+  it("counts an unlabeled resolved import as a false positive", () => {
+    const result = compareImports(importGraph(), { scope: ["src/a/"], items: [{ file: a, line: 1, source: "x.B", target: b }] });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 2, 0]);
+  });
+
+  const injectGraph = (): Graph => {
+    const graph: Graph = { nodes: files("src/C.java", "src/S.java", "src/T.java"), relationships: [] };
+    const cls = (file: string, name: string) => `file:${file}:class:3:p.${name}`;
+    graph.relationships.push(
+      rel(cls("src/C.java", "C"), "INJECTS", cls("src/S.java", "S"), { fieldName: "service", via: "constructor" }),
+      rel(cls("src/C.java", "C"), "INJECTS", cls("src/T.java", "T"), { fieldName: "t", via: "field" }),
+      rel(cls("src/S.java", "S"), "INJECTS", cls("src/T.java", "T"), { fieldName: "t", via: "field" }),
+    );
+    return graph;
+  };
+
+  it("scores INJECTS edges by consumer, field, via and provider, in scope only", () => {
+    const result = compareInjections(injectGraph(), {
+      scope: ["src/C.java"],
+      items: [
+        { file: "src/C.java", consumer: "p.C", field: "service", via: "constructor", provider: "p.S", providerFile: "src/S.java" },
+        { file: "src/C.java", consumer: "p.C", field: "t", via: "setter", provider: "p.T", providerFile: "src/T.java" },
+      ],
+    });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 1, 1]);
+    assert.deepEqual(result.falsePositives, ["src/C.java p.C.t (field) -> src/T.java p.T"]);
+    assert.deepEqual(result.falseNegatives, ["src/C.java p.C.t (setter) -> src/T.java p.T"]);
   });
 });

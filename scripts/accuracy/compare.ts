@@ -50,6 +50,15 @@ export type BuildTargetLabel = { file: string; system: string; name: string; kin
 // An `#include` (`source` as written) of a C or C++ file at (file, line) and
 // the scanned file it names; null for a header outside the scan (system, third party).
 export type IncludeLabel = { file: string; line: number; source: string; target: string | null };
+// An `import` of a Java file at (file, line) as written (`source`, the
+// qualified name, with a trailing `.*` for a wildcard import), and the scanned
+// `.java` file it resolves to; null for a type outside the scan (JDK, third party).
+export type ImportLabel = { file: string; line: number; source: string; target: string | null };
+// A dependency injection edge (INJECTS) between two scanned Java classes: the
+// consumer class `consumer` (qualified name) of `file` receives the provider class
+// `provider` of `providerFile` through `field` (the field or parameter name) and
+// `via` (constructor, field, setter or bean-parameter).
+export type InjectionLabel = { file: string; consumer: string; field: string; via: string; provider: string; providerFile: string };
 export type ComponentLabel = { file: string; name: string; line: number };
 // `file` and `line` are the rendering element's; `parent` is the component it is in.
 export type RenderLabel = { file: string; parent: string; line: number; child: string; childFile: string };
@@ -102,6 +111,17 @@ export type Labels = {
   buildTargets?: { scope: string[]; items: BuildTargetLabel[] };
   // Every `#include` of the C and C++ files in `files`.
   includes?: { files: string[]; items: IncludeLabel[] };
+  // Every `import` of the Java files in `scope` (files, or directories ending in "/").
+  // Scoring like `includes`: only imports the scan resolves count as found (a
+  // resolved import must carry the labeled target, else it is a false positive);
+  // a label with a target the scan leaves unresolved is a false negative; a label
+  // with target null just records an import that should stay unresolved.
+  imports?: { scope: string[]; items: ImportLabel[] };
+  // INJECTS edges whose consumer class is declared in a file of `scope`. Every
+  // edge the scan emits from those files must be labeled (else false positive);
+  // every label must be emitted (else false negative). Edges match on
+  // (file, consumer, field, via, provider, providerFile) exactly.
+  injections?: { scope: string[]; items: InjectionLabel[] };
 };
 
 export type Score = {
@@ -888,4 +908,64 @@ export function compareIncludes(graph: Graph, labels: NonNullable<Labels["includ
     if (item.target !== null && resolved.get(key(item)) === null) falseNegatives.push(`${key(item)} -> ${item.target}`);
   }
   return score(tp, falsePositives, falseNegatives);
+}
+
+export function scanImports(graph: Graph): ImportLabel[] {
+  const byId = new Map(graph.nodes.map((node) => [node.id, node]));
+  const owner = new Map<string, string>();
+  const target = new Map<string, string>();
+  for (const rel of graph.relationships) {
+    if (rel.type === "IMPORTS") owner.set(rel.to, rel.from.replace(/^file:/u, ""));
+    else if (rel.type === "RESOLVES_TO" && rel.from.includes(":import:")) target.set(rel.from, rel.to.replace(/^file:/u, ""));
+  }
+  return [...owner].flatMap(([id, file]) => {
+    const node = byId.get(id);
+    if (!node || !file.endsWith(".java")) return [];
+    const source = String(node.properties.source);
+    return [{ file, line: num(node.properties.line), source: node.properties.isWildcard === true && !source.endsWith(".*") ? `${source}.*` : source, target: target.get(id) ?? null }];
+  });
+}
+
+/** Same scoring as `compareIncludes`, over the Java files of `labels.scope`. */
+export function compareImports(graph: Graph, labels: NonNullable<Labels["imports"]>): Score {
+  const found = scanImports(graph).filter((item) => inScope(item.file, labels.scope));
+  const key = (item: ImportLabel) => `${item.file}:${item.line} ${item.source}`;
+  const labeled = new Map(labels.items.map((item) => [key(item), item.target]));
+  const falsePositives: string[] = [];
+  const falseNegatives: string[] = [];
+  let tp = 0;
+  for (const item of found) {
+    if (item.target === null) continue;
+    const expected = labeled.get(key(item));
+    if (expected === item.target) tp += 1;
+    else falsePositives.push(`${key(item)} -> ${item.target} (labeled ${expected ?? "<unlabeled>"})`);
+  }
+  const resolved = new Map(found.map((item) => [key(item), item.target]));
+  for (const item of labels.items) {
+    const actual = resolved.get(key(item));
+    if (item.target !== null && (actual === null || actual === undefined)) falseNegatives.push(`${key(item)} -> ${item.target}${actual === undefined ? " (import not found)" : ""}`);
+  }
+  return score(tp, falsePositives, falseNegatives);
+}
+
+export function scanInjections(graph: Graph): InjectionLabel[] {
+  const files = filePaths(graph);
+  const qualifiedName = (id: string) => /:class:\d+:(.+)$/u.exec(id)?.[1] ?? null;
+  return graph.relationships.flatMap((rel) => {
+    if (rel.type !== "INJECTS") return [];
+    const file = fileOfNodeId(rel.from, files);
+    const providerFile = fileOfNodeId(rel.to, files);
+    const consumer = qualifiedName(rel.from);
+    const provider = qualifiedName(rel.to);
+    if (!file || !providerFile || !file.endsWith(".java") || !consumer || !provider) return [];
+    return [{ file, consumer, field: String(rel.properties.fieldName), via: String(rel.properties.via), provider, providerFile }];
+  });
+}
+
+const injectionAtom = (item: InjectionLabel) => `${item.file} ${item.consumer}.${item.field} (${item.via}) -> ${item.providerFile} ${item.provider}`;
+
+export function compareInjections(graph: Graph, labels: NonNullable<Labels["injections"]>): Score {
+  const found = scanInjections(graph).filter((item) => inScope(item.file, labels.scope)).map(injectionAtom);
+  const result = pair(labels.items.map(injectionAtom), found, (label, atom) => label === atom);
+  return score(result.matched, result.unmatchedFound, result.unmatchedLabels);
 }
