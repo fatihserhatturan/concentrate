@@ -1,0 +1,22 @@
+app:
+  name: Config Demo
+  timeout: 30
+  mail:
+    host: smtp.example.com
+    port: 25
+    from-address: noreply@example.com
+    retry:
+      max-attempts: 3
+    allowed-senders:
+      - a@example.com
+      - b@example.com
+  client:
+    base-url: https://api.example.com
+    connect-timeout: 2s
+server:
+  port: ${PORT:8080}
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}/shop
+    username: shop
+    password: ${DB_PASSWORD}

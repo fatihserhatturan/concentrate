@@ -2241,9 +2241,9 @@ the call recall leaves out:
 - `switch` and record patterns do not feed local types.
 - `module-info.java` records only the module name (`File.javaModule`); `requires`,
   `exports` and `opens` are not read.
-- Frameworks: routes, entrypoints and dependency injection are read (see Java
-  frameworks below). Data access, config and outbound HTTP are not read yet
-  (Phase 42 onward).
+- Frameworks: routes, entrypoints, dependency injection, data access (JPA,
+  Spring Data, JDBC, MyBatis), config and env, and outbound HTTP are read (see
+  Java frameworks below).
 
 ### Java build systems
 
@@ -2286,8 +2286,8 @@ the call recall leaves out:
 
 ### Java frameworks
 
-HTTP routes, framework entrypoints and dependency injection come from
-annotations and a few call shapes, in `src/integrations/frameworks/java/`. An
+HTTP routes, framework entrypoints, dependency injection, data access, config
+and outbound HTTP come from annotations and a few call shapes, in `src/integrations/frameworks/java/`. An
 annotation is matched by simple name and package, by one rule everywhere. Its
 package is known when it is written qualified, named by a single-type import, or
 written through an imported type (`@CommandLine.Command` with
@@ -2417,6 +2417,198 @@ Dependency injection (`INJECTS`):
 `impact_of` also seeds the methods an interface declares, so a change to
 `OrderRepository.save` reports the routes and entrypoints that reach it through a
 call on an interface-typed injected field.
+
+Data access (`list_data_access`, `find_table_usage`):
+
+- A data access is ACCESSES_DATA from the function that makes it to a DataModel
+  (READS / WRITES to its Table follow). The routes, entrypoints and callers that
+  reach that function get it too. Receivers are matched by declared type
+  (a field, parameter or local), so an unrelated `query(...)` is ignored.
+- JPA (library `jpa`): a class with `@Entity` (`javax` or `jakarta`) is a
+  DataModel mapped to its table: `@Table(name, schema)`, else the entity name.
+  Names follow Spring Boot's physical naming: snake_case, lower case
+  (`CatalogProduct` and `@Table(name = "OrderItems")` are `catalog_product` and
+  `order_items`; `@Column`, `@JoinColumn` and `@JoinTable` names too). A quoted
+  name (`"\"Items\""`, backticks) is kept as written, minus the quotes. A name
+  that is a constant (`@Table(name = Tables.ITEMS)`) is resolved; an empty
+  `@Table(name = "")` falls back to the entity name. Columns come from the non-transient fields of the class and its
+  `@MappedSuperclass` ancestors, `@Embedded` / `@Embeddable` fields, the foreign
+  key of `@ManyToOne` and the owning side of `@OneToOne`, and the join table of
+  `@ManyToMany`. `@Inheritance` SINGLE_TABLE, JOINED and TABLE_PER_CLASS are
+  followed. `RELATES_TO` links the entities. `EntityManager` and Hibernate
+  `Session` calls (`persist`, `merge`, `remove`, `find`, `createQuery`,
+  `createNativeQuery`, `createSQLQuery`, ...) are accesses. A JPQL
+  `delete Entity e where ...` (no `FROM`) is a delete.
+- Spring Data: an interface extending `Repository`,
+  `CrudRepository`, `PagingAndSortingRepository` or `JpaRepository` (through
+  scanned interfaces too) over a scanned entity is a DataModel of library
+  `spring-data` (mapped to the entity's table, `RELATES_TO` the entity). Its
+  accesses are recorded on the entity's DataModel with `library: jpa`, so
+  `list_data_access` with `library: spring-data` finds no access rows (the
+  repository models carry none); use `library: jpa`. Derived query methods
+  (`findBy...`, `countBy...`, `deleteBy...`), `@Query` (JPQL against the entity
+  names, or SQL with `nativeQuery = true`, a `Boolean.TRUE` or a boolean
+  constant; when the flag is not readable, the query is native if the SQL
+  reader finds a table in it, else JPQL) and the inherited CRUD methods, seen
+  at the call on a repository-typed field, parameter or local, are accesses. A
+  repository of another store (`MongoRepository`) is left out.
+- JDBC (library `jdbc`): `JdbcTemplate` and `NamedParameterJdbcTemplate` (and
+  their `...Operations`), `JdbcClient.sql`, `SimpleJdbcInsert.withTableName`
+  (also after `withSchemaName`), `Connection.prepareStatement` / `prepareCall`
+  and `Statement.execute*`; every `String` argument of `batchUpdate(String...)`
+  is read. A method parameter or local that has the name of a constant is
+  never taken for it. The
+  SQL is a literal, a text block, a concatenation, a single-assignment local or
+  a constant, read by the SQL layer. A dynamic part names no table; a statement
+  that is wholly dynamic is skipped.
+- MyBatis (library `mybatis`): `@Select`, `@Insert`, `@Update` and `@Delete` on a
+  mapper interface method, and the statements of a mapper XML file linked to the
+  method of the same name in the interface its `namespace` names, declared there
+  or inherited from a scanned super-interface. In XML, dynamic
+  tags are removed and their text kept, `<include refid>` is replaced by the
+  `<sql>` text, and `#{...}` and `${...}` become `?`. The SQL of a `<selectKey>`
+  is not part of the statement; it is a `read` of its own. A `<` is a tag only
+  when a name and whitespace, `/` or `>` follow. XML files over 1 MB and under
+  `target/` or `build/` are skipped.
+- A table is one node per lower-cased name: `table:java:-:<lower-cased name>`.
+  Its `name` is the spelling of a declaration (a JPA entity or `@Table`; of
+  several, the smallest spelling) when there is one, else the lower-cased name,
+  so the result does not depend on the order of the files. JDBC and MyBatis
+  accesses go to a DataModel of their library named after the table
+  (`datamodel:jdbc:<table>`), mapped to the same Table as the entity's, not to
+  the entity's DataModel; the access keeps its own `library`.
+- One table name in different schemas is one Table (the first schema is kept).
+- Not handled in JPA: property access (annotations on getters),
+  `@AttributeOverride`, composite `@JoinColumns`, `@OneToMany` join columns,
+  `@SecondaryTable`, `@ElementCollection`, discriminator columns, `orm.xml`,
+  `@NamedQuery`, `@Query(name = ...)` and `createNamedQuery`, `@Procedure`, the Criteria API,
+  Specifications, Querydsl, query by example, a repository typed through its
+  generic base at the use site (`BaseRepository<Customer, Long>`), repositories
+  declared as classes, `@RepositoryDefinition`, repository fragments
+  (`FooRepositoryCustom` and `FooRepositoryImpl`), and same-named entities of
+  two packages in JPQL (the name is left out).
+- Not handled in JDBC: a receiver the declared types do not show
+  (`dataSource.getConnection().prepareStatement(...)`, `getJdbcTemplate()`, a
+  `var` bound to a call), SQL read from a file or built by `StringBuilder`,
+  `MessageFormat` or a method, `SimpleJdbcCall` and stored procedure names,
+  and Spring `@Sql` scripts.
+- Not handled in MyBatis: `@SelectProvider` and the other providers, `@MapperScan`,
+  `@Lang`, `<script>` blocks inside annotations (read as text, tags left in),
+  XML statements whose namespace names no scanned interface, `<include>`
+  properties, and `databaseId` (every variant is read).
+
+Config and env (`list_env_config`):
+
+- `System.getenv("NAME")`, `System.getenv().get("NAME")` and `getOrDefault`,
+  also through a local bound to `System.getenv()` and a static import, with a
+  literal or constant name, are USES_ENV from the method (the file for a field
+  initializer). `System` is `java.lang.System`: a scanned type named `System`
+  (same package, nested, or imported), or an import of another `System`, makes
+  the call no env read. `System.getProperty` is a JVM property and is ignored.
+- Spring config files (`application*.properties|yml|yaml`, `bootstrap*`) in a
+  `resources` directory (`src/main/resources`, `src/test/resources`, a module's
+  own) or its `config` directory, and in a `config` directory (or `config/*/`)
+  at a module or repository root outside `src`: every key is a ConfigValue
+  declared by its file. They are read only when the scan has Java files or a
+  Maven/Gradle build file, so a Python or Node repo's `resources/application.yml`
+  makes nothing. A profile file's keys are nodes of that file, never merged
+  with the default ones. Keys of `src/test/resources` are consumed by readers
+  in test files only, not by main code.
+- Redaction: a key is a secret when a segment of it (split on `.`) has, among
+  its whole parts (kebab, snake and camel case), password, passwd, pwd, secret(s),
+  credential(s) or a singular token (`access-token`, `apiToken`; not
+  `max-tokens`), or two parts that make private-key, api-key, access-key,
+  secret-key, encryption-key, signing-key or client-secret; a plain `key` is
+  not (`cache.key-prefix` is shown, so are `db.passage` and `max-tokens`). The value of a secret key is stored as `<redacted>` unless it is only
+  a placeholder without a default (`${DB_PASSWORD}`; `${DB_PASSWORD:pw}` is
+  redacted). The default of `@Value("${secret.key:default}")` and
+  `getProperty("secret.key", "default")` follows the same rule. In any value,
+  the password of URL userinfo (`scheme://user:pw@host`, including
+  `jdbc:...://`) and a `password=` parameter become `<redacted>`. A `${NAME}`
+  placeholder that names no key and looks like an environment variable is
+  USES_ENV from the config file.
+- CONSUMES_CONFIG comes from `@Value("${key}")` and `@Value("${key:default}")`
+  (Spring's and Micronaut's, and Micronaut `@Property`), from
+  `@ConfigurationProperties(prefix)` classes (also on a `@Bean` method, with
+  relaxed binding of the fields), and from `Environment.getProperty` /
+  `getRequiredProperty`. A method that calls an accessor on a properties-typed
+  value reads the keys of that field; one that is given the class and calls no
+  accessor reads every key. The reader, its file and the routes it handles
+  consume the key.
+- A key no file defines but that has a default is a ConfigValue of the reader's
+  file with `valueType: "default"`. A key with neither that looks like an
+  environment variable (`${REGION}`) is USES_ENV.
+- Relaxed-binding env: a read of `app.mail.port` is also USES_ENV of
+  `APP_MAIL_PORT`, only when that name is declared in a `.env*` file, read by
+  `System.getenv` or named in a placeholder somewhere in the scan.
+- Not handled: SpEL (`#{...}`), `@Value` of a constant that is not a literal,
+  `@PropertySource`, `@EnableConfigurationProperties` and
+  `@ConfigurationPropertiesScan` (a properties class counts through its own
+  annotation), `@Name` constructor binding, `Binder.get`, MicroProfile
+  `@ConfigProperty`, `Environment.getProperty` in a field initializer,
+  `ConfigurableEnvironment` property sources, the element type of a
+  `Map<String, Nested>` or `List<Nested>` field (the field binds every key under
+  it), and keys built at run time. Profile activation is not evaluated: the
+  files of every profile are linked (the HTTP reader is the one that prefers
+  the entries of `spring.profiles.active`).
+  A field's reader is a method that names it, not as the target of an
+  assignment; a nested type that declares a field of the same name hides it. Config consumption is not carried through
+  calls: a method that only calls the reader does not consume the key (data
+  access is).
+
+Outbound HTTP (`api_consumers`):
+
+- The request is recorded on the Call (`httpClient`, `httpMethod`, `httpUrl`) and
+  linked to the route it reaches by `REQUESTS`, with the same origin rules as
+  every language (local origins dropped, `--api-origin`). A query string or
+  fragment is dropped. Test files are skipped.
+- `resttemplate`: `RestTemplate` / `RestOperations` (`getForObject`,
+  `getForEntity`, `postForObject`, `postForEntity`, `postForLocation`, `put`,
+  `patchForObject`, `delete`, `headForHeaders`, `optionsForAllow`, and `exchange`
+  and `execute` with an `HttpMethod`). A `RestTemplateBuilder().rootUri(b)` base
+  counts as a base URL.
+- `restclient` and `webclient`: `client.get().uri(...)`, `.method(...)`,
+  `.uri(URI.create(...))` and `.uri(b -> b.path("/x").build())`, recorded on the
+  `uri(...)` call. The base is the one of the chain (`RestClient.create(base)`,
+  `.baseUrl(base)`), of the field or local that built the client in the same
+  class, or, for an injected client, of the only `@Bean` method of the scan that
+  builds a client of that type with a base URL. A relative path gets the base in
+  front.
+- `httpclient` (`java.net.http`) and `okhttp`: the request is recorded on the
+  `HttpRequest.newBuilder` or `new Request.Builder()` call, one per request
+  expression, whatever sends it, so the function that builds the request is the
+  one that requests, even when another function sends it. GET when no method is
+  named.
+- `feign`: a `@FeignClient(name | value, url, path)` interface, or a plain Feign
+  interface with `@RequestLine` and a `Feign.builder().target(Api.class, url)`
+  base. The request is recorded on each Call that invokes one of its methods,
+  with the method mapping (`@GetMapping`, `@RequestMapping(method = ...)`, ...).
+  Without `url` the base is the service name as `http://<name>`; pass
+  `--api-origin http://<name>` to turn it into a path.
+- A client may be a subclass of the library type (`class MyRt extends
+  RestTemplate`), also through scanned types. A file is looked at when it names
+  a client type or a distinctive RestTemplate method (`getForObject`, ...).
+- URLs are literals, constants, locals, concatenations, `@Value("${api.url}")`
+  fields and `Environment.getProperty`, resolved through the Spring config
+  (the entries of the profiles `spring.profiles.active` names win; an
+  unresolved placeholder is `${env:NAME}`). A placeholder through a key named
+  like a secret (`${db.password}`) is never filled and stays as written, and
+  the userinfo of an absolute URL (`http://user:pw@host`) is dropped from
+  `httpUrl`. `UriComponentsBuilder.path` / `pathSegment` join with one slash
+  (`"/a/"` + `"/b"` is `/a/b`). A Feign overload (same method name) is linked
+  only when exactly one has the call's argument count. Any other dynamic part is
+  `${expression}` and matches a route parameter. A URL that starts with a
+  dynamic part gets no base and, when nothing else is known, stays unlinked.
+- Not handled: an `HttpRequest.Builder` or `Request.Builder` held in a variable
+  (only the chain from `newBuilder` / `new Request.Builder()` to `build()` is
+  read), Apache HttpClient, Retrofit, `HttpURLConnection` and the JAX-RS
+  `Client`, `RestTemplate.exchange(RequestEntity)` built elsewhere, a
+  `WebClient` request built through a `RequestHeadersUriSpec` variable,
+  `UriComponentsBuilder` beyond `path` / `pathSegment`, a base URL set by `@Bean`
+  customizers, `uriBuilder` lambdas that do not call `path`, `@FeignClient`
+  through meta-annotations, JAX-RS annotations on Feign interfaces, Feign
+  `configuration` / `contextId`, Ribbon and load-balancer URL rewriting, and
+  `${env:X}` values read from `.env*` files.
 
 ## Non-code files
 

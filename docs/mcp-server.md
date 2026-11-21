@@ -219,7 +219,7 @@ even for large repositories; read it first to decide which tools to call.
   (kind `event`) and picocli commands (kind `cli`). A Java trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
   destination is `resolved: false`.
 - `list_env_config`: lists environment variable usage and config declarations
-  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`). `unread: true` lists instead the variables the scanned env
+  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys (also in a root `config/` directory, test resources for test readers only; secret values are stored as `<redacted>`) with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
   the env file and line) and the ones code reads that no env file declares
   (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
@@ -228,7 +228,7 @@ even for large repositories; read it first to decide which tools to call.
   lists data-access operations by source, model, library, and operation. Each
   row has the model's `table` when one is known. Go gorm, ent, sqlc,
   `database/sql` and sqlx accesses are included, and Rust sqlx, diesel and
-  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one). Rows with `direct: true`
+  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one), and Java JPA (and Spring Data repository), JDBC and MyBatis ones (`library: jpa`, `jdbc`, `mybatis`; Spring Data accesses are `jpa` rows on the entity's model, and the `spring-data` models of the repositories carry no access rows). Rows with `direct: true`
   (the file or function that makes the call) come first; the others are the
   callers, routes and entrypoints that reach it. `line` is in `accessFile`,
   the file of the call, which differs from the source's `file` on a
@@ -356,7 +356,7 @@ These answer a whole question in one call instead of a chain of lookups.
   `consumerPages`.
 - `api_consumers({ method?, path?, routeFile?, framework?, file?, client?, limit = 50 })`:
   the calls linked to a route by `REQUESTS` (fetch, axios, ky, ofetch, SWR,
-  TanStack Query, Angular `HttpClient`, tRPC, and Go `net/http` and resty), filtered by the route's method, path (resolved full
+  TanStack Query, Angular `HttpClient`, tRPC, and Go `net/http` and resty, and Java `resttemplate`, `restclient`, `webclient`, `httpclient`, `okhttp` and `feign`), filtered by the route's method, path (resolved full
   path or as declared), declaring file or framework, or by the calling `file`
   or `client`; with no filter, every linked call. Each consumer has its
   `route` (method, full path, framework, file, line), the `client`, the

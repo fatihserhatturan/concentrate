@@ -164,8 +164,14 @@ Facts that need the syntax tree come from a parse plugin instead. Java's
 `createJavaParser(plugins)` (`src/integrations/languages/java/parser.ts`) takes
 `JavaParsePlugin` functions that run on each file while its tree is alive and may
 add properties, nodes and relationships; the Java framework layer uses them for
-WebFlux functional routes and gRPC stub receivers
-(`src/integrations/frameworks/java/`).
+WebFlux functional routes, gRPC stub receivers, string constants (first, because
+the later plugins read what it keeps), JPA, JDBC and MyBatis call sites, env and
+config reads, and outbound HTTP shapes (`src/integrations/frameworks/java/`, list
+in `index.ts`). A plugin may carry a `version`, joined into the parser's cache
+version (`1+<versions>`): bump it when its parse output changes. A plugin that
+needs the whole scan stores a temporary property on a node (`javaJdbcSql`,
+`javaConfigEnv`, `javaHttp`), and the matching contributor reads it once every
+file is parsed and deletes it.
 
 ### Project manifests
 

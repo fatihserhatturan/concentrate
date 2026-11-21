@@ -1,0 +1,4 @@
+inventory:
+  base-url: http://localhost:8080/api
+portal:
+  origin: http://localhost:8080

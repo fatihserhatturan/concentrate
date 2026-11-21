@@ -1,0 +1,4711 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 16
+          },
+          {
+            "table": "File",
+            "count": 14
+          },
+          {
+            "table": "Import",
+            "count": 52
+          },
+          {
+            "table": "Function",
+            "count": 29
+          },
+          {
+            "table": "Class",
+            "count": 9
+          },
+          {
+            "table": "Field",
+            "count": 15
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 29
+          },
+          {
+            "table": "Interface",
+            "count": 3
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 15
+          },
+          {
+            "table": "Route",
+            "count": 8
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 5
+          },
+          {
+            "table": "ConfigValue",
+            "count": 12
+          },
+          {
+            "table": "DataModel",
+            "count": 4
+          },
+          {
+            "table": "Table",
+            "count": 1
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 16
+        },
+        {
+          "table": "File",
+          "count": 14
+        },
+        {
+          "table": "Import",
+          "count": 52
+        },
+        {
+          "table": "Function",
+          "count": 29
+        },
+        {
+          "table": "Class",
+          "count": 9
+        },
+        {
+          "table": "Field",
+          "count": 15
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 29
+        },
+        {
+          "table": "Interface",
+          "count": 3
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 15
+        },
+        {
+          "table": "Route",
+          "count": 8
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 5
+        },
+        {
+          "table": "ConfigValue",
+          "count": 12
+        },
+        {
+          "table": "DataModel",
+          "count": 4
+        },
+        {
+          "table": "Table",
+          "count": 1
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "OrdersApplication",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "NotifyGateway",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LimitProperties",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderJdbcDao",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderEntity",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderService",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "AuditController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "NotifyController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "AuditClient",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/orders/client/AuditClient.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "OrderMapper",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "NotifyGateway",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "NotifyGateway"
+          },
+          {
+            "name": "send",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "NotifyGateway"
+          },
+          {
+            "name": "getMaxOpen",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LimitProperties"
+          },
+          {
+            "name": "getPageSize",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LimitProperties"
+          },
+          {
+            "name": "OrderJdbcDao",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderJdbcDao"
+          },
+          {
+            "name": "markShipped",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderJdbcDao"
+          },
+          {
+            "name": "openCount",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderJdbcDao"
+          },
+          {
+            "name": "OrderService",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 26,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "place",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 35,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "open",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 43,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "forCustomer",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 52,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "cleanup",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 56,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "region",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 60,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderService"
+          },
+          {
+            "name": "record",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "AuditController"
+          },
+          {
+            "name": "send",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "NotifyController"
+          },
+          {
+            "name": "OrderController",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          },
+          {
+            "name": "place",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          },
+          {
+            "name": "open",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          },
+          {
+            "name": "byCustomer",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          },
+          {
+            "name": "cleanup",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          },
+          {
+            "name": "region",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 49,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderController"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface) MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target) WHERE target.name IN [\"AuditClient\", \"OrderMapper\", \"OrderRepository\"] RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine, cls.name AS name, classFile.relativePath AS file, cls.line AS line ORDER BY classFile.relativePath, cls.line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "OrdersApplication",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "NotifyGateway",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LimitProperties",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderJdbcDao",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderEntity",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderService",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "AuditController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/web/AuditController.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "NotifyController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "AuditClient",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/orders/client/AuditClient.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "OrderMapper",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "OrderRepository",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "NotifyGateway",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "NotifyGateway"
+        },
+        {
+          "name": "send",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "line": 16,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "NotifyGateway"
+        },
+        {
+          "name": "getMaxOpen",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LimitProperties"
+        },
+        {
+          "name": "getPageSize",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LimitProperties"
+        },
+        {
+          "name": "OrderJdbcDao",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderJdbcDao"
+        },
+        {
+          "name": "markShipped",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderJdbcDao"
+        },
+        {
+          "name": "openCount",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderJdbcDao"
+        },
+        {
+          "name": "OrderService",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 26,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderService"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "name": "OrdersApplication",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "name": "NotifyGateway",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "name": "LimitProperties",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "name": "OrderJdbcDao",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+            "name": "OrderEntity",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "name": "OrderService",
+            "kind": "Class",
+            "line": 14,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "name": "AuditController",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "name": "NotifyController",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "name": "OrderController",
+            "kind": "Class",
+            "line": 15,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/orders/client/AuditClient.java",
+            "name": "AuditClient",
+            "kind": "Interface",
+            "line": 7,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "name": "OrderMapper",
+            "kind": "Interface",
+            "line": 8,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "name": "OrderRepository",
+            "kind": "Interface",
+            "line": 7,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+          "name": "OrdersApplication",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "name": "NotifyGateway",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "name": "LimitProperties",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "name": "OrderJdbcDao",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+          "name": "OrderEntity",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "name": "OrderService",
+          "kind": "Class",
+          "line": 14,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/AuditController.java",
+          "name": "AuditController",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+          "name": "NotifyController",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "name": "OrderController",
+          "kind": "Class",
+          "line": 15,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/client/AuditClient.java",
+          "name": "AuditClient",
+          "kind": "Interface",
+          "line": 7,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "name": "OrderMapper",
+          "kind": "Interface",
+          "line": 8,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "name": "OrderRepository",
+          "kind": "Interface",
+          "line": 7,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/audit/events",
+            "fullPath": "/api/audit/events",
+            "framework": "spring-mvc",
+            "handlerName": "record",
+            "handler": "record"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/notify/send",
+            "fullPath": "/api/notify/send",
+            "framework": "spring-mvc",
+            "handlerName": "send",
+            "handler": "send"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "method": "POST",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "spring-mvc",
+            "handlerName": "place",
+            "handler": "place"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "method": "GET",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "spring-mvc",
+            "handlerName": "open",
+            "handler": "open"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "method": "PUT",
+            "path": "/api/orders/{id}/ship",
+            "fullPath": "/api/orders/{id}/ship",
+            "framework": "spring-mvc",
+            "handlerName": "ship",
+            "handler": "ship"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "method": "GET",
+            "path": "/api/orders/by-customer/{email}",
+            "fullPath": "/api/orders/by-customer/{email}",
+            "framework": "spring-mvc",
+            "handlerName": "byCustomer",
+            "handler": "byCustomer"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "method": "DELETE",
+            "path": "/api/orders/cancelled",
+            "fullPath": "/api/orders/cancelled",
+            "framework": "spring-mvc",
+            "handlerName": "cleanup",
+            "handler": "cleanup"
+          },
+          {
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 49,
+            "method": "GET",
+            "path": "/api/orders/region",
+            "fullPath": "/api/orders/region",
+            "framework": "spring-mvc",
+            "handlerName": "region",
+            "handler": "region"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/orders/web/AuditController.java",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/audit/events",
+          "fullPath": "/api/audit/events",
+          "framework": "spring-mvc",
+          "handlerName": "record",
+          "handler": "record"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/notify/send",
+          "fullPath": "/api/notify/send",
+          "framework": "spring-mvc",
+          "handlerName": "send",
+          "handler": "send"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 24,
+          "method": "POST",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "spring-mvc",
+          "handlerName": "place",
+          "handler": "place"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 29,
+          "method": "GET",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "spring-mvc",
+          "handlerName": "open",
+          "handler": "open"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 34,
+          "method": "PUT",
+          "path": "/api/orders/{id}/ship",
+          "fullPath": "/api/orders/{id}/ship",
+          "framework": "spring-mvc",
+          "handlerName": "ship",
+          "handler": "ship"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 39,
+          "method": "GET",
+          "path": "/api/orders/by-customer/{email}",
+          "fullPath": "/api/orders/by-customer/{email}",
+          "framework": "spring-mvc",
+          "handlerName": "byCustomer",
+          "handler": "byCustomer"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 44,
+          "method": "DELETE",
+          "path": "/api/orders/cancelled",
+          "fullPath": "/api/orders/cancelled",
+          "framework": "spring-mvc",
+          "handlerName": "cleanup",
+          "handler": "cleanup"
+        },
+        {
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 49,
+          "method": "GET",
+          "path": "/api/orders/region",
+          "fullPath": "/api/orders/region",
+          "framework": "spring-mvc",
+          "handlerName": "region",
+          "handler": "region"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 6,
+            "kind": "spring-boot-application",
+            "trigger": "com.acme.orders.OrdersApplication",
+            "library": "spring-boot",
+            "handlerName": "main",
+            "handler": "main"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:8:0:main:<none>",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 8,
+            "kind": "main",
+            "trigger": null,
+            "library": "java",
+            "handlerName": "main",
+            "handler": "main"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:8:0:main:<none>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:8:0:main:<none>"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "kind": "main",
+            "trigger": null,
+            "line": 6,
+            "command": "SpringApplication.run"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+          "line": 6,
+          "kind": "spring-boot-application",
+          "trigger": "com.acme.orders.OrdersApplication",
+          "library": "spring-boot",
+          "handlerName": "main",
+          "handler": "main",
+          "runs": [
+            {
+              "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+              "entrypoint": "main:null",
+              "command": "SpringApplication.run"
+            }
+          ]
+        },
+        {
+          "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+          "line": 8,
+          "kind": "main",
+          "trigger": null,
+          "library": "java",
+          "handlerName": "main",
+          "handler": "main"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 61,
+            "name": "ORDERS_REGION",
+            "value": "System.getenv",
+            "valueType": null,
+            "consumer": "src/main/java/com/acme/orders/service/OrderService.java",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 7,
+            "name": "NOTIFY_URL",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 10,
+            "name": "AUDIT_URL",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 13,
+            "name": "DB_HOST",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "src/main/resources/application.yml",
+            "line": 14,
+            "name": "DB_PASSWORD",
+            "value": "config placeholder",
+            "valueType": null,
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 2,
+            "name": "app.name",
+            "value": "Orders",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 5,
+            "name": "app.limits.page-size",
+            "value": "20",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 7,
+            "name": "app.notify.base-url",
+            "value": "${NOTIFY_URL:http://localhost:8080}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 10,
+            "name": "services.audit.url",
+            "value": "${AUDIT_URL:http://localhost:8080}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 13,
+            "name": "spring.datasource.url",
+            "value": "jdbc:postgresql://${DB_HOST:localhost}/orders",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 14,
+            "name": "spring.datasource.password",
+            "value": "${DB_PASSWORD}",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 7,
+            "name": "app.notify.base-url",
+            "value": "${NOTIFY_URL:http://localhost:8080}",
+            "valueType": "string",
+            "consumer": "baseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "maxOpen",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 5,
+            "name": "app.limits.page-size",
+            "value": "20",
+            "valueType": "number",
+            "consumer": "pageSize",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 2,
+            "name": "app.name",
+            "value": "Orders",
+            "valueType": "string",
+            "consumer": "appName",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "maxOpen",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 61,
+          "name": "ORDERS_REGION",
+          "value": "System.getenv",
+          "valueType": null,
+          "consumer": "src/main/java/com/acme/orders/service/OrderService.java",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 7,
+          "name": "NOTIFY_URL",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 10,
+          "name": "AUDIT_URL",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 13,
+          "name": "DB_HOST",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "src/main/resources/application.yml",
+          "line": 14,
+          "name": "DB_PASSWORD",
+          "value": "config placeholder",
+          "valueType": null,
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 2,
+          "name": "app.name",
+          "value": "Orders",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 5,
+          "name": "app.limits.page-size",
+          "value": "20",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 7,
+          "name": "app.notify.base-url",
+          "value": "${NOTIFY_URL:http://localhost:8080}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 10,
+          "name": "services.audit.url",
+          "value": "${AUDIT_URL:http://localhost:8080}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 13,
+          "name": "spring.datasource.url",
+          "value": "jdbc:postgresql://${DB_HOST:localhost}/orders",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 14,
+          "name": "spring.datasource.password",
+          "value": "${DB_PASSWORD}",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "line": 7,
+          "name": "app.notify.base-url",
+          "value": "${NOTIFY_URL:http://localhost:8080}",
+          "valueType": "string",
+          "consumer": "baseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "maxOpen",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 5,
+          "name": "app.limits.page-size",
+          "value": "20",
+          "valueType": "number",
+          "consumer": "pageSize",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 2,
+          "name": "app.name",
+          "value": "Orders",
+          "valueType": "string",
+          "consumer": "appName",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "maxOpen",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 17
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 8,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "open",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 8,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "open",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 8,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "countByCustomerEmail",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:10:com.acme.orders.repo.OrderRepository.countByCustomerEmail",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 10,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "aggregate",
+            "expression": "OrderRepository.countByCustomerEmail"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "byCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "byCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "purgeCancelled",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "markShipped",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 15,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ship",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 15,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ship",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 15,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "openCount",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 19,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForObject"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "place",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 19,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForObject"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "place",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 19,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForObject"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "place",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 40,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "upsert",
+            "expression": "repository.save"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "place",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 40,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "upsert",
+            "expression": "repository.save"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 8,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByStatus"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/by-customer/{email}",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/cancelled",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/{id}/ship",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 15,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "update",
+            "expression": "jdbcTemplate.update"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 19,
+            "model": "orders",
+            "library": "jdbc",
+            "table": "orders",
+            "operation": "read",
+            "expression": "jdbcTemplate.queryForObject"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 40,
+            "model": "OrderEntity",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "upsert",
+            "expression": "repository.save"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByStatus",
+          "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 8,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "countByCustomerEmail",
+          "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 10,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "aggregate",
+          "expression": "OrderRepository.countByCustomerEmail"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "byCustomer",
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "purgeCancelled",
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "markShipped",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 15,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "openCount",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 19,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForObject"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "place",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 40,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "upsert",
+          "expression": "repository.save"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "open",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 8,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "open",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 8,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forCustomer",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "byCustomer",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ship",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 15,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ship",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 15,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "place",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 19,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForObject"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "place",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 19,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForObject"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "place",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 40,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "upsert",
+          "expression": "repository.save"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+          "line": 8,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByStatus"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/by-customer/{email}",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/cancelled",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/{id}/ship",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 15,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "update",
+          "expression": "jdbcTemplate.update"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 19,
+          "model": "orders",
+          "library": "jdbc",
+          "table": "orders",
+          "operation": "read",
+          "expression": "jdbcTemplate.queryForObject"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 40,
+          "model": "OrderEntity",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "upsert",
+          "expression": "repository.save"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 24
+      }
+    }
+  },
+  {
+    "tool": "list_tables",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (table:Table) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
+        "params": {
+          "name": "",
+          "library": ""
+        },
+        "rows": [
+          {
+            "id": "table:java:-:orders",
+            "name": "orders",
+            "kind": "table",
+            "library": "jpa",
+            "schemaName": null,
+            "provider": null,
+            "declaredIn": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+            "line": 8,
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"Long\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":true},{\"name\":\"customerEmail\",\"column\":\"customer_email\",\"type\":\"String\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"status\",\"column\":\"status\",\"type\":\"String\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) RETURN id(table) AS table, id(model) AS modelId, model.name AS model",
+        "params": {
+          "name": "",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:orders",
+            "modelId": "datamodel:jpa:com.acme.orders.domain:OrderEntity",
+            "model": "OrderEntity"
+          },
+          {
+            "table": "table:java:-:orders",
+            "modelId": "datamodel:spring-data:com.acme.orders.repo:OrderRepository",
+            "model": "OrderRepository"
+          },
+          {
+            "table": "table:java:-:orders",
+            "modelId": "datamodel:jdbc:orders",
+            "model": "orders"
+          },
+          {
+            "table": "table:java:-:orders",
+            "modelId": "datamodel:mybatis:orders",
+            "model": "orders"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[rel:RELATES_TO]->(target:DataModel) RETURN id(model) AS modelId, rel.field AS field, rel.kind AS kind, target.name AS target, rel.relationName AS relationName, rel.onDelete AS onDelete",
+        "rows": [
+          {
+            "modelId": "datamodel:spring-data:com.acme.orders.repo:OrderRepository",
+            "field": "entity",
+            "kind": "one",
+            "target": "OrderEntity",
+            "relationName": null,
+            "onDelete": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(route) RETURN id(table) AS table, id(route) AS id, route.method AS method, route.fullPath AS fullPath, route.path AS path, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "method": "POST",
+            "fullPath": "/api/orders",
+            "path": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "relType": "WRITES_ROUTE",
+            "operation": "upsert"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders",
+            "method": "GET",
+            "fullPath": "/api/orders",
+            "path": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship",
+            "method": "PUT",
+            "fullPath": "/api/orders/{id}/ship",
+            "path": "/api/orders/{id}/ship",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "relType": "WRITES_ROUTE",
+            "operation": "update"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "method": "POST",
+            "fullPath": "/api/orders",
+            "path": "/api/orders",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}",
+            "method": "GET",
+            "fullPath": "/api/orders/by-customer/{email}",
+            "path": "/api/orders/by-customer/{email}",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled",
+            "method": "DELETE",
+            "fullPath": "/api/orders/cancelled",
+            "path": "/api/orders/cancelled",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "relType": "WRITES_ROUTE",
+            "operation": "delete"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) RETURN id(table) AS table, id(fn) AS id, label(rel) AS relType",
+        "params": {
+          "name": "",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:10:com.acme.orders.repo.OrderRepository.countByCustomerEmail",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:orders",
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "relType": "WRITES_FUNCTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {},
+      "totalTables": 1,
+      "tables": [
+        {
+          "name": "orders",
+          "kind": "table",
+          "library": "jpa",
+          "declaredIn": "src/main/java/com/acme/orders/domain/OrderEntity.java",
+          "line": 8,
+          "columns": [
+            {
+              "name": "id",
+              "type": "Long",
+              "isId": true,
+              "isUnique": true
+            },
+            {
+              "name": "customerEmail",
+              "type": "String",
+              "column": "customer_email",
+              "optional": true
+            },
+            {
+              "name": "status",
+              "type": "String",
+              "optional": true
+            }
+          ],
+          "models": [
+            {
+              "name": "OrderEntity",
+              "relations": []
+            },
+            {
+              "name": "OrderRepository",
+              "relations": [
+                {
+                  "field": "entity",
+                  "kind": "one",
+                  "model": "OrderEntity"
+                }
+              ]
+            },
+            {
+              "name": "orders",
+              "relations": []
+            },
+            {
+              "name": "orders",
+              "relations": []
+            }
+          ],
+          "readBy": {
+            "routes": 3,
+            "entrypoints": 0,
+            "functions": 10
+          },
+          "writtenBy": {
+            "routes": 3,
+            "entrypoints": 0,
+            "functions": 8
+          },
+          "routes": [
+            {
+              "method": "POST",
+              "path": "/api/orders",
+              "file": "src/main/java/com/acme/orders/web/OrderController.java",
+              "line": 24,
+              "reads": [
+                "read"
+              ],
+              "writes": [
+                "upsert"
+              ]
+            },
+            {
+              "method": "GET",
+              "path": "/api/orders",
+              "file": "src/main/java/com/acme/orders/web/OrderController.java",
+              "line": 29,
+              "reads": [
+                "read"
+              ]
+            },
+            {
+              "method": "PUT",
+              "path": "/api/orders/{id}/ship",
+              "file": "src/main/java/com/acme/orders/web/OrderController.java",
+              "line": 34,
+              "writes": [
+                "update"
+              ]
+            },
+            {
+              "method": "GET",
+              "path": "/api/orders/by-customer/{email}",
+              "file": "src/main/java/com/acme/orders/web/OrderController.java",
+              "line": 39,
+              "reads": [
+                "read"
+              ]
+            },
+            {
+              "method": "DELETE",
+              "path": "/api/orders/cancelled",
+              "file": "src/main/java/com/acme/orders/web/OrderController.java",
+              "line": 44,
+              "writes": [
+                "delete"
+              ]
+            }
+          ],
+          "entrypoints": []
+        }
+      ],
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "mybatis"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"mybatis\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"mybatis\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "byCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "byCustomer",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "purgeCancelled",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "cleanup",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"mybatis\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/by-customer/{email}",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "read",
+            "expression": "@Select"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/cancelled",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "sourceId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "model": "orders",
+            "library": "mybatis",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "@Delete"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"mybatis\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "mybatis",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "byCustomer",
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "purgeCancelled",
+          "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forCustomer",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "byCustomer",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "cleanup",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/by-customer/{email}",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 10,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "read",
+          "expression": "@Select"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/cancelled",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+          "line": 13,
+          "model": "orders",
+          "library": "mybatis",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "@Delete"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "name": "app.limits"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"app.limits\")) RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"app.limits\")) RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 5,
+            "name": "app.limits.page-size",
+            "value": "20",
+            "valueType": "number",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"app.limits\")) RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "maxOpen",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 5,
+            "name": "app.limits.page-size",
+            "value": "20",
+            "valueType": "number",
+            "consumer": "pageSize",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 4,
+            "name": "app.limits.max-open",
+            "value": "50",
+            "valueType": "number",
+            "consumer": "maxOpen",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "app.limits",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 5,
+          "name": "app.limits.page-size",
+          "value": "20",
+          "valueType": "number",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "maxOpen",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+          "line": 5,
+          "name": "app.limits.page-size",
+          "value": "20",
+          "valueType": "number",
+          "consumer": "pageSize",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 4,
+          "name": "app.limits.max-open",
+          "value": "50",
+          "valueType": "number",
+          "consumer": "maxOpen",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "feign"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:function:8:com.acme.orders.OrdersApplication.main",
+            "name": "main",
+            "className": "OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:12:com.acme.orders.client.NotifyGateway.NotifyGateway",
+            "name": "NotifyGateway",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "name": "send",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "name": "getMaxOpen",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:11:com.acme.orders.config.LimitProperties.getPageSize",
+            "name": "getPageSize",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:10:com.acme.orders.dao.OrderJdbcDao.OrderJdbcDao",
+            "name": "OrderJdbcDao",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "name": "markShipped",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "name": "openCount",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:26:com.acme.orders.service.OrderService.OrderService",
+            "name": "OrderService",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 26,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "name": "place",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 35,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "name": "open",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 43,
+            "endLine": 45
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "name": "ship",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 47,
+            "endLine": 50
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "name": "forCustomer",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 52,
+            "endLine": 54
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "name": "cleanup",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 56,
+            "endLine": 58
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "name": "region",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 60,
+            "endLine": 62
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/AuditController.java:function:11:com.acme.orders.web.AuditController.record",
+            "name": "record",
+            "className": "AuditController",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/NotifyController.java:function:11:com.acme.orders.web.NotifyController.send",
+            "name": "send",
+            "className": "NotifyController",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:20:com.acme.orders.web.OrderController.OrderController",
+            "name": "OrderController",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "name": "place",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "name": "open",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "name": "ship",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "endLine": 37
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "name": "byCustomer",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "endLine": 42
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "name": "cleanup",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "endLine": 47
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "name": "region",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 49,
+            "endLine": 52
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/client/AuditClient.java:function:9:com.acme.orders.client.AuditClient.record",
+            "line": 39
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "callee": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "line": 44
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "line": 48
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "line": 49
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "line": 53
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "line": 57
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "line": 26
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "line": 31
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "line": 41
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "line": 46
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "line": 51
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:49:0:GET:/api/orders/region"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events",
+            "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:49:0:GET:/api/orders/region"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/audit/events",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/orders/web/AuditController.java",
+            "routeLine": 11,
+            "call": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place:call:39:4:audit.record",
+            "line": 39,
+            "expression": "audit.record",
+            "client": "feign",
+            "method": "POST",
+            "url": "/api/audit/events",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place"
+          },
+          {
+            "route": "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/notify/send",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "routeLine": 11,
+            "call": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send:call:17:11:web.post().uri",
+            "line": 17,
+            "expression": "web.post().uri",
+            "client": "webclient",
+            "method": "POST",
+            "url": "/api/notify/send",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "feign",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/audit/events",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11
+          },
+          "client": "feign",
+          "method": "POST",
+          "url": "/api/audit/events",
+          "match": "exact",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 39,
+          "expression": "audit.record",
+          "function": "place"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "webclient"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:function:8:com.acme.orders.OrdersApplication.main",
+            "name": "main",
+            "className": "OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:12:com.acme.orders.client.NotifyGateway.NotifyGateway",
+            "name": "NotifyGateway",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "name": "send",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "name": "getMaxOpen",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:11:com.acme.orders.config.LimitProperties.getPageSize",
+            "name": "getPageSize",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:10:com.acme.orders.dao.OrderJdbcDao.OrderJdbcDao",
+            "name": "OrderJdbcDao",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "name": "markShipped",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "name": "openCount",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:26:com.acme.orders.service.OrderService.OrderService",
+            "name": "OrderService",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 26,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "name": "place",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 35,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "name": "open",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 43,
+            "endLine": 45
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "name": "ship",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 47,
+            "endLine": 50
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "name": "forCustomer",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 52,
+            "endLine": 54
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "name": "cleanup",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 56,
+            "endLine": 58
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "name": "region",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 60,
+            "endLine": 62
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/AuditController.java:function:11:com.acme.orders.web.AuditController.record",
+            "name": "record",
+            "className": "AuditController",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/NotifyController.java:function:11:com.acme.orders.web.NotifyController.send",
+            "name": "send",
+            "className": "NotifyController",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:20:com.acme.orders.web.OrderController.OrderController",
+            "name": "OrderController",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "name": "place",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "name": "open",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "name": "ship",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "endLine": 37
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "name": "byCustomer",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "endLine": 42
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "name": "cleanup",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "endLine": 47
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "name": "region",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 49,
+            "endLine": 52
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/client/AuditClient.java:function:9:com.acme.orders.client.AuditClient.record",
+            "line": 39
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "callee": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "line": 44
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "line": 48
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "line": 49
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "line": 53
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "line": 57
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "line": 26
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "line": 31
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "line": 41
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "line": 46
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "line": 51
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled"
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:route:49:0:GET:/api/orders/region"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events",
+            "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:24:0:POST:/api/orders",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:29:0:GET:/api/orders",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:39:0:GET:/api/orders/by-customer/{email}",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:44:0:DELETE:/api/orders/cancelled",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:49:0:GET:/api/orders/region"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/orders/web/AuditController.java:route:11:0:POST:/api/audit/events",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/audit/events",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/orders/web/AuditController.java",
+            "routeLine": 11,
+            "call": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place:call:39:4:audit.record",
+            "line": 39,
+            "expression": "audit.record",
+            "client": "feign",
+            "method": "POST",
+            "url": "/api/audit/events",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place"
+          },
+          {
+            "route": "file:src/main/java/com/acme/orders/web/NotifyController.java:route:11:0:POST:/api/notify/send",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/notify/send",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "routeLine": 11,
+            "call": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send:call:17:11:web.post().uri",
+            "line": 17,
+            "expression": "web.post().uri",
+            "client": "webclient",
+            "method": "POST",
+            "url": "/api/notify/send",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "webclient",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/notify/send",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11
+          },
+          "client": "webclient",
+          "method": "POST",
+          "url": "/api/notify/send",
+          "match": "exact",
+          "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+          "line": 17,
+          "expression": "web.post().uri",
+          "function": "send"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "markShipped"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:function:8:com.acme.orders.OrdersApplication.main",
+            "name": "main",
+            "className": "OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "line": 8,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:12:com.acme.orders.client.NotifyGateway.NotifyGateway",
+            "name": "NotifyGateway",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 12,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "name": "send",
+            "className": "NotifyGateway",
+            "file": "src/main/java/com/acme/orders/client/NotifyGateway.java",
+            "line": 16,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "name": "getMaxOpen",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:11:com.acme.orders.config.LimitProperties.getPageSize",
+            "name": "getPageSize",
+            "className": "LimitProperties",
+            "file": "src/main/java/com/acme/orders/config/LimitProperties.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:10:com.acme.orders.dao.OrderJdbcDao.OrderJdbcDao",
+            "name": "OrderJdbcDao",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 10,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "name": "markShipped",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 14,
+            "endLine": 16
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "name": "openCount",
+            "className": "OrderJdbcDao",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 18,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:26:com.acme.orders.service.OrderService.OrderService",
+            "name": "OrderService",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 26,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "name": "place",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 35,
+            "endLine": 41
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "name": "open",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 43,
+            "endLine": 45
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "name": "ship",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 47,
+            "endLine": 50
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "name": "forCustomer",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 52,
+            "endLine": 54
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "name": "cleanup",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 56,
+            "endLine": 58
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "name": "region",
+            "className": "OrderService",
+            "file": "src/main/java/com/acme/orders/service/OrderService.java",
+            "line": 60,
+            "endLine": 62
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/AuditController.java:function:11:com.acme.orders.web.AuditController.record",
+            "name": "record",
+            "className": "AuditController",
+            "file": "src/main/java/com/acme/orders/web/AuditController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/NotifyController.java:function:11:com.acme.orders.web.NotifyController.send",
+            "name": "send",
+            "className": "NotifyController",
+            "file": "src/main/java/com/acme/orders/web/NotifyController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:20:com.acme.orders.web.OrderController.OrderController",
+            "name": "OrderController",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 20,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "name": "place",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 24,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "name": "open",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 29,
+            "endLine": 32
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "name": "ship",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "endLine": 37
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "name": "byCustomer",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 39,
+            "endLine": 42
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "name": "cleanup",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 44,
+            "endLine": 47
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "name": "region",
+            "className": "OrderController",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 49,
+            "endLine": 52
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/client/AuditClient.java:function:9:com.acme.orders.client.AuditClient.record",
+            "name": "record",
+            "className": "AuditClient",
+            "file": "src/main/java/com/acme/orders/client/AuditClient.java",
+            "line": 9,
+            "endLine": 10
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "name": "byCustomer",
+            "className": "OrderMapper",
+            "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "name": "purgeCancelled",
+            "className": "OrderMapper",
+            "file": "src/main/java/com/acme/orders/mapper/OrderMapper.java",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "name": "findByStatus",
+            "className": "OrderRepository",
+            "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:10:com.acme.orders.repo.OrderRepository.countByCustomerEmail",
+            "name": "countByCustomerEmail",
+            "className": "OrderRepository",
+            "file": "src/main/java/com/acme/orders/repo/OrderRepository.java",
+            "line": 10,
+            "endLine": 10
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "markShipped"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:8:0:main:<none>",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "kind": "main",
+            "trigger": null,
+            "line": 8
+          },
+          {
+            "id": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "file": "src/main/java/com/acme/orders/OrdersApplication.java",
+            "kind": "spring-boot-application",
+            "trigger": "com.acme.orders.OrdersApplication",
+            "line": 6
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": [
+          {
+            "runner": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:6:0:spring-boot-application:com.acme.orders.OrdersApplication",
+            "target": "file:src/main/java/com/acme/orders/OrdersApplication.java:entrypoint:8:0:main:<none>",
+            "command": "SpringApplication.run"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:18:com.acme.orders.dao.OrderJdbcDao.openCount",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/config/LimitProperties.java:function:10:com.acme.orders.config.LimitProperties.getMaxOpen",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "callee": "file:src/main/java/com/acme/orders/client/AuditClient.java:function:9:com.acme.orders.client.AuditClient.record",
+            "line": 39
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "callee": "file:src/main/java/com/acme/orders/repo/OrderRepository.java:function:8:com.acme.orders.repo.OrderRepository.findByStatus",
+            "line": 44
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/client/NotifyGateway.java:function:16:com.acme.orders.client.NotifyGateway.send",
+            "line": 48
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "callee": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "line": 49
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:10:com.acme.orders.mapper.OrderMapper.byCustomer",
+            "line": 53
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/mapper/OrderMapper.java:function:13:com.acme.orders.mapper.OrderMapper.purgeCancelled",
+            "line": 57
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:24:com.acme.orders.web.OrderController.place",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:35:com.acme.orders.service.OrderService.place",
+            "line": 26
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:29:com.acme.orders.web.OrderController.open",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:43:com.acme.orders.service.OrderService.open",
+            "line": 31
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "line": 36
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:39:com.acme.orders.web.OrderController.byCustomer",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:52:com.acme.orders.service.OrderService.forCustomer",
+            "line": 41
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:44:com.acme.orders.web.OrderController.cleanup",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:56:com.acme.orders.service.OrderService.cleanup",
+            "line": 46
+          },
+          {
+            "caller": "file:src/main/java/com/acme/orders/web/OrderController.java:function:49:com.acme.orders.web.OrderController.region",
+            "callee": "file:src/main/java/com/acme/orders/service/OrderService.java:function:60:com.acme.orders.service.OrderService.region",
+            "line": 51
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship",
+            "method": "PUT",
+            "path": "/api/orders/{id}/ship",
+            "fullPath": "/api/orders/{id}/ship",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/orders/web/OrderController.java",
+            "line": 34,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          ]
+        },
+        "rows": [
+          {
+            "model": "orders",
+            "library": "jdbc",
+            "operation": "update",
+            "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+            "line": 15,
+            "expression": "jdbcTemplate.update",
+            "fn": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          ]
+        },
+        "rows": [
+          {
+            "tableId": "table:java:-:orders",
+            "table": "orders",
+            "kind": "table",
+            "library": "jpa",
+            "tableAccess": "WRITES_FUNCTION",
+            "operation": "update",
+            "fn": "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/web/OrderController.java:route:34:0:PUT:/api/orders/{id}/ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/orders/dao/OrderJdbcDao.java:function:14:com.acme.orders.dao.OrderJdbcDao.markShipped",
+            "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship",
+            "file:src/main/java/com/acme/orders/web/OrderController.java:function:34:com.acme.orders.web.OrderController.ship"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"markShipped\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"markShipped\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"markShipped\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "markShipped"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/orders/service/OrderService.java:function:47:com.acme.orders.service.OrderService.ship:call:49:11:dao.markShipped",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "markShipped",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "markShipped",
+          "className": "OrderJdbcDao",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 14,
+          "endLine": 16
+        }
+      ],
+      "callers": [
+        {
+          "name": "ship",
+          "className": "OrderService",
+          "file": "src/main/java/com/acme/orders/service/OrderService.java",
+          "line": 47,
+          "endLine": 50,
+          "depth": 1
+        },
+        {
+          "name": "ship",
+          "className": "OrderController",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 34,
+          "endLine": 37,
+          "depth": 2
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "PUT",
+          "path": "/api/orders/{id}/ship",
+          "fullPath": "/api/orders/{id}/ship",
+          "framework": "spring-mvc",
+          "file": "src/main/java/com/acme/orders/web/OrderController.java",
+          "line": 34,
+          "reachedThrough": [
+            {
+              "function": "ship",
+              "functionFile": "src/main/java/com/acme/orders/web/OrderController.java",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
+      "dataAccess": [
+        {
+          "model": "orders",
+          "library": "jdbc",
+          "operation": "update",
+          "file": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java",
+          "line": 15,
+          "expression": "jdbcTemplate.update",
+          "usedBy": [
+            {
+              "function": "markShipped",
+              "functionFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java"
+            }
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "table": "orders",
+          "kind": "table",
+          "library": "jpa",
+          "reads": [],
+          "writes": [
+            "update"
+          ],
+          "usedBy": [
+            {
+              "function": "markShipped",
+              "functionFile": "src/main/java/com/acme/orders/dao/OrderJdbcDao.java"
+            }
+          ]
+        }
+      ],
+      "envVars": [],
+      "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named markShipped in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  }
+]

@@ -1,0 +1,3308 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 0
+          },
+          {
+            "table": "Directory",
+            "count": 11
+          },
+          {
+            "table": "File",
+            "count": 12
+          },
+          {
+            "table": "Import",
+            "count": 55
+          },
+          {
+            "table": "Function",
+            "count": 23
+          },
+          {
+            "table": "Class",
+            "count": 9
+          },
+          {
+            "table": "Field",
+            "count": 21
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 33
+          },
+          {
+            "table": "Interface",
+            "count": 3
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 4
+          },
+          {
+            "table": "Route",
+            "count": 2
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 0
+          },
+          {
+            "table": "DataModel",
+            "count": 8
+          },
+          {
+            "table": "Table",
+            "count": 6
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 0
+        },
+        {
+          "table": "Directory",
+          "count": 11
+        },
+        {
+          "table": "File",
+          "count": 12
+        },
+        {
+          "table": "Import",
+          "count": 55
+        },
+        {
+          "table": "Function",
+          "count": 23
+        },
+        {
+          "table": "Class",
+          "count": 9
+        },
+        {
+          "table": "Field",
+          "count": 21
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 33
+        },
+        {
+          "table": "Interface",
+          "count": 3
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 4
+        },
+        {
+          "table": "Route",
+          "count": 2
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 0
+        },
+        {
+          "table": "DataModel",
+          "count": 8
+        },
+        {
+          "table": "Table",
+          "count": 6
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "Address",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/Address.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "BaseEntity",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CardPayment",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/CardPayment.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Customer",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/Customer.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Order",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/Order.java",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Payment",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/domain/Payment.java",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CustomerService",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CustomerController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "BaseRepository",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/shop/repo/BaseRepository.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "CustomerRepository",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "getId",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BaseEntity"
+          },
+          {
+            "name": "CustomerService",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerService"
+          },
+          {
+            "name": "register",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 23,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerService"
+          },
+          {
+            "name": "active",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 31,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerService"
+          },
+          {
+            "name": "forget",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 35,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerService"
+          },
+          {
+            "name": "CustomerController",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerController"
+          },
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerController"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerController"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface) MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target) WHERE target.name IN [\"BaseRepository\", \"CustomerRepository\", \"OrderRepository\"] RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine, cls.name AS name, classFile.relativePath AS file, cls.line AS line ORDER BY classFile.relativePath, cls.line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "Address",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/Address.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "BaseEntity",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CardPayment",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/CardPayment.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Customer",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/Customer.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Order",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/Order.java",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Payment",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/domain/Payment.java",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CustomerService",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CustomerController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "BaseRepository",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/shop/repo/BaseRepository.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "CustomerRepository",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "OrderRepository",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "getId",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "BaseEntity"
+        },
+        {
+          "name": "CustomerService",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerService"
+        },
+        {
+          "name": "register",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 23,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerService"
+        },
+        {
+          "name": "active",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 31,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerService"
+        },
+        {
+          "name": "forget",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 35,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerService"
+        },
+        {
+          "name": "CustomerController",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerController"
+        },
+        {
+          "name": "get",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerController"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 22,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerController"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 19
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/shop/domain/Address.java",
+            "name": "Address",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+            "name": "BaseEntity",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/CardPayment.java",
+            "name": "CardPayment",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/Customer.java",
+            "name": "Customer",
+            "kind": "Class",
+            "line": 12,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/Order.java",
+            "name": "Order",
+            "kind": "Class",
+            "line": 13,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/Payment.java",
+            "name": "Payment",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/domain/Product.java",
+            "name": "Product",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "name": "CustomerService",
+            "kind": "Class",
+            "line": 11,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "name": "CustomerController",
+            "kind": "Class",
+            "line": 12,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/shop/repo/BaseRepository.java",
+            "name": "BaseRepository",
+            "kind": "Interface",
+            "line": 6,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "name": "CustomerRepository",
+            "kind": "Interface",
+            "line": 10,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "name": "OrderRepository",
+            "kind": "Interface",
+            "line": 6,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/shop/domain/Address.java",
+          "name": "Address",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+          "name": "BaseEntity",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/CardPayment.java",
+          "name": "CardPayment",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/Customer.java",
+          "name": "Customer",
+          "kind": "Class",
+          "line": 12,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/Order.java",
+          "name": "Order",
+          "kind": "Class",
+          "line": 13,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/Payment.java",
+          "name": "Payment",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/domain/Product.java",
+          "name": "Product",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "name": "CustomerService",
+          "kind": "Class",
+          "line": 11,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "name": "CustomerController",
+          "kind": "Class",
+          "line": 12,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/repo/BaseRepository.java",
+          "name": "BaseRepository",
+          "kind": "Interface",
+          "line": 6,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "name": "CustomerRepository",
+          "kind": "Interface",
+          "line": 10,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "name": "OrderRepository",
+          "kind": "Interface",
+          "line": 6,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 19,
+            "method": "GET",
+            "path": "/customers/{id}",
+            "fullPath": "/customers/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 22,
+            "method": "POST",
+            "path": "/customers",
+            "fullPath": "/customers",
+            "framework": "spring-mvc",
+            "handlerName": "create",
+            "handler": "create"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 19,
+          "method": "GET",
+          "path": "/customers/{id}",
+          "fullPath": "/customers/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "line": 22,
+          "method": "POST",
+          "path": "/customers",
+          "fullPath": "/customers",
+          "framework": "spring-mvc",
+          "handlerName": "create",
+          "handler": "create"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByCustomerId",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/OrderRepository.java:function:7:com.acme.shop.repo.OrderRepository.findByCustomerId",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByCustomerId"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByCustomerId"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByEmailAndStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.findByEmailAndStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "active",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.findByEmailAndStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "countByStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:13:com.acme.shop.repo.CustomerRepository.countByStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 13,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "aggregate",
+            "expression": "CustomerRepository.countByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "existsByEmail",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:15:com.acme.shop.repo.CustomerRepository.existsByEmail",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 15,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.existsByEmail"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "deleteByStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:17:com.acme.shop.repo.CustomerRepository.deleteByStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 17,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "delete",
+            "expression": "CustomerRepository.deleteByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "search",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:19:com.acme.shop.repo.CustomerRepository.search",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 19,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.search"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "updateStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:22:com.acme.shop.repo.CustomerRepository.updateStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 22,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "update",
+            "expression": "CustomerRepository.updateStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "register",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:23:com.acme.shop.service.CustomerService.register",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "create",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:22:com.acme.shop.web.CustomerController.create",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "withOrders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.withOrders"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "withOrders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "CustomerRepository.withOrders"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "load",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:27:com.acme.shop.service.CustomerService.load",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "get",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:19:com.acme.shop.web.CustomerController.get",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 36,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "delete",
+            "expression": "customers.deleteById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 37,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "orders.deleteAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "products",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:40:com.acme.shop.service.CustomerService.products",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 41,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "read",
+            "expression": "em.createQuery"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "product",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:44:com.acme.shop.service.CustomerService.product",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 45,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "read",
+            "expression": "em.find"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "add",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:48:com.acme.shop.service.CustomerService.add",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 49,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "create",
+            "expression": "em.persist"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "stats",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:52:com.acme.shop.service.CustomerService.stats",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 53,
+            "model": "order_products",
+            "library": "jpa",
+            "table": "order_products",
+            "operation": "read",
+            "expression": "em.createNativeQuery"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:22:0:POST:/customers",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers/{id}",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:19:0:GET:/customers/{id}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByCustomerId",
+          "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 7,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByCustomerId"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByEmailAndStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.findByEmailAndStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "countByStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 13,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "aggregate",
+          "expression": "CustomerRepository.countByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "existsByEmail",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 15,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.existsByEmail"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "deleteByStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 17,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "delete",
+          "expression": "CustomerRepository.deleteByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "search",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 19,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.search"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "updateStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 22,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "update",
+          "expression": "CustomerRepository.updateStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "register",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "withOrders",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 26,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.withOrders"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "withOrders",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 26,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "CustomerRepository.withOrders"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "load",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 36,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "delete",
+          "expression": "customers.deleteById"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 37,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "orders.deleteAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "products",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 41,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "read",
+          "expression": "em.createQuery"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "product",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 45,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "read",
+          "expression": "em.find"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "add",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 49,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "create",
+          "expression": "em.persist"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "stats",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 53,
+          "model": "order_products",
+          "library": "jpa",
+          "table": "order_products",
+          "operation": "read",
+          "expression": "em.createNativeQuery"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 7,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByCustomerId"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "active",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.findByEmailAndStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "create",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "get",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers/{id}",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 23
+      }
+    }
+  },
+  {
+    "tool": "list_tables",
+    "args": {
+      "name": "customers"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
+        "params": {
+          "name": "customers",
+          "library": ""
+        },
+        "rows": [
+          {
+            "id": "table:java:-:customers",
+            "name": "customers",
+            "kind": "table",
+            "library": "jpa",
+            "schemaName": "shop",
+            "provider": null,
+            "declaredIn": "src/main/java/com/acme/shop/domain/Customer.java",
+            "line": 12,
+            "columns": "[{\"name\":\"id\",\"column\":\"id\",\"type\":\"Long\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":true},{\"name\":\"createdAt\",\"column\":\"created_at\",\"type\":\"Instant\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"email\",\"column\":\"email_address\",\"type\":\"String\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"status\",\"column\":\"status\",\"type\":\"String\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"street\",\"column\":\"street\",\"type\":\"String\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"city\",\"column\":\"city_name\",\"type\":\"String\",\"optional\":true,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(model) AS modelId, model.name AS model",
+        "params": {
+          "name": "customers",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:customers",
+            "modelId": "datamodel:jpa:com.acme.shop.domain:Customer",
+            "model": "Customer"
+          },
+          {
+            "table": "table:java:-:customers",
+            "modelId": "datamodel:spring-data:com.acme.shop.repo:CustomerRepository",
+            "model": "CustomerRepository"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[rel:RELATES_TO]->(target:DataModel) RETURN id(model) AS modelId, rel.field AS field, rel.kind AS kind, target.name AS target, rel.relationName AS relationName, rel.onDelete AS onDelete",
+        "rows": [
+          {
+            "modelId": "datamodel:jpa:com.acme.shop.domain:Customer",
+            "field": "orders",
+            "kind": "many",
+            "target": "Order",
+            "relationName": null,
+            "onDelete": null
+          },
+          {
+            "modelId": "datamodel:jpa:com.acme.shop.domain:Order",
+            "field": "customer",
+            "kind": "one",
+            "target": "Customer",
+            "relationName": null,
+            "onDelete": null
+          },
+          {
+            "modelId": "datamodel:jpa:com.acme.shop.domain:Order",
+            "field": "products",
+            "kind": "many",
+            "target": "Product",
+            "relationName": null,
+            "onDelete": null
+          },
+          {
+            "modelId": "datamodel:spring-data:com.acme.shop.repo:CustomerRepository",
+            "field": "entity",
+            "kind": "one",
+            "target": "Customer",
+            "relationName": null,
+            "onDelete": null
+          },
+          {
+            "modelId": "datamodel:spring-data:com.acme.shop.repo:OrderRepository",
+            "field": "entity",
+            "kind": "one",
+            "target": "Order",
+            "relationName": null,
+            "onDelete": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(route) RETURN id(table) AS table, id(route) AS id, route.method AS method, route.fullPath AS fullPath, route.path AS path, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "customers",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:19:0:GET:/customers/{id}",
+            "method": "GET",
+            "fullPath": "/customers/{id}",
+            "path": "/customers/{id}",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 19,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:22:0:POST:/customers",
+            "method": "POST",
+            "fullPath": "/customers",
+            "path": "/customers",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 22,
+            "relType": "WRITES_ROUTE",
+            "operation": "upsert"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "customers",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(fn) AS id, label(rel) AS relType",
+        "params": {
+          "name": "customers",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:13:com.acme.shop.repo.CustomerRepository.countByStatus",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:15:com.acme.shop.repo.CustomerRepository.existsByEmail",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:17:com.acme.shop.repo.CustomerRepository.deleteByStatus",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:19:com.acme.shop.repo.CustomerRepository.search",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:22:com.acme.shop.repo.CustomerRepository.updateStatus",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:23:com.acme.shop.service.CustomerService.register",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:27:com.acme.shop.service.CustomerService.load",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:22:com.acme.shop.web.CustomerController.create",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:java:-:customers",
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:19:com.acme.shop.web.CustomerController.get",
+            "relType": "READS_FUNCTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "customers"
+      },
+      "totalTables": 1,
+      "tables": [
+        {
+          "name": "customers",
+          "kind": "table",
+          "library": "jpa",
+          "schemaName": "shop",
+          "declaredIn": "src/main/java/com/acme/shop/domain/Customer.java",
+          "line": 12,
+          "columns": [
+            {
+              "name": "id",
+              "type": "Long",
+              "isId": true,
+              "isUnique": true
+            },
+            {
+              "name": "createdAt",
+              "type": "Instant",
+              "column": "created_at",
+              "optional": true
+            },
+            {
+              "name": "email",
+              "type": "String",
+              "column": "email_address"
+            },
+            {
+              "name": "status",
+              "type": "String",
+              "optional": true
+            },
+            {
+              "name": "street",
+              "type": "String",
+              "optional": true
+            },
+            {
+              "name": "city",
+              "type": "String",
+              "column": "city_name",
+              "optional": true
+            }
+          ],
+          "models": [
+            {
+              "name": "Customer",
+              "relations": [
+                {
+                  "field": "orders",
+                  "kind": "many",
+                  "model": "Order"
+                }
+              ]
+            },
+            {
+              "name": "CustomerRepository",
+              "relations": [
+                {
+                  "field": "entity",
+                  "kind": "one",
+                  "model": "Customer"
+                }
+              ]
+            }
+          ],
+          "readBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 8
+          },
+          "writtenBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 5
+          },
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/customers/{id}",
+              "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+              "line": 19,
+              "reads": [
+                "read"
+              ]
+            },
+            {
+              "method": "POST",
+              "path": "/customers",
+              "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+              "line": 22,
+              "writes": [
+                "upsert"
+              ]
+            }
+          ],
+          "entrypoints": []
+        }
+      ],
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "jpa"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"jpa\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"jpa\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByCustomerId",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/OrderRepository.java:function:7:com.acme.shop.repo.OrderRepository.findByCustomerId",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByCustomerId"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByCustomerId"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByEmailAndStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.findByEmailAndStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "active",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.findByEmailAndStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "countByStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:13:com.acme.shop.repo.CustomerRepository.countByStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 13,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "aggregate",
+            "expression": "CustomerRepository.countByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "existsByEmail",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:15:com.acme.shop.repo.CustomerRepository.existsByEmail",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 15,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.existsByEmail"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "deleteByStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:17:com.acme.shop.repo.CustomerRepository.deleteByStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 17,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "delete",
+            "expression": "CustomerRepository.deleteByStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "search",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:19:com.acme.shop.repo.CustomerRepository.search",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 19,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.search"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "updateStatus",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:22:com.acme.shop.repo.CustomerRepository.updateStatus",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 22,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "update",
+            "expression": "CustomerRepository.updateStatus"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "register",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:23:com.acme.shop.service.CustomerService.register",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "create",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:22:com.acme.shop.web.CustomerController.create",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "withOrders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "CustomerRepository.withOrders"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "withOrders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "CustomerRepository.withOrders"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "load",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:27:com.acme.shop.service.CustomerService.load",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "get",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:19:com.acme.shop.web.CustomerController.get",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 36,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "delete",
+            "expression": "customers.deleteById"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 37,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "orders.deleteAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "products",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:40:com.acme.shop.service.CustomerService.products",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 41,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "read",
+            "expression": "em.createQuery"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "product",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:44:com.acme.shop.service.CustomerService.product",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 45,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "read",
+            "expression": "em.find"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "add",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:48:com.acme.shop.service.CustomerService.add",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 49,
+            "model": "Product",
+            "library": "jpa",
+            "table": "catalog_product",
+            "operation": "create",
+            "expression": "em.persist"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "stats",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:52:com.acme.shop.service.CustomerService.stats",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 53,
+            "model": "order_products",
+            "library": "jpa",
+            "table": "order_products",
+            "operation": "read",
+            "expression": "em.createNativeQuery"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"jpa\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:22:0:POST:/customers",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 24,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "upsert",
+            "expression": "customers.save"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers/{id}",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "sourceId": "file:src/main/java/com/acme/shop/web/CustomerController.java:route:19:0:GET:/customers/{id}",
+            "direct": false,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 28,
+            "model": "Customer",
+            "library": "jpa",
+            "table": "customers",
+            "operation": "read",
+            "expression": "customers.findById"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"jpa\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "jpa",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByCustomerId",
+          "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 7,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByCustomerId"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByEmailAndStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.findByEmailAndStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "countByStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 13,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "aggregate",
+          "expression": "CustomerRepository.countByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "existsByEmail",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 15,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.existsByEmail"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "deleteByStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 17,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "delete",
+          "expression": "CustomerRepository.deleteByStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "search",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 19,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.search"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "updateStatus",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 22,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "update",
+          "expression": "CustomerRepository.updateStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "register",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "withOrders",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 26,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.withOrders"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "withOrders",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 26,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "CustomerRepository.withOrders"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "load",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 36,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "delete",
+          "expression": "customers.deleteById"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 37,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "orders.deleteAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "products",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 41,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "read",
+          "expression": "em.createQuery"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "product",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 45,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "read",
+          "expression": "em.find"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "add",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 49,
+          "model": "Product",
+          "library": "jpa",
+          "table": "catalog_product",
+          "operation": "create",
+          "expression": "em.persist"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "stats",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 53,
+          "model": "order_products",
+          "library": "jpa",
+          "table": "order_products",
+          "operation": "read",
+          "expression": "em.createNativeQuery"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 7,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByCustomerId"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "active",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "CustomerRepository.findByEmailAndStatus"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "create",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "get",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 24,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "upsert",
+          "expression": "customers.save"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers/{id}",
+          "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+          "direct": false,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 28,
+          "model": "Customer",
+          "library": "jpa",
+          "table": "customers",
+          "operation": "read",
+          "expression": "customers.findById"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 23
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "model": "Order",
+      "direct": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.direct = true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.direct = true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "findByCustomerId",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/OrderRepository.java:function:7:com.acme.shop.repo.OrderRepository.findByCustomerId",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "OrderRepository.findByCustomerId"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "withOrders",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "read",
+            "expression": "CustomerRepository.withOrders"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "forget",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 37,
+            "model": "Order",
+            "library": "jpa",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "orders.deleteAll"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "stats",
+            "file": null,
+            "sourceId": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:52:com.acme.shop.service.CustomerService.stats",
+            "direct": true,
+            "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 53,
+            "model": "order_products",
+            "library": "jpa",
+            "table": "order_products",
+            "operation": "read",
+            "expression": "em.createNativeQuery"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.direct = true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.direct = true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "model": "Order",
+        "direct": true,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "findByCustomerId",
+          "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+          "line": 7,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "OrderRepository.findByCustomerId"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "withOrders",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 26,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "read",
+          "expression": "CustomerRepository.withOrders"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "forget",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 37,
+          "model": "Order",
+          "library": "jpa",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "orders.deleteAll"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "stats",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "direct": true,
+          "accessFile": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 53,
+          "model": "order_products",
+          "library": "jpa",
+          "table": "order_products",
+          "operation": "read",
+          "expression": "em.createNativeQuery"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "findByEmailAndStatus"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/shop/domain/BaseEntity.java:function:18:com.acme.shop.domain.BaseEntity.getId",
+            "name": "getId",
+            "className": "BaseEntity",
+            "file": "src/main/java/com/acme/shop/domain/BaseEntity.java",
+            "line": 18,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/domain/Customer.java:function:24:com.acme.shop.domain.Customer.<init-block>",
+            "name": "<init-block>",
+            "className": "Customer",
+            "file": "src/main/java/com/acme/shop/domain/Customer.java",
+            "line": 24,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/domain/Order.java:function:22:com.acme.shop.domain.Order.<init-block>",
+            "name": "<init-block>",
+            "className": "Order",
+            "file": "src/main/java/com/acme/shop/domain/Order.java",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:17:com.acme.shop.service.CustomerService.CustomerService",
+            "name": "CustomerService",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 17,
+            "endLine": 21
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:23:com.acme.shop.service.CustomerService.register",
+            "name": "register",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 23,
+            "endLine": 25
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:27:com.acme.shop.service.CustomerService.load",
+            "name": "load",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 27,
+            "endLine": 29
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active",
+            "name": "active",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 31,
+            "endLine": 33
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "name": "forget",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 35,
+            "endLine": 38
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:40:com.acme.shop.service.CustomerService.products",
+            "name": "products",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 40,
+            "endLine": 42
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:44:com.acme.shop.service.CustomerService.product",
+            "name": "product",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 44,
+            "endLine": 46
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:48:com.acme.shop.service.CustomerService.add",
+            "name": "add",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 48,
+            "endLine": 50
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:52:com.acme.shop.service.CustomerService.stats",
+            "name": "stats",
+            "className": "CustomerService",
+            "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+            "line": 52,
+            "endLine": 54
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:17:com.acme.shop.web.CustomerController.CustomerController",
+            "name": "CustomerController",
+            "className": "CustomerController",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:19:com.acme.shop.web.CustomerController.get",
+            "name": "get",
+            "className": "CustomerController",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 19,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:22:com.acme.shop.web.CustomerController.create",
+            "name": "create",
+            "className": "CustomerController",
+            "file": "src/main/java/com/acme/shop/web/CustomerController.java",
+            "line": 22,
+            "endLine": 23
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "name": "findByEmailAndStatus",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "endLine": 11
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:13:com.acme.shop.repo.CustomerRepository.countByStatus",
+            "name": "countByStatus",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:15:com.acme.shop.repo.CustomerRepository.existsByEmail",
+            "name": "existsByEmail",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 15,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:17:com.acme.shop.repo.CustomerRepository.deleteByStatus",
+            "name": "deleteByStatus",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:19:com.acme.shop.repo.CustomerRepository.search",
+            "name": "search",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 19,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:22:com.acme.shop.repo.CustomerRepository.updateStatus",
+            "name": "updateStatus",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 22,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:26:com.acme.shop.repo.CustomerRepository.withOrders",
+            "name": "withOrders",
+            "className": "CustomerRepository",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 26,
+            "endLine": 27
+          },
+          {
+            "id": "file:src/main/java/com/acme/shop/repo/OrderRepository.java:function:7:com.acme.shop.repo.OrderRepository.findByCustomerId",
+            "name": "findByCustomerId",
+            "className": "OrderRepository",
+            "file": "src/main/java/com/acme/shop/repo/OrderRepository.java",
+            "line": 7,
+            "endLine": 7
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "findByEmailAndStatus"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active",
+            "callee": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "line": 32
+          },
+          {
+            "caller": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:35:com.acme.shop.service.CustomerService.forget",
+            "callee": "file:src/main/java/com/acme/shop/repo/OrderRepository.java:function:7:com.acme.shop.repo.OrderRepository.findByCustomerId",
+            "line": 37
+          },
+          {
+            "caller": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:19:com.acme.shop.web.CustomerController.get",
+            "callee": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:27:com.acme.shop.service.CustomerService.load",
+            "line": 20
+          },
+          {
+            "caller": "file:src/main/java/com/acme/shop/web/CustomerController.java:function:22:com.acme.shop.web.CustomerController.create",
+            "callee": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:23:com.acme.shop.service.CustomerService.register",
+            "line": 23
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          ]
+        },
+        "rows": [
+          {
+            "model": "Customer",
+            "library": "jpa",
+            "operation": "read",
+            "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+            "line": 11,
+            "expression": "CustomerRepository.findByEmailAndStatus",
+            "fn": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          ]
+        },
+        "rows": [
+          {
+            "tableId": "table:java:-:customers",
+            "table": "customers",
+            "kind": "table",
+            "library": "jpa",
+            "tableAccess": "READS_FUNCTION",
+            "operation": "read",
+            "fn": "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/shop/repo/CustomerRepository.java:function:11:com.acme.shop.repo.CustomerRepository.findByEmailAndStatus",
+            "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"findByEmailAndStatus\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"findByEmailAndStatus\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"findByEmailAndStatus\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "findByEmailAndStatus"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/shop/service/CustomerService.java:function:31:com.acme.shop.service.CustomerService.active:call:32:11:customers.findByEmailAndStatus",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "findByEmailAndStatus",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "findByEmailAndStatus",
+          "className": "CustomerRepository",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "endLine": 11
+        }
+      ],
+      "callers": [
+        {
+          "name": "active",
+          "className": "CustomerService",
+          "file": "src/main/java/com/acme/shop/service/CustomerService.java",
+          "line": 31,
+          "endLine": 33,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
+      "dataAccess": [
+        {
+          "model": "Customer",
+          "library": "jpa",
+          "operation": "read",
+          "file": "src/main/java/com/acme/shop/repo/CustomerRepository.java",
+          "line": 11,
+          "expression": "CustomerRepository.findByEmailAndStatus",
+          "usedBy": [
+            {
+              "function": "findByEmailAndStatus",
+              "functionFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java"
+            }
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "table": "customers",
+          "kind": "table",
+          "library": "jpa",
+          "reads": [
+            "read"
+          ],
+          "writes": [],
+          "usedBy": [
+            {
+              "function": "findByEmailAndStatus",
+              "functionFile": "src/main/java/com/acme/shop/repo/CustomerRepository.java"
+            }
+          ]
+        }
+      ],
+      "envVars": [],
+      "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named findByEmailAndStatus in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]

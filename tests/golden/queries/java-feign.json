@@ -1,0 +1,1815 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 11
+          },
+          {
+            "table": "File",
+            "count": 9
+          },
+          {
+            "table": "Import",
+            "count": 23
+          },
+          {
+            "table": "Function",
+            "count": 19
+          },
+          {
+            "table": "Class",
+            "count": 4
+          },
+          {
+            "table": "Field",
+            "count": 3
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 19
+          },
+          {
+            "table": "Interface",
+            "count": 3
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 6
+          },
+          {
+            "table": "Route",
+            "count": 5
+          },
+          {
+            "table": "EntryPoint",
+            "count": 0
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 6
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 11
+        },
+        {
+          "table": "File",
+          "count": 9
+        },
+        {
+          "table": "Import",
+          "count": 23
+        },
+        {
+          "table": "Function",
+          "count": 19
+        },
+        {
+          "table": "Class",
+          "count": 4
+        },
+        {
+          "table": "Field",
+          "count": 3
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 19
+        },
+        {
+          "table": "Interface",
+          "count": 3
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 6
+        },
+        {
+          "table": "Route",
+          "count": 5
+        },
+        {
+          "table": "EntryPoint",
+          "count": 0
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 6
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "InvoiceFacade",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "LegacyConfig",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "InvoiceController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "StatusController",
+            "kind": "Class",
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "BillingClient",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/billing/client/BillingClient.java",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "InventoryClient",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/billing/client/InventoryClient.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "name": "LegacyApi",
+            "kind": "Interface",
+            "file": "src/main/java/com/acme/billing/client/LegacyApi.java",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "InvoiceFacade",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceFacade"
+          },
+          {
+            "name": "open",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceFacade"
+          },
+          {
+            "name": "cancel",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceFacade"
+          },
+          {
+            "name": "lines",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 26,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceFacade"
+          },
+          {
+            "name": "legacyApi",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "LegacyConfig"
+          },
+          {
+            "name": "get",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceController"
+          },
+          {
+            "name": "create",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceController"
+          },
+          {
+            "name": "cancel",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceController"
+          },
+          {
+            "name": "lines",
+            "kind": "Method",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceController"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface) MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target) WHERE target.name IN [\"BillingClient\", \"InventoryClient\", \"LegacyApi\"] RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine, cls.name AS name, classFile.relativePath AS file, cls.line AS line ORDER BY classFile.relativePath, cls.line",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "InvoiceFacade",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "LegacyConfig",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "InvoiceController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StatusController",
+          "kind": "Class",
+          "file": "src/main/java/com/acme/billing/web/StatusController.java",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "BillingClient",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/billing/client/BillingClient.java",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "InventoryClient",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/billing/client/InventoryClient.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "LegacyApi",
+          "kind": "Interface",
+          "file": "src/main/java/com/acme/billing/client/LegacyApi.java",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "name": "InvoiceFacade",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceFacade"
+        },
+        {
+          "name": "open",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 22,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceFacade"
+        },
+        {
+          "name": "cancel",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 24,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceFacade"
+        },
+        {
+          "name": "lines",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 26,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceFacade"
+        },
+        {
+          "name": "legacyApi",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "LegacyConfig"
+        },
+        {
+          "name": "get",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceController"
+        },
+        {
+          "name": "create",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceController"
+        },
+        {
+          "name": "cancel",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceController"
+        },
+        {
+          "name": "lines",
+          "kind": "Method",
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceController"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 16
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "name": "InvoiceFacade",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+            "name": "LegacyConfig",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "name": "InvoiceController",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "name": "StatusController",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/billing/client/BillingClient.java",
+            "name": "BillingClient",
+            "kind": "Interface",
+            "line": 12,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/client/InventoryClient.java",
+            "name": "InventoryClient",
+            "kind": "Interface",
+            "line": 8,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/client/LegacyApi.java",
+            "name": "LegacyApi",
+            "kind": "Interface",
+            "line": 5,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "name": "InvoiceFacade",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+          "name": "LegacyConfig",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "name": "InvoiceController",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/StatusController.java",
+          "name": "StatusController",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/client/BillingClient.java",
+          "name": "BillingClient",
+          "kind": "Interface",
+          "line": 12,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/client/InventoryClient.java",
+          "name": "InventoryClient",
+          "kind": "Interface",
+          "line": 8,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/client/LegacyApi.java",
+          "name": "LegacyApi",
+          "kind": "Interface",
+          "line": 5,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 7
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/api/invoices/{id}",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/invoices",
+            "fullPath": "/api/invoices",
+            "framework": "spring-mvc",
+            "handlerName": "create",
+            "handler": "create"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14,
+            "method": "DELETE",
+            "path": "/api/invoices/{id}",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "cancel",
+            "handler": "cancel"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17,
+            "method": "GET",
+            "path": "/api/invoices/{id}/lines",
+            "fullPath": "/api/invoices/{id}/lines",
+            "framework": "spring-mvc",
+            "handlerName": "lines",
+            "handler": "lines"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "spring-mvc",
+            "handlerName": "status",
+            "handler": "status"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/api/invoices/{id}",
+          "fullPath": "/api/invoices/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/invoices",
+          "fullPath": "/api/invoices",
+          "framework": "spring-mvc",
+          "handlerName": "create",
+          "handler": "create"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 14,
+          "method": "DELETE",
+          "path": "/api/invoices/{id}",
+          "fullPath": "/api/invoices/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "cancel",
+          "handler": "cancel"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 17,
+          "method": "GET",
+          "path": "/api/invoices/{id}/lines",
+          "fullPath": "/api/invoices/{id}/lines",
+          "framework": "spring-mvc",
+          "handlerName": "lines",
+          "handler": "lines"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/StatusController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "spring-mvc",
+          "handlerName": "status",
+          "handler": "status"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "src/main/resources/application.yml",
+            "line": 3,
+            "name": "services.billing.url",
+            "value": "http://localhost:8080",
+            "valueType": "string",
+            "consumer": "src/main/resources/application.yml",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "config",
+          "file": "src/main/resources/application.yml",
+          "line": 3,
+          "name": "services.billing.url",
+          "value": "http://localhost:8080",
+          "valueType": "string",
+          "consumer": "src/main/resources/application.yml",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "feign"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:14:com.acme.billing.InvoiceFacade.InvoiceFacade",
+            "name": "InvoiceFacade",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 14,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "name": "show",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 20,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "name": "open",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "name": "cancel",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 24,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "name": "lines",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 26,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:28:com.acme.billing.InvoiceFacade.stock",
+            "name": "stock",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 28,
+            "endLine": 28
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping",
+            "name": "ping",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 30,
+            "endLine": 30
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/config/LegacyConfig.java:function:10:com.acme.billing.config.LegacyConfig.legacyApi",
+            "name": "legacyApi",
+            "className": "LegacyConfig",
+            "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:8:com.acme.billing.web.InvoiceController.get",
+            "name": "get",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:11:com.acme.billing.web.InvoiceController.create",
+            "name": "create",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:14:com.acme.billing.web.InvoiceController.cancel",
+            "name": "cancel",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:17:com.acme.billing.web.InvoiceController.lines",
+            "name": "lines",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/StatusController.java:function:8:com.acme.billing.web.StatusController.status",
+            "name": "status",
+            "className": "StatusController",
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 8,
+            "endLine": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:14:com.acme.billing.client.BillingClient.get",
+            "line": 20
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:17:com.acme.billing.client.BillingClient.create",
+            "line": 22
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:20:com.acme.billing.client.BillingClient.cancel",
+            "line": 24
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:23:com.acme.billing.client.BillingClient.lines",
+            "line": 26
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:28:com.acme.billing.InvoiceFacade.stock",
+            "callee": "file:src/main/java/com/acme/billing/client/InventoryClient.java:function:10:com.acme.billing.client.InventoryClient.stock",
+            "line": 28
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping",
+            "callee": "file:src/main/java/com/acme/billing/client/LegacyApi.java:function:6:com.acme.billing.client.LegacyApi.status",
+            "line": 30
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:11:0:POST:/api/invoices"
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:14:0:DELETE:/api/invoices/{id}"
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:17:0:GET:/api/invoices/{id}/lines"
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/StatusController.java:route:8:0:GET:/status"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}",
+            "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:11:0:POST:/api/invoices",
+            "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:14:0:DELETE:/api/invoices/{id}",
+            "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:17:0:GET:/api/invoices/{id}/lines",
+            "file:src/main/java/com/acme/billing/web/StatusController.java:route:8:0:GET:/status"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/invoices/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show:call:20:39:billing.get",
+            "line": 20,
+            "expression": "billing.get",
+            "client": "feign",
+            "method": "GET",
+            "url": "/api/invoices/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show"
+          },
+          {
+            "route": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:11:0:POST:/api/invoices",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/invoices",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "routeLine": 11,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open:call:22:43:billing.create",
+            "line": 22,
+            "expression": "billing.create",
+            "client": "feign",
+            "method": "POST",
+            "url": "/api/invoices",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open"
+          },
+          {
+            "route": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:14:0:DELETE:/api/invoices/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/invoices/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "routeLine": 14,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel:call:24:32:billing.cancel",
+            "line": 24,
+            "expression": "billing.cancel",
+            "client": "feign",
+            "method": "DELETE",
+            "url": "/api/invoices/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel"
+          },
+          {
+            "route": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:17:0:GET:/api/invoices/{id}/lines",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/invoices/{id}/lines",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "routeLine": 17,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines:call:26:40:billing.lines",
+            "line": 26,
+            "expression": "billing.lines",
+            "client": "feign",
+            "method": "GET",
+            "url": "/api/invoices/{id}/lines",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines"
+          },
+          {
+            "route": "file:src/main/java/com/acme/billing/web/StatusController.java:route:8:0:GET:/status",
+            "routeMethod": "GET",
+            "routeFullPath": "/status",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/StatusController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping:call:30:32:legacy.status",
+            "line": 30,
+            "expression": "legacy.status",
+            "client": "feign",
+            "method": "GET",
+            "url": "/status",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "feign",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/invoices",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11
+          },
+          "client": "feign",
+          "method": "POST",
+          "url": "/api/invoices",
+          "match": "exact",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 22,
+          "expression": "billing.create",
+          "function": "open"
+        },
+        {
+          "route": {
+            "method": "DELETE",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14
+          },
+          "client": "feign",
+          "method": "DELETE",
+          "url": "/api/invoices/{id}",
+          "match": "parameter",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 24,
+          "expression": "billing.cancel",
+          "function": "cancel"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8
+          },
+          "client": "feign",
+          "method": "GET",
+          "url": "/api/invoices/{id}",
+          "match": "parameter",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 20,
+          "expression": "billing.get",
+          "function": "show"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/invoices/{id}/lines",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17
+          },
+          "client": "feign",
+          "method": "GET",
+          "url": "/api/invoices/{id}/lines",
+          "match": "parameter",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 26,
+          "expression": "billing.lines",
+          "function": "lines"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/status",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 8
+          },
+          "client": "feign",
+          "method": "GET",
+          "url": "/status",
+          "match": "exact",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 30,
+          "expression": "legacy.status",
+          "function": "ping"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "GET",
+      "path": "/api/invoices/{id}"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:14:com.acme.billing.InvoiceFacade.InvoiceFacade",
+            "name": "InvoiceFacade",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 14,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "name": "show",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 20,
+            "endLine": 20
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "name": "open",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "name": "cancel",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 24,
+            "endLine": 24
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "name": "lines",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 26,
+            "endLine": 26
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:28:com.acme.billing.InvoiceFacade.stock",
+            "name": "stock",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 28,
+            "endLine": 28
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping",
+            "name": "ping",
+            "className": "InvoiceFacade",
+            "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+            "line": 30,
+            "endLine": 30
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/config/LegacyConfig.java:function:10:com.acme.billing.config.LegacyConfig.legacyApi",
+            "name": "legacyApi",
+            "className": "LegacyConfig",
+            "file": "src/main/java/com/acme/billing/config/LegacyConfig.java",
+            "line": 10,
+            "endLine": 13
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:8:com.acme.billing.web.InvoiceController.get",
+            "name": "get",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8,
+            "endLine": 9
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:11:com.acme.billing.web.InvoiceController.create",
+            "name": "create",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11,
+            "endLine": 12
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:14:com.acme.billing.web.InvoiceController.cancel",
+            "name": "cancel",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14,
+            "endLine": 15
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:function:17:com.acme.billing.web.InvoiceController.lines",
+            "name": "lines",
+            "className": "InvoiceController",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17,
+            "endLine": 18
+          },
+          {
+            "id": "file:src/main/java/com/acme/billing/web/StatusController.java:function:8:com.acme.billing.web.StatusController.status",
+            "name": "status",
+            "className": "StatusController",
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 8,
+            "endLine": 9
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:14:com.acme.billing.client.BillingClient.get",
+            "line": 20
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:22:com.acme.billing.InvoiceFacade.open",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:17:com.acme.billing.client.BillingClient.create",
+            "line": 22
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:24:com.acme.billing.InvoiceFacade.cancel",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:20:com.acme.billing.client.BillingClient.cancel",
+            "line": 24
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:26:com.acme.billing.InvoiceFacade.lines",
+            "callee": "file:src/main/java/com/acme/billing/client/BillingClient.java:function:23:com.acme.billing.client.BillingClient.lines",
+            "line": 26
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:28:com.acme.billing.InvoiceFacade.stock",
+            "callee": "file:src/main/java/com/acme/billing/client/InventoryClient.java:function:10:com.acme.billing.client.InventoryClient.stock",
+            "line": 28
+          },
+          {
+            "caller": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:30:com.acme.billing.InvoiceFacade.ping",
+            "callee": "file:src/main/java/com/acme/billing/client/LegacyApi.java:function:6:com.acme.billing.client.LegacyApi.status",
+            "line": 30
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "GET",
+          "path": "/api/invoices/{id}",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:src/main/java/com/acme/billing/web/InvoiceController.java:route:8:0:GET:/api/invoices/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/invoices/{id}",
+            "routeFramework": "spring-mvc",
+            "routeFile": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "routeLine": 8,
+            "call": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show:call:20:39:billing.get",
+            "line": 20,
+            "expression": "billing.get",
+            "client": "feign",
+            "method": "GET",
+            "url": "/api/invoices/{id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:src/main/java/com/acme/billing/InvoiceFacade.java:function:20:com.acme.billing.InvoiceFacade.show"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "GET",
+        "path": "/api/invoices/{id}",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8
+          },
+          "client": "feign",
+          "method": "GET",
+          "url": "/api/invoices/{id}",
+          "match": "parameter",
+          "file": "src/main/java/com/acme/billing/InvoiceFacade.java",
+          "line": 20,
+          "expression": "billing.get",
+          "function": "show"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "framework": "spring-mvc"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"spring-mvc\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/api/invoices/{id}",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "get",
+            "handler": "get"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 11,
+            "method": "POST",
+            "path": "/api/invoices",
+            "fullPath": "/api/invoices",
+            "framework": "spring-mvc",
+            "handlerName": "create",
+            "handler": "create"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 14,
+            "method": "DELETE",
+            "path": "/api/invoices/{id}",
+            "fullPath": "/api/invoices/{id}",
+            "framework": "spring-mvc",
+            "handlerName": "cancel",
+            "handler": "cancel"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+            "line": 17,
+            "method": "GET",
+            "path": "/api/invoices/{id}/lines",
+            "fullPath": "/api/invoices/{id}/lines",
+            "framework": "spring-mvc",
+            "handlerName": "lines",
+            "handler": "lines"
+          },
+          {
+            "file": "src/main/java/com/acme/billing/web/StatusController.java",
+            "line": 8,
+            "method": "GET",
+            "path": "/status",
+            "fullPath": "/status",
+            "framework": "spring-mvc",
+            "handlerName": "status",
+            "handler": "status"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "spring-mvc",
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/api/invoices/{id}",
+          "fullPath": "/api/invoices/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "get",
+          "handler": "get"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 11,
+          "method": "POST",
+          "path": "/api/invoices",
+          "fullPath": "/api/invoices",
+          "framework": "spring-mvc",
+          "handlerName": "create",
+          "handler": "create"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 14,
+          "method": "DELETE",
+          "path": "/api/invoices/{id}",
+          "fullPath": "/api/invoices/{id}",
+          "framework": "spring-mvc",
+          "handlerName": "cancel",
+          "handler": "cancel"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/InvoiceController.java",
+          "line": 17,
+          "method": "GET",
+          "path": "/api/invoices/{id}/lines",
+          "fullPath": "/api/invoices/{id}/lines",
+          "framework": "spring-mvc",
+          "handlerName": "lines",
+          "handler": "lines"
+        },
+        {
+          "file": "src/main/java/com/acme/billing/web/StatusController.java",
+          "line": 8,
+          "method": "GET",
+          "path": "/status",
+          "fullPath": "/status",
+          "framework": "spring-mvc",
+          "handlerName": "status",
+          "handler": "status"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  }
+]
