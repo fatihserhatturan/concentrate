@@ -146,11 +146,20 @@ export type SqlModelAccess = { modelId: string; table: string; operation: JavaDa
  * statements record.
  */
 export function sqlModelAccesses(graph: IGraphContributor, sql: string, library: string): SqlModelAccess[] {
-  return sqlTableAccesses(sql).map((access) => {
+  const accesses = sqlTableAccesses(sql);
+  // JDBC `SELECT COUNT(*) FROM t …` aggregates, as JPQL's `SELECT COUNT(x) FROM T` does (MyBatis and native `@Query` keep
+  // reading, as their labels do). With several tables (a join, a
+  // subquery) which of them the aggregate runs over is unknown: they stay reads.
+  const aggregate = library === "jdbc" && accesses.length === 1 && accesses[0]!.operation === "read" && aggregateSelect.test(sql);
+  return accesses.map((access) => {
     const table = javaTable(graph, access.table, { library });
-    return { modelId: javaTableModel(graph, table, library), table, operation: access.operation };
+    return { modelId: javaTableModel(graph, table, library), table, operation: aggregate ? "aggregate" : access.operation };
   });
 }
+
+// A select list of aggregate functions only: `COUNT(*)`, `COUNT(DISTINCT id) AS n`, `MAX(a), MIN(a)`.
+const aggregateFunction = String.raw`(?:count|sum|avg|min|max)\s*\((?:[^()]|\([^()]*\))*\)(?:\s+(?:as\s+)?[\w$"]+)?`;
+const aggregateSelect = new RegExp(String.raw`^\s*select\s+${aggregateFunction}(?:\s*,\s*${aggregateFunction})*\s+from\b`, "iu");
 
 /**
  * One access site. `callId`: the Call node of the access (its function is the CALLS caller); `functionId`: the
