@@ -1,28 +1,2808 @@
 {
   "sample": "internet-java-spring-realworld",
-  "$comment": "Spring MVC + MyBatis + GraphQL (DGS) RealWorld backend. Scope: src/main/java and src/main/resources (MyBatis mapper XML, application.properties); tests are out of scope. Stub: labels are added by later Phase 43 tracks.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. gothinkster/spring-boot-realworld-example-app: Spring MVC REST + MyBatis (mapper XML) + DGS GraphQL, SQLite. Scope: src/main/java and src/main/resources; src/test is out of scope (the scan reads it, so a stray finding there would not be scored). Routes: all 19 REST handlers of src/main/java/io/spring/api/*Api.java, one label per method at the line of the mapping annotation; the path is the class-level @RequestMapping joined with the method path (relative paths such as \"articles/{slug}/favorite\" are served from the root: no servlet context-path is configured, so there is no /api prefix). The GraphQL (DGS) datafetchers are not routes. Imports: every `import io.spring...` of src/main/java (243 lines, read with a regular expression over the import lines and checked for the file on disk). A type of the repository resolves to its file; the nested `CursorPager.Direction` resolves to CursorPager.java; the 47 imports of `io.spring.graphql.types.*` and `io.spring.graphql.DgsConstants.*` name types the DGS codegen generates at build time (no file in the scan), so their target is null. Imports of the JDK and third-party libraries are not labeled (no file in the scan). Injections (scored per consumer file of src/main/java): only injections visible in the source without Lombok are labeled: `@Autowired` constructors and fields and the single constructors. Lombok-generated constructors (`@AllArgsConstructor` on ArticlesApi, ArticleApi, ArticleFavoriteApi, CommentsApi, CurrentUserApi, ProfileApi, TagsApi, UsersApi, the nine *Mutation / *Datafetcher classes of graphql/, ArticleQueryService, CommentQueryService, UserQueryService, TagsQueryService, ProfileQueryService, ArticleCommandService) are a known limitation and are NOT labeled; they are 49 real injection points the scan cannot see (47 with a scanned provider), so recall here is not recall of the app's wiring. Providers are Spring-managed classes with a stereotype: a repository interface injection goes to its one implementing class (UserRepository -> MyBatisUserRepository). Not labeled although true: the `@Mapper` interfaces injected into the MyBatis*Repository classes (an interface with no stereotype is no provider in INJECTS) and `PasswordEncoder` (a @Bean of WebSecurityConfig whose type BCryptPasswordEncoder is not a scanned class). Labeled although the consumer has no stereotype: the four ConstraintValidators (UpdateUserValidator in UserService.java, DuplicatedEmailValidator, DuplicatedUsernameValidator, DuplicatedArticleValidator), which Spring's SpringConstraintValidatorFactory autowires, and JwtTokenFilter, which WebSecurityConfig.jwtTokenFilter() registers as a @Bean (Spring autowires the fields of @Bean instances). Data access: every SQL statement of the MyBatis mapper XML (src/main/resources/mapper/*.xml, `<include refid>` fragments expanded by hand, including the cross-namespace one of CommentReadService) attached to the method of its mapper interface, one label per (method, table, operation) with the model being the table name; operation by SQL verb (select = read). There are no annotated statements. The repository / service / controller functions that call a mapper are indirect accesses (the harness scores only a function's own accesses) and are not labeled. Env: there is no System.getenv, no @Value placeholder naming an environment variable and no ${NAME} in application.properties, so the env list is empty (the @Value keys image.default, jwt.secret and jwt.sessionTime are Spring config keys, not process environment). SqlTables: the seven tables of db/migration/V1__create_tables.sql, columns in DDL order (SQLite types as written, lowercased). Calls: every call site of the 8 files Article.java, User.java, ArticleCommandService.java, UserService.java (with its UpdateUserValidator) and the four MyBatis*Repository.java whose callee is a method, constructor or `this(...)` written in the repository (checked by reading each file); Lombok-generated getters (getId, getTitle, ...), equals and the JDK, Joda, Spring and validation APIs are not labeled. The method reference `Tag::new` has callee `new` and runs Tag(String). A call through an interface (userRepository.save, articleRepository.save, ...) is labeled with the implementing method only (MyBatisUserRepository.save): the interface method is a declaration with no body, so the call dispatches to the implementation; a scan that also reports the interface declaration is scored a false positive. A mapper call (userMapper.findById) targets the mapper interface method, the only declaration there is (MyBatis generates the implementation at run time).",
   "routes": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "src/main/java/io/spring/api/"
+    ],
+    "items": [
+      {
+        "method": "POST",
+        "path": "/articles",
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 28
+      },
+      {
+        "method": "GET",
+        "path": "/articles/feed",
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 40
+      },
+      {
+        "method": "GET",
+        "path": "/articles",
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 48
+      },
+      {
+        "method": "GET",
+        "path": "/articles/{slug}",
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 35
+      },
+      {
+        "method": "PUT",
+        "path": "/articles/{slug}",
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 44
+      },
+      {
+        "method": "DELETE",
+        "path": "/articles/{slug}",
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 65
+      },
+      {
+        "method": "POST",
+        "path": "/articles/{slug}/favorite",
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 29
+      },
+      {
+        "method": "DELETE",
+        "path": "/articles/{slug}/favorite",
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 39
+      },
+      {
+        "method": "POST",
+        "path": "/articles/{slug}/comments",
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 40
+      },
+      {
+        "method": "GET",
+        "path": "/articles/{slug}/comments",
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 53
+      },
+      {
+        "method": "DELETE",
+        "path": "/articles/{slug}/comments/{id}",
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 67
+      },
+      {
+        "method": "GET",
+        "path": "/profiles/{username}",
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 28
+      },
+      {
+        "method": "POST",
+        "path": "/profiles/{username}/follow",
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 37
+      },
+      {
+        "method": "DELETE",
+        "path": "/profiles/{username}/follow",
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 51
+      },
+      {
+        "method": "GET",
+        "path": "/tags",
+        "file": "src/main/java/io/spring/api/TagsApi.java",
+        "line": 17
+      },
+      {
+        "method": "GET",
+        "path": "/user",
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 31
+      },
+      {
+        "method": "PUT",
+        "path": "/user",
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 40
+      },
+      {
+        "method": "POST",
+        "path": "/users",
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 39
+      },
+      {
+        "method": "POST",
+        "path": "/users/login",
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 47
+      }
+    ]
   },
   "calls": {
-    "files": [],
-    "items": []
+    "files": [
+      "src/main/java/io/spring/core/article/Article.java",
+      "src/main/java/io/spring/core/user/User.java",
+      "src/main/java/io/spring/application/article/ArticleCommandService.java",
+      "src/main/java/io/spring/application/user/UserService.java",
+      "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+      "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+      "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+      "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java"
+    ],
+    "items": [
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 20,
+        "callee": "Article",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Article.java",
+          "name": "Article",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 26,
+        "callee": "save",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+          "name": "save",
+          "className": "MyBatisArticleRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 31,
+        "callee": "update",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Article.java",
+          "name": "update",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 35,
+        "callee": "save",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+          "name": "save",
+          "className": "MyBatisArticleRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 36,
+        "callee": "User",
+        "target": {
+          "file": "src/main/java/io/spring/core/user/User.java",
+          "name": "User",
+          "className": "User"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 42,
+        "callee": "save",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+          "name": "save",
+          "className": "MyBatisUserRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 49,
+        "callee": "update",
+        "target": {
+          "file": "src/main/java/io/spring/core/user/User.java",
+          "name": "update",
+          "className": "User"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 55,
+        "callee": "save",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+          "name": "save",
+          "className": "MyBatisUserRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 81,
+        "callee": "findByEmail",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+          "name": "findByEmail",
+          "className": "MyBatisUserRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 84,
+        "callee": "findByUsername",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+          "name": "findByUsername",
+          "className": "MyBatisUserRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 30,
+        "callee": "this",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Article.java",
+          "name": "Article",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 41,
+        "callee": "toSlug",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Article.java",
+          "name": "toSlug",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 45,
+        "callee": "new",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Tag.java",
+          "name": "Tag",
+          "className": "Tag"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 52,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 54,
+        "callee": "toSlug",
+        "target": {
+          "file": "src/main/java/io/spring/core/article/Article.java",
+          "name": "toSlug",
+          "className": "Article"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 57,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 61,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 30,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 34,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 38,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 42,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 46,
+        "callee": "isEmpty",
+        "target": {
+          "file": "src/main/java/io/spring/Util.java",
+          "name": "isEmpty",
+          "className": "Util"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 21,
+        "callee": "find",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+          "name": "find",
+          "className": "ArticleFavoriteMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 22,
+        "callee": "insert",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+          "name": "insert",
+          "className": "ArticleFavoriteMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 28,
+        "callee": "find",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+          "name": "find",
+          "className": "ArticleFavoriteMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 33,
+        "callee": "delete",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+          "name": "delete",
+          "className": "ArticleFavoriteMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 22,
+        "callee": "findById",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "findById",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 23,
+        "callee": "createNew",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+          "name": "createNew",
+          "className": "MyBatisArticleRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 25,
+        "callee": "update",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "update",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 32,
+        "callee": "findTag",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "findTag",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 35,
+        "callee": "insertTag",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "insertTag",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 38,
+        "callee": "insertArticleTagRelation",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "insertArticleTagRelation",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 40,
+        "callee": "insert",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "insert",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 45,
+        "callee": "findById",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "findById",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 50,
+        "callee": "findBySlug",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "findBySlug",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 55,
+        "callee": "delete",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+          "name": "delete",
+          "className": "ArticleMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 21,
+        "callee": "insert",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+          "name": "insert",
+          "className": "CommentMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 26,
+        "callee": "findById",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+          "name": "findById",
+          "className": "CommentMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 31,
+        "callee": "delete",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+          "name": "delete",
+          "className": "CommentMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 22,
+        "callee": "findById",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "findById",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 23,
+        "callee": "insert",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "insert",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 25,
+        "callee": "update",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "update",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 31,
+        "callee": "findById",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "findById",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 36,
+        "callee": "findByUsername",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "findByUsername",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 41,
+        "callee": "findByEmail",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "findByEmail",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 46,
+        "callee": "findRelation",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+          "name": "findRelation",
+          "className": "MyBatisUserRepository"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 47,
+        "callee": "saveRelation",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "saveRelation",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 53,
+        "callee": "findRelation",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "findRelation",
+          "className": "UserMapper"
+        }
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 58,
+        "callee": "deleteRelation",
+        "target": {
+          "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+          "name": "deleteRelation",
+          "className": "UserMapper"
+        }
+      }
+    ]
   },
   "imports": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "src/main/java/"
+    ],
+    "items": [
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 3,
+        "source": "io.spring.api.exception.NoAuthorizationException",
+        "target": "src/main/java/io/spring/api/exception/NoAuthorizationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 4,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 5,
+        "source": "io.spring.application.ArticleQueryService",
+        "target": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 6,
+        "source": "io.spring.application.article.ArticleCommandService",
+        "target": "src/main/java/io/spring/application/article/ArticleCommandService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 7,
+        "source": "io.spring.application.article.UpdateArticleParam",
+        "target": "src/main/java/io/spring/application/article/UpdateArticleParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 8,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 9,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 10,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 11,
+        "source": "io.spring.core.service.AuthorizationService",
+        "target": "src/main/java/io/spring/core/service/AuthorizationService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleApi.java",
+        "line": 12,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 3,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 4,
+        "source": "io.spring.application.ArticleQueryService",
+        "target": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 5,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 6,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 7,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 8,
+        "source": "io.spring.core.favorite.ArticleFavorite",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavorite.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 9,
+        "source": "io.spring.core.favorite.ArticleFavoriteRepository",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavoriteRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticleFavoriteApi.java",
+        "line": 10,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 3,
+        "source": "io.spring.application.ArticleQueryService",
+        "target": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 4,
+        "source": "io.spring.application.Page",
+        "target": "src/main/java/io/spring/application/Page.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 5,
+        "source": "io.spring.application.article.ArticleCommandService",
+        "target": "src/main/java/io/spring/application/article/ArticleCommandService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 6,
+        "source": "io.spring.application.article.NewArticleParam",
+        "target": "src/main/java/io/spring/application/article/NewArticleParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 7,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ArticlesApi.java",
+        "line": 8,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 4,
+        "source": "io.spring.api.exception.NoAuthorizationException",
+        "target": "src/main/java/io/spring/api/exception/NoAuthorizationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 5,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 6,
+        "source": "io.spring.application.CommentQueryService",
+        "target": "src/main/java/io/spring/application/CommentQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 7,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 8,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 9,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 10,
+        "source": "io.spring.core.comment.Comment",
+        "target": "src/main/java/io/spring/core/comment/Comment.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 11,
+        "source": "io.spring.core.comment.CommentRepository",
+        "target": "src/main/java/io/spring/core/comment/CommentRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 12,
+        "source": "io.spring.core.service.AuthorizationService",
+        "target": "src/main/java/io/spring/core/service/AuthorizationService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CommentsApi.java",
+        "line": 13,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 3,
+        "source": "io.spring.application.UserQueryService",
+        "target": "src/main/java/io/spring/application/UserQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 4,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 5,
+        "source": "io.spring.application.data.UserWithToken",
+        "target": "src/main/java/io/spring/application/data/UserWithToken.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 6,
+        "source": "io.spring.application.user.UpdateUserCommand",
+        "target": "src/main/java/io/spring/application/user/UpdateUserCommand.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 7,
+        "source": "io.spring.application.user.UpdateUserParam",
+        "target": "src/main/java/io/spring/application/user/UpdateUserParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 8,
+        "source": "io.spring.application.user.UserService",
+        "target": "src/main/java/io/spring/application/user/UserService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/CurrentUserApi.java",
+        "line": 9,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 3,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 4,
+        "source": "io.spring.application.ProfileQueryService",
+        "target": "src/main/java/io/spring/application/ProfileQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 5,
+        "source": "io.spring.application.data.ProfileData",
+        "target": "src/main/java/io/spring/application/data/ProfileData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 6,
+        "source": "io.spring.core.user.FollowRelation",
+        "target": "src/main/java/io/spring/core/user/FollowRelation.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 7,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/ProfileApi.java",
+        "line": 8,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/TagsApi.java",
+        "line": 3,
+        "source": "io.spring.application.TagsQueryService",
+        "target": "src/main/java/io/spring/application/TagsQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 6,
+        "source": "io.spring.api.exception.InvalidAuthenticationException",
+        "target": "src/main/java/io/spring/api/exception/InvalidAuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 7,
+        "source": "io.spring.application.UserQueryService",
+        "target": "src/main/java/io/spring/application/UserQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 8,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 9,
+        "source": "io.spring.application.data.UserWithToken",
+        "target": "src/main/java/io/spring/application/data/UserWithToken.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 10,
+        "source": "io.spring.application.user.RegisterParam",
+        "target": "src/main/java/io/spring/application/user/RegisterParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 11,
+        "source": "io.spring.application.user.UserService",
+        "target": "src/main/java/io/spring/application/user/UserService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 12,
+        "source": "io.spring.core.service.JwtService",
+        "target": "src/main/java/io/spring/core/service/JwtService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 13,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/UsersApi.java",
+        "line": 14,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/security/JwtTokenFilter.java",
+        "line": 3,
+        "source": "io.spring.core.service.JwtService",
+        "target": "src/main/java/io/spring/core/service/JwtService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/security/JwtTokenFilter.java",
+        "line": 4,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 5,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 6,
+        "source": "io.spring.application.data.ArticleDataList",
+        "target": "src/main/java/io/spring/application/data/ArticleDataList.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 7,
+        "source": "io.spring.application.data.ArticleFavoriteCount",
+        "target": "src/main/java/io/spring/application/data/ArticleFavoriteCount.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 8,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 9,
+        "source": "io.spring.infrastructure.mybatis.readservice.ArticleFavoritesReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 10,
+        "source": "io.spring.infrastructure.mybatis.readservice.ArticleReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ArticleQueryService.java",
+        "line": 11,
+        "source": "io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/CommentQueryService.java",
+        "line": 3,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/CommentQueryService.java",
+        "line": 4,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/CommentQueryService.java",
+        "line": 5,
+        "source": "io.spring.infrastructure.mybatis.readservice.CommentReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/CommentQueryService.java",
+        "line": 6,
+        "source": "io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/CursorPageParameter.java",
+        "line": 3,
+        "source": "io.spring.application.CursorPager.Direction",
+        "target": "src/main/java/io/spring/application/CursorPager.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ProfileQueryService.java",
+        "line": 3,
+        "source": "io.spring.application.data.ProfileData",
+        "target": "src/main/java/io/spring/application/data/ProfileData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ProfileQueryService.java",
+        "line": 4,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ProfileQueryService.java",
+        "line": 5,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ProfileQueryService.java",
+        "line": 6,
+        "source": "io.spring.infrastructure.mybatis.readservice.UserReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/ProfileQueryService.java",
+        "line": 7,
+        "source": "io.spring.infrastructure.mybatis.readservice.UserRelationshipQueryService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/TagsQueryService.java",
+        "line": 3,
+        "source": "io.spring.infrastructure.mybatis.readservice.TagReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/TagReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/UserQueryService.java",
+        "line": 3,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/UserQueryService.java",
+        "line": 4,
+        "source": "io.spring.infrastructure.mybatis.readservice.UserReadService",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserReadService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 3,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 4,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/ArticleCommandService.java",
+        "line": 5,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/DuplicatedArticleValidator.java",
+        "line": 3,
+        "source": "io.spring.application.ArticleQueryService",
+        "target": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/DuplicatedArticleValidator.java",
+        "line": 4,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/data/ArticleData.java",
+        "line": 4,
+        "source": "io.spring.application.DateTimeCursor",
+        "target": "src/main/java/io/spring/application/DateTimeCursor.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/data/CommentData.java",
+        "line": 5,
+        "source": "io.spring.application.DateTimeCursor",
+        "target": "src/main/java/io/spring/application/DateTimeCursor.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/data/CommentData.java",
+        "line": 6,
+        "source": "io.spring.application.Node",
+        "target": "src/main/java/io/spring/application/Node.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/DuplicatedEmailValidator.java",
+        "line": 3,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/DuplicatedUsernameValidator.java",
+        "line": 3,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UpdateUserCommand.java",
+        "line": 3,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 3,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "line": 4,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/article/Article.java",
+        "line": 5,
+        "source": "io.spring.Util",
+        "target": "src/main/java/io/spring/Util.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/service/AuthorizationService.java",
+        "line": 3,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/service/AuthorizationService.java",
+        "line": 4,
+        "source": "io.spring.core.comment.Comment",
+        "target": "src/main/java/io/spring/core/comment/Comment.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/service/AuthorizationService.java",
+        "line": 5,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/service/JwtService.java",
+        "line": 3,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/core/user/User.java",
+        "line": 3,
+        "source": "io.spring.Util",
+        "target": "src/main/java/io/spring/Util.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 12,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 13,
+        "source": "io.spring.application.ArticleQueryService",
+        "target": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 14,
+        "source": "io.spring.application.CursorPageParameter",
+        "target": "src/main/java/io/spring/application/CursorPageParameter.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 15,
+        "source": "io.spring.application.CursorPager",
+        "target": "src/main/java/io/spring/application/CursorPager.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 16,
+        "source": "io.spring.application.CursorPager.Direction",
+        "target": "src/main/java/io/spring/application/CursorPager.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 17,
+        "source": "io.spring.application.DateTimeCursor",
+        "target": "src/main/java/io/spring/application/DateTimeCursor.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 18,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 19,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 20,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 21,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 22,
+        "source": "io.spring.graphql.DgsConstants.ARTICLEPAYLOAD",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 23,
+        "source": "io.spring.graphql.DgsConstants.COMMENT",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 24,
+        "source": "io.spring.graphql.DgsConstants.PROFILE",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 25,
+        "source": "io.spring.graphql.DgsConstants.QUERY",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 26,
+        "source": "io.spring.graphql.types.Article",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 27,
+        "source": "io.spring.graphql.types.ArticleEdge",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 28,
+        "source": "io.spring.graphql.types.ArticlesConnection",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleDatafetcher.java",
+        "line": 29,
+        "source": "io.spring.graphql.types.Profile",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 7,
+        "source": "io.spring.api.exception.NoAuthorizationException",
+        "target": "src/main/java/io/spring/api/exception/NoAuthorizationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 8,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 9,
+        "source": "io.spring.application.article.ArticleCommandService",
+        "target": "src/main/java/io/spring/application/article/ArticleCommandService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 10,
+        "source": "io.spring.application.article.NewArticleParam",
+        "target": "src/main/java/io/spring/application/article/NewArticleParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 11,
+        "source": "io.spring.application.article.UpdateArticleParam",
+        "target": "src/main/java/io/spring/application/article/UpdateArticleParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 12,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 13,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 14,
+        "source": "io.spring.core.favorite.ArticleFavorite",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavorite.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 15,
+        "source": "io.spring.core.favorite.ArticleFavoriteRepository",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavoriteRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 16,
+        "source": "io.spring.core.service.AuthorizationService",
+        "target": "src/main/java/io/spring/core/service/AuthorizationService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 17,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 18,
+        "source": "io.spring.graphql.DgsConstants.MUTATION",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 19,
+        "source": "io.spring.graphql.exception.AuthenticationException",
+        "target": "src/main/java/io/spring/graphql/exception/AuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 20,
+        "source": "io.spring.graphql.types.ArticlePayload",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 21,
+        "source": "io.spring.graphql.types.CreateArticleInput",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 22,
+        "source": "io.spring.graphql.types.DeletionStatus",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ArticleMutation.java",
+        "line": 23,
+        "source": "io.spring.graphql.types.UpdateArticleInput",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 10,
+        "source": "io.spring.application.CommentQueryService",
+        "target": "src/main/java/io/spring/application/CommentQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 11,
+        "source": "io.spring.application.CursorPageParameter",
+        "target": "src/main/java/io/spring/application/CursorPageParameter.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 12,
+        "source": "io.spring.application.CursorPager",
+        "target": "src/main/java/io/spring/application/CursorPager.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 13,
+        "source": "io.spring.application.CursorPager.Direction",
+        "target": "src/main/java/io/spring/application/CursorPager.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 14,
+        "source": "io.spring.application.DateTimeCursor",
+        "target": "src/main/java/io/spring/application/DateTimeCursor.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 15,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 16,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 17,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 18,
+        "source": "io.spring.graphql.DgsConstants.ARTICLE",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 19,
+        "source": "io.spring.graphql.DgsConstants.COMMENTPAYLOAD",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 20,
+        "source": "io.spring.graphql.types.Article",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 21,
+        "source": "io.spring.graphql.types.Comment",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 22,
+        "source": "io.spring.graphql.types.CommentEdge",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentDatafetcher.java",
+        "line": 23,
+        "source": "io.spring.graphql.types.CommentsConnection",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 7,
+        "source": "io.spring.api.exception.NoAuthorizationException",
+        "target": "src/main/java/io/spring/api/exception/NoAuthorizationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 8,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 9,
+        "source": "io.spring.application.CommentQueryService",
+        "target": "src/main/java/io/spring/application/CommentQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 10,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 11,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 12,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 13,
+        "source": "io.spring.core.comment.Comment",
+        "target": "src/main/java/io/spring/core/comment/Comment.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 14,
+        "source": "io.spring.core.comment.CommentRepository",
+        "target": "src/main/java/io/spring/core/comment/CommentRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 15,
+        "source": "io.spring.core.service.AuthorizationService",
+        "target": "src/main/java/io/spring/core/service/AuthorizationService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 16,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 17,
+        "source": "io.spring.graphql.DgsConstants.MUTATION",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 18,
+        "source": "io.spring.graphql.exception.AuthenticationException",
+        "target": "src/main/java/io/spring/graphql/exception/AuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 19,
+        "source": "io.spring.graphql.types.CommentPayload",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/CommentMutation.java",
+        "line": 20,
+        "source": "io.spring.graphql.types.DeletionStatus",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 7,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 8,
+        "source": "io.spring.application.UserQueryService",
+        "target": "src/main/java/io/spring/application/UserQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 9,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 10,
+        "source": "io.spring.application.data.UserWithToken",
+        "target": "src/main/java/io/spring/application/data/UserWithToken.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 11,
+        "source": "io.spring.core.service.JwtService",
+        "target": "src/main/java/io/spring/core/service/JwtService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 12,
+        "source": "io.spring.graphql.DgsConstants.QUERY",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 13,
+        "source": "io.spring.graphql.DgsConstants.USERPAYLOAD",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/MeDatafetcher.java",
+        "line": 14,
+        "source": "io.spring.graphql.types.User",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 7,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 8,
+        "source": "io.spring.application.ProfileQueryService",
+        "target": "src/main/java/io/spring/application/ProfileQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 9,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 10,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 11,
+        "source": "io.spring.application.data.ProfileData",
+        "target": "src/main/java/io/spring/application/data/ProfileData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 12,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 13,
+        "source": "io.spring.graphql.DgsConstants.ARTICLE",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 14,
+        "source": "io.spring.graphql.DgsConstants.COMMENT",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 15,
+        "source": "io.spring.graphql.DgsConstants.QUERY",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 16,
+        "source": "io.spring.graphql.DgsConstants.USER",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 17,
+        "source": "io.spring.graphql.types.Article",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 18,
+        "source": "io.spring.graphql.types.Comment",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 19,
+        "source": "io.spring.graphql.types.Profile",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/ProfileDatafetcher.java",
+        "line": 20,
+        "source": "io.spring.graphql.types.ProfilePayload",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 6,
+        "source": "io.spring.api.exception.ResourceNotFoundException",
+        "target": "src/main/java/io/spring/api/exception/ResourceNotFoundException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 7,
+        "source": "io.spring.application.ProfileQueryService",
+        "target": "src/main/java/io/spring/application/ProfileQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 8,
+        "source": "io.spring.application.data.ProfileData",
+        "target": "src/main/java/io/spring/application/data/ProfileData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 9,
+        "source": "io.spring.core.user.FollowRelation",
+        "target": "src/main/java/io/spring/core/user/FollowRelation.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 10,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 11,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 12,
+        "source": "io.spring.graphql.DgsConstants.MUTATION",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 13,
+        "source": "io.spring.graphql.exception.AuthenticationException",
+        "target": "src/main/java/io/spring/graphql/exception/AuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 14,
+        "source": "io.spring.graphql.types.Profile",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/RelationMutation.java",
+        "line": 15,
+        "source": "io.spring.graphql.types.ProfilePayload",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/SecurityUtil.java",
+        "line": 3,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/TagDatafetcher.java",
+        "line": 5,
+        "source": "io.spring.application.TagsQueryService",
+        "target": "src/main/java/io/spring/application/TagsQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/TagDatafetcher.java",
+        "line": 6,
+        "source": "io.spring.graphql.DgsConstants.QUERY",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 7,
+        "source": "io.spring.api.exception.InvalidAuthenticationException",
+        "target": "src/main/java/io/spring/api/exception/InvalidAuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 8,
+        "source": "io.spring.application.user.RegisterParam",
+        "target": "src/main/java/io/spring/application/user/RegisterParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 9,
+        "source": "io.spring.application.user.UpdateUserCommand",
+        "target": "src/main/java/io/spring/application/user/UpdateUserCommand.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 10,
+        "source": "io.spring.application.user.UpdateUserParam",
+        "target": "src/main/java/io/spring/application/user/UpdateUserParam.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 11,
+        "source": "io.spring.application.user.UserService",
+        "target": "src/main/java/io/spring/application/user/UserService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 12,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 13,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 14,
+        "source": "io.spring.graphql.DgsConstants.MUTATION",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 15,
+        "source": "io.spring.graphql.exception.GraphQLCustomizeExceptionHandler",
+        "target": "src/main/java/io/spring/graphql/exception/GraphQLCustomizeExceptionHandler.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 16,
+        "source": "io.spring.graphql.types.CreateUserInput",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 17,
+        "source": "io.spring.graphql.types.UpdateUserInput",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 18,
+        "source": "io.spring.graphql.types.UserPayload",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/UserMutation.java",
+        "line": 19,
+        "source": "io.spring.graphql.types.UserResult",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/exception/GraphQLCustomizeExceptionHandler.java",
+        "line": 10,
+        "source": "io.spring.api.exception.FieldErrorResource",
+        "target": "src/main/java/io/spring/api/exception/FieldErrorResource.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/exception/GraphQLCustomizeExceptionHandler.java",
+        "line": 11,
+        "source": "io.spring.api.exception.InvalidAuthenticationException",
+        "target": "src/main/java/io/spring/api/exception/InvalidAuthenticationException.java"
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/exception/GraphQLCustomizeExceptionHandler.java",
+        "line": 12,
+        "source": "io.spring.graphql.types.Error",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/graphql/exception/GraphQLCustomizeExceptionHandler.java",
+        "line": 13,
+        "source": "io.spring.graphql.types.ErrorItem",
+        "target": null
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+        "line": 3,
+        "source": "io.spring.core.favorite.ArticleFavorite",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavorite.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "line": 3,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "line": 4,
+        "source": "io.spring.core.article.Tag",
+        "target": "src/main/java/io/spring/core/article/Tag.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+        "line": 3,
+        "source": "io.spring.core.comment.Comment",
+        "target": "src/main/java/io/spring/core/comment/Comment.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "line": 3,
+        "source": "io.spring.core.user.FollowRelation",
+        "target": "src/main/java/io/spring/core/user/FollowRelation.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "line": 4,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "line": 3,
+        "source": "io.spring.application.data.ArticleFavoriteCount",
+        "target": "src/main/java/io/spring/application/data/ArticleFavoriteCount.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "line": 4,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "line": 3,
+        "source": "io.spring.application.CursorPageParameter",
+        "target": "src/main/java/io/spring/application/CursorPageParameter.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "line": 4,
+        "source": "io.spring.application.Page",
+        "target": "src/main/java/io/spring/application/Page.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "line": 5,
+        "source": "io.spring.application.data.ArticleData",
+        "target": "src/main/java/io/spring/application/data/ArticleData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "line": 3,
+        "source": "io.spring.application.CursorPageParameter",
+        "target": "src/main/java/io/spring/application/CursorPageParameter.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "line": 4,
+        "source": "io.spring.application.data.CommentData",
+        "target": "src/main/java/io/spring/application/data/CommentData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserReadService.java",
+        "line": 3,
+        "source": "io.spring.application.data.UserData",
+        "target": "src/main/java/io/spring/application/data/UserData.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 3,
+        "source": "io.spring.core.favorite.ArticleFavorite",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavorite.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 4,
+        "source": "io.spring.core.favorite.ArticleFavoriteRepository",
+        "target": "src/main/java/io/spring/core/favorite/ArticleFavoriteRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleFavoriteRepository.java",
+        "line": 5,
+        "source": "io.spring.infrastructure.mybatis.mapper.ArticleFavoriteMapper",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 3,
+        "source": "io.spring.core.article.Article",
+        "target": "src/main/java/io/spring/core/article/Article.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 4,
+        "source": "io.spring.core.article.ArticleRepository",
+        "target": "src/main/java/io/spring/core/article/ArticleRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 5,
+        "source": "io.spring.core.article.Tag",
+        "target": "src/main/java/io/spring/core/article/Tag.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisArticleRepository.java",
+        "line": 6,
+        "source": "io.spring.infrastructure.mybatis.mapper.ArticleMapper",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 3,
+        "source": "io.spring.core.comment.Comment",
+        "target": "src/main/java/io/spring/core/comment/Comment.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 4,
+        "source": "io.spring.core.comment.CommentRepository",
+        "target": "src/main/java/io/spring/core/comment/CommentRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisCommentRepository.java",
+        "line": 5,
+        "source": "io.spring.infrastructure.mybatis.mapper.CommentMapper",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 3,
+        "source": "io.spring.core.user.FollowRelation",
+        "target": "src/main/java/io/spring/core/user/FollowRelation.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 4,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 5,
+        "source": "io.spring.core.user.UserRepository",
+        "target": "src/main/java/io/spring/core/user/UserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java",
+        "line": 6,
+        "source": "io.spring.infrastructure.mybatis.mapper.UserMapper",
+        "target": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/service/DefaultJwtService.java",
+        "line": 7,
+        "source": "io.spring.core.service.JwtService",
+        "target": "src/main/java/io/spring/core/service/JwtService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/service/DefaultJwtService.java",
+        "line": 8,
+        "source": "io.spring.core.user.User",
+        "target": "src/main/java/io/spring/core/user/User.java"
+      }
+    ]
   },
   "injections": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "src/main/java/"
+    ],
+    "items": [
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "consumer": "io.spring.application.user.UserService",
+        "field": "userRepository",
+        "via": "constructor",
+        "provider": "io.spring.infrastructure.repository.MyBatisUserRepository",
+        "providerFile": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/UserService.java",
+        "consumer": "io.spring.application.user.UpdateUserValidator",
+        "field": "userRepository",
+        "via": "field",
+        "provider": "io.spring.infrastructure.repository.MyBatisUserRepository",
+        "providerFile": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/DuplicatedEmailValidator.java",
+        "consumer": "io.spring.application.user.DuplicatedEmailValidator",
+        "field": "userRepository",
+        "via": "field",
+        "provider": "io.spring.infrastructure.repository.MyBatisUserRepository",
+        "providerFile": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/user/DuplicatedUsernameValidator.java",
+        "consumer": "io.spring.application.user.DuplicatedUsernameValidator",
+        "field": "userRepository",
+        "via": "field",
+        "provider": "io.spring.infrastructure.repository.MyBatisUserRepository",
+        "providerFile": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/application/article/DuplicatedArticleValidator.java",
+        "consumer": "io.spring.application.article.DuplicatedArticleValidator",
+        "field": "articleQueryService",
+        "via": "field",
+        "provider": "io.spring.application.ArticleQueryService",
+        "providerFile": "src/main/java/io/spring/application/ArticleQueryService.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/security/JwtTokenFilter.java",
+        "consumer": "io.spring.api.security.JwtTokenFilter",
+        "field": "userRepository",
+        "via": "field",
+        "provider": "io.spring.infrastructure.repository.MyBatisUserRepository",
+        "providerFile": "src/main/java/io/spring/infrastructure/repository/MyBatisUserRepository.java"
+      },
+      {
+        "file": "src/main/java/io/spring/api/security/JwtTokenFilter.java",
+        "consumer": "io.spring.api.security.JwtTokenFilter",
+        "field": "jwtService",
+        "via": "field",
+        "provider": "io.spring.infrastructure.service.DefaultJwtService",
+        "providerFile": "src/main/java/io/spring/infrastructure/service/DefaultJwtService.java"
+      }
+    ]
   },
   "dataAccess": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "src/main/java/"
+    ],
+    "items": [
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+        "function": "insert",
+        "model": "article_favorites",
+        "operation": "create",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+        "function": "delete",
+        "model": "article_favorites",
+        "operation": "delete",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleFavoriteMapper.java",
+        "function": "find",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "insert",
+        "model": "articles",
+        "operation": "create",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "insertTag",
+        "model": "tags",
+        "operation": "create",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "insertArticleTagRelation",
+        "model": "article_tags",
+        "operation": "create",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "update",
+        "model": "articles",
+        "operation": "update",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "delete",
+        "model": "articles",
+        "operation": "delete",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findById",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findById",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findById",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findBySlug",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findBySlug",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findBySlug",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/ArticleMapper.java",
+        "function": "findTag",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+        "function": "insert",
+        "model": "comments",
+        "operation": "create",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+        "function": "delete",
+        "model": "comments",
+        "operation": "delete",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/CommentMapper.java",
+        "function": "findById",
+        "model": "comments",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "insert",
+        "model": "users",
+        "operation": "create",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "saveRelation",
+        "model": "follows",
+        "operation": "create",
+        "table": "follows"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "update",
+        "model": "users",
+        "operation": "update",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "deleteRelation",
+        "model": "follows",
+        "operation": "delete",
+        "table": "follows"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "findByUsername",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "findByEmail",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "findById",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/mapper/UserMapper.java",
+        "function": "findRelation",
+        "model": "follows",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "isUserFavorite",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "articleFavoriteCount",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "articlesFavoriteCount",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "articlesFavoriteCount",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "userFavorites",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleFavoritesReadService.java",
+        "function": "userFavorites",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/TagReadService.java",
+        "function": "all",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findById",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findById",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findById",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findById",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findBySlug",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findBySlug",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findBySlug",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findBySlug",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticles",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticles",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticles",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticles",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthors",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthors",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthors",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthors",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthorsWithCursor",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthorsWithCursor",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthorsWithCursor",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesOfAuthorsWithCursor",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "queryArticles",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "queryArticles",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "queryArticles",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "queryArticles",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "queryArticles",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countArticle",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countArticle",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countArticle",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countArticle",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countArticle",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesWithCursor",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesWithCursor",
+        "model": "article_tags",
+        "operation": "read",
+        "table": "article_tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesWithCursor",
+        "model": "tags",
+        "operation": "read",
+        "table": "tags"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesWithCursor",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "findArticlesWithCursor",
+        "model": "article_favorites",
+        "operation": "read",
+        "table": "article_favorites"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/ArticleReadService.java",
+        "function": "countFeedSize",
+        "model": "articles",
+        "operation": "read",
+        "table": "articles"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findById",
+        "model": "comments",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findById",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findByArticleId",
+        "model": "comments",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findByArticleId",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findByArticleIdWithCursor",
+        "model": "comments",
+        "operation": "read",
+        "table": "comments"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/CommentReadService.java",
+        "function": "findByArticleIdWithCursor",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserReadService.java",
+        "function": "findByUsername",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserReadService.java",
+        "function": "findById",
+        "model": "users",
+        "operation": "read",
+        "table": "users"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java",
+        "function": "isUserFollowing",
+        "model": "follows",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java",
+        "function": "followingAuthors",
+        "model": "follows",
+        "operation": "read",
+        "table": "follows"
+      },
+      {
+        "file": "src/main/java/io/spring/infrastructure/mybatis/readservice/UserRelationshipQueryService.java",
+        "function": "followedUsers",
+        "model": "follows",
+        "operation": "read",
+        "table": "follows"
+      }
+    ]
   },
   "env": {
-    "scope": [],
+    "scope": [
+      "src/main/java/",
+      "src/main/resources/"
+    ],
     "items": []
+  },
+  "sqlTables": {
+    "scope": [
+      "src/main/resources/db/migration/"
+    ],
+    "items": [
+      {
+        "name": "users",
+        "kind": "table",
+        "columns": [
+          "id:varchar(255) pk",
+          "username:varchar(255)? unique",
+          "password:varchar(255)?",
+          "email:varchar(255)? unique",
+          "bio:text?",
+          "image:varchar(511)?"
+        ]
+      },
+      {
+        "name": "articles",
+        "kind": "table",
+        "columns": [
+          "id:varchar(255) pk",
+          "user_id:varchar(255)?",
+          "slug:varchar(255)? unique",
+          "title:varchar(255)?",
+          "description:text?",
+          "body:text?",
+          "created_at:timestamp",
+          "updated_at:timestamp"
+        ]
+      },
+      {
+        "name": "article_favorites",
+        "kind": "table",
+        "columns": [
+          "article_id:varchar(255) pk",
+          "user_id:varchar(255) pk"
+        ]
+      },
+      {
+        "name": "follows",
+        "kind": "table",
+        "columns": [
+          "user_id:varchar(255)",
+          "follow_id:varchar(255)"
+        ]
+      },
+      {
+        "name": "tags",
+        "kind": "table",
+        "columns": [
+          "id:varchar(255) pk",
+          "name:varchar(255)"
+        ]
+      },
+      {
+        "name": "article_tags",
+        "kind": "table",
+        "columns": [
+          "article_id:varchar(255)",
+          "tag_id:varchar(255)"
+        ]
+      },
+      {
+        "name": "comments",
+        "kind": "table",
+        "columns": [
+          "id:varchar(255) pk",
+          "body:text?",
+          "article_id:varchar(255)?",
+          "user_id:varchar(255)?",
+          "created_at:timestamp",
+          "updated_at:timestamp"
+        ]
+      }
+    ]
   }
 }
