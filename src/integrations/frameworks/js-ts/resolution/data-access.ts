@@ -99,6 +99,8 @@ const operationByMethod = new Map<string, string>([
 const readOperations = new Set(["read", "aggregate"]);
 const writeOperations = new Set(["create", "update", "delete", "upsert"]);
 
+const jsTsLanguages = new Set(["javascript", "typescript", "vue", "svelte"]);
+
 export function addDataAccessRelationships(
   graph: IGraphContributor,
   prismaModels: PrismaModelIndex = { schemas: [], packageDirectories: [] },
@@ -108,15 +110,23 @@ export function addDataAccessRelationships(
   const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (
     typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : []
   )));
+  // This heuristic matches JS/TS ORM method names on receivers; other languages
+  // (Java's `articleRepository.remove`) have their own data-access passes.
+  const otherLanguageFiles = new Set(graph.nodesWithLabel("File").flatMap((node) => (
+    typeof node.properties.relativePath === "string" && typeof node.properties.language === "string"
+      && !jsTsLanguages.has(node.properties.language)
+      ? [node.properties.relativePath] : []
+  )));
   const declaredModels = new DeclaredModels(graph.nodesWithLabel("DataModel"), prismaModels.packageDirectories);
   addDeclaredRelations(graph, declaredModels);
 
   // A copy: the loop adds nodes.
   for (const callNode of [...graph.nodesWithLabel("Call")]) {
+    const file = fileOfNodeId(callNode.id, filePaths);
+    if (file && otherLanguageFiles.has(file)) continue;
     const dataAccess = classifyDataAccessCall(callNode, context);
     if (!dataAccess) continue;
 
-    const file = fileOfNodeId(callNode.id, filePaths);
     dataAccess.file = file;
     const declared = !file ? null : dataAccess.library === "prisma"
       ? resolvePrismaModel(prismaModels, file, dataAccess.modelName)
