@@ -1,0 +1,224 @@
+{
+  "$comment": "Java agent benchmark questions over the pinned Spring PetClinic REST, Spring RealWorld (MyBatis + DGS), grpc-java examples and Netflix concurrency-limits (Gradle multi-module) samples: routes and RPCs, callers, change impact, dependency injection, Gradle modules, tables and configuration reads. Expected answers were written by reading the pinned source (the controller mapping annotations, the call sites of findBySlug and findByPetId, the implements/extends clauses, the constructor and field injections, the Gradle dependency blocks, the mapper XML and schema SQL, the @Value and @ConditionalOnProperty uses), not from Concentrate output. Scoring as in questions.json.",
+  "questions": [
+    {
+      "id": "java-realworld-favorite-route",
+      "sample": "internet-java-spring-realworld",
+      "category": "routes",
+      "question": "In the Spring RealWorld backend, which controller class serves the favorite and unfavorite endpoints, and what is its request path?",
+      "expected": {
+        "mustInclude": [
+          "ArticleFavoriteApi",
+          "articles/{slug}/favorite"
+        ]
+      }
+    },
+    {
+      "id": "java-realworld-login-route",
+      "sample": "internet-java-spring-realworld",
+      "category": "routes",
+      "question": "Which controller class handles POST /users/login in the Spring RealWorld backend, and which other POST path does the same class serve?",
+      "expected": {
+        "mustInclude": [
+          "UsersApi",
+          "/users/login",
+          "/users"
+        ]
+      }
+    },
+    {
+      "id": "java-grpc-routeguide-rpcs",
+      "sample": "internet-java-grpc-examples",
+      "category": "routes",
+      "question": "Which rpc methods does the RouteGuide service define in examples/src/main/proto/route_guide.proto?",
+      "expected": {
+        "mustInclude": [
+          "GetFeature",
+          "ListFeatures",
+          "RecordRoute",
+          "RouteChat"
+        ]
+      }
+    },
+    {
+      "id": "java-petclinic-visits-by-pet-caller",
+      "sample": "internet-java-spring-petclinic-rest",
+      "category": "callers",
+      "question": "Which method of ClinicServiceImpl calls visitRepository.findByPetId?",
+      "expected": {
+        "mustInclude": [
+          "findVisitsByPetId"
+        ]
+      }
+    },
+    {
+      "id": "java-grpc-calcdistance-caller",
+      "sample": "internet-java-grpc-examples",
+      "category": "callers",
+      "question": "In examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java, which RouteGuideService method (through the observer it returns) calls calcDistance?",
+      "expected": {
+        "mustInclude": [
+          "recordRoute"
+        ]
+      }
+    },
+    {
+      "id": "java-realworld-findbyslug-impact",
+      "sample": "internet-java-spring-realworld",
+      "category": "impact",
+      "question": "If I change ArticleRepository.findBySlug in the Spring RealWorld backend, which classes call it through an injected ArticleRepository?",
+      "expected": {
+        "mustInclude": [
+          "ArticleApi",
+          "ArticleFavoriteApi",
+          "CommentsApi",
+          "ArticleMutation",
+          "CommentMutation"
+        ]
+      }
+    },
+    {
+      "id": "java-petclinic-visit-repository-impact",
+      "sample": "internet-java-spring-petclinic-rest",
+      "category": "impact",
+      "question": "If I change the VisitRepository interface in Spring PetClinic REST, which classes or interfaces implement or extend it?",
+      "expected": {
+        "mustInclude": [
+          "JpaVisitRepositoryImpl",
+          "JdbcVisitRepositoryImpl",
+          "SpringDataVisitRepository"
+        ]
+      }
+    },
+    {
+      "id": "java-limits-abstractlimit-impact",
+      "sample": "internet-java-gradle-multimodule",
+      "category": "impact",
+      "question": "If I change AbstractLimit in concurrency-limits-core, which classes extend it?",
+      "expected": {
+        "mustInclude": [
+          "VegasLimit",
+          "AIMDLimit",
+          "SettableLimit",
+          "Gradient2Limit",
+          "GradientLimit",
+          "FixedLimit"
+        ]
+      }
+    },
+    {
+      "id": "java-petclinic-clinicservice-di",
+      "sample": "internet-java-spring-petclinic-rest",
+      "category": "di",
+      "question": "Which class implements the ClinicService interface in Spring PetClinic REST, and which repository interfaces does its constructor take?",
+      "expected": {
+        "mustInclude": [
+          "ClinicServiceImpl",
+          "PetRepository",
+          "VetRepository",
+          "OwnerRepository",
+          "VisitRepository",
+          "SpecialtyRepository",
+          "PetTypeRepository"
+        ]
+      }
+    },
+    {
+      "id": "java-realworld-jwtservice-di",
+      "sample": "internet-java-spring-realworld",
+      "category": "di",
+      "question": "Which class implements JwtService in the Spring RealWorld backend, and which classes get a JwtService injected?",
+      "expected": {
+        "mustInclude": [
+          "DefaultJwtService",
+          "UsersApi",
+          "MeDatafetcher",
+          "JwtTokenFilter"
+        ]
+      }
+    },
+    {
+      "id": "java-limits-core-dependents",
+      "sample": "internet-java-gradle-multimodule",
+      "category": "modules",
+      "question": "Which Gradle subprojects of concurrency-limits depend on the concurrency-limits-core project?",
+      "expected": {
+        "mustInclude": [
+          "concurrency-limits-grpc",
+          "concurrency-limits-servlet",
+          "concurrency-limits-servlet-jakarta",
+          "concurrency-limits-spectator"
+        ]
+      }
+    },
+    {
+      "id": "java-limits-spectator-module",
+      "sample": "internet-java-gradle-multimodule",
+      "category": "modules",
+      "question": "In which Gradle subproject is SpectatorMetricRegistry defined, and which core interface does it implement?",
+      "expected": {
+        "mustInclude": [
+          "concurrency-limits-spectator",
+          "MetricRegistry"
+        ]
+      }
+    },
+    {
+      "id": "java-petclinic-h2-tables",
+      "sample": "internet-java-spring-petclinic-rest",
+      "category": "tables",
+      "question": "Which tables does src/main/resources/db/h2/schema.sql create in Spring PetClinic REST?",
+      "expected": {
+        "mustInclude": [
+          "vets",
+          "specialties",
+          "vet_specialties",
+          "types",
+          "owners",
+          "pets",
+          "visits",
+          "users",
+          "roles"
+        ]
+      }
+    },
+    {
+      "id": "java-realworld-article-mapper-tables",
+      "sample": "internet-java-spring-realworld",
+      "category": "tables",
+      "question": "Which tables do the insert statements of src/main/resources/mapper/ArticleMapper.xml write to in the Spring RealWorld backend?",
+      "expected": {
+        "mustInclude": [
+          "articles",
+          "tags",
+          "article_tags"
+        ]
+      }
+    },
+    {
+      "id": "java-realworld-value-properties",
+      "sample": "internet-java-spring-realworld",
+      "category": "env",
+      "question": "Which configuration properties does the Spring RealWorld backend inject with @Value?",
+      "expected": {
+        "mustInclude": [
+          "jwt.secret",
+          "jwt.sessionTime",
+          "image.default"
+        ]
+      }
+    },
+    {
+      "id": "java-petclinic-security-property",
+      "sample": "internet-java-spring-petclinic-rest",
+      "category": "env",
+      "question": "Which configuration property switches BasicAuthenticationConfig on in Spring PetClinic REST, and what value does application.properties give it?",
+      "expected": {
+        "mustInclude": [
+          "petclinic.security.enable",
+          "false"
+        ]
+      }
+    }
+  ]
+}
