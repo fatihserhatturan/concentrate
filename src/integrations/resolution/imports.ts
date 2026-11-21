@@ -16,6 +16,8 @@ export async function addImportResolutionRelationships(
 ): Promise<{
   resolved: number;
   unresolved: number;
+  /** Import id -> files of the package it names as a whole (no `RESOLVES_TO`). */
+  packageImports: Map<string, readonly string[]>;
 }> {
   // Through the graph's lookups: only the File and IMPORTS entries are read.
   const fileIdByRelativePath = new Map<string, string>();
@@ -48,6 +50,7 @@ export async function addImportResolutionRelationships(
   }
   let resolved = 0;
   let unresolved = 0;
+  const packageImports = new Map<string, readonly string[]>();
 
   for (const node of graph.nodesWithLabel("Import")) {
     const source = node.properties.source;
@@ -61,9 +64,10 @@ export async function addImportResolutionRelationships(
     for (const targetFileId of result.fileIds) {
       graph.addRelationship({ from: node.id, to: targetFileId, type: "RESOLVES_TO", properties: {} });
     }
-    if (result.fileIds.length > 0) resolved += 1;
+    if (result.packageFileIds && result.packageFileIds.length > 0) packageImports.set(node.id, result.packageFileIds);
+    if (result.fileIds.length > 0 || packageImports.has(node.id)) resolved += 1;
     else if (result.expected) unresolved += 1;
   }
 
-  return { resolved, unresolved };
+  return { resolved, unresolved, packageImports };
 }

@@ -81,4 +81,32 @@ public class Use {
     }, "src/main/java/p/Sub.java", 2);
     assert.ok(found.includes("p.Ctx.name"), found.join(","));
   });
+
+  it("persists only certain argument types of a call, never expression text", async () => {
+    const graph = await buildCodeGraph(await project({
+      "src/main/java/p/Box.java": `package p;
+public class Box {
+  private final Other held = null;
+  public Box(Other other, String name) {}
+  public Box(String name, int count) {}
+  void make(Other typed, Object unknown) {
+    new Box(typed, "x");
+    new Box(compute(unknown), compute(typed));
+    new Box("y", 3);
+    make(this.held, new Other());
+  }
+  Other compute(Object o) { return null; }
+}
+class Other {}
+`,
+    }), { continueOnError: false });
+    const calls = graph.nodes.filter((node) => node.label === "Call" && node.id.includes("file:src/main/java/p/Box.java"));
+    const types = (line: number, callee: string) => calls.find((node) => node.properties.line === line && node.properties.callee === callee)?.properties.argumentTypes;
+    assert.equal(types(7, "Box"), JSON.stringify(["Other", "String"]));
+    assert.equal(types(8, "Box"), undefined);
+    assert.equal(types(9, "Box"), JSON.stringify(["String", "int"]));
+    assert.equal(types(10, "make"), JSON.stringify(["@held", "Other"]));
+    for (const node of calls) assert.ok(!String(node.properties.argumentTypes ?? "").includes("("));
+    assert.equal(graph.nodes.filter((node) => node.label === "Function").some((node) => String(node.properties.javaLocals).includes("#")), false);
+  });
 });

@@ -14,7 +14,7 @@ export const javaGraphSchema: GraphSchemaExtension = {
     { label: "Field", after: "line", properties: { declaredType: "STRING", fieldKind: "STRING", stringConstant: "STRING" } },
     { label: "Package", after: "workspaceRoot", properties: { buildSystem: "STRING", sourceRoots: "STRING", testSourceRoots: "STRING", aggregator: "BOOLEAN", mainClass: "STRING", mainClassSource: "STRING", buildFile: "STRING" } },
     { label: "EntryPoint", after: "handlerName", properties: { source: "STRING", resolved: "BOOLEAN" } },
-    { label: "Call", after: "qualifier", properties: { argumentCount: "INT64", callKind: "STRING" } },
+    { label: "Call", after: "qualifier", properties: { argumentCount: "INT64", argumentTypes: "STRING", callKind: "STRING" } },
   ],
   relationshipProperties: [{ label: "INJECTS", after: "fieldName", properties: { via: "STRING", beanMethod: "STRING" } }],
   relationshipTables: [

@@ -10,8 +10,7 @@ export type JavaVisibility = "public" | "protected" | "package" | "private";
 // `fullType` keeps the generic arguments of a declared type (`Optional<Limiter.Listener>`); `lambda` says which
 // call a lambda parameter without a declared type is an argument of (its type comes from that call's parameter).
 export type JavaLambdaContext = { callee: string; receiver: string | null; arity: number; arg: number; param: number };
-// A key `#line:column` (not a name) holds the argument expressions of the call at that position: `args`.
-export type JavaLocal = { type?: string; fullType?: string; lambda?: JavaLambdaContext; args?: Array<string | null> };
+export type JavaLocal = { type?: string; fullType?: string; lambda?: JavaLambdaContext };
 
 // `annotations` (only when the parameter has some): `@Qualifier("x")` is { name: "Qualifier", args: [`"x"`] },
 // the same name and args as a Decorator node.
@@ -120,7 +119,7 @@ export function normalizeJavaType(text: string | null | undefined): string | nul
 export function genericTypeText(text: string | null | undefined): string | null {
   if (!text || !text.includes("<")) return null;
   const type = text.replace(/@[\p{L}\p{N}_$.]+(?:\s*\([^)]*\))?/gu, " ").replace(/\bfinal\b/gu, " ").replace(/\s+/gu, " ").replace(/\s*([<>,.])\s*/gu, "$1").trim();
-  return type.includes("<") && !type.startsWith("var") ? type : null;
+  return type.includes("<") && !type.startsWith("var") && type.length <= 160 ? type : null;
 }
 
 export function lastSegment(name: string): string {

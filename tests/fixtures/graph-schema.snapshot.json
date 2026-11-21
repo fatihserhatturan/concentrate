@@ -214,6 +214,7 @@
     "qualifier": "STRING",
     "argCount": "INT64",
     "argumentCount": "INT64",
+    "argumentTypes": "STRING",
     "callKind": "STRING"
    }
   },

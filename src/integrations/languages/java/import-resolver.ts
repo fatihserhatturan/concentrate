@@ -31,11 +31,13 @@ export const javaImportResolver: ILanguageImportResolver = {
     return (node, importerFileId, source) => {
       const isWildcard = node.properties.isWildcard === true;
       const isStatic = node.properties.isStatic === true;
-      // An on-demand import (`import a.b.*`) names a package, not a file: no RESOLVES_TO to any one file of it.
-      // The call resolver reads the Import node itself to find the types the package offers.
-      if (isWildcard && !isStatic && index.hasPackage(source)) return { fileIds: [], expected: false };
       const target = index.resolveImport({ source, isWildcard, isStatic }, importerFileId);
-      return { fileIds: target.fileIds.filter((id) => id !== importerFileId), expected: target.expected };
+      const fileIds = target.fileIds.filter((id) => id !== importerFileId);
+      // An on-demand import (`import a.b.*`) names a package, not a file: no RESOLVES_TO to any one file of it. The
+      // importer depends on the package's files (`packageFileIds`: the build packages it imports, and `affected`
+      // follows the same dependency from the Import's source). The call resolver reads the Import node itself.
+      if (isWildcard && !isStatic && index.hasPackage(source)) return { fileIds: [], packageFileIds: fileIds, expected: false };
+      return { fileIds, expected: target.expected };
     };
   },
 };

@@ -97,3 +97,35 @@ describe("mcp --tools", () => {
     }
   });
 });
+
+describe("affected tests through Java package imports", () => {
+  it("reaches a test that depends on a package only through `import a.b.*`", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "concentrate-affected-java-"));
+    const projectPath = path.join(root, "project");
+    const files: Record<string, string> = {
+      "src/main/java/a/One.java": "package a;\npublic class One { public int v() { return 1; } }\n",
+      "src/main/java/a/Two.java": "package a;\npublic class Two {}\n",
+      "src/main/java/c/Other.java": "package c;\npublic class Other {}\n",
+      "src/test/java/b/UseTest.java": "package b;\nimport a.*;\npublic class UseTest { One one; }\n",
+      "src/test/java/b/OtherTest.java": "package b;\nimport c.Other;\npublic class OtherTest { Other other; }\n",
+    };
+    for (const [file, text] of Object.entries(files)) {
+      await mkdir(path.dirname(path.join(projectPath, file)), { recursive: true });
+      await writeFile(path.join(projectPath, file), text);
+    }
+    const database = path.join(root, "graph");
+    await scanIntoStore(projectPath, { database, continueOnError: false, include: [], exclude: [], retryLock: true, cacheDir: path.join(root, "cache"), manifest: path.join(root, "scan-manifest.json") });
+    const store = await openGraphStore(database);
+    try {
+      const rows = await store.query("MATCH (:File)-[:IMPORTS]->(imp:Import)-[:RESOLVES_TO]->(:File) WHERE imp.isWildcard = true RETURN imp.source AS source") as unknown[];
+      assert.equal(rows.length, 0);
+      for (const changed of ["src/main/java/a/One.java", "src/main/java/a/Two.java"]) {
+        const result = await affectedTests(store, [changed]);
+        assert.deepEqual(result.tests.map((test) => test.file), ["src/test/java/b/UseTest.java"], changed);
+      }
+      assert.deepEqual((await affectedTests(store, ["src/main/java/c/Other.java"])).tests.map((test) => test.file), ["src/test/java/b/OtherTest.java"]);
+    } finally {
+      await store.close();
+    }
+  });
+});

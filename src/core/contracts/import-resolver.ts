@@ -17,8 +17,11 @@ export type ImportResolutionContext = {
  * What one import resolves to. `fileIds` are the files it reaches (a Go import
  * is every file of a package); none means unresolved, which counts against the
  * scan only when `expected` (an external package or a system header does not).
+ * `packageFileIds` are the files of a package the import names as a whole (a Java `import a.b.*`): the
+ * import depends on the package without resolving to any one file, so no `RESOLVES_TO`; the build
+ * packages holding those files are what it imports.
  */
-export type ImportResolution = { fileIds: readonly string[]; expected: boolean };
+export type ImportResolution = { fileIds: readonly string[]; expected: boolean; packageFileIds?: readonly string[] };
 
 /** Resolves the imports of one scan; built once, the first time an import of a supported file is seen. */
 export type ImportResolutionSession = (

@@ -176,24 +176,45 @@ function lambdaContext(lambda: SyntaxNode, param: number): JavaLambdaContext | n
   const arg = args.findIndex((child) => child.id === lambda.id);
   if (!callee || arg < 0) return null;
   const object = call.childForFieldName("object");
-  return { callee, receiver: object ? expressionText(object) : null, arity: args.length, arg, param };
+  const receiver = object ? expressionText(object) : null;
+  return receiver !== null && receiver.length > 80 ? null : { callee, receiver, arity: args.length, arg, param };
 }
 
-const simpleArgumentTypes: ReadonlySet<string> = new Set([
-  "identifier", "this", "string_literal", "decimal_integer_literal", "hex_integer_literal", "decimal_floating_point_literal",
-  "true", "false", "character_literal", "field_access", "object_creation_expression", "method_invocation",
-]);
+const literalTypes: Readonly<Record<string, string>> = {
+  string_literal: "String", true: "boolean", false: "boolean", character_literal: "char", decimal_floating_point_literal: "double",
+};
 
-// The arguments of a call as short expressions (null for the ones too complex to type): overloads are told apart by them.
-function argumentTexts(list: SyntaxNode | null | undefined): string | null {
+// The type of one argument when it is certain from the call site alone, as a short token the resolver reads back:
+// a type name (`String`, `int`, a class from `new T()`, the declared type of a typed local), `this`, or `@name`
+// for a field (the resolver finds the field's type). Null for anything else; no expression text is kept.
+function argumentType(argument: SyntaxNode, locals: JavaLocals): string | null {
+  const literal = literalTypes[argument.type];
+  if (literal) return literal;
+  switch (argument.type) {
+    case "decimal_integer_literal":
+    case "hex_integer_literal":
+      return /[lL]$/u.test(argument.text) ? "long" : "int";
+    case "this":
+      return "this";
+    case "identifier":
+      return locals.has(argument.text) ? locals.get(argument.text)?.type ?? null : `@${argument.text}`;
+    case "field_access": {
+      const name = argument.childForFieldName("field")?.text;
+      return argument.childForFieldName("object")?.type === "this" && name && !locals.has(name) ? `@${name}` : null;
+    }
+    case "object_creation_expression":
+      if (argument.namedChildren.some((child) => child.type === "class_body" || child.type === "identifier")) return null;
+      return normalizeJavaType(typeText(argument.childForFieldName("type")));
+    default:
+      return null;
+  }
+}
+
+// The certain argument types of a call, as a JSON array with null for the uncertain ones; null when none is certain.
+function argumentTypes(list: SyntaxNode | null | undefined, locals: JavaLocals): string | null {
   const args = list?.namedChildren.filter((argument) => !isComment(argument)) ?? [];
-  const texts = args.map((argument) => {
-    if (!simpleArgumentTypes.has(argument.type)) return null;
-    if (argument.type === "object_creation_expression" && argument.namedChildren.some((child) => child.type === "class_body")) return null;
-    const text = compactExpression(argument.text);
-    return text.length <= 120 ? text : null;
-  });
-  return texts.some((text) => text !== null) ? JSON.stringify(texts) : null;
+  const types = args.map((argument) => argumentType(argument, locals));
+  return types.some((type) => type !== null) ? JSON.stringify(types) : null;
 }
 
 export const callLikeTypes: ReadonlySet<string> = new Set([
@@ -246,7 +267,6 @@ function build(
   locals: JavaLocals,
 ): GraphNode {
   const line = node.startPosition.row + 1;
-  takeArguments(extra, locals, line, node.startPosition.column);
   const receiverText = receiver ? compactExpression(receiver.text) : null;
   const qualifier = qualifierOf(receiver, locals);
   return {
@@ -267,17 +287,10 @@ function build(
   };
 }
 
-function withArguments(node: SyntaxNode): Record<string, string | number> {
+function withArguments(node: SyntaxNode, locals: JavaLocals): Record<string, string | number> {
   const list = node.childForFieldName("arguments");
-  const texts = argumentTexts(list);
-  return { argumentCount: argumentCount(list), ...(texts === null ? {} : { argumentTexts: texts }) };
-}
-
-// The argument expressions travel in the function's `javaLocals`, under `#line:column`, not as a Call property.
-function takeArguments(extra: Record<string, string | number | boolean | null>, locals: JavaLocals, line: number, column: number): void {
-  const texts = extra.argumentTexts;
-  delete extra.argumentTexts;
-  if (typeof texts === "string") locals.set(`#${line}:${column}`, { args: JSON.parse(texts) as Array<string | null> });
+  const types = argumentTypes(list, locals);
+  return { argumentCount: argumentCount(list), ...(types === null ? {} : { argumentTypes: types }) };
 }
 
 // The Call node of a method invocation, `new T(...)`, `this(...)` / `super(...)`
@@ -289,13 +302,13 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: Jav
       if (!name) return null;
       const object = node.childForFieldName("object");
       const expression = object ? `${compactExpression(object.text)}.${name}` : name;
-      return build(functionId, node, expression, name, object, "method", withArguments(node), locals);
+      return build(functionId, node, expression, name, object, "method", withArguments(node, locals), locals);
     }
     case "object_creation_expression": {
       const type = normalizeJavaType(typeText(node.childForFieldName("type")));
       if (!type) return null;
       const object = node.childForFieldName("object") ?? node.namedChildren.find((child) => child.id !== node.childForFieldName("type")?.id && child.type !== "argument_list" && child.type !== "class_body" && child.type !== "type_arguments" && child.type !== "modifiers" && !isComment(child)) ?? null;
-      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, "constructor", withArguments(node), locals);
+      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, "constructor", withArguments(node, locals), locals);
       const prefix = type.includes(".") ? type.slice(0, type.lastIndexOf(".")) : null;
       if (prefix) call.properties.qualifier = prefix;
       if (object && object.id !== node.childForFieldName("type")?.id) call.properties.receiver = compactExpression(object.text);
@@ -305,7 +318,7 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: Jav
       const constructor = node.childForFieldName("constructor")?.text;
       if (constructor !== "this" && constructor !== "super") return null;
       const object = node.childForFieldName("object");
-      return build(functionId, node, constructor, constructor, object, "explicitConstructor", withArguments(node), locals);
+      return build(functionId, node, constructor, constructor, object, "explicitConstructor", withArguments(node, locals), locals);
     }
     case "method_reference": {
       const children = node.children;

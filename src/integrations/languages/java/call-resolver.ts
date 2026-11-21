@@ -102,7 +102,6 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     return params;
   };
   const localsCache = new Map<string, Scope["locals"]>();
-  const callArguments = new Map<string, Array<string | null>>();
   const localsOf = (fn: GraphNode | undefined): Scope["locals"] => {
     if (!fn) return new Map();
     let locals = localsCache.get(fn.id);
@@ -110,11 +109,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
       locals = new Map();
       try {
         const parsed = typeof fn.properties.javaLocals === "string" ? JSON.parse(fn.properties.javaLocals) : {};
-        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown; fullType?: unknown; lambda?: unknown; args?: unknown } | null>)) {
-          if (name.startsWith("#")) {
-            if (Array.isArray(value?.args)) callArguments.set(`${fn.id}${name}`, value.args.map((item: unknown) => (typeof item === "string" ? item : null)));
-            continue;
-          }
+        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown; fullType?: unknown; lambda?: unknown } | null>)) {
           if (!value) {
             locals.set(name, null);
             continue;
@@ -499,12 +494,16 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
   // Overloads of one arity told apart by the arguments whose type is certain (a class of the scan, a String or
   // primitive literal) against parameters whose type is certain too. Keeps every candidate when none would be left.
   type Kind = { kind: "scan"; type: JavaType } | { kind: "string" } | { kind: "primitive" };
-  const argumentKind = (text: string | null, scope: Scope): Kind | null => {
-    if (text === null) return null;
-    if (text.startsWith("\"")) return { kind: "string" };
-    if (/^(?:-?\d|true$|false$|')/u.test(text)) return { kind: "primitive" };
-    const value = evaluate(text, scope);
-    return value && !value.isType ? { kind: "scan", type: value.type } : null;
+  const argumentKind = (token: string | null, scope: Scope): Kind | null => {
+    if (token === null) return null;
+    if (primitiveTypes.has(token)) return { kind: "primitive" };
+    if (token === "this" || token.startsWith("@")) {
+      const value = evaluate(token === "this" ? token : token.slice(1), scope);
+      return value && !value.isType ? { kind: "scan", type: value.type } : null;
+    }
+    const type = typeOfName(token, scope.type, scope.fn);
+    if (type) return { kind: "scan", type };
+    return token === "String" ? { kind: "string" } : null;
   };
   const parameterKind = (param: Param, owner: JavaType, fn: GraphNode): Kind | null => {
     if (param.varargs) return null;
@@ -520,12 +519,18 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     if (argument.kind === "primitive" && parameter.kind === "primitive") return false;
     return argument.kind !== parameter.kind;
   };
-  const argumentTextsOf = (call: GraphNode, scope: Scope): Array<string | null> | null =>
-    scope.fn ? callArguments.get(`${scope.fn.id}#${String(call.properties.line)}:${String(call.properties.columnNumber)}`) ?? null : null;
+  const argumentTypesOf = (call: GraphNode): Array<string | null> | null => {
+    try {
+      const parsed: unknown = typeof call.properties.argumentTypes === "string" ? JSON.parse(call.properties.argumentTypes) : null;
+      return Array.isArray(parsed) ? parsed.map((item: unknown) => (typeof item === "string" ? item : null)) : null;
+    } catch {
+      return null;
+    }
+  };
   const narrow = (candidates: Candidate[], scope: Scope): Candidate[] => {
-    const texts = argumentTextsOf(scope.call, scope);
-    if (candidates.length < 2 || !texts) return candidates;
-    const kinds = texts.map((text) => argumentKind(text, scope));
+    const tokens = argumentTypesOf(scope.call);
+    if (candidates.length < 2 || !tokens) return candidates;
+    const kinds = tokens.map((token) => argumentKind(token, scope));
     if (kinds.every((kind) => kind === null)) return candidates;
     const kept = candidates.filter(({ fn, owner }) => {
       const params = paramsOf(fn);
