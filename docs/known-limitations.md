@@ -2610,6 +2610,52 @@ Outbound HTTP (`api_consumers`):
   `configuration` / `contextId`, Ribbon and load-balancer URL rewriting, and
   `${env:X}` values read from `.env*` files.
 
+### Java measurement (Phase 43)
+
+Measured on four pinned samples (`docs/accuracy.md`, "Java samples"): 20 of 20 routes, 451 of 451
+call sites, 153 of 153 data accesses, 6 of 6 env reads, 7 SQL tables, 10 rpcs, 12 build-target
+facts, 369 of 369 `import` resolutions and 31 of 31 injections, with no false positive. The labels
+are scoped to what a static read of the repository can see; what follows is what is outside
+that scope.
+
+- **Lombok-generated members.** `@AllArgsConstructor`, `@RequiredArgsConstructor`, `@Data`,
+  `@Getter`, `@Setter` and `@Builder` generate constructors and accessors the scan never sees (it
+  does not run annotation processors). A constructor-injected field behind `@RequiredArgsConstructor`
+  gets no `INJECTS` edge (the RealWorld sample has 49 such points, 47 with a scanned provider), and
+  a call to a generated getter or builder method has no function to resolve to.
+- **Reflection.** `Class.forName`, `Method.invoke`, `ServiceLoader`, proxies created at run time and
+  beans looked up by name from the `ApplicationContext` are not followed; only what the syntax
+  names is linked.
+- **Code generated at build time is not in the repository.** MapStruct implementations, DGS codegen
+  types, openapi-generator interfaces and DTOs, and protobuf and gRPC stubs do not exist as files, so
+  a call through them targets the interface method (or stays unresolved) and an import of
+  one is a null resolution. PetClinic REST's 37 routes come from `*Api` interfaces that
+  openapi-generator writes from `openapi.yml`; the controllers implement them, no mapping
+  annotation is in the Java sources, and `openapi.yml` is not read, so `list_routes` shows only the one
+  `@RequestMapping("/")` that is declared in a class.
+- **Kotlin** (and Scala and Groovy) is not parsed: there is no grammar for it, so a `.kt` file has no
+  symbols and a mixed Java and Kotlin module has only its Java half in the graph.
+- **`@ConditionalOn*` beans are not evaluated.** A bean guarded by `@ConditionalOnProperty`,
+  `@ConditionalOnMissingBean` or another condition counts as present; two such providers behind one
+  interface are ambiguous. `@Profile` is read (see Dependency injection above), but a
+  profile expression (`!dev`, `a & b`) is compatible with any profile.
+- **A `@Bean` method that returns `new X()` under an interface type** (`Notifier notifier() { return
+  new EmailNotifier(); }`) is not followed to `EmailNotifier`: the bean is the interface, so a consumer of
+  the interface gets the edge to the configuration class, not to the implementer.
+- **Ambiguous injection points have no edge.** An interface with several implementers that are
+  not all `@Profile`-gated, and that `@Qualifier`, `@Primary` and the field name do not narrow, gets no
+  `INJECTS` edge; `ambiguousInjections` on the consumer counts it. Profile-gated alternatives each
+  get an edge, which over-approximates (one of them is active at runtime).
+- **A wildcard import in `affected` ignores the module filter.** `import a.b.*` links the file to
+  every file of package `a.b` in the scan, also one of a module the importer does not depend on, so a
+  same-named package in another module can add tests to the `affected` answer that do not
+  run it. Specific imports are filtered by module visibility.
+- **CI workflow variables are not Java env reads.** Variables a GitHub Actions workflow sets or
+  reads for a Gradle build (`GRADLE_OPTS`, publishing secrets such as the `ORG_*` ones of
+  concurrency-limits) belong to the workflow job (`DECLARES_ENV`, `USES_ENV` from the workflow file),
+  not to a Java function; only `System.getenv`, `@Value` placeholders and the Spring config
+  are Java env reads, so `list_env_config` on a Java project can show variables no Java code uses.
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.

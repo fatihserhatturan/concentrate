@@ -841,3 +841,90 @@ the same as before the phase; the new rows only add to them).
   column 0 without a `;` (`GTEST_REPEATER_METHOD_(OnTestStart, TestInfo)`) are read as
   blanks; googletest's left-out statements fell from 38 to 23.
 
+
+## Java samples (Phase 43)
+
+`npm run bench:accuracy` now has Java rows in every section that applies (routes, calls,
+data access, env reads, SQL tables, rpcs, build targets, `import` resolution and dependency
+injection). Latest run, one `npm run bench:accuracy -- --sample <name>` per sample on
+2026-11-21: [`bench/results/accuracy-java-0.1.0-2026-11-21.json`](../bench/results/accuracy-java-0.1.0-2026-11-21.json).
+The labels were written from the pinned sources in `scripts/samples.json`, not from Concentrate
+output: [Spring PetClinic REST](https://github.com/spring-petclinic/spring-petclinic-rest) (JPA,
+JDBC and Spring Data repositories selected by profile), the Spring Boot RealWorld app
+(Spring MVC, MyBatis, DGS GraphQL, SQLite), the helloworld and routeguide examples of
+grpc-java, and Netflix concurrency-limits (five Gradle subprojects). Each label file says in its
+`$comment` what is in scope (tests are out of scope everywhere) and what was left unlabeled and
+why. Routes were counted from the mapping annotations, imports with a regular expression over
+the import lines checked against the files on disk, the in-repository call sites by searching
+every method name defined in the labeled files, and the SQL statements of the MyBatis mapper XML
+by hand.
+
+Label conventions decided in this phase (they are in each label file's `$comment`):
+
+- **A call through an interface** is labeled with the interface method declaration plus every
+  implementer in the scan. javac binds the call to the declared method, which is a real node, so a
+  scan that reports only the implementers misses the declaration and one that reports only the
+  declaration misses the implementers. A mapper interface with no implementation in the repository
+  (MapStruct, MyBatis) has the interface method as its only target.
+- **A wildcard import is target null**: it names a package, not a file.
+- **A `SELECT` that is only aggregate functions over one table** (`select count(1) from t`) is
+  an aggregate, not a read, for every Java SQL source (JDBC, MyBatis, native `@Query`, JPQL).
+- **Profile-gated alternatives** (`@Repository` implementations with different `@Profile`
+  values behind one interface) each get an `INJECTS` edge, because one of them is active at
+  runtime and the graph cannot tell which; implementers whose profile shares nothing with the
+  consumer's own `@Profile` are dropped.
+- **Lombok-generated injection points are not labeled** (`@AllArgsConstructor`,
+  `@RequiredArgsConstructor`): the RealWorld sample has 49 of them (47 with a scanned provider)
+  that the scan cannot see, so its injection recall is not recall of the app's wiring.
+
+| Kind | Samples | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Routes | PetClinic REST, RealWorld | 20 | 20 | 0 | 0 | 100% | 100% |
+| Calls | PetClinic REST, RealWorld, grpc-java examples, concurrency-limits | 451 | 451 | 0 | 0 | 100% | 100% |
+| Data access | PetClinic REST, RealWorld | 153 | 153 | 0 | 0 | 100% | 100% |
+| Env reads | PetClinic REST (the other three have none) | 6 | 6 | 0 | 0 | 100% | 100% |
+| SQL tables | RealWorld | 7 | 7 | 0 | 0 | 100% | 100% |
+| Rpcs | grpc-java examples (10 rpcs in 4 protos, with the Java methods that implement them) | 10 | 10 | 0 | 0 | 100% | 100% |
+| Build targets | concurrency-limits (Gradle modules and their links) | 12 | 12 | 0 | 0 | 100% | 100% |
+| `import` resolution | all four | 369 | 369 | 0 | 0 | 100% | 100% |
+| Injections (`INJECTS`) | PetClinic REST, RealWorld (none in the other two) | 31 | 31 | 0 | 0 | 100% | 100% |
+
+Per sample, labels (all with 0 false positives and 0 false negatives):
+
+| Sample | Routes | Calls | Data access | Env | Imports | Injections | Other |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| internet-java-spring-petclinic-rest | 1 | 57 | 73 | 6 | 140 | 24 | |
+| internet-java-spring-realworld | 19 | 55 | 80 | 0 | 199 | 7 | 7 SQL tables |
+| internet-java-grpc-examples | | 75 | | 0 | 0 | | 10 rpcs |
+| internet-java-gradle-multimodule | | 264 | | 0 | 30 | 0 | 12 build targets |
+
+Every row is 100% precision and 100% recall because the labels are scoped to what the
+graph can know (see the limits below): what lies outside that scope is a known limitation
+in [known-limitations.md](known-limitations.md#java), not a miss, and a sample with no item of a kind
+(env reads in RealWorld, grpc-java and concurrency-limits, injections in concurrency-limits) scores any finding of that
+kind as a false positive.
+
+### What is not labeled
+
+- **PetClinic REST has one labeled route, not 38.** The controllers implement interfaces
+  (`rest.api.*Api`) that openapi-generator generates from `openapi.yml` at build time; neither the
+  interfaces nor the DTOs are in the repository, so the 37 operations have no mapping annotation in
+  any Java source. The one declared route is `RootRestControllerV1`'s `@RequestMapping("/")`.
+- **RealWorld imports of generated types.** The 47 imports of `io.spring.graphql.types.*` and
+  `DgsConstants.*` name classes the DGS codegen generates; they are labeled null.
+- **MapStruct mapper parameters in PetClinic REST get no injection edge**: the implementations
+  are generated at build time.
+- **RealWorld injections** are only the ones visible without Lombok.
+- **grpc-java**: the generated stubs and protobuf classes are not in the scan. A call through a
+  stub (`blockingStub.sayHello`) is labeled with the service implementation it runs, as in the
+  C++ sample.
+
+### Fixes made while labeling
+
+- A call through an interface is reported on the interface method declaration and on every
+  implementer; wildcard imports resolve to no file and `affected` follows them to the files of the
+  package; `SELECT COUNT(...)` over one table is an aggregate in JDBC, MyBatis and native `@Query`
+  alike; constructor and method overloads are told apart by the types of the arguments, and
+  `Optional` and lambda parameters get their types from the generic signature; profile-gated
+  alternatives each get an `INJECTS` edge. Each is covered by a test in `tests/java-*.test.ts`.
+

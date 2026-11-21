@@ -141,6 +141,8 @@ async function toolCases(store: Awaited<ReturnType<typeof openGraphStore>>): Pro
     { tool: "api_consumers", args: route ? { method: route.method, path: route.fullPath ?? route.path } : {} },
     { tool: "component_tree", args: component ? { name: component.name } : null },
     { tool: "find_component_usages", args: component ? { name: component.name } : null },
+    { tool: "explore", args: name ? { symbol: name } : null },
+    { tool: "trace_calls", args: name ? { from: name } : null },
   ];
   const missing = mcpToolDefinitions.map((tool) => tool.name).filter((tool) => !cases.some((entry) => entry.tool === tool));
   if (missing.length > 0) throw new Error(`No benchmark case for: ${missing.join(", ")}`);

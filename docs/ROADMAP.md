@@ -62,11 +62,12 @@ the only runtime dependency left is `web-tree-sitter`.
 | M11 – Rust ecosystem | 26–29 | Cargo workspaces, path calls, traits and attributes; axum, actix-web, Rocket and warp routes; sqlx, diesel, SeaORM, env and reqwest; measured on pinned samples. |
 | M12 – Python ecosystem | 30–33 | Python packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer entrypoints; SQLAlchemy, Django ORM, env, HTTP clients and DI; measured on pinned samples. |
 | M13 – C/C++ ecosystem | 34–37 | C and C++ includes, headers, namespaces, classes and virtual calls; CMake, Make and `compile_commands.json` targets; Drogon, Crow, Pistache, cpp-httplib, gRPC and Qt; SQL, env and libcurl; measured on pinned samples. |
+| M14 – Java ecosystem | 38–43 | Java packages, classes, interfaces and calls resolved through inheritance; Maven and Gradle builds; Spring MVC, WebFlux, JAX-RS and Micronaut routes, gRPC, Spring DI, JPA, Spring Data, JDBC and MyBatis, config and env, and outbound HTTP; measured on pinned samples. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
-M9 (Go), M10 (non-code files), M11 (Rust), M12 (Python) and M13 (C/C++) are done: every planned phase
-(M1–M13) is finished.
+M9 (Go), M10 (non-code files), M11 (Rust), M12 (Python), M13 (C/C++) and M14 (Java) are done, except the Java agent benchmark run: every planned phase
+(M1–M14) is finished.
 
 Risks: grammar upgrades changing trees (bounded by golden graph and query tests), Cypher subset
 breadth (bounded by golden queries), and performance (worker pool if needed).
@@ -1624,6 +1625,49 @@ The preprocessor is not run: macros are read as calls. The decisions of M9 apply
 
 - [ ] Accuracy, performance and agent results for C/C++ are reproducible from scripts
 - [x] README shows the C/C++ coverage
+
+## M14: Java ecosystem
+
+Phases 38–43 add Java: the vendored grammar, `import` resolution and calls resolved through
+inheritance, Maven and Gradle builds, Spring, JAX-RS and Micronaut routes, gRPC services, Spring dependency
+injection, JPA, Spring Data, JDBC and MyBatis data access, config and env and outbound HTTP, then
+the measurement. Annotation processors and build-time code generation are not run (Lombok,
+MapStruct, openapi-generator): what they write is not in the graph. The decisions of M9 apply.
+
+## Phase 43: Java ecosystem measurement (samples, accuracy, agent benchmark, README) ([#283](https://github.com/fatihserhatturan/concentrate/issues/283))
+
+**Milestone:** M14 – Java ecosystem
+**Depends on:** Phase 42
+
+**Goal:** Prove the Java graph with the same measurements as the other ecosystems: pinned samples, hand labels, the agent benchmark and README numbers.
+
+- Done in one PR, except the agent benchmark run: this phase pins four samples (Spring PetClinic REST, the Spring Boot RealWorld app, grpc-java examples, Netflix concurrency-limits), adds labels, accuracy, scan cost, goldens, agent questions and docs, and fixes what the labeling found.
+
+### Samples and labels
+
+- [x] Pin a Spring Boot REST service, a gRPC Java sample and a Gradle multi-module project in `scripts/samples.json`
+- [x] Hand labels for routes, calls, imports, injections, data access, env, SQL tables, rpcs and build targets in `bench/labels/`
+- [x] Golden sample graphs where they stay small enough
+
+### Accuracy and performance
+
+- [x] Java rows in every `bench:accuracy` section; precision 100%, recall reported (100% on every row, with the unlabeled limits in accuracy.md)
+- [x] Scan time and memory for the Java samples in `docs/benchmarks.md`
+
+### Agent benchmark
+
+- [x] Java questions (routes, callers, impact, injection, modules, tables, env) in `bench/agent/questions-java.json`
+- [ ] Results per category committed and documented: pending approval of the cost estimate for a paid run
+
+### Docs
+
+- [x] README "What it sees" table and languages line cover Java
+- [x] `docs/accuracy.md` and `docs/known-limitations.md` updated
+
+### Acceptance criteria
+
+- [ ] Accuracy, performance and agent results for Java are reproducible from scripts (the agent results are pending)
+- [x] README shows the Java coverage
 
 ## Verification (every milestone)
 
