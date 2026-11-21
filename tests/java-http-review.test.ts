@@ -38,8 +38,8 @@ describe("Java HTTP and config: review fixes (F2)", () => {
   });
 
   it("knows secret keys by segment and redacts values", () => {
-    for (const key of ["db.password", "a.private-key", "x.apiKey", "x.signing_key", "client.secret", "some.tokens"]) assert.ok(isSecretKey(key), key);
-    for (const key of ["cache.key-prefix", "a.key", "monkey.name"]) assert.ok(!isSecretKey(key), key);
+    for (const key of ["db.password", "a.private-key", "x.apiKey", "x.signing_key", "client.secret", "apiToken", "client-secret", "access-token", "auth.token", "spring.datasource.password"]) assert.ok(isSecretKey(key), key);
+    for (const key of ["cache.key-prefix", "a.key", "monkey.name", "openai.max-tokens", "db.passage"]) assert.ok(!isSecretKey(key), key);
     assert.equal(redactValue("a.b", "amqp://u:pw@h:5672"), "amqp://u:<redacted>@h:5672");
     assert.equal(redactValue("db.passage", "v"), "v");
   });

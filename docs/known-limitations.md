@@ -2492,11 +2492,12 @@ Config and env (`list_env_config`):
   makes nothing. A profile file's keys are nodes of that file, never merged
   with the default ones. Keys of `src/test/resources` are consumed by readers
   in test files only, not by main code.
-- Redaction: a key is a secret when any segment of it (split on `.`, then on
-  kebab, camel and underscore parts) holds password, passwd, pwd, secret,
-  token, credential(s), or private-key, api-key, access-key, secret-key,
-  encryption-key, signing-key; a plain `key` is not (`cache.key-prefix` is
-  shown). The value of a secret key is stored as `<redacted>` unless it is only
+- Redaction: a key is a secret when a segment of it (split on `.`) has, among
+  its whole parts (kebab, snake and camel case), password, passwd, pwd, secret(s),
+  credential(s) or a singular token (`access-token`, `apiToken`; not
+  `max-tokens`), or two parts that make private-key, api-key, access-key,
+  secret-key, encryption-key, signing-key or client-secret; a plain `key` is
+  not (`cache.key-prefix` is shown, so are `db.passage` and `max-tokens`). The value of a secret key is stored as `<redacted>` unless it is only
   a placeholder without a default (`${DB_PASSWORD}`; `${DB_PASSWORD:pw}` is
   redacted). The default of `@Value("${secret.key:default}")` and
   `getProperty("secret.key", "default")` follows the same rule. In any value,
