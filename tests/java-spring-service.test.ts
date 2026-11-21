@@ -49,7 +49,7 @@ describe("Java data, config and HTTP acceptance through the MCP tools (fixtures/
     assert.deepEqual(
       table.routes.map((route: Json) => `${route.method} ${route.path} r=${(route.reads ?? []).join()} w=${(route.writes ?? []).join()}`),
       [
-        "POST /api/orders r=read w=upsert",
+        "POST /api/orders r=aggregate w=upsert",
         "GET /api/orders r=read w=",
         "PUT /api/orders/{id}/ship r= w=update",
         "GET /api/orders/by-customer/{email} r=read w=",
@@ -63,7 +63,7 @@ describe("Java data, config and HTTP acceptance through the MCP tools (fixtures/
     const rows = result.dataAccess.map((row: Json) => `${row.library} ${row.sourceName} ${row.table} ${row.operation}`).sort();
     assert.deepEqual(rows, [
       "jdbc markShipped orders update",
-      "jdbc openCount orders read",
+      "jdbc openCount orders aggregate",
       "jpa countByCustomerEmail orders aggregate",
       "jpa findByStatus orders read",
       "jpa place orders upsert",
