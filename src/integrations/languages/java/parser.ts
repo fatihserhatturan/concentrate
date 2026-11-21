@@ -87,7 +87,7 @@ export function createJavaParser(plugins: readonly VersionedJavaParsePlugin[] = 
   const versions = plugins.flatMap((plugin) => (plugin.version === undefined ? [] : [plugin.version]));
   return {
     language: "java",
-    version: versions.length === 0 ? "1" : `1+${versions.join("+")}`,
+    version: versions.length === 0 ? "2" : `2+${versions.join("+")}`,
     parse: (rootPath, filePath) => parseJavaFile(rootPath, filePath, plugins),
   };
 }

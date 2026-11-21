@@ -48,7 +48,7 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
     "testdata",
   ]);
 
-  const isTest = hasSegment(segments, [
+  const isTest = hasSegment(layoutSegments, [
     "test",
     "tests",
     "__tests__",
