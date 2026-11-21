@@ -1,20 +1,2547 @@
 {
   "sample": "internet-java-gradle-multimodule",
-  "$comment": "Netflix concurrency-limits: 5 Gradle subprojects (core, grpc, servlet, servlet-jakarta, spectator). Scope: the main sources of every subproject; tests are out of scope. Stub: labels are added by later Phase 43 tracks.",
+  "$comment": "Hand-labeled from the pinned sample source (scripts/samples.json), not from Concentrate output. Netflix concurrency-limits: five Gradle subprojects (core, grpc, servlet, servlet-jakarta, spectator) under a root build.gradle and settings.gradle (include of the five directories). Scope: the main sources of the four satellite modules (grpc 6 files, servlet 2, servlet-jakarta 2, spectator 1) and, in core, the five limiter classes BlockingLimiter, SimpleLimiter, AbstractLimiter, AbstractPartitionedLimiter and LifoBlockingLimiter (imports) with BlockingLimiter and SimpleLimiter (calls); tests are out of scope. Calls: every call site of those files whose callee is a method, constructor or `this(...)`/`super(...)` call of this repository, labeled with every definition it can run (class hierarchy analysis over the whole repository: a call on the Limiter interface runs Limiter.acquire and the acquire of BlockingLimiter, LifoBlockingLimiter, AbstractPartitionedLimiter and SimpleLimiter; a call on Limiter.Listener runs the interface method and the seven implementations - the named SimpleLimiter.Listener and the anonymous classes AbstractLimiter$1 (NOOP_LISTENER) and $2, AbstractPartitionedLimiter$1, BlockingLimiter$1 and LifoBlockingLimiter$1, numbered per enclosing class in source order; MetricRegistry.distribution runs the default method, EmptyMetricRegistry and SpectatorMetricRegistry; GrpcServerRequestContext and GrpcClientRequestContext methods run the interface method and the anonymous class of the interceptor). The type of a lambda parameter (`context` in `partitionResolver(context -> context.getHeaders()...)`, `listener` in `.map(listener -> ...)`) is the one the generic signature gives. Calls into gRPC, the servlet API, spectator, slf4j, Guava and the JDK (Optional, Predicate, Semaphore, ...) are not labeled, so any target they get counts as a false positive; `new` of an interface (anonymous classes) and of a class without an explicit constructor are not call sites with a target. Imports: the in-repository imports of those files (cross-module ones resolve into concurrency-limits-core) with the target file; the non-JDK imports that leave the repository are labeled null; JDK imports are not labeled, so any resolution of an unlabeled import counts as a false positive. Injections: none - no class of the sample is a Spring, Guice or other container component (no @Inject, @Autowired, @Component, @Service or @Bean anywhere), so the scope is the main sources of every subproject and any INJECTS edge is a false positive. Env: no Java source reads an environment variable or system property (no getenv or getProperty call in main code); the env variables of the smoke report come from the GitHub Actions workflows (GITHUB_TOKEN and the ORG_* secrets of nebula-ci, nebula-publish and nebula-snapshot, and their DECLARES_ENV settings), not from Java code, and the harness env kind only counts file-level reads, so the scope is the main sources and has no items; the harness does not distinguish a system property from an environment variable. Build targets: the harness kind scores CMake and Make targets only (scanBuildTargets reads Package nodes of manager cmake or make), so Gradle projects cannot be labeled in it. Ground truth for a future Gradle build-target kind: settings.gradle includes :concurrency-limits-core, -grpc, -servlet, -servlet-jakarta and -spectator; inter-project dependencies are grpc -> core (implementation project), grpc -> spectator (testImplementation), servlet -> core (api), servlet -> spectator (testImplementation), servlet-jakarta -> core (api), servlet-jakarta -> spectator (testImplementation), spectator -> core (implementation); core has none.",
   "calls": {
-    "files": [],
-    "items": []
+    "files": [
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+      "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+      "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+      "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+      "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+      "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java"
+    ],
+    "items": [
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 42,
+        "callee": "BlockingLimiter",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "BlockingLimiter",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 54,
+        "callee": "checkArgument",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java",
+          "name": "checkArgument",
+          "className": "Preconditions"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 55,
+        "callee": "BlockingLimiter",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "BlockingLimiter",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 87,
+        "callee": "acquire",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "acquire",
+            "className": "Limiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "acquire",
+            "className": "BlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "acquire",
+            "className": "LifoBlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "acquire",
+            "className": "AbstractPartitionedLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "acquire",
+            "className": "SimpleLimiter"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 111,
+        "callee": "tryAcquire",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "tryAcquire",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 114,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 115,
+        "callee": "unblock",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "unblock",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 120,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 121,
+        "callee": "unblock",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "unblock",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 126,
+        "callee": "onDropped",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onDropped",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onDropped",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onDropped",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onDropped",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 127,
+        "callee": "unblock",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "unblock",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 28,
+        "callee": "SimpleLimiter",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+          "name": "SimpleLimiter",
+          "className": "SimpleLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 44,
+        "callee": "super",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "AbstractLimiter",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 46,
+        "callee": "distribution",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java",
+            "name": "distribution",
+            "className": "MetricRegistry"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/EmptyMetricRegistry.java",
+            "name": "distribution",
+            "className": "EmptyMetricRegistry"
+          },
+          {
+            "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+            "name": "distribution",
+            "className": "SpectatorMetricRegistry"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 47,
+        "callee": "AdjustableSemaphore",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+          "name": "AdjustableSemaphore",
+          "className": "SimpleLimiter.AdjustableSemaphore"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 47,
+        "callee": "getLimit",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "getLimit",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 53,
+        "callee": "shouldBypass",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "shouldBypass",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 54,
+        "callee": "createBypassListener",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "createBypassListener",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 57,
+        "callee": "createRejectedListener",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "createRejectedListener",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 60,
+        "callee": "Listener",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+          "name": "Listener",
+          "className": "SimpleLimiter.Listener"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 60,
+        "callee": "createListener",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "createListener",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 62,
+        "callee": "addLongSample",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java",
+            "name": "addLongSample",
+            "className": "MetricRegistry.SampleListener"
+          },
+          {
+            "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+            "name": "addLongSample",
+            "className": "SpectatorMetricRegistry$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 62,
+        "callee": "getInflight",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "getInflight",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 68,
+        "callee": "getLimit",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "getLimit",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 69,
+        "callee": "onNewLimit",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "onNewLimit",
+          "className": "AbstractLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 74,
+        "callee": "reducePermits",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+          "name": "reducePermits",
+          "className": "SimpleLimiter.AdjustableSemaphore"
+        }
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 101,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 107,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 113,
+        "callee": "onDropped",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onDropped",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onDropped",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onDropped",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onDropped",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 56,
+        "callee": "acquire",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "acquire",
+            "className": "Limiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "acquire",
+            "className": "BlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "acquire",
+            "className": "LifoBlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "acquire",
+            "className": "AbstractPartitionedLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "acquire",
+            "className": "SimpleLimiter"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 81,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 83,
+        "callee": "onDropped",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onDropped",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onDropped",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onDropped",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onDropped",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 85,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 99,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 31,
+        "callee": "getMethod",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+            "name": "getMethod",
+            "className": "GrpcClientRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+            "name": "getMethod",
+            "className": "ConcurrencyLimitClientInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 31,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 35,
+        "callee": "getCallOptions",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+            "name": "getCallOptions",
+            "className": "GrpcClientRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+            "name": "getCallOptions",
+            "className": "ConcurrencyLimitClientInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 35,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 47,
+        "callee": "bypassLimitResolverInternal",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "bypassLimitResolverInternal",
+          "className": "AbstractLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 57,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "GrpcClientLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 57,
+        "callee": "getMethod",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+            "name": "getMethod",
+            "className": "GrpcClientRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+            "name": "getMethod",
+            "className": "ConcurrencyLimitClientInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 69,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "GrpcClientLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 69,
+        "callee": "getCallOptions",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+            "name": "getCallOptions",
+            "className": "GrpcClientRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+            "name": "getCallOptions",
+            "className": "ConcurrencyLimitClientInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 89,
+        "callee": "build",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "build",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 92,
+        "callee": "wrap",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+          "name": "wrap",
+          "className": "BlockingLimiter"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 56,
+        "callee": "checkArgument",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java",
+          "name": "checkArgument",
+          "className": "Preconditions"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 70,
+        "callee": "checkArgument",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java",
+          "name": "checkArgument",
+          "className": "Preconditions"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 83,
+        "callee": "checkArgument",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java",
+          "name": "checkArgument",
+          "className": "Preconditions"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 89,
+        "callee": "ConcurrencyLimitServerInterceptor",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "ConcurrencyLimitServerInterceptor",
+          "className": "ConcurrencyLimitServerInterceptor"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 94,
+        "callee": "Builder",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "Builder",
+          "className": "ConcurrencyLimitServerInterceptor.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 103,
+        "callee": "checkArgument",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java",
+          "name": "checkArgument",
+          "className": "Preconditions"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 125,
+        "callee": "acquire",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "acquire",
+            "className": "Limiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "acquire",
+            "className": "BlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "acquire",
+            "className": "LifoBlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "acquire",
+            "className": "AbstractPartitionedLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "acquire",
+            "className": "SimpleLimiter"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 161,
+        "callee": "safeComplete",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "safeComplete",
+          "className": "ConcurrencyLimitServerInterceptor$2"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 164,
+        "callee": "onDropped",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onDropped",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onDropped",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onDropped",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onDropped",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 167,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 177,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 177,
+        "callee": "safeComplete",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "safeComplete",
+          "className": "ConcurrencyLimitServerInterceptor$2"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 189,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 189,
+        "callee": "safeComplete",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "safeComplete",
+          "className": "ConcurrencyLimitServerInterceptor$2"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 200,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 200,
+        "callee": "safeComplete",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "safeComplete",
+          "className": "ConcurrencyLimitServerInterceptor$2"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 210,
+        "callee": "onDropped",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onDropped",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onDropped",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onDropped",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onDropped",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onDropped",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 210,
+        "callee": "safeComplete",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+          "name": "safeComplete",
+          "className": "ConcurrencyLimitServerInterceptor$2"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 29,
+        "callee": "getCall",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getCall",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getCall",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 29,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 37,
+        "callee": "getHeaders",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getHeaders",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getHeaders",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 37,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 45,
+        "callee": "getCall",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getCall",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getCall",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 45,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 58,
+        "callee": "bypassLimitResolverInternal",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "bypassLimitResolverInternal",
+          "className": "AbstractLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 68,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "GrpcServerLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 68,
+        "callee": "getCall",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getCall",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getCall",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 80,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "GrpcServerLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 80,
+        "callee": "getHeaders",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getHeaders",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getHeaders",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 92,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "GrpcServerLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 92,
+        "callee": "getCall",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+            "name": "getCall",
+            "className": "GrpcServerRequestContext"
+          },
+          {
+            "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+            "name": "getCall",
+            "className": "ConcurrencyLimitServerInterceptor$1"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 42,
+        "callee": "this",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+          "name": "ConcurrencyLimitServletFilter",
+          "className": "ConcurrencyLimitServletFilter"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 57,
+        "callee": "acquire",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "acquire",
+            "className": "Limiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "acquire",
+            "className": "BlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "acquire",
+            "className": "LifoBlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "acquire",
+            "className": "AbstractPartitionedLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "acquire",
+            "className": "SimpleLimiter"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 61,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 63,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 67,
+        "callee": "outputThrottleError",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+          "name": "outputThrottleError",
+          "className": "ConcurrencyLimitServletFilter"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 38,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 48,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 56,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 64,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 74,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 86,
+        "callee": "bypassLimitResolverInternal",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "bypassLimitResolverInternal",
+          "className": "AbstractLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 98,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 110,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 122,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 132,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 142,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 44,
+        "callee": "this",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+          "name": "ConcurrencyLimitServletFilter",
+          "className": "ConcurrencyLimitServletFilter"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 59,
+        "callee": "acquire",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "acquire",
+            "className": "Limiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "acquire",
+            "className": "BlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "acquire",
+            "className": "LifoBlockingLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "acquire",
+            "className": "AbstractPartitionedLimiter"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "acquire",
+            "className": "SimpleLimiter"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 63,
+        "callee": "onSuccess",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onSuccess",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onSuccess",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onSuccess",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onSuccess",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 65,
+        "callee": "onIgnore",
+        "target": null,
+        "targets": [
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java",
+            "name": "onIgnore",
+            "className": "Limiter.Listener"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractLimiter$2"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+            "name": "onIgnore",
+            "className": "AbstractPartitionedLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "BlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+            "name": "onIgnore",
+            "className": "LifoBlockingLimiter$1"
+          },
+          {
+            "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+            "name": "onIgnore",
+            "className": "SimpleLimiter.Listener"
+          }
+        ]
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 69,
+        "callee": "outputThrottleError",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+          "name": "outputThrottleError",
+          "className": "ConcurrencyLimitServletFilter"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 38,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 48,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 56,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 64,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 74,
+        "callee": "partitionResolver",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+          "name": "partitionResolver",
+          "className": "AbstractPartitionedLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 86,
+        "callee": "bypassLimitResolverInternal",
+        "target": {
+          "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+          "name": "bypassLimitResolverInternal",
+          "className": "AbstractLimiter.Builder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 98,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 110,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 122,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 132,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 142,
+        "callee": "bypassLimitResolver",
+        "target": {
+          "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+          "name": "bypassLimitResolver",
+          "className": "ServletLimiterBuilder"
+        }
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 37,
+        "callee": "suffixBaseId",
+        "target": {
+          "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+          "name": "suffixBaseId",
+          "className": "SpectatorMetricRegistry"
+        }
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 56,
+        "callee": "suffixBaseId",
+        "target": {
+          "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+          "name": "suffixBaseId",
+          "className": "SpectatorMetricRegistry"
+        }
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 66,
+        "callee": "suffixBaseId",
+        "target": {
+          "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+          "name": "suffixBaseId",
+          "className": "SpectatorMetricRegistry"
+        }
+      }
+    ]
   },
   "imports": {
-    "scope": [],
-    "items": []
+    "scope": [
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+      "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+      "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+      "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+      "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+      "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+      "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+      "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java"
+    ],
+    "items": [
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 18,
+        "source": "com.google.common.base.Preconditions",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 20,
+        "source": "io.grpc.CallOptions",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 21,
+        "source": "io.grpc.Channel",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 22,
+        "source": "io.grpc.ClientCall",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 23,
+        "source": "io.grpc.ClientInterceptor",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 24,
+        "source": "io.grpc.ForwardingClientCall",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 25,
+        "source": "io.grpc.ForwardingClientCallListener",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 26,
+        "source": "io.grpc.Metadata",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 27,
+        "source": "io.grpc.MethodDescriptor",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 28,
+        "source": "io.grpc.Status",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 29,
+        "source": "io.grpc.Status.Code",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/ConcurrencyLimitClientInterceptor.java",
+        "line": 31,
+        "source": "javax.annotation.Nullable",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.limiter.AbstractPartitionedLimiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 20,
+        "source": "com.netflix.concurrency.limits.limiter.BlockingLimiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientLimiterBuilder.java",
+        "line": 21,
+        "source": "io.grpc.CallOptions",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+        "line": 18,
+        "source": "io.grpc.CallOptions",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/client/GrpcClientRequestContext.java",
+        "line": 19,
+        "source": "io.grpc.MethodDescriptor",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.internal.Preconditions",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 20,
+        "source": "io.grpc.ForwardingServerCall",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 21,
+        "source": "io.grpc.ForwardingServerCallListener",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 22,
+        "source": "io.grpc.Metadata",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 23,
+        "source": "io.grpc.ServerCall",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 24,
+        "source": "io.grpc.ServerCall.Listener",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 25,
+        "source": "io.grpc.ServerCallHandler",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 26,
+        "source": "io.grpc.ServerInterceptor",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 27,
+        "source": "io.grpc.Status",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 28,
+        "source": "org.slf4j.Logger",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/ConcurrencyLimitServerInterceptor.java",
+        "line": 29,
+        "source": "org.slf4j.LoggerFactory",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.limiter.AbstractPartitionedLimiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java"
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 19,
+        "source": "io.grpc.Attributes",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerLimiterBuilder.java",
+        "line": 20,
+        "source": "io.grpc.Metadata",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+        "line": 18,
+        "source": "io.grpc.Metadata",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-grpc/src/main/java/com/netflix/concurrency/limits/grpc/server/GrpcServerRequestContext.java",
+        "line": 19,
+        "source": "io.grpc.ServerCall",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 23,
+        "source": "javax.servlet.Filter",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 24,
+        "source": "javax.servlet.FilterChain",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 25,
+        "source": "javax.servlet.FilterConfig",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 26,
+        "source": "javax.servlet.ServletException",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 27,
+        "source": "javax.servlet.ServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 28,
+        "source": "javax.servlet.ServletResponse",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 29,
+        "source": "javax.servlet.http.HttpServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
+        "line": 30,
+        "source": "javax.servlet.http.HttpServletResponse",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.limiter.AbstractPartitionedLimiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ServletLimiterBuilder.java",
+        "line": 22,
+        "source": "javax.servlet.http.HttpServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 20,
+        "source": "jakarta.servlet.Filter",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 21,
+        "source": "jakarta.servlet.FilterChain",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 22,
+        "source": "jakarta.servlet.FilterConfig",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 23,
+        "source": "jakarta.servlet.ServletException",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 24,
+        "source": "jakarta.servlet.ServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 25,
+        "source": "jakarta.servlet.ServletResponse",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 26,
+        "source": "jakarta.servlet.http.HttpServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
+        "line": 27,
+        "source": "jakarta.servlet.http.HttpServletResponse",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.limiter.AbstractPartitionedLimiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java"
+      },
+      {
+        "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ServletLimiterBuilder.java",
+        "line": 21,
+        "source": "jakarta.servlet.http.HttpServletRequest",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 20,
+        "source": "com.netflix.concurrency.limits.MetricRegistry",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java"
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 21,
+        "source": "com.netflix.spectator.api.DistributionSummary",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 22,
+        "source": "com.netflix.spectator.api.Id",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 23,
+        "source": "com.netflix.spectator.api.Registry",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-spectator/src/main/java/com/netflix/concurrency/limits/spectator/SpectatorMetricRegistry.java",
+        "line": 24,
+        "source": "com.netflix.spectator.api.patterns.PolledMeter",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limit",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limit.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 20,
+        "source": "com.netflix.concurrency.limits.MetricIds",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricIds.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 21,
+        "source": "com.netflix.concurrency.limits.MetricRegistry",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 22,
+        "source": "com.netflix.concurrency.limits.internal.EmptyMetricRegistry",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/EmptyMetricRegistry.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractLimiter.java",
+        "line": 23,
+        "source": "com.netflix.concurrency.limits.limit.VegasLimit",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limit/VegasLimit.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.MetricIds",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricIds.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 20,
+        "source": "com.netflix.concurrency.limits.MetricRegistry",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 21,
+        "source": "com.netflix.concurrency.limits.internal.Preconditions",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 22,
+        "source": "org.slf4j.Logger",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/AbstractPartitionedLimiter.java",
+        "line": 23,
+        "source": "org.slf4j.LoggerFactory",
+        "target": null
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.internal.Preconditions",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/internal/Preconditions.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/LifoBlockingLimiter.java",
+        "line": 26,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 18,
+        "source": "com.netflix.concurrency.limits.Limiter",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/Limiter.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 19,
+        "source": "com.netflix.concurrency.limits.MetricIds",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricIds.java"
+      },
+      {
+        "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/SimpleLimiter.java",
+        "line": 20,
+        "source": "com.netflix.concurrency.limits.MetricRegistry",
+        "target": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/MetricRegistry.java"
+      }
+    ]
   },
   "injections": {
-    "scope": [],
+    "scope": [
+      "concurrency-limits-core/src/main/java/",
+      "concurrency-limits-grpc/src/main/java/",
+      "concurrency-limits-servlet/src/main/java/",
+      "concurrency-limits-servlet-jakarta/src/main/java/",
+      "concurrency-limits-spectator/src/main/java/"
+    ],
     "items": []
   },
   "env": {
-    "scope": [],
+    "scope": [
+      "concurrency-limits-core/src/main/java/",
+      "concurrency-limits-grpc/src/main/java/",
+      "concurrency-limits-servlet/src/main/java/",
+      "concurrency-limits-servlet-jakarta/src/main/java/",
+      "concurrency-limits-spectator/src/main/java/"
+    ],
     "items": []
   },
   "buildTargets": {
