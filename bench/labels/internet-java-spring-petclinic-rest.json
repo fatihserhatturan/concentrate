@@ -86,7 +86,8 @@
         "target": {
           "file": "src/main/java/org/springframework/samples/petclinic/mapper/PetTypeMapper.java",
           "name": "toPetType",
-          "className": "PetTypeMapper"
+          "className": "PetTypeMapper",
+          "line": 20
         }
       },
       {
