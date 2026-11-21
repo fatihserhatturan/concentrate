@@ -1859,7 +1859,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "jdbcTemplate.queryForObject"
           },
           {
@@ -1873,7 +1873,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "jdbcTemplate.queryForObject"
           },
           {
@@ -1887,7 +1887,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "jdbcTemplate.queryForObject"
           },
           {
@@ -1991,7 +1991,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "jdbcTemplate.queryForObject"
           },
           {
@@ -2097,7 +2097,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "jdbcTemplate.queryForObject"
         },
         {
@@ -2227,7 +2227,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "jdbcTemplate.queryForObject"
         },
         {
@@ -2240,7 +2240,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "jdbcTemplate.queryForObject"
         },
         {
@@ -2318,7 +2318,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "jdbcTemplate.queryForObject"
         },
         {
@@ -2462,7 +2462,7 @@
             "file": "src/main/java/com/acme/orders/web/OrderController.java",
             "line": 24,
             "relType": "READS_ROUTE",
-            "operation": "read"
+            "operation": "aggregate"
           },
           {
             "table": "table:java:-:orders",
@@ -2668,7 +2668,7 @@
               "file": "src/main/java/com/acme/orders/web/OrderController.java",
               "line": 24,
               "reads": [
-                "read"
+                "aggregate"
               ],
               "writes": [
                 "upsert"
