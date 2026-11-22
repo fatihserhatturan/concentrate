@@ -6,7 +6,7 @@ import type { CSharpType } from "../../languages/csharp/types.js";
 import { csharpAttributeReader, csharpStringLiteral, argumentExpression, findAttributes } from "./attributes.js";
 import { addCSharpEntryPoint } from "./emit.js";
 import { invocationInfo } from "./invocations.js";
-import { createGroupPrefixResolver, describePath } from "./routes.js";
+import { createGroupPrefixResolver, createRelativeReceiverCheck, describePath } from "./routes.js";
 import { csharpMethods } from "./shared.js";
 import { csharpTypeResolver } from "./type-names.js";
 
@@ -29,6 +29,7 @@ export const csharpSignalrPlugin: VersionedCSharpParsePlugin = Object.assign(
   ({ root, functions, calls }: Parameters<VersionedCSharpParsePlugin>[0]) => {
     if (!root.text.includes("MapHub")) return;
     const groupPrefix = createGroupPrefixResolver(functions);
+    const isRelative = createRelativeReceiverCheck(functions);
     for (const { syntax, node, function: fn } of calls) {
       if (node.properties.callee !== "MapHub") continue;
       const info = invocationInfo(syntax);
@@ -37,13 +38,17 @@ export const csharpSignalrPlugin: VersionedCSharpParsePlugin = Object.assign(
       let path: string | null = null;
       if (first?.kind === "string") {
         const nameNode = syntax.childForFieldName("function")?.childForFieldName("name") ?? syntax;
-        const parts = [...groupPrefix(info.receiver, fn, nameNode.startPosition.row + 1), { value: first.value ?? "", resolved: true }];
-        path = describePath(parts).path;
+        const line = nameNode.startPosition.row + 1;
+        // A hub mapped on a group the caller gives (`this RouteGroupBuilder g`) has a relative path: null, never a guess.
+        if (!isRelative(info.receiver, fn, line)) {
+          const parts = [...groupPrefix(info.receiver, fn, line), { value: first.value ?? "", resolved: true }];
+          path = describePath(parts).path;
+        }
       }
       node.properties.signalrMapHub = JSON.stringify({ path });
     }
   },
-  { version: "2" },
+  { version: "3" },
 );
 
 export const csharpSignalrContributor: ISemanticContributor = {

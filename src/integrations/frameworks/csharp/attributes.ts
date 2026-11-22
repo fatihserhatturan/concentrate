@@ -223,7 +223,7 @@ export const positionalArguments = (attribute: Pick<CSharpAttributeInfo, "args">
 export function namedArgument(attribute: Pick<CSharpAttributeInfo, "args">, key: string): string | null {
   for (const arg of attribute.args) {
     const match = KEYED.exec(arg);
-    if (match && match[1] === key) return match[2]!;
+    if (match && match[1]!.toLowerCase() === key.toLowerCase()) return match[2]!;
   }
   return null;
 }
