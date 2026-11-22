@@ -78,7 +78,7 @@ import { csharpLanguages } from "../integrations/languages/csharp/descriptor.js"
 import { csharpCallResolver, csharpInheritanceResolver } from "../integrations/languages/csharp/resolvers.js";
 import { csharpManifestReader } from "../integrations/languages/csharp/manifest.js";
 import { csharpImportResolver } from "../integrations/languages/csharp/import-resolver.js";
-import { csharpDiContributor, csharpEntrypointsContributor, csharpFrameworkEntrypointsContributor, csharpFrameworkParser, csharpFrameworkSchemas, csharpGrpcContributor, csharpProjectsContributor, csharpRoutesContributor, csharpSignalrContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
+import { csharpDiContributor, csharpEntrypointsContributor, csharpFrameworkEntrypointsContributor, csharpFrameworkParser, csharpFrameworkSchemas, csharpGrpcContributor, csharpHandlerInjectionContributor, csharpProjectsContributor, csharpRoutesContributor, csharpSignalrContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -174,6 +174,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     csharpSignalrContributor,
     csharpTestsContributor,
     csharpDiContributor,
+    csharpHandlerInjectionContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,

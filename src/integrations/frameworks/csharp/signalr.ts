@@ -6,6 +6,7 @@ import type { CSharpType } from "../../languages/csharp/types.js";
 import { csharpAttributeReader, csharpStringLiteral, argumentExpression, findAttributes } from "./attributes.js";
 import { addCSharpEntryPoint } from "./emit.js";
 import { invocationInfo } from "./invocations.js";
+import { createGroupPrefixResolver, describePath } from "./routes.js";
 import { csharpMethods } from "./shared.js";
 import { csharpTypeResolver } from "./type-names.js";
 
@@ -15,7 +16,9 @@ import { csharpTypeResolver } from "./type-names.js";
 // `[HubMethodName("x")]` when written). Overrides are the framework callbacks (`OnConnectedAsync`,
 // `OnDisconnectedAsync`, `Dispose`): not client-invokable, so not entrypoints. Abstract hubs have no instance: their
 // concrete subclasses carry the methods. `MapHub<T>("/path")` gives the EntryPoints `hubPath` (the first call's path;
-// null when no call names the hub or the path is not a literal); a `MapGroup` prefix is not applied.
+// null when no call names the hub or the path is not a literal); the `MapGroup` prefixes of the receiver chain or of the local
+// variable holding a group (`app.MapGroup("/rt").MapHub<T>("/chat")`) are joined in front, reusing the minimal API group logic
+// of routes.ts (a prefix that is not a literal gives null, never a guess).
 
 const SIGNALR_NAMESPACES = ["Microsoft.AspNetCore.SignalR"];
 const HUB_BASES = ["Hub", "DynamicHub"];
@@ -23,16 +26,24 @@ const HUB_BASES = ["Hub", "DynamicHub"];
 // MapHub<T>("/path"): the literal path (null when it is a constant, an expression or absent), stored on the Call node
 // for the contributor, which removes it.
 export const csharpSignalrPlugin: VersionedCSharpParsePlugin = Object.assign(
-  ({ calls }: Parameters<VersionedCSharpParsePlugin>[0]) => {
-    for (const { syntax, node } of calls) {
+  ({ root, functions, calls }: Parameters<VersionedCSharpParsePlugin>[0]) => {
+    if (!root.text.includes("MapHub")) return;
+    const groupPrefix = createGroupPrefixResolver(functions);
+    for (const { syntax, node, function: fn } of calls) {
       if (node.properties.callee !== "MapHub") continue;
       const info = invocationInfo(syntax);
       if (!info || info.name !== "MapHub") continue;
       const first = info.arguments[0];
-      node.properties.signalrMapHub = JSON.stringify({ path: first?.kind === "string" ? first.value ?? null : null });
+      let path: string | null = null;
+      if (first?.kind === "string") {
+        const nameNode = syntax.childForFieldName("function")?.childForFieldName("name") ?? syntax;
+        const parts = [...groupPrefix(info.receiver, fn, nameNode.startPosition.row + 1), { value: first.value ?? "", resolved: true }];
+        path = describePath(parts).path;
+      }
+      node.properties.signalrMapHub = JSON.stringify({ path });
     }
   },
-  { version: "1" },
+  { version: "2" },
 );
 
 export const csharpSignalrContributor: ISemanticContributor = {

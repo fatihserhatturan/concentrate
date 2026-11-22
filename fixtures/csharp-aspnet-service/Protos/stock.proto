@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "Inventory.Service.Grpc";
+
+package inventory;
+
+service Stocker {
+  rpc Reserve (ReserveRequest) returns (ReserveReply);
+  rpc Check (CheckRequest) returns (ReserveReply);
+}
+
+message ReserveRequest {
+  string sku = 1;
+  int32 quantity = 2;
+}
+
+message CheckRequest {
+  string sku = 1;
+}
+
+message ReserveReply {
+  bool ok = 1;
+}
