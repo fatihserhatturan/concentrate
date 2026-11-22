@@ -6,7 +6,7 @@ import { declaredCSharpProjects } from "../../languages/csharp/manifest.js";
 // from `csharpManifestReader`) gets `projectFile`, `sdk`, `outputType`, `executable`, `rootNamespace`, `assemblyName`,
 // `targetFrameworks`, `usings`, `solutions` (JSON arrays), `implicitUsings`, `isTestProject` and `unresolved`. An
 // executable project is an `EntryPoint` (kind `csharp-project`, declared by the `.csproj` file) that `RUNS` what the
-// runtime starts in it: the `<top-level>` function of its top-level statements, else its static `Main` method(s) (the
+// runtime starts in it: the `main` entrypoint of its top-level statements, else of its static `Main` method(s) (the
 // entrypoints of `csharp.entrypoints`, which already applies CS7022). Without either, `resolved` is false.
 export const csharpProjectsContributor: ISemanticContributor = {
   id: "csharp.projects",
@@ -20,16 +20,14 @@ export const csharpProjectsContributor: ISemanticContributor = {
     const projects = declaredCSharpProjects(model);
     if (projects.length === 0) return;
 
-    // File node id -> the handlers of its entrypoints.
+    // File node id -> the `main` entrypoints it declares (the store only allows RUNS from an EntryPoint to a File or
+    // another EntryPoint, so the project runs the entrypoint whose handler is `<top-level>` or `Main`).
     const handlersOfFile = new Map<string, { handler: string; line: number }[]>();
-    const handlerOfEntry = new Map<string, string>();
-    for (const rel of graph.relationshipsOfType("ENTRYPOINT_HANDLED_BY")) handlerOfEntry.set(rel.from, rel.to);
     for (const rel of graph.relationshipsOfType("DECLARES_ENTRYPOINT")) {
       const entry = graph.node(rel.to);
-      const handler = handlerOfEntry.get(rel.to);
-      if (!entry || entry.properties.library !== "csharp" || entry.properties.kind !== "main" || !handler) continue;
+      if (!entry || entry.properties.library !== "csharp" || entry.properties.kind !== "main") continue;
       const list = handlersOfFile.get(rel.from) ?? [];
-      list.push({ handler, line: Number(entry.properties.line) });
+      list.push({ handler: rel.to, line: Number(entry.properties.line) });
       handlersOfFile.set(rel.from, list);
     }
     const projectFilesOf = (dir: string, claimed: ReadonlySet<string>): string[] =>

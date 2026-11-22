@@ -91,14 +91,16 @@ describe("C# project graph: fixtures/csharp-solution", () => {
     const graph = await scan("fixtures/csharp-solution");
     const webRuns = runs(graph, projectEntry(graph, "Shop.Web")!.id);
     assert.equal(webRuns.length, 1);
-    assert.match(webRuns[0]!, /^file:src\/Shop\.Web\/Program\.cs:function:\d+:<top-level>$/u);
+    assert.match(webRuns[0]!, /^file:src\/Shop\.Web\/Program\.cs:entrypoint:/u);
+    assert.equal(graph.nodes.find((node) => node.id === webRuns[0])?.properties.handlerName, "<top-level>");
     const mainEntries = graph.nodes.filter((node) => node.label === "EntryPoint" && node.properties.kind === "main").map((node) => node.id);
     assert.ok(!mainEntries.some((id) => id.includes("Launcher.cs")), mainEntries.join("\n"));
     assert.ok(mainEntries.some((id) => id.includes("src/Shop.Web/Program.cs")));
     assert.ok(mainEntries.some((id) => id.includes("tools/Orphan/Program.cs")));
     const orphanRuns = runs(graph, projectEntry(graph, "Orphan")!.id);
     assert.equal(orphanRuns.length, 1);
-    assert.match(orphanRuns[0]!, /^file:tools\/Orphan\/Program\.cs:function:\d+:Orphan\.Program\.Main$/u);
+    assert.match(orphanRuns[0]!, /^file:tools\/Orphan\/Program\.cs:entrypoint:/u);
+    assert.equal(graph.nodes.find((node) => node.id === orphanRuns[0])?.properties.handlerName, "Main");
   });
 });
 
