@@ -64,9 +64,13 @@ export const toyDescriptor: LanguageDescriptor = { id: "toy", code: true, extens
 - Optional: `fileNames`, `matchFileName`, `fallback`, `version` (part of the
   parse cache fingerprint), `refine` (a per-scan hook that may change a file's
   language, as C++ does for `.h`), and file conventions: `testFile`,
-  `generatedFile`, `supportFile`, `lockfiles`, `ignoredPatterns`,
-  `ignoredInDirectory`. Conventions apply to every file in the project, not
-  only files of this language.
+  `generatedFile`, `generatedDirectories`, `supportFile`, `lockfiles`,
+  `ignoredPatterns`, `ignoredInDirectory`. Conventions apply to every file in
+  the project, not only files of this language.
+- `generatedDirectories` lists directory names whose files are generated, at any
+  depth (C# sets `["obj"]`: MSBuild output). It is collected from every language
+  like the other conventions, so a file under such a directory is generated
+  whatever its language.
 - `displayName` is optional and defaults to `id`. The MCP unused-exports note
   uses it for the language name.
 
@@ -217,7 +221,7 @@ Register with `registry.registerCallResolver(toyCallResolver)`. Each result is
 a `ResolvedCallTarget`: `functionId`, plus an optional `via` (`interface`,
 `trait`, `override`...) when the match is not direct. The scan writes a
 `CALL_RESOLVES_TO` relationship for each. Examples:
-`src/integrations/languages/{go,python,rust,cpp,java}/resolvers.ts`.
+`src/integrations/languages/{go,python,rust,cpp,java,csharp}/resolvers.ts`.
 
 ### Imports
 
@@ -253,7 +257,7 @@ export const toyImportResolver: ILanguageImportResolver = {
 Register with `registry.registerImportResolver(toyImportResolver)`.
 `src/integrations/resolution/imports.ts` only dispatches to the resolvers and
 adds the `RESOLVES_TO` edges; no language logic lives there. Built-in
-resolvers: `src/integrations/languages/{plain,rust,cpp,java,python,go,js-ts}/import-resolver.ts`,
+resolvers: `src/integrations/languages/{plain,rust,cpp,java,csharp,python,go,js-ts}/import-resolver.ts`,
 registered in `default-registry.ts` in the order that decides which one wins.
 
 ### Inheritance
@@ -270,7 +274,7 @@ registry.registerInheritanceResolver(resolver);
 ```
 
 Inheritance resolvers all run, in registration order; they do not compete.
-Examples: `src/integrations/languages/{go,python,rust,cpp,java}/resolvers.ts`. The
+Examples: `src/integrations/languages/{go,python,rust,cpp,java,csharp}/resolvers.ts`. The
 toy language has no classes, so it has none.
 
 ## 5. Graph schema extension
@@ -353,7 +357,7 @@ Registration order is the order of the language paragraphs in the MCP
 registered rules. Each language name in it is the descriptor's `displayName`,
 or the id when that is not set.
 
-Examples: `src/integrations/languages/{js-ts,go,rust,python,cpp,java}/unused.ts`.
+Examples: `src/integrations/languages/{js-ts,go,rust,python,cpp,java,csharp}/unused.ts`.
 
 ## 7. Tests, fixtures and golden files
 
