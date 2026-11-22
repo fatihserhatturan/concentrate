@@ -155,6 +155,8 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
   const buildTy = (parsed: ParsedType | null, owner: JavaType, fn: GraphNode | undefined, env: ReadonlyMap<string, Ty | null> | undefined): Ty | null => {
     if (!parsed || parsed.name.endsWith("[]")) return null;
     const simple = !parsed.name.includes(".");
+    // A method's own type variable shadows a class type variable of the same name (`class Base<T> { <T> T pick(T a) }`).
+    if (simple && fn && parseStringList(fn.properties.typeParameters).some((written) => /^[\p{L}_$][\p{L}\p{N}_$]*/u.exec(written)?.[0] === parsed.name)) return null;
     if (simple && env?.has(parsed.name)) return env.get(parsed.name) ?? null;
     if (simple && typeVariables(owner, fn).has(parsed.name)) return null;
     const args = parsed.args.map((argument) => buildTy(argument, owner, fn, env));
@@ -173,7 +175,13 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     if (!pkg) return null;
     if (dot >= 0) return name === `${pkg}.${simple}` ? simple : null;
     if (pkg === "java.lang") return simple;
-    return (importsByFile.get(fileId) ?? []).some((node) => {
+    const imports = importsByFile.get(fileId) ?? [];
+    // An explicit single-type import of the same simple name from another package wins over a JDK wildcard.
+    if (imports.some((node) => {
+      const source = String(node.properties.source ?? "");
+      return node.properties.isStatic !== true && node.properties.isWildcard !== true && source.endsWith(`.${simple}`) && source !== `${pkg}.${simple}`;
+    })) return null;
+    return imports.some((node) => {
       if (node.properties.isStatic === true) return false;
       const source = String(node.properties.source ?? "");
       return source === `${pkg}.${simple}` || (node.properties.isWildcard === true && source === pkg);
