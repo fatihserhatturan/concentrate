@@ -587,7 +587,8 @@
         "target": {
           "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
           "name": "RouteGuideServer",
-          "className": "RouteGuideServer"
+          "className": "RouteGuideServer",
+          "line": 59
         }
       },
       {
@@ -597,7 +598,8 @@
         "target": {
           "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
           "name": "RouteGuideServer",
-          "className": "RouteGuideServer"
+          "className": "RouteGuideServer",
+          "line": 65
         }
       },
       {
@@ -637,7 +639,8 @@
         "target": {
           "file": "examples/src/main/java/io/grpc/examples/routeguide/RouteGuideServer.java",
           "name": "RouteGuideServer",
-          "className": "RouteGuideServer"
+          "className": "RouteGuideServer",
+          "line": 54
         }
       },
       {

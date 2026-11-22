@@ -892,7 +892,8 @@
         "target": {
           "file": "concurrency-limits-core/src/main/java/com/netflix/concurrency/limits/limiter/BlockingLimiter.java",
           "name": "wrap",
-          "className": "BlockingLimiter"
+          "className": "BlockingLimiter",
+          "line": 41
         }
       },
       {
@@ -1482,7 +1483,8 @@
         "target": {
           "file": "concurrency-limits-servlet-jakarta/src/main/java/com/netflix/concurrency/limits/servlet/jakarta/ConcurrencyLimitServletFilter.java",
           "name": "ConcurrencyLimitServletFilter",
-          "className": "ConcurrencyLimitServletFilter"
+          "className": "ConcurrencyLimitServletFilter",
+          "line": 45
         }
       },
       {
@@ -1731,7 +1733,8 @@
         "target": {
           "file": "concurrency-limits-servlet/src/main/java/com/netflix/concurrency/limits/servlet/ConcurrencyLimitServletFilter.java",
           "name": "ConcurrencyLimitServletFilter",
-          "className": "ConcurrencyLimitServletFilter"
+          "className": "ConcurrencyLimitServletFilter",
+          "line": 46
         }
       },
       {
