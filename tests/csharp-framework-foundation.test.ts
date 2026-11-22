@@ -94,7 +94,7 @@ describe("C# framework foundation (Phase 46 wave 0)", () => {
     const parser = createCSharpParser([plugin]);
     assert.equal(parser.version, "1+test");
     assert.equal(createCSharpParser().version, "1");
-    assert.equal(csharpFrameworkParser.version, "1", "stub plugins carry no version: the parse cache stays valid");
+    assert.match(csharpFrameworkParser.version ?? "", /^1(?:\+[\w.+-]+)?$/u, "plugins that output set a version: it joins the parse cache fingerprint");
     await parser.parse(root, path.join(root, "Program.cs"));
     assert.ok(seen);
     assert.ok(seen.functions.some((fn) => fn.node.properties.name === "<top-level>"));
