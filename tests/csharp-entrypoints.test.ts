@@ -38,17 +38,12 @@ describe("C# entrypoints (fixtures/csharp-entrypoints)", () => {
     assert.deepEqual(entry.properties, { kind: "main", trigger: null, receiverName: null, library: "csharp", line: entry.properties.line, handlerName: entry.properties.handlerName });
   });
 
-  it("lets top-level statements win over a static Main anywhere in the scan (CS7022)", async () => {
-    assert.deepEqual(entries(await scan("csharp-entrypoints")), ["toplevel/Program.cs:3 main csharp <top-level>"]);
-    const { dir, done } = await project({
-      "A.cs": "class A { static void Main() { } }\n",
-      "B.cs": "System.Console.WriteLine(1);\n",
-    });
-    try {
-      assert.deepEqual(entries(await buildCodeGraph(dir, { continueOnError: false })), ["B.cs:1 main csharp <top-level>"]);
-    } finally {
-      await done();
-    }
+  it("keeps both static Main and top-level statements as entrypoints in one scan (CS7022 waits for projects)", async () => {
+    assert.deepEqual(entries(await scan("csharp-entrypoints")), [
+      "asyncmain/Program.cs:7 main csharp Main",
+      "classic/Program.cs:5 main csharp Main",
+      "toplevel/Program.cs:3 main csharp <top-level>",
+    ]);
   });
 });
 

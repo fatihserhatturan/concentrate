@@ -2689,11 +2689,11 @@ that scope.
   `Decorator` nodes; calls resolved through usings, extension methods and
   inheritance with interface and override dispatch; `static Main` and top-level
   statements as entrypoints; xUnit, NUnit and MSTest tests; unused-export rules.
-- **Entrypoints.** A static `Main` with a valid signature is an entrypoint, unless
-  the scan has top-level statements: a project with them ignores every `Main`
-  (CS7022), and the scan is one project, so the top-level statements are then the
-  only entrypoint. The unused-export rule does not see top-level statements and
-  still treats a valid static `Main` as an entrypoint (a type holding one is kept).
+- **Entrypoints.** A static `Main` with a valid signature and every file's
+  top-level statements are entrypoints. CS7022 (top-level statements win over
+  `Main` within a project) is not applied until project boundaries are read
+  (Phase 45). The unused-export rule likewise treats a valid static `Main` as an
+  entrypoint (a type holding one is kept).
 - **Tests are detected per framework.** xUnit (`Fact`, `Theory`), NUnit (`Test`,
   `TestCase`, `TestCaseSource`, `Theory`, `TestFixture`, `SetUp`, `TearDown`,
   `OneTimeSetUp`, `OneTimeTearDown`) and MSTest (`TestMethod`, `DataTestMethod`,
