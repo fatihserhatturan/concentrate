@@ -62,6 +62,14 @@ function slnxProjectPaths(text: string): string[] {
 export function interpretSolutions(input: SolutionInput): SolutionResult {
   const solutions: CSharpSolution[] = [];
   let unresolved = 0;
+  let lower: Map<string, string> | undefined;
+  const lowerFiles = (): Map<string, string> => {
+    if (!lower) {
+      lower = new Map();
+      for (const file of [...input.files].sort()) if (!lower.has(file.toLowerCase())) lower.set(file.toLowerCase(), file);
+    }
+    return lower;
+  };
   for (const file of [...input.texts.keys()].sort()) {
     const text = input.texts.get(file)!;
     const format = file.toLowerCase().endsWith(".slnx") ? "slnx" : "sln";
@@ -70,7 +78,8 @@ export function interpretSolutions(input: SolutionInput): SolutionResult {
     let missing = 0;
     for (const entry of written) {
       const resolved = resolveProjectPath(file, entry);
-      if (resolved !== null && input.files.has(resolved)) projects.add(resolved);
+      const canonical = resolved === null ? null : input.files.has(resolved) ? resolved : (lowerFiles().get(resolved.toLowerCase()) ?? null);
+      if (canonical !== null) projects.add(canonical);
       else missing += 1;
     }
     unresolved += missing;

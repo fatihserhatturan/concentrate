@@ -11,16 +11,16 @@ export * from "./types.js";
 const MAX_PROJECT_FILE_BYTES = 1_000_000;
 
 export function isCSharpProjectFile(file: string): boolean {
-  return file.endsWith(".csproj");
+  return /\.csproj$/iu.test(file);
 }
 
 export function isCSharpSolutionFile(file: string): boolean {
-  return file.endsWith(".sln") || file.endsWith(".slnx");
+  return /\.slnx?$/iu.test(file);
 }
 
 /** `Directory.Build.props`, `Directory.Packages.props` and the other MSBuild property files (`.props`). */
 export function isMsbuildPropsFile(file: string): boolean {
-  return file.endsWith(".props");
+  return /\.props$/iu.test(file);
 }
 
 export function isCSharpBuildFile(file: string): boolean {
