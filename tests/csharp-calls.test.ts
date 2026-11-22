@@ -71,12 +71,12 @@ describe("C# calls: csharp-calls fixture", () => {
     for (const entry of ids) assert.equal(parameterCount(entry.to[0]!), entry.args);
   });
 
-  it("counts the same-arity Fmt overloads as ambiguous: every remaining candidate is marked, none guessed", () => {
+  it("narrows Fmt(1, \"a\") to the two overloads that accept the arguments, both marked, none guessed", () => {
     const fmt = one(calls, run("Fmt"));
-    assert.ok(fmt.length >= 2, fmt.join());
+    // Fmt(string, int) cannot take (int, string): the argument types drop it. Fmt(int, string) and Fmt(object, object) stay.
+    assert.equal(fmt.length, 2, fmt.join());
     assert.ok(fmt.every((target) => target.startsWith("Util/MathUtil.cs::Acme.Util.MathUtil.Fmt") && target.endsWith("(overload)")), fmt.join());
-    // Fmt(string, int) cannot take (int, string): the argument types drop it.
-    assert.ok(fmt.length < 3);
+    assert.equal(new Set(fmt).size, 2);
   });
 
   it("resolves fields, properties, parameters, var, target-typed new, this and chains through return types", () => {

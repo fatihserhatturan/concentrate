@@ -8,6 +8,6 @@ Expected graph facts (scan treated as one project):
 - `using static Acme.Shared.Constants;` in Greeter.cs resolves to Constants.cs; `Prefix` resolves to `Constants.Prefix`.
 - `using Money = Acme.Models.Money;` alias resolves to Money.cs; `using Core = Acme.Core.Helpers;` alias resolves to Helpers.cs (`Core.Twice` -> `Helpers.Twice`).
 - External imports: `System`, `System.Text`, `System.Collections.Generic`, `Microsoft.Extensions.Logging`.
-- Unresolved (external, not guessed): `Acme.Missing.Library`.
+- Unresolved (counted, not guessed): `using Acme.Missing.Library;` in Greeter.cs. It is under the scan's own root namespace `Acme` but no file declares it. A using under a foreign root (like `Ghost.Unknown` in csharp-calls) is external and not counted.
 - `Console` / `List<int>` in Program.cs come via the global usings of `System` / `System.Collections.Generic` (external).
 - Entrypoint: `Program.Main` in `app/Program.cs`.
