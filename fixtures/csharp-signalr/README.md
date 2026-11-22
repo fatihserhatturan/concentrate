@@ -1,5 +1,12 @@
-# csharp-signalr (Phase 46 placeholder)
+# csharp-signalr
 
-Wave 0 placeholder: only this README is here, so `tests/golden.test.ts` skips the directory (a fixture directory
-holding nothing but README.md is pending). The owning track replaces it with real sources, then runs
-`npm run golden:update` to record `tests/golden/fixtures/csharp-signalr.jsonl`. Delete this README when the sources exist.
+SignalR hubs (Phase 46): classes deriving from `Hub` / `Hub<TClient>`, directly or through a user base hub.
+
+Expected facts (EntryPoint kind `signalr`, library `signalr`, trigger `Hub/method`, property `hubPath` from `MapHub<T>("/path")`):
+
+- `ChatHub` (`hubPath` `/hubs/chat`): `ChatHub/SendMessage`, `ChatHub/join` (`[HubMethodName("join")]` on `JoinRoom`), `ChatHub/Counter`
+  (a streaming method), and `ChatHub/Ping` inherited from the abstract user base `AuditedHub<TClient>` (handler `AuditedHub.Ping`).
+- `NotificationHub` (`/hubs/notifications`): `Subscribe`, `Unsubscribe`.
+- `DraftHub` is never mapped: `Draft` with `hubPath: null`.
+- Not EntryPoints: `OnConnectedAsync` / `OnDisconnectedAsync` (overrides: framework lifecycle callbacks), the static `Version`,
+  the private `Normalize`, the protected `Audit`, the abstract `AuditedHub` itself, and `NotificationSender` (not a hub).

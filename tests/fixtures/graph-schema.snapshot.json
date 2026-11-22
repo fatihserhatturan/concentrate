@@ -348,7 +348,9 @@
     "line": "INT64",
     "handlerName": "STRING",
     "source": "STRING",
-    "resolved": "BOOLEAN"
+    "resolved": "BOOLEAN",
+    "registered": "BOOLEAN",
+    "hubPath": "STRING"
    }
   },
   {
