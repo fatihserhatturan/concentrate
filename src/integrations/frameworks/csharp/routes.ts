@@ -25,9 +25,11 @@ import type { CSharpType } from "../../languages/csharp/types.js";
 
 // HTTP routes of ASP.NET Core.
 //
-// Controllers (framework `aspnet-mvc`): a concrete public class that derives from `ControllerBase` / `Controller`
-// (directly or through user base controllers) or carries `[ApiController]` / `[Controller]`. Every public instance
-// method that is not `[NonAction]` is an action. `[Route]` on the class (own, else the nearest base class's: the
+// Controllers (framework `aspnet-mvc`), MVC's discovery rule: a public, concrete, non-generic class that is named
+// `...Controller`, or carries `[Controller]` (own or inherited), or derives from `ControllerBase` / `Controller`
+// (directly or through user base controllers); `[NonController]` excludes it. `[ApiController]` alone does not make a
+// controller. Every public instance method that is not `[NonAction]`, not `Dispose()` (0 parameters) and not generic
+// is an action. `[Route]` on the class (own, else the nearest base class's: the
 // attribute is inherited) joins with the verb attributes (`[HttpGet("x")]`, `[AcceptVerbs]`, `[Route]`) of the method;
 // a method template starting with `/` or `~/` replaces the class template; `[controller]`, `[action]` and `[area]`
 // tokens are replaced (the controller name without `Controller`, the method name without `Async` or `[ActionName]`,
@@ -45,6 +47,14 @@ import type { CSharpType } from "../../languages/csharp/types.js";
 // lambda or a local function links to the enclosing Function with `handlerName: "<lambda>"` (the written name for a
 // local function), and the typed lambda parameters are kept on the Route as `handlerParameters` (a JSON list shaped like
 // a Function's `parameters`) for dependency-injection analysis.
+//
+// `Map(path, handler)` (also a mapper's `Map(src, dst)`) needs a lambda / anonymous method / method group as handler and
+// a string, interpolation or constant expression as path; a plain local or parameter of a non-delegate type as handler
+// (or of a non-string type as path) is not a route.
+//
+// A route on a builder rooted at a `RouteGroupBuilder` parameter (`this RouteGroupBuilder g`) is relative: its prefix
+// comes from the caller, so `path` is null and `pathExpression` holds the written relative path (with the in-method
+// group prefix). `IEndpointRouteBuilder` / `WebApplication` parameters count as the root.
 //
 // Not handled (never guessed): a group prefix that an extension method receives from its caller
 // (`app.MapGroup("/api").MapTodos()`: the routes inside keep the paths relative to their own builder), custom

@@ -18,7 +18,8 @@ import { csharpTypeResolver } from "./type-names.js";
 // concrete subclasses carry the methods. `MapHub<T>("/path")` gives the EntryPoints `hubPath` (the first call's path;
 // null when no call names the hub or the path is not a literal); the `MapGroup` prefixes of the receiver chain or of the local
 // variable holding a group (`app.MapGroup("/rt").MapHub<T>("/chat")`) are joined in front, reusing the minimal API group logic
-// of routes.ts (a prefix that is not a literal gives null, never a guess).
+// of routes.ts (a prefix that is not a literal gives null, never a guess). A hub mapped on a builder rooted at a
+// `RouteGroupBuilder` parameter (`this RouteGroupBuilder g`) has a relative path: `hubPath` is null.
 
 const SIGNALR_NAMESPACES = ["Microsoft.AspNetCore.SignalR"];
 const HUB_BASES = ["Hub", "DynamicHub"];

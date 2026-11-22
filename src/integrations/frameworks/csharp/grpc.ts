@@ -25,6 +25,9 @@ import { csharpTypeResolver } from "./type-names.js";
 // (CALL_RESOLVES_TO, `via: "grpc"`) to the method of each class serving X with that name; several implementations
 // are all linked. A `.proto` rpc gets RPC_IMPLEMENTED_BY to those methods.
 //
+// A bare `XClient` (no `X.` qualifier) that resolves to no scanned type counts only when the file shows gRPC: a
+// `using Grpc.*`, a `using static` of the service class, or an alias of `X.XClient`; a REST `OrderClient` does not link.
+//
 // Never guessed: a receiver whose type is unknown, a client type that resolves to a scanned class other than a
 // generated one. The proto service is matched by its simple name (like Java); `option csharp_namespace` is not kept
 // in the graph, so two protos with one service name in different packages both link.
