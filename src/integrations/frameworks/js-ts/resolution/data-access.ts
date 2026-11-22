@@ -99,7 +99,8 @@ const operationByMethod = new Map<string, string>([
 const readOperations = new Set(["read", "aggregate"]);
 const writeOperations = new Set(["create", "update", "delete", "upsert"]);
 
-const jsTsLanguages = new Set(["javascript", "typescript", "vue", "svelte"]);
+// Every language of `languages/js-ts/descriptor.ts`: HTML inline scripts and Astro frontmatter are parsed as JS/TS too.
+const jsTsLanguages = new Set(["javascript", "typescript", "html", "vue", "svelte", "astro"]);
 
 export function addDataAccessRelationships(
   graph: IGraphContributor,

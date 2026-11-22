@@ -44,7 +44,7 @@ import { javaMethods } from "./shared.js";
 // autowires them) and the class a `@Bean` method returns (fields and setters; its constructor is the
 // method's business, so it is not scanned).
 // Not handled: meta-annotations (a custom stereotype), Lombok-generated constructors, Micronaut
-// `@Factory`, `@ConditionalOn*` beans, profile expressions (`!dev`, `a & b`: compatible with anything),
+// `@Factory`, `@ConditionalOn*` beans, profile expressions beyond `!`, `&`, `|`, parentheses (unparseable: compatible with anything),
 // `@Bean` returning `new X()` under an interface type, type variables of generic providers.
 
 const STEREOTYPES: ReadonlyArray<readonly [string, readonly string[]]> = [
@@ -83,7 +83,7 @@ type Candidate = {
   /** The written type of a `@Bean` method's return (with its type arguments); null for a class provider. */
   returnText: string | null;
   /** `@Profile` values of the bean (its method, else its class); null when it is not profile-gated. */
-  profiles: Set<string> | null;
+  profiles: ProfileSet | null;
 };
 
 type Point = {
@@ -93,6 +93,8 @@ type Point = {
   name: string;
   via: Via;
   annotations: AnnotationLike[];
+  /** The consumer's own profiles when they are not its class's (a `@Bean` method's parameters). */
+  profiles?: ProfileSet | null;
 };
 
 // java.beans.Introspector: `URLService` stays, `UserService` becomes `userService`.
@@ -100,16 +102,103 @@ function decapitalize(name: string): string {
   return name.length > 1 && name[0] === name[0]!.toUpperCase() && name[1] === name[1]!.toUpperCase() ? name : name.charAt(0).toLowerCase() + name.slice(1);
 }
 
-function profilesOf(list: readonly JavaAnnotationInfo[]): Set<string> | null {
+// A `@Profile` set: the alternatives written (`"dev"`, `"!prod"`, `"a & b"`), or opaque when an element is not a
+// string literal (`Constants.X`) or the list is empty: an opaque set is compatible with everything (documented:
+// for precision an unknown value is never used to rule a bean out).
+type ProfileSet = { formulas: string[]; opaque: boolean };
+
+function profilesOf(list: readonly JavaAnnotationInfo[]): ProfileSet | null {
   const anns = findAnnotations(list, "Profile", ["org.springframework.context.annotation"]);
   if (anns.length === 0) return null;
-  return new Set(anns.flatMap((ann) => literals(ann).values));
+  const parts = anns.map((ann) => literals(ann));
+  const formulas = parts.flatMap((part) => part.values);
+  return { formulas, opaque: formulas.length === 0 || parts.some((part) => part.unresolved) };
 }
 
-// Two profile sets can be active together: they share a name, or either holds an expression or no known name.
-function profilesCompatible(a: ReadonlySet<string>, b: ReadonlySet<string>): boolean {
-  const opaque = (set: ReadonlySet<string>) => set.size === 0 || [...set].some((name) => /[!&|()]/u.test(name));
-  return opaque(a) || opaque(b) || [...a].some((name) => b.has(name));
+type ProfileExpr = { op: "name"; name: string } | { op: "not"; of: ProfileExpr } | { op: "and" | "or"; left: ProfileExpr; right: ProfileExpr };
+
+// Spring's profile expression grammar: names, `!`, `&`, `|`, parentheses. null when it does not parse.
+function parseProfileExpression(text: string): ProfileExpr | null {
+  const tokens = text.match(/[!&|()]|[^\s!&|()]+/gu) ?? [];
+  let index = 0;
+  const parseOr = (): ProfileExpr | null => {
+    let left = parseAnd();
+    while (left && tokens[index] === "|") {
+      index += 1;
+      const right = parseAnd();
+      if (!right) return null;
+      left = { op: "or", left, right };
+    }
+    return left;
+  };
+  const parseAnd = (): ProfileExpr | null => {
+    let left = parseUnary();
+    while (left && tokens[index] === "&") {
+      index += 1;
+      const right = parseUnary();
+      if (!right) return null;
+      left = { op: "and", left, right };
+    }
+    return left;
+  };
+  const parseUnary = (): ProfileExpr | null => {
+    const token = tokens[index];
+    if (token === undefined) return null;
+    index += 1;
+    if (token === "!") {
+      const of = parseUnary();
+      return of ? { op: "not", of } : null;
+    }
+    if (token === "(") {
+      const inner = parseOr();
+      if (!inner || tokens[index] !== ")") return null;
+      index += 1;
+      return inner;
+    }
+    return /^[&|()]$/u.test(token) ? null : { op: "name", name: token };
+  };
+  const result = parseOr();
+  return result && index === tokens.length ? result : null;
+}
+
+const evalProfile = (expr: ProfileExpr, world: ReadonlySet<string>): boolean => (
+  expr.op === "name" ? world.has(expr.name) : expr.op === "not" ? !evalProfile(expr.of, world)
+    : expr.op === "and" ? evalProfile(expr.left, world) && evalProfile(expr.right, world) : evalProfile(expr.left, world) || evalProfile(expr.right, world)
+);
+
+function profileVariables(expr: ProfileExpr, into = new Set<string>()): Set<string> {
+  if (expr.op === "name") into.add(expr.name);
+  else if (expr.op === "not") profileVariables(expr.of, into);
+  else {
+    profileVariables(expr.left, into);
+    profileVariables(expr.right, into);
+  }
+  return into;
+}
+
+// Two profile sets can be active together: some world (set of active profiles) satisfies one alternative of each.
+// A plain name stands for the world where exactly it is active (so `dev` and `prod` do not meet, as before);
+// an expression adds every assignment of its own names that satisfies it. Opaque or unparseable: compatible.
+function profilesCompatible(a: ProfileSet, b: ProfileSet): boolean {
+  if (a.opaque || b.opaque) return true;
+  const parse = (set: ProfileSet) => set.formulas.map((text) => parseProfileExpression(text));
+  const left = parse(a);
+  const right = parse(b);
+  if (left.includes(null) || right.includes(null)) return true;
+  const leftExprs = left as ProfileExpr[];
+  const rightExprs = right as ProfileExpr[];
+  const worlds: Set<string>[] = [];
+  for (const expr of [...leftExprs, ...rightExprs]) {
+    if (expr.op === "name") {
+      worlds.push(new Set([expr.name]));
+      continue;
+    }
+    const names = [...profileVariables(expr)];
+    if (names.length > 10) return true;
+    for (let mask = 0; mask < 1 << names.length; mask += 1) worlds.push(new Set(names.filter((_, i) => mask & (1 << i))));
+  }
+  const holds = (side: ProfileExpr[], world: ReadonlySet<string>) => side.some((expr) => evalProfile(expr, world));
+  return worlds.some((world) => holds(leftExprs, world) && holds(rightExprs, world));
 }
 
 function literals(ann: AnnotationLike | undefined, key = "value"): { values: string[]; unresolved: boolean } {
@@ -313,7 +402,7 @@ export const javaDiContributor: ISemanticContributor = {
           });
         }
         for (const parameter of parameterList(method)) {
-          points.push({ consumer: beanClass ? beanClass.node : owner.node, scope: owner, type: parameter.type, name: parameter.name, via: "bean-parameter", annotations: parameter.annotations });
+          points.push({ consumer: beanClass ? beanClass.node : owner.node, scope: owner, type: parameter.type, name: parameter.name, via: "bean-parameter", annotations: parameter.annotations, profiles: profilesOf(list) ?? profilesOf(reader.annotationsOf(owner.node)) });
         }
       }
 
@@ -483,7 +572,8 @@ export const javaDiContributor: ISemanticContributor = {
       if (new Set(matches.map((match) => `${match.target.id}\0${match.beanMethod ?? ""}`)).size === 1) link(point, matches[0]!);
       else if (matches.every((match) => match.profiles !== null)) {
         // Profile-gated alternatives: one is active at runtime, which one is not known here.
-        const own = profilesOf(reader.annotationsOf(point.scope.node));
+        // A `@Bean` method's parameters use the method's own `@Profile` first.
+        const own = point.profiles !== undefined ? point.profiles : profilesOf(reader.annotationsOf(point.scope.node));
         const compatible = own ? matches.filter((match) => profilesCompatible(own, match.profiles!)) : matches;
         if (compatible.length === 0) countAmbiguous(point.consumer);
         else for (const match of compatible) link(point, match);
