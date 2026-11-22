@@ -198,7 +198,7 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
   }
 };
 
-export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "3" });
+export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "4" });
 
 // ---------------------------------------------------------------- helpers
 
@@ -745,17 +745,23 @@ export const javaDataJpaContributor: ISemanticContributor = {
         const query = findAnnotations(anns, "Query", ["org.springframework.data.jpa.repository", "org.springframework.data.mongodb.repository"])[0];
         let found: Array<{ modelId: string; operation: JavaDataOperation }> = [];
         if (query) {
-          const value = annotationValue(query, "value")?.[0];
-          if (!value || query.qualifiedName?.includes("mongodb")) continue;
-          const template = value.resolved ? null : javaStringFromText(value.value);
-          const sql = value.resolved ? value.value : template ? stringOf(template, repository.type) : null;
-          if (!sql) continue;
+          if (query.qualifiedName?.includes("mongodb")) continue;
           const native = nativeFlag(query, repository.type);
-          found = native === true ? sqlModels(sql) : native === false ? jpqlAccesses(sql, repository.type, entity) : (() => {
-            const asSql = sqlModels(sql);
-            return asSql.length > 0 ? asSql : jpqlAccesses(sql, repository.type, entity);
-          })();
+          // `value` and `countQuery` are both statements of the method; read alike.
+          const read = (attribute: string): Array<{ modelId: string; operation: JavaDataOperation }> => {
+            const value = annotationValue(query, attribute)?.[0];
+            if (!value) return [];
+            const template = value.resolved ? null : javaStringFromText(value.value);
+            const sql = value.resolved ? value.value : template ? stringOf(template, repository.type) : null;
+            if (!sql) return [];
+            return native === true ? sqlModels(sql) : native === false ? jpqlAccesses(sql, repository.type, entity) : (() => {
+              const asSql = sqlModels(sql);
+              return asSql.length > 0 ? asSql : jpqlAccesses(sql, repository.type, entity);
+            })();
+          };
+          found = read("value");
           if (hasAnnotation(anns, "Modifying", ["org.springframework.data.jpa.repository"]) && found.length > 0 && found.every((item) => item.operation === "read")) found = [{ ...found[0]!, operation: "update" }, ...found.slice(1)];
+          for (const access of read("countQuery")) if (!found.some((item) => item.modelId === access.modelId && item.operation === access.operation)) found.push(access);
         } else {
           const match = DERIVED.exec(String(fn.properties.name));
           if (!match) continue;
