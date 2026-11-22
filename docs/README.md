@@ -12,7 +12,7 @@
 - [Architecture](architecture.md): the scan pipeline, source layout and dependencies.
 - [Layered core architecture](layered-core-architecture.md): layer boundaries and the rules each layer follows.
 - [Adding a language](adding-a-language.md): step-by-step guide to a new language or plugin, from grammar to UI highlighting.
-- [Roadmap](ROADMAP.md): milestones M1–M13, their phases and status.
+- [Roadmap](ROADMAP.md): milestones M1–M14, their phases and status.
 
 ## How well it works
 

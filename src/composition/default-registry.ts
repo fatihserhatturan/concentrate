@@ -193,10 +193,13 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
 }
 
 function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILanguageResolver[] {
+  // The package imports (`import a.b.*`) the import resolvers found, for the package-level import edges.
+  let packageImports: ReadonlyMap<string, readonly string[]> = new Map();
   const importResolver: ILanguageResolver = {
     id: "core.imports",
     async resolve(graph, rootPath, report) {
       const counts = await addImportResolutionRelationships(graph, rootPath, registry.importResolvers, report);
+      packageImports = counts.packageImports;
       report.resolvedImports = counts.resolved;
       report.unresolvedRelativeImports = counts.unresolved;
     },
@@ -205,7 +208,7 @@ function createDefaultLanguageResolvers(registry: CoreIntegrationRegistry): ILan
   const packageImportResolver: ILanguageResolver = {
     id: "core.package-imports",
     resolve(graph) {
-      addImportPackageRelationships(graph);
+      addImportPackageRelationships(graph, packageImports);
     },
   };
 

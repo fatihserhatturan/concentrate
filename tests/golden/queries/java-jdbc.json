@@ -979,20 +979,6 @@
         "rows": [
           {
             "sourceKind": "Function",
-            "sourceName": "AuditDao",
-            "file": null,
-            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:14:com.acme.jdbc.AuditDao.AuditDao",
-            "direct": true,
-            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
-            "line": 16,
-            "model": "audit_log",
-            "library": "jdbc",
-            "table": "audit_log",
-            "operation": "create",
-            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
-          },
-          {
-            "sourceKind": "Function",
             "sourceName": "find",
             "file": null,
             "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
@@ -1156,7 +1142,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "client.sql"
           },
           {
@@ -1293,19 +1279,6 @@
       "dataAccess": [
         {
           "sourceKind": "Function",
-          "sourceName": "AuditDao",
-          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
-          "direct": true,
-          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
-          "line": 16,
-          "model": "audit_log",
-          "library": "jdbc",
-          "table": "audit_log",
-          "operation": "create",
-          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
-        },
-        {
-          "sourceKind": "Function",
           "sourceName": "find",
           "file": "src/main/java/com/acme/jdbc/UserDao.java",
           "direct": true,
@@ -1405,7 +1378,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "client.sql"
         },
         {
@@ -1567,7 +1540,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 21
+        "returned": 20
       }
     }
   },
@@ -1778,20 +1751,6 @@
         "rows": [
           {
             "sourceKind": "Function",
-            "sourceName": "AuditDao",
-            "file": null,
-            "sourceId": "file:src/main/java/com/acme/jdbc/AuditDao.java:function:14:com.acme.jdbc.AuditDao.AuditDao",
-            "direct": true,
-            "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
-            "line": 16,
-            "model": "audit_log",
-            "library": "jdbc",
-            "table": "audit_log",
-            "operation": "create",
-            "expression": "new SimpleJdbcInsert(dataSource).withTableName"
-          },
-          {
-            "sourceKind": "Function",
             "sourceName": "find",
             "file": null,
             "sourceId": "file:src/main/java/com/acme/jdbc/UserDao.java:function:16:com.acme.jdbc.UserDao.find",
@@ -1955,7 +1914,7 @@
             "model": "orders",
             "library": "jdbc",
             "table": "orders",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "client.sql"
           },
           {
@@ -2093,19 +2052,6 @@
       "dataAccess": [
         {
           "sourceKind": "Function",
-          "sourceName": "AuditDao",
-          "file": "src/main/java/com/acme/jdbc/AuditDao.java",
-          "direct": true,
-          "accessFile": "src/main/java/com/acme/jdbc/AuditDao.java",
-          "line": 16,
-          "model": "audit_log",
-          "library": "jdbc",
-          "table": "audit_log",
-          "operation": "create",
-          "expression": "new SimpleJdbcInsert(dataSource).withTableName"
-        },
-        {
-          "sourceKind": "Function",
           "sourceName": "find",
           "file": "src/main/java/com/acme/jdbc/UserDao.java",
           "direct": true,
@@ -2205,7 +2151,7 @@
           "model": "orders",
           "library": "jdbc",
           "table": "orders",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "client.sql"
         },
         {
@@ -2367,7 +2313,7 @@
       ],
       "page": {
         "offset": 0,
-        "returned": 21
+        "returned": 20
       }
     }
   },

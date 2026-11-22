@@ -1281,7 +1281,7 @@
             "model": "order_products",
             "library": "jpa",
             "table": "order_products",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "em.createNativeQuery"
           }
         ]
@@ -1550,7 +1550,7 @@
           "model": "order_products",
           "library": "jpa",
           "table": "order_products",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "em.createNativeQuery"
         },
         {
@@ -2266,7 +2266,7 @@
             "model": "order_products",
             "library": "jpa",
             "table": "order_products",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "em.createNativeQuery"
           }
         ]
@@ -2536,7 +2536,7 @@
           "model": "order_products",
           "library": "jpa",
           "table": "order_products",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "em.createNativeQuery"
         },
         {
@@ -2693,7 +2693,7 @@
             "model": "order_products",
             "library": "jpa",
             "table": "order_products",
-            "operation": "read",
+            "operation": "aggregate",
             "expression": "em.createNativeQuery"
           }
         ]
@@ -2765,7 +2765,7 @@
           "model": "order_products",
           "library": "jpa",
           "table": "order_products",
-          "operation": "read",
+          "operation": "aggregate",
           "expression": "em.createNativeQuery"
         }
       ],

@@ -16,7 +16,7 @@ import path from "node:path";
 import { parseArgs } from "node:util";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
-import { compareCalls, compareComponents, compareDataAccess, compareEnv, compareEnvDeclarations, comparePages, compareRenders, compareRequests, compareRoutes, compareRuns, compareRpcs, compareBuildTargets, compareIncludes, compareScripts, compareSqlTables, compareStoreAccess, compareStyleLinks, compareStores, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
+import { compareCalls, compareComponents, compareDataAccess, compareEnv, compareEnvDeclarations, comparePages, compareRenders, compareRequests, compareRoutes, compareRuns, compareRpcs, compareBuildTargets, compareIncludes, compareImports, compareInjections, compareScripts, compareSqlTables, compareStoreAccess, compareStyleLinks, compareStores, sumScores, type Labels, type RouteScore, type Score } from "./accuracy/compare.js";
 
 const { values } = parseArgs({
   options: {
@@ -27,12 +27,12 @@ const { values } = parseArgs({
 });
 
 const labelsDirectory = new URL("../bench/labels/", import.meta.url);
-const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests", "stores", "storeAccess", "env", "scripts", "runs", "envDeclarations", "styleLinks", "sqlTables", "rpcs", "buildTargets", "includes"] as const;
+const kinds = ["routes", "calls", "dataAccess", "components", "renders", "pages", "requests", "stores", "storeAccess", "env", "scripts", "runs", "envDeclarations", "styleLinks", "sqlTables", "rpcs", "buildTargets", "includes", "imports", "injections"] as const;
 type Kind = (typeof kinds)[number];
 
 const labelFiles = (await readdir(labelsDirectory)).filter((file) => file.endsWith(".json")).sort();
 const manifest = await readSampleManifest();
-type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score; stores?: Score; storeAccess?: Score; env?: Score; scripts?: Score; runs?: Score; envDeclarations?: Score; styleLinks?: Score; sqlTables?: Score; rpcs?: Score; buildTargets?: Score; includes?: Score };
+type Scores = { routes?: RouteScore; calls?: Score; dataAccess?: Score; components?: Score; renders?: Score; pages?: Score; requests?: Score; stores?: Score; storeAccess?: Score; env?: Score; scripts?: Score; runs?: Score; envDeclarations?: Score; styleLinks?: Score; sqlTables?: Score; rpcs?: Score; buildTargets?: Score; includes?: Score; imports?: Score; injections?: Score };
 const results: Array<{ sample: string; scores: Scores }> = [];
 
 for (const labelFile of labelFiles) {
@@ -64,6 +64,8 @@ for (const labelFile of labelFiles) {
   if (labels.rpcs) scores.rpcs = compareRpcs(graph, labels.rpcs);
   if (labels.buildTargets) scores.buildTargets = compareBuildTargets(graph, labels.buildTargets);
   if (labels.includes) scores.includes = compareIncludes(graph, labels.includes);
+  if (labels.imports) scores.imports = compareImports(graph, labels.imports);
+  if (labels.injections) scores.injections = compareInjections(graph, labels.injections);
   results.push({ sample: labels.sample, scores });
 }
 
@@ -85,8 +87,10 @@ const titles: Record<Kind, string> = {
   styleLinks: "Class links (CSS Modules and template class names)",
   sqlTables: "SQL tables (columns, keys, references)",
   rpcs: "Proto rpcs (messages, Go server interface, implementations)",
-  buildTargets: "Build targets (CMake and Make: targets, sources, links)",
+  buildTargets: "Build targets (CMake, Make, Gradle, Maven: targets, sources, links)",
   includes: "C and C++ #include resolution",
+  imports: "Java import resolution",
+  injections: "Java dependency injection (INJECTS)",
 };
 
 // Routes get one more column: detected routes whose full path is right.

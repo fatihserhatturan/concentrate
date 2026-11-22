@@ -93,6 +93,39 @@ const PERSISTENCE_CALLS = new Set(["persist", "merge", "remove", "find", "getRef
 
 type JpaArg = { s: JavaStringTemplate } | { c: string } | { e: string };
 
+const isMergeCall = (node: SyntaxNode): boolean => node.type === "method_invocation" && node.childForFieldName("name")?.text === "merge";
+
+// Whether the `merge(...)` call is directly the argument of `remove(...)`, also through a conditional or parentheses.
+function isRemoveOperand(merge: SyntaxNode): boolean {
+  let current = merge;
+  for (let parent = current.parent; parent; current = parent, parent = parent.parent) {
+    if (parent.type === "parenthesized_expression") continue;
+    if (parent.type === "ternary_expression" && parent.childForFieldName("condition")?.id !== current.id) continue;
+    if (parent.type === "argument_list") {
+      const call = parent.parent;
+      return call?.type === "method_invocation" && call.childForFieldName("name")?.text === "remove" && parent.namedChildren[0]?.id === current.id;
+    }
+    return false;
+  }
+  return false;
+}
+
+// The expression whose entity `remove(arg)` deletes: for a conditional the branch that is not a `merge(...)`, for a
+// `merge(x)` its argument.
+function removedEntityOperand(arg: SyntaxNode): SyntaxNode {
+  if (arg.type === "parenthesized_expression" && arg.namedChildren[0]) return removedEntityOperand(arg.namedChildren[0]);
+  if (arg.type === "ternary_expression") {
+    const branches = [arg.childForFieldName("consequence"), arg.childForFieldName("alternative")].filter((branch): branch is SyntaxNode => branch !== null);
+    const plain = branches.find((branch) => !isMergeCall(branch));
+    return removedEntityOperand(plain ?? branches[0] ?? arg);
+  }
+  if (isMergeCall(arg)) {
+    const inner = arg.childForFieldName("arguments")?.namedChildren.find((child) => !child.type.endsWith("comment"));
+    if (inner) return inner;
+  }
+  return arg;
+}
+
 const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) => {
   if (!/persistence|springframework\.data|hibernate/u.test(root.text)) return;
   const own = (node: GraphNode) => node.id.startsWith(`${fileNodeId}:`);
@@ -147,6 +180,11 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
       const call = calls.get(`${node.startPosition.row + 1}:${node.startPosition.column}:${callee}`);
       if (!call) continue;
       const args = (node.childForFieldName("arguments")?.namedChildren ?? []).filter((arg) => !arg.type.endsWith("comment")).slice(0, 2);
+      // `em.remove(em.contains(x) ? x : em.merge(x))`: the `merge` only re-attaches the entity the `remove` deletes,
+      // so it is no write (no arguments are kept, the contributor skips it), and the removed entity is the one the
+      // branches name.
+      if (callee === "merge" && isRemoveOperand(node)) continue;
+      if (callee === "remove" && args[0]) args[0] = removedEntityOperand(args[0]);
       const read = args.map((arg): JpaArg => {
         if (arg.type === "class_literal") return { c: compactExpression(arg.text).replace(/\.class$/u, "") };
         if (QUERY_METHODS.has(callee) && arg === args[0]) {
@@ -160,7 +198,7 @@ const readJpaPlugin: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) 
   }
 };
 
-export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "2" });
+export const javaDataJpaPlugin: JavaParsePlugin & { version: string } = Object.assign<JavaParsePlugin, { version: string }>(readJpaPlugin, { version: "4" });
 
 // ---------------------------------------------------------------- helpers
 
@@ -707,17 +745,23 @@ export const javaDataJpaContributor: ISemanticContributor = {
         const query = findAnnotations(anns, "Query", ["org.springframework.data.jpa.repository", "org.springframework.data.mongodb.repository"])[0];
         let found: Array<{ modelId: string; operation: JavaDataOperation }> = [];
         if (query) {
-          const value = annotationValue(query, "value")?.[0];
-          if (!value || query.qualifiedName?.includes("mongodb")) continue;
-          const template = value.resolved ? null : javaStringFromText(value.value);
-          const sql = value.resolved ? value.value : template ? stringOf(template, repository.type) : null;
-          if (!sql) continue;
+          if (query.qualifiedName?.includes("mongodb")) continue;
           const native = nativeFlag(query, repository.type);
-          found = native === true ? sqlModels(sql) : native === false ? jpqlAccesses(sql, repository.type, entity) : (() => {
-            const asSql = sqlModels(sql);
-            return asSql.length > 0 ? asSql : jpqlAccesses(sql, repository.type, entity);
-          })();
+          // `value` and `countQuery` are both statements of the method; read alike.
+          const read = (attribute: string): Array<{ modelId: string; operation: JavaDataOperation }> => {
+            const value = annotationValue(query, attribute)?.[0];
+            if (!value) return [];
+            const template = value.resolved ? null : javaStringFromText(value.value);
+            const sql = value.resolved ? value.value : template ? stringOf(template, repository.type) : null;
+            if (!sql) return [];
+            return native === true ? sqlModels(sql) : native === false ? jpqlAccesses(sql, repository.type, entity) : (() => {
+              const asSql = sqlModels(sql);
+              return asSql.length > 0 ? asSql : jpqlAccesses(sql, repository.type, entity);
+            })();
+          };
+          found = read("value");
           if (hasAnnotation(anns, "Modifying", ["org.springframework.data.jpa.repository"]) && found.length > 0 && found.every((item) => item.operation === "read")) found = [{ ...found[0]!, operation: "update" }, ...found.slice(1)];
+          for (const access of read("countQuery")) if (!found.some((item) => item.modelId === access.modelId && item.operation === access.operation)) found.push(access);
         } else {
           const match = DERIVED.exec(String(fn.properties.name));
           if (!match) continue;

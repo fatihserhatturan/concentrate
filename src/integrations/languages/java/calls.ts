@@ -5,10 +5,12 @@ import {
   compactExpression,
   compactNoSpace,
   dottedName,
+  genericTypeText,
   lastSegment,
   normalizeJavaType,
   typeDeclarationTypes,
   typeText,
+  type JavaLambdaContext,
   type JavaLocal,
   type JavaParameter,
 } from "./syntax.js";
@@ -47,7 +49,9 @@ function declared(typeNode: SyntaxNode | null, dimensions: SyntaxNode | null, va
   const written = typeText(typeNode);
   if (written === "var") return inferred(value);
   const type = normalizeJavaType(`${written}${dimensions ? compactNoSpace(dimensions.text) : ""}`);
-  return type ? { type } : null;
+  if (!type) return null;
+  const fullType = dimensions ? null : genericTypeText(written);
+  return fullType ? { type, fullType } : { type };
 }
 
 function inferred(written: SyntaxNode | null): JavaLocal | null {
@@ -71,7 +75,8 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly Ja
   const locals: JavaLocals = new Map();
   for (const parameter of parameters) {
     const type = normalizeJavaType(parameter.type);
-    merge(locals, parameter.name, type ? { type } : null);
+    const fullType = genericTypeText(parameter.type);
+    merge(locals, parameter.name, type ? (fullType ? { type, fullType } : { type }) : null);
   }
   const visit = (node: SyntaxNode): void => {
     if (isNestedScope(node)) return;
@@ -105,15 +110,28 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly Ja
         if (name) merge(locals, name, declared(node.childForFieldName("right"), null, null));
         break;
       }
+      case "type_pattern":
+      case "record_pattern_component": {
+        // `case Dog pet ->`, `instanceof Box(Dog pet)`: the last identifier is the binding, the first other node its type.
+        const parts = node.namedChildren.filter((child) => !isComment(child) && child.type !== "modifiers");
+        const name = parts.length >= 2 && parts[parts.length - 1]!.type === "identifier" ? parts[parts.length - 1]!.text : null;
+        if (name) merge(locals, name, declared(parts[0]!, null, null));
+        break;
+      }
       case "lambda_expression": {
         const list = node.childForFieldName("parameters");
+        const lambdaParameters = list?.type === "identifier" ? [list] : (list?.namedChildren ?? []).filter((child) => !isComment(child));
+        const untyped = (child: SyntaxNode): JavaLocal | null => {
+          const lambda = lambdaContext(node, lambdaParameters.findIndex((candidate) => candidate.id === child.id));
+          return lambda ? { lambda } : null;
+        };
         if (list?.type === "identifier") {
-          merge(locals, list.text, null);
+          merge(locals, list.text, untyped(list));
         } else if (list?.type === "inferred_parameters") {
-          for (const child of list.namedChildren) if (child.type === "identifier") merge(locals, child.text, null);
+          for (const child of list.namedChildren) if (child.type === "identifier") merge(locals, child.text, untyped(child));
         } else if (list) {
           for (const parameter of list.namedChildren) {
-            if (parameter.type === "identifier") merge(locals, parameter.text, null);
+            if (parameter.type === "identifier") merge(locals, parameter.text, untyped(parameter));
             else if (parameter.type === "formal_parameter") {
               const name = parameter.childForFieldName("name")?.text;
               if (name) merge(locals, name, declared(parameter.childForFieldName("type"), null, null));
@@ -137,6 +155,74 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly Ja
     for (let i = children.length - 1; i >= 0; i--) stack.push(children[i]!);
   }
   return locals;
+}
+
+// An expression's text with the bodies of anonymous classes cut out (`new Foo(){...}` is `new Foo(){}`).
+function expressionText(node: SyntaxNode): string {
+  const cuts: Array<{ start: number; end: number }> = [];
+  const stack: SyntaxNode[] = [node];
+  while (stack.length > 0) {
+    const current = stack.pop()!;
+    if (current.type === "class_body" && current.parent?.type === "object_creation_expression") {
+      cuts.push({ start: current.startIndex - node.startIndex, end: current.endIndex - node.startIndex });
+      continue;
+    }
+    for (const child of current.namedChildren) stack.push(child);
+  }
+  let text = node.text;
+  for (const cut of cuts.sort((a, b) => b.start - a.start)) text = `${text.slice(0, cut.start)}{}${text.slice(cut.end)}`;
+  return compactExpression(text);
+}
+
+// The method call a lambda is a direct argument of, with the lambda parameter's position.
+function lambdaContext(lambda: SyntaxNode, param: number): JavaLambdaContext | null {
+  const list = lambda.parent;
+  const call = list?.parent;
+  if (param < 0 || list?.type !== "argument_list" || call?.type !== "method_invocation") return null;
+  const callee = call.childForFieldName("name")?.text;
+  const args = list.namedChildren.filter((child) => !isComment(child));
+  const arg = args.findIndex((child) => child.id === lambda.id);
+  if (!callee || arg < 0) return null;
+  const object = call.childForFieldName("object");
+  const receiver = object ? expressionText(object) : null;
+  return receiver !== null && receiver.length > 80 ? null : { callee, receiver, arity: args.length, arg, param };
+}
+
+const literalTypes: Readonly<Record<string, string>> = {
+  string_literal: "String", true: "boolean", false: "boolean", character_literal: "char", decimal_floating_point_literal: "double",
+};
+
+// The type of one argument when it is certain from the call site alone, as a short token the resolver reads back:
+// a type name (`String`, `int`, a class from `new T()`, the declared type of a typed local), `this`, or `@name`
+// for a field (the resolver finds the field's type). Null for anything else; no expression text is kept.
+function argumentType(argument: SyntaxNode, locals: JavaLocals): string | null {
+  const literal = literalTypes[argument.type];
+  if (literal) return literal;
+  switch (argument.type) {
+    case "decimal_integer_literal":
+    case "hex_integer_literal":
+      return /[lL]$/u.test(argument.text) ? "long" : "int";
+    case "this":
+      return "this";
+    case "identifier":
+      return locals.has(argument.text) ? locals.get(argument.text)?.type ?? null : `@${argument.text}`;
+    case "field_access": {
+      const name = argument.childForFieldName("field")?.text;
+      return argument.childForFieldName("object")?.type === "this" && name && !locals.has(name) ? `@${name}` : null;
+    }
+    case "object_creation_expression":
+      if (argument.namedChildren.some((child) => child.type === "class_body" || child.type === "identifier")) return null;
+      return normalizeJavaType(typeText(argument.childForFieldName("type")));
+    default:
+      return null;
+  }
+}
+
+// The certain argument types of a call, as a JSON array with null for the uncertain ones; null when none is certain.
+function argumentTypes(list: SyntaxNode | null | undefined, locals: JavaLocals): string | null {
+  const args = list?.namedChildren.filter((argument) => !isComment(argument)) ?? [];
+  const types = args.map((argument) => argumentType(argument, locals));
+  return types.some((type) => type !== null) ? JSON.stringify(types) : null;
 }
 
 export const callLikeTypes: ReadonlySet<string> = new Set([
@@ -175,7 +261,7 @@ function receiverProperties(receiver: SyntaxNode | null, locals: JavaLocals): Re
   }
   if (receiver.type !== "identifier" || !locals.has(receiver.text)) return {};
   const local = locals.get(receiver.text);
-  return local ? { receiverIsLocal: true, receiverType: local.type } : { receiverIsLocal: true };
+  return local?.type ? { receiverIsLocal: true, receiverType: local.type } : { receiverIsLocal: true };
 }
 
 function build(
@@ -209,6 +295,12 @@ function build(
   };
 }
 
+function withArguments(node: SyntaxNode, locals: JavaLocals): Record<string, string | number> {
+  const list = node.childForFieldName("arguments");
+  const types = argumentTypes(list, locals);
+  return { argumentCount: argumentCount(list), ...(types === null ? {} : { argumentTypes: types }) };
+}
+
 // The Call node of a method invocation, `new T(...)`, `this(...)` / `super(...)`
 // or method reference; null when `node` is none of them.
 export function createCallNode(functionId: string, node: SyntaxNode, locals: JavaLocals): GraphNode | null {
@@ -218,13 +310,13 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: Jav
       if (!name) return null;
       const object = node.childForFieldName("object");
       const expression = object ? `${compactExpression(object.text)}.${name}` : name;
-      return build(functionId, node, expression, name, object, "method", { argumentCount: argumentCount(node.childForFieldName("arguments")) }, locals);
+      return build(functionId, node, expression, name, object, "method", withArguments(node, locals), locals);
     }
     case "object_creation_expression": {
       const type = normalizeJavaType(typeText(node.childForFieldName("type")));
       if (!type) return null;
       const object = node.childForFieldName("object") ?? node.namedChildren.find((child) => child.id !== node.childForFieldName("type")?.id && child.type !== "argument_list" && child.type !== "class_body" && child.type !== "type_arguments" && child.type !== "modifiers" && !isComment(child)) ?? null;
-      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, "constructor", { argumentCount: argumentCount(node.childForFieldName("arguments")) }, locals);
+      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, "constructor", withArguments(node, locals), locals);
       const prefix = type.includes(".") ? type.slice(0, type.lastIndexOf(".")) : null;
       if (prefix) call.properties.qualifier = prefix;
       if (object && object.id !== node.childForFieldName("type")?.id) call.properties.receiver = compactExpression(object.text);
@@ -234,7 +326,7 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: Jav
       const constructor = node.childForFieldName("constructor")?.text;
       if (constructor !== "this" && constructor !== "super") return null;
       const object = node.childForFieldName("object");
-      return build(functionId, node, constructor, constructor, object, "explicitConstructor", { argumentCount: argumentCount(node.childForFieldName("arguments")) }, locals);
+      return build(functionId, node, constructor, constructor, object, "explicitConstructor", withArguments(node, locals), locals);
     }
     case "method_reference": {
       const children = node.children;

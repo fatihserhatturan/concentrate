@@ -34,7 +34,12 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
     "coverage",
   ]) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
 
-  const isFixture = hasSegment(segments, [
+  // Below a JVM source root (`src/main/java`, `src/test/kotlin`, …) directories
+  // are package names (`org.springframework.samples.petclinic`), not layout
+  // folders, so the name heuristics for fixtures, mocks and support skip them.
+  const layoutSegments = segments.slice(0, jvmSourceRootEnd(segments));
+
+  const isFixture = hasSegment(layoutSegments, [
     "fixture",
     "fixtures",
     "__fixtures__",
@@ -43,7 +48,7 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
     "testdata",
   ]);
 
-  const isTest = hasSegment(segments, [
+  const isTest = hasSegment(layoutSegments, [
     "test",
     "tests",
     "__tests__",
@@ -52,7 +57,7 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
   ]) || conventions.testFile(fileName)
     || testContent;
 
-  const isSupport = hasSegment(segments, [
+  const isSupport = hasSegment(layoutSegments, [
     "mock",
     "mocks",
     "__mocks__",
@@ -97,6 +102,16 @@ function primarySourceType(input: Omit<FileClassification, "sourceType">): FileS
   if (input.isDocs) return "docs";
   return "production";
 }
+
+// Index just past a `src/<set>/<jvm language>` root, or the full length when the path has none.
+function jvmSourceRootEnd(segments: string[]): number {
+  for (let index = 0; index + 2 < segments.length - 1; index += 1) {
+    if (segments[index] === "src" && JVM_LANGUAGE_DIRS.has(segments[index + 2]!)) return index + 3;
+  }
+  return segments.length;
+}
+
+const JVM_LANGUAGE_DIRS = new Set(["java", "kotlin", "scala", "groovy"]);
 
 function hasSegment(segments: string[], names: string[]): boolean {
   const normalizedNames = new Set(names);

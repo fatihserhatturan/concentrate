@@ -6,9 +6,13 @@ import { samplesDirectory } from "../src/adapters/cli/smoke.js";
 import type { GraphNode, GraphRelationship } from "../src/core/graph/model.js";
 import {
   compareCalls,
+  compareBuildTargets,
   compareComponents,
+  scanBuildTargets,
   compareDataAccess,
   compareEnvDeclarations,
+  compareImports,
+  compareInjections,
   comparePages,
   compareRenders,
   compareRequests,
@@ -78,21 +82,77 @@ describe("accuracy comparator: routes", () => {
   });
 });
 
-function callGraph(calls: Array<{ file: string; line: number; callee: string; target?: { file: string; name: string; className?: string; label?: GraphNode["label"] } }>): Graph {
+function callGraph(calls: Array<{ file: string; line: number; callee: string; target?: { file: string; name: string; className?: string; line?: number; label?: GraphNode["label"] } }>): Graph {
   const graph: Graph = { nodes: files("a.ts", "b.ts"), relationships: [] };
   calls.forEach((call, index) => {
     const id = `file:${call.file}:function:1:main:call:${call.line}:${index}:${call.callee}`;
     graph.nodes.push(node(id, "Call", { callee: call.callee, line: call.line }));
     if (call.target) {
-      const targetId = `file:${call.target.file}:${call.target.label ?? "function"}:${call.target.className ?? ""}:${call.target.name}`;
+      const targetId = `file:${call.target.file}:${call.target.label ?? "function"}:${call.target.className ?? ""}:${call.target.name}${call.target.line === undefined ? "" : `:${call.target.line}`}`;
       if (!graph.nodes.some((entry) => entry.id === targetId)) {
-        graph.nodes.push(node(targetId, call.target.label ?? "Function", { name: call.target.name, ...(call.target.className ? { className: call.target.className } : {}) }));
+        graph.nodes.push(node(targetId, call.target.label ?? "Function", { name: call.target.name, ...(call.target.className ? { className: call.target.className } : {}), ...(call.target.line === undefined ? {} : { line: call.target.line }) }));
       }
       graph.relationships.push(rel(id, "CALL_RESOLVES_TO", targetId));
     }
   });
   return graph;
 }
+
+describe("accuracy comparator: constructor overloads", () => {
+  const ctor = (line: number) => ({ file: "b.ts", name: "Foo", className: "Foo", line });
+  it("tells overloads apart when the label carries a line", () => {
+    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
+    const callId = graph.nodes.find((entry) => entry.label === "Call")!.id;
+    graph.nodes.push(node("file:b.ts:function:Foo:Foo:20", "Function", { name: "Foo", className: "Foo", line: 20 }));
+    graph.relationships.push(rel(callId, "CALL_RESOLVES_TO", "file:b.ts:function:Foo:Foo:20"));
+    const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo", line: 20 } }] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 0]);
+  });
+  it("applies the line to a `constructor` label that matches the class function too", () => {
+    const run = (labelLine: number) => {
+      const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", line: 10 } }]);
+      return compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "constructor", className: "Foo", line: labelLine } }] });
+    };
+    const hit = run(10);
+    assert.deepEqual([hit.tp, hit.fp, hit.fn], [1, 0, 0]);
+    const miss = run(20);
+    assert.deepEqual([miss.tp, miss.fp, miss.fn], [0, 1, 1]);
+  });
+  it("keeps labels without a line matching any overload", () => {
+    const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
+    const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo" } }] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [1, 0, 0]);
+  });
+});
+
+describe("accuracy comparator: Gradle build targets", () => {
+  const pkg = (name: string, extra: Record<string, unknown> = {}) => node(`package:${name}`, "Package", { name, manager: "gradle", buildFile: `${name}/build.gradle`, aggregator: false, ...extra });
+  const graph = (): Graph => ({
+    nodes: [pkg("core"), pkg("app"), pkg("root", { aggregator: true, buildFile: "build.gradle" })],
+    relationships: [
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "implementation" }),
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "internalImport" }),
+      rel("package:app", "PACKAGE_IMPORTS_PACKAGE", "package:core", { dependencyType: "testImplementation" }),
+    ],
+  });
+  it("dedupes the internalImport duplicate and keeps each scope", () => {
+    const app = scanBuildTargets(graph()).find((target) => target.name === "app")!;
+    assert.deepEqual(app.links, ["core (implementation)", "core (testImplementation)"]);
+    assert.equal(app.kind, "module");
+    assert.equal(scanBuildTargets(graph()).find((target) => target.name === "root")!.kind, "aggregator");
+  });
+  it("scores modules and scoped links within scope", () => {
+    const score = compareBuildTargets(graph(), { scope: ["app/", "core/"], items: [
+      { file: "core/build.gradle", system: "gradle", name: "core", kind: "module", sources: [], links: [] },
+      { file: "app/build.gradle", system: "gradle", name: "app", kind: "module", sources: [], links: ["core (implementation)"] },
+    ] });
+    assert.deepEqual([score.tp, score.fp, score.fn], [3, 1, 0]);
+  });
+  it("keeps CMake targets unchanged", () => {
+    const cmake: Graph = { nodes: [node("package:t", "Package", { name: "t", manager: "cmake", buildFile: "CMakeLists.txt", targetType: "executable" })], relationships: [] };
+    assert.deepEqual(scanBuildTargets(cmake), [{ file: "CMakeLists.txt", system: "cmake", name: "t", kind: "executable", sources: [], links: [] }]);
+  });
+});
 
 describe("accuracy comparator: calls", () => {
   const labels = (items: NonNullable<Labels["calls"]>["items"]) => ({ files: ["a.ts"], items });
@@ -508,5 +568,70 @@ describe("accuracy comparator: scripts and infrastructure", () => {
     const result = compareEnvDeclarations(graph, { scope: ["Makefile"], items: [{ file: "Makefile", line: 1, name: "A" }, { file: "Makefile", line: 2, name: "C" }] });
     assert.deepEqual([result.tp, result.fp, result.fn], [1, 0, 1]);
     assert.deepEqual(result.falseNegatives, ["Makefile:2 C"]);
+  });
+});
+
+describe("accuracy comparator: Java imports and injections", () => {
+  const importNode = (file: string, line: number, source: string, wildcard = false) =>
+    node(`file:${file}:import:${line}:${source}`, "Import", { source, line, isWildcard: wildcard, isStatic: false });
+  const a = "src/a/A.java";
+  const b = "src/a/B.java";
+  const importGraph = (): Graph => {
+    const graph: Graph = { nodes: files(a, b), relationships: [] };
+    const link = (file: string, line: number, source: string, target?: string, wildcard = false) => {
+      const item = importNode(file, line, source, wildcard);
+      graph.nodes.push(item);
+      graph.relationships.push(rel(`file:${file}`, "IMPORTS", item.id));
+      if (target) graph.relationships.push(rel(item.id, "RESOLVES_TO", `file:${target}`));
+    };
+    link(a, 1, "x.B", b);
+    link(a, 2, "java.util.List");
+    link(a, 3, "x.Wrong", b);
+    link(b, 1, "x.A", a);
+    return graph;
+  };
+
+  it("scores resolved imports against the labeled target, in scope only", () => {
+    const result = compareImports(importGraph(), {
+      scope: [a],
+      items: [
+        { file: a, line: 1, source: "x.B", target: b },
+        { file: a, line: 2, source: "java.util.List", target: null },
+        { file: a, line: 3, source: "x.Wrong", target: a },
+        { file: a, line: 4, source: "x.Missing", target: b },
+      ],
+    });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 1, 1]);
+    assert.deepEqual(result.falsePositives, [`${a}:3 x.Wrong -> ${b} (labeled ${a})`]);
+    assert.deepEqual(result.falseNegatives, [`${a}:4 x.Missing -> ${b} (import not found)`]);
+  });
+
+  it("counts an unlabeled resolved import as a false positive", () => {
+    const result = compareImports(importGraph(), { scope: ["src/a/"], items: [{ file: a, line: 1, source: "x.B", target: b }] });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 2, 0]);
+  });
+
+  const injectGraph = (): Graph => {
+    const graph: Graph = { nodes: files("src/C.java", "src/S.java", "src/T.java"), relationships: [] };
+    const cls = (file: string, name: string) => `file:${file}:class:3:p.${name}`;
+    graph.relationships.push(
+      rel(cls("src/C.java", "C"), "INJECTS", cls("src/S.java", "S"), { fieldName: "service", via: "constructor" }),
+      rel(cls("src/C.java", "C"), "INJECTS", cls("src/T.java", "T"), { fieldName: "t", via: "field" }),
+      rel(cls("src/S.java", "S"), "INJECTS", cls("src/T.java", "T"), { fieldName: "t", via: "field" }),
+    );
+    return graph;
+  };
+
+  it("scores INJECTS edges by consumer, field, via and provider, in scope only", () => {
+    const result = compareInjections(injectGraph(), {
+      scope: ["src/C.java"],
+      items: [
+        { file: "src/C.java", consumer: "p.C", field: "service", via: "constructor", provider: "p.S", providerFile: "src/S.java" },
+        { file: "src/C.java", consumer: "p.C", field: "t", via: "setter", provider: "p.T", providerFile: "src/T.java" },
+      ],
+    });
+    assert.deepEqual([result.tp, result.fp, result.fn], [1, 1, 1]);
+    assert.deepEqual(result.falsePositives, ["src/C.java p.C.t (field) -> src/T.java p.T"]);
+    assert.deepEqual(result.falseNegatives, ["src/C.java p.C.t (setter) -> src/T.java p.T"]);
   });
 });

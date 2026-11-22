@@ -3,7 +3,10 @@ import { loadCallEdges, loadFunctions, matchesFileOrDirectory } from "./graph.js
 
 // Test files that reach changed files. A file depends on another when it
 // imports it (a resolved import) or one of its functions, methods or its
-// top level calls a function defined there (a resolved call). The walk goes
+// top level calls a function defined there (a resolved call). A Java on-demand
+// import (`import a.b.*`) names a package, not a file, and resolves to no
+// file: it makes the importer depend on every Java file declaring that package.
+// The walk goes
 // from the changed files to their dependents, up to `maxDepth` hops, and
 // keeps the files the graph marks as tests.
 
@@ -24,7 +27,7 @@ export type AffectedResult = {
 };
 
 export async function affectedTests(engine: IQueryEngine, requested: readonly string[], maxDepth = 20): Promise<AffectedResult> {
-  const [fileRows, testRows, imports, moduleCalls, functions, calls] = await Promise.all([
+  const [fileRows, testRows, imports, packageImports, javaFiles, moduleCalls, functions, calls] = await Promise.all([
     engine.query("MATCH (file:File) RETURN file.relativePath AS file"),
     engine.query("MATCH (file:File) WHERE file.isTest = true RETURN file.relativePath AS file"),
     engine.query(`
@@ -32,12 +35,21 @@ export async function affectedTests(engine: IQueryEngine, requested: readonly st
       RETURN source.relativePath AS dependent, target.relativePath AS dependency
     `),
     engine.query(`
+      MATCH (source:File)-[:IMPORTS]->(imp:Import)
+      WHERE source.language = 'java' AND imp.isWildcard = true AND (imp.isStatic IS NULL OR imp.isStatic = false)
+      RETURN source.relativePath AS dependent, imp.source AS package
+    `),
+    engine.query(`
+      MATCH (file:File) WHERE file.language = 'java' AND file.packageName IS NOT NULL
+      RETURN file.relativePath AS file, file.packageName AS package
+    `),
+    engine.query(`
       MATCH (source:File)-[:MODULE_CALLS]->(:Call)-[:CALL_RESOLVES_TO]->(fn:Function)
       RETURN source.relativePath AS dependent, id(fn) AS fn
     `),
     loadFunctions(engine),
     loadCallEdges(engine),
-  ]) as [Array<{ file?: unknown }>, Array<{ file?: unknown }>, Array<Record<string, unknown>>, Array<Record<string, unknown>>, Awaited<ReturnType<typeof loadFunctions>>, Awaited<ReturnType<typeof loadCallEdges>>];
+  ]) as [Array<{ file?: unknown }>, Array<{ file?: unknown }>, Array<Record<string, unknown>>, Array<Record<string, unknown>>, Array<Record<string, unknown>>, Array<Record<string, unknown>>, Awaited<ReturnType<typeof loadFunctions>>, Awaited<ReturnType<typeof loadCallEdges>>];
 
   const scanned = fileRows.map((row) => String(row.file));
   const isTest = new Set(testRows.map((row) => String(row.file)));
@@ -51,6 +63,12 @@ export async function affectedTests(engine: IQueryEngine, requested: readonly st
     dependents.set(dependency, set);
   };
   for (const row of imports) link(row.dependent, row.dependency);
+  const filesByPackage = new Map<string, string[]>();
+  for (const row of javaFiles) {
+    if (typeof row.file !== "string" || typeof row.package !== "string") continue;
+    filesByPackage.set(row.package, [...(filesByPackage.get(row.package) ?? []), row.file]);
+  }
+  for (const row of packageImports) for (const member of filesByPackage.get(String(row.package)) ?? []) link(row.dependent, member);
   for (const row of moduleCalls) link(row.dependent, functions.get(String(row.fn))?.file);
   for (const edge of calls) link(functions.get(edge.caller)?.file, functions.get(edge.callee)?.file);
 

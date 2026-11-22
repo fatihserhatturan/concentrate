@@ -67,7 +67,7 @@ async function collectDeclaredPackages(
   return packages.sort((a, b) => a.dir.localeCompare(b.dir));
 }
 
-export function addImportPackageRelationships(graph: IGraphContributor): void {
+export function addImportPackageRelationships(graph: IGraphContributor, packageImports: ReadonlyMap<string, readonly string[]> = new Map()): void {
   const packageIdByFileId = packageFileIndex(graph);
   const packageIdByImportId = new Map<string, string>();
 
@@ -80,21 +80,10 @@ export function addImportPackageRelationships(graph: IGraphContributor): void {
     }
   }
 
-  // Copy: the loop adds relationships of other types only, but stay a snapshot.
-  for (const relationship of [...graph.relationshipsOfType("RESOLVES_TO")]) {
-    const targetPackageId = packageIdByFileId.get(relationship.to);
-    if (!targetPackageId) {
-      continue;
-    }
+  const link = (importId: string, targetPackageId: string): void => {
+    graph.addRelationship({ from: importId, to: targetPackageId, type: "IMPORTS_PACKAGE", properties: {} });
 
-    graph.addRelationship({
-      from: relationship.from,
-      to: targetPackageId,
-      type: "IMPORTS_PACKAGE",
-      properties: {},
-    });
-
-    const sourcePackageId = packageIdByImportId.get(relationship.from);
+    const sourcePackageId = packageIdByImportId.get(importId);
     if (sourcePackageId && sourcePackageId !== targetPackageId) {
       graph.addRelationship({
         from: sourcePackageId,
@@ -105,6 +94,17 @@ export function addImportPackageRelationships(graph: IGraphContributor): void {
         },
       });
     }
+  };
+
+  // Copy: the loop adds relationships of other types only, but stay a snapshot.
+  for (const relationship of [...graph.relationshipsOfType("RESOLVES_TO")]) {
+    const targetPackageId = packageIdByFileId.get(relationship.to);
+    if (targetPackageId) link(relationship.from, targetPackageId);
+  }
+
+  // An import of a whole package reaches the build packages of its files, without resolving to any one file.
+  for (const [importId, fileIds] of packageImports) {
+    for (const targetPackageId of new Set(fileIds.flatMap((fileId) => packageIdByFileId.get(fileId) ?? []))) link(importId, targetPackageId);
   }
 }
 

@@ -95,3 +95,15 @@ describe("non-code files in the graph", () => {
     assert.equal(limited.report.otherFiles, 19);
   });
 });
+
+describe("JVM package segments", () => {
+  it("does not treat package names below a JVM source root as layout folders", () => {
+    const c = defaultLanguageTable.conventions;
+    const base = "src/main/java/org/springframework/samples/petclinic";
+    assert.equal(classifyFile(`${base}/model/Owner.java`, c).sourceType, "production");
+    assert.equal(classifyFile("src/main/java/org/acme/support/Helper.java", c).sourceType, "production");
+    assert.equal(classifyFile("samples/App.java", c).sourceType, "fixture");
+    assert.equal(classifyFile("src/main/java/org/acme/fixtures/X.java", c).isFixture, false);
+    assert.equal(classifyFile("src/test/java/org/acme/FooTest.java", c).isTest, true);
+  });
+});

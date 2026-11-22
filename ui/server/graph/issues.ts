@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import { coreIntegrationRegistry, findImportCycles, findUnusedExports, type ISourceReader } from "../core.js";
+import { createDefaultCoreIntegrationRegistry, findImportCycles, findUnusedExports, type ISourceReader } from "../core.js";
 import { loadIndex, projectStore } from "./index.js";
 
 export type Issues = {
@@ -10,6 +10,9 @@ export type Issues = {
   /** The core's own caveat: these are candidates, not proof. */
   note: string;
 };
+
+// One registry for the process: it only supplies the unused-export rules.
+const coreIntegrationRegistry = createDefaultCoreIntegrationRegistry();
 
 const sourceReader: ISourceReader = { readFile: (file) => readFile(file, "utf8").catch(() => undefined) };
 
