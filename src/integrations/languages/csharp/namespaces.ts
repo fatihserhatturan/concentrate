@@ -20,6 +20,11 @@ export type CSharpUsing = {
   isGlobal: boolean;
   /** Enclosing namespace full name of a `using` inside a namespace block, "" at file level. */
   scope: string;
+  /** First and last line of the namespace block the `using` is written in (absent at file level and for `global using`). */
+  scopeStart: number | undefined;
+  scopeEnd: number | undefined;
+  /** Generic arguments the target of an alias was written with (`using IntBox = N.Box<int>;` is 1). */
+  arity: number | undefined;
   /** `source` resolved to a declared namespace/type name (scope-relative candidates tried), else `source`. */
   target: string;
   targetKind: "namespace" | "type" | "external";
@@ -39,6 +44,11 @@ export type CSharpUsingsInScope = {
 
 /** The outcome of one `using`. `expected`: finding no file counts as unresolved. */
 export type CSharpUsingResolution = Pick<CSharpUsing, "target" | "targetKind" | "fileIds"> & { expected: boolean };
+
+/** True when `using` counts at `line`: a `using` in a namespace block only counts inside that block (no line: anywhere its namespace is). */
+export function usingAppliesAt(using: Pick<CSharpUsing, "scopeStart" | "scopeEnd">, line: number | undefined): boolean {
+  return line === undefined || using.scopeStart === undefined || using.scopeEnd === undefined || (line >= using.scopeStart && line <= using.scopeEnd);
+}
 
 export type CSharpUsingShape = { source: string; kind: CSharpUsing["kind"]; scope: string };
 
@@ -177,6 +187,9 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
       alias: typeof p.alias === "string" && p.alias !== "" ? p.alias : undefined,
       isGlobal: p.isGlobal === true,
       scope,
+      scopeStart: typeof p.usingScopeStart === "number" ? p.usingScopeStart : undefined,
+      scopeEnd: typeof p.usingScopeEnd === "number" ? p.usingScopeEnd : undefined,
+      arity: typeof p.sourceArity === "number" ? p.sourceArity : undefined,
       target: resolution.target,
       targetKind: resolution.targetKind,
       fileIds: resolution.fileIds,
@@ -221,12 +234,12 @@ export function globalUsingsOf(source: IGraphContributor | CSharpNamespaceIndex)
  * and usings. A `using` in a namespace block only counts inside that block (and nested namespaces); file-level
  * and `global using` directives count everywhere.
  */
-export function usingsInScope(source: IGraphContributor | CSharpNamespaceIndex, fileId: string, namespace: string): CSharpUsingsInScope {
+export function usingsInScope(source: IGraphContributor | CSharpNamespaceIndex, fileId: string, namespace: string, line?: number): CSharpUsingsInScope {
   const result: CSharpUsingsInScope = { namespaces: [...enclosingChain(namespace), ""], aliases: new Map(), staticTypes: [] };
   const usingIndex = csharpUsingIndexOf(source);
   if (usingIndex === undefined) return result;
   const own = usingIndex.usingsOfFile(fileId).filter(
-    (using) => !using.isGlobal && (using.scope === "" || namespace === using.scope || namespace.startsWith(`${using.scope}.`)),
+    (using) => !using.isGlobal && (using.scope === "" || namespace === using.scope || namespace.startsWith(`${using.scope}.`)) && usingAppliesAt(using, line),
   );
   // Innermost block scope first, then file level, then global; stable within a group.
   const ordered = [

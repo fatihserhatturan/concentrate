@@ -2,7 +2,8 @@ import type { IGraphContributor } from "../../../core/contracts/graph-contributo
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { isCSharpFile } from "../file-kind.js";
-import { csharpUsingIndexOf } from "./namespaces.js";
+import { csharpUsingIndexOf, usingAppliesAt } from "./namespaces.js";
+import { trailingArity } from "./syntax.js";
 import { csharpNamespaceIndexOf } from "./project.js";
 
 // Type names of C# code, resolved straight from the graph nodes: a name written in a file / namespace /
@@ -33,8 +34,12 @@ export type CSharpType = {
   arity: number;
 };
 
-/** `fileId`: the file the use site is in; `typeId`: the innermost enclosing type, when known; `namespace`: the namespace the use site is declared in. */
-export type CSharpTypeScope = { fileId: string; typeId?: string | null; namespace?: string };
+/**
+ * `fileId`: the file the use site is in; `typeId`: the innermost enclosing type, when known; `namespace`: the namespace
+ * the use site is declared in; `line`: the line of the use site (tells two blocks of one namespace in a file apart: a
+ * `using` written in one block does not count in the other).
+ */
+export type CSharpTypeScope = { fileId: string; typeId?: string | null; namespace?: string; line?: number };
 
 /** What one namespace declaration of a file brings into scope. */
 export type CSharpUsingLevel = {
@@ -43,6 +48,8 @@ export type CSharpUsingLevel = {
   usings: string[];
   /** `using X = A.B.C;` as alias -> dotted target. */
   aliases: Map<string, string>;
+  /** alias -> number of generic arguments its target was written with (`using IntBox = N.Box<int>;` is 1), when it has any. */
+  aliasArities: Map<string, number>;
   /** `using static A.B.C;` dotted type names. */
   statics: string[];
 };
@@ -60,7 +67,7 @@ export type CSharpTypeIndex = {
   /** Every type that extends or implements `type`, directly or not. */
   subtypes(type: CSharpType): readonly CSharpType[];
   /** The namespaces, aliases and static types a use site in `namespace` of `fileId` sees, innermost level first. */
-  usingScope(fileId: string, namespace: string): readonly CSharpUsingLevel[];
+  usingScope(fileId: string, namespace: string, line?: number): readonly CSharpUsingLevel[];
   /** The namespace `name` is (a declared namespace or an ancestor of one), resolved through namespace aliases of the scope. */
   namespaceNamed(name: string, scope: CSharpTypeScope): string | null;
   hasNamespace(name: string): boolean;
@@ -81,6 +88,7 @@ export type PartialFact = {
   constraints?: Array<{ param: string; constraints: string[] }>;
   bases?: Array<{ name: string; text: string; relation: string }>;
   fields?: Array<{ name: string; type: string | null; visibility: string; isStatic: boolean }>;
+  line?: number;
 };
 
 const cache = new WeakMap<object, CSharpTypeIndex>();
@@ -197,7 +205,7 @@ function mergePartials(graph: IGraphContributor, partialsByNode: Map<string, Par
 function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CSharpTypeIndex {
   // Declarations per type: the facts of each `partial` part, read before the merge.
   const partialsByNode = new Map<string, PartialFact[]>();
-  const declarations = new Map<string, Array<{ fileId: string; bases: Array<{ name: string; text: string; relation: string }> }>>();
+  const declarations = new Map<string, Array<{ fileId: string; line: number | undefined; bases: Array<{ name: string; text: string; relation: string }> }>>();
   for (const file of graph.nodesWithLabel("File")) {
     if (typeof file.properties.csharpPartials !== "string") continue;
     for (const fact of parseJsonList<PartialFact>(file.properties.csharpPartials)) {
@@ -206,7 +214,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       if (list) list.push(fact);
       else partialsByNode.set(fact.id, [fact]);
       const decls = declarations.get(fact.id) ?? [];
-      decls.push({ fileId: file.id, bases: fact.bases ?? [] });
+      decls.push({ fileId: file.id, line: typeof fact.line === "number" ? fact.line : undefined, bases: fact.bases ?? [] });
       declarations.set(fact.id, decls);
     }
   }
@@ -287,15 +295,18 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     levels.push("");
     return levels;
   };
-  const buildUsingScope = (fileId: string, namespace: string): CSharpUsingLevel[] => {
-    const own = usingIndex?.usingsOfFile(fileId) ?? [];
+  const buildUsingScope = (fileId: string, namespace: string, line: number | undefined): CSharpUsingLevel[] => {
+    const own = (usingIndex?.usingsOfFile(fileId) ?? []).filter((using) => usingAppliesAt(using, line));
     return namespaceChain(namespace).map((level) => {
-      const result: CSharpUsingLevel = { namespace: level, usings: [], aliases: new Map(), statics: [] };
+      const result: CSharpUsingLevel = { namespace: level, usings: [], aliases: new Map(), statics: [], aliasArities: new Map() };
       const resolved = [...own.filter((using) => using.scope === level && !using.isGlobal), ...(level === "" ? usingIndex?.globalUsings ?? [] : [])];
       for (const using of resolved) {
         if (!using.source) continue;
         if (using.kind === "alias" && using.alias !== undefined) {
-          if (!result.aliases.has(using.alias)) result.aliases.set(using.alias, using.target);
+          if (!result.aliases.has(using.alias)) {
+            result.aliases.set(using.alias, using.target);
+            if (using.arity !== undefined) result.aliasArities.set(using.alias, using.arity);
+          }
         } else if (using.kind === "static") {
           if (!result.statics.includes(using.target)) result.statics.push(using.target);
         } else if (!result.usings.includes(using.target)) {
@@ -306,10 +317,12 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     });
   };
   const usingScopeCache = new Map<string, CSharpUsingLevel[]>();
-  const usingScope = (fileId: string, namespace: string): readonly CSharpUsingLevel[] => {
-    const key = `${fileId}\0${namespace}`;
+  const usingScope = (fileId: string, namespace: string, line?: number): readonly CSharpUsingLevel[] => {
+    // Usings of a namespace block count only at the lines of that block: the key holds the blocks the line is in.
+    const blocks = line === undefined ? "*" : (usingIndex?.usingsOfFile(fileId) ?? []).filter((using) => using.scopeStart !== undefined && usingAppliesAt(using, line)).map((using) => using.importId).join(",");
+    const key = `${fileId}\0${namespace}\0${blocks}`;
     let found = usingScopeCache.get(key);
-    if (!found) usingScopeCache.set(key, found = buildUsingScope(fileId, namespace));
+    if (!found) usingScopeCache.set(key, found = buildUsingScope(fileId, namespace, line));
     return found;
   };
 
@@ -322,7 +335,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
 
   const hasNamespace = (name: string): boolean => namespaceIndex.hasNamespace(name);
   const namespaceNamed = (name: string, scope: CSharpTypeScope): string | null => {
-    const levels = usingScope(scope.fileId, namespaceOfScope(scope));
+    const levels = usingScope(scope.fileId, namespaceOfScope(scope), scope.line);
     const [first, ...rest] = name.split(".");
     for (const level of levels) {
       const target = level.aliases.get(first!);
@@ -353,7 +366,8 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
   const resolveAliasTarget = (target: string, scope: CSharpTypeScope, arity: number | undefined, seen: Set<string>): CSharpType | null => {
     if (seen.has(target)) return null;
     seen.add(target);
-    return byQualifiedName(target, arity) ?? byQualifiedName(target) ?? resolveDotted(target, { fileId: scope.fileId, namespace: "" }, arity, seen);
+    // The arity the alias was written with is never dropped: `using IntBox = N.Box<int>;` is `Box<T>`, not a plain `Box`.
+    return byQualifiedName(target, arity) ?? resolveDotted(target, { fileId: scope.fileId, namespace: "" }, arity, seen);
   };
 
   const resolveSimple = (name: string, scope: CSharpTypeScope, arity: number | undefined, seen: Set<string> = new Set()): CSharpType | null => {
@@ -362,12 +376,12 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       const nested = member(current, name, arity) ?? inheritedMember(current, name, arity, new Set());
       if (nested) return nested;
     }
-    for (const level of usingScope(scope.fileId, namespaceOfScope(scope))) {
+    for (const level of usingScope(scope.fileId, namespaceOfScope(scope), scope.line)) {
       const here = topLevel(level.namespace, name, arity);
       if (here) return here;
       const target = level.aliases.get(name);
       if (target !== undefined) {
-        const aliased = resolveAliasTarget(target, scope, undefined, seen);
+        const aliased = resolveAliasTarget(target, scope, level.aliasArities.get(name), seen);
         if (aliased) return aliased;
       }
       for (const using of level.usings) {
@@ -394,7 +408,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     if (current) return current;
     // `Ns.Type` or `Alias.Type` for a namespace alias, relative to every enclosing namespace.
     const [first, ...rest] = segments;
-    for (const level of usingScope(scope.fileId, namespaceOfScope(scope))) {
+    for (const level of usingScope(scope.fileId, namespaceOfScope(scope), scope.line)) {
       const target = level.aliases.get(first!);
       if (target !== undefined && rest.length > 0) {
         const found = byQualifiedName(`${target}.${rest.join(".")}`, arity);
@@ -427,14 +441,15 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     if (known) return known;
     supertypeCache.set(type.id, []); // a cycle sees nothing
     const outerType = enclosing(type);
-    const decls = declarations.get(type.id) ?? [{ fileId: type.fileIds[0]!, bases: parseJsonList<{ name: string; text: string; relation: string }>(type.node.properties.bases) }];
+    const decls = declarations.get(type.id) ?? [{ fileId: type.fileIds[0]!, line: typeof type.node.properties.line === "number" ? type.node.properties.line : undefined, bases: parseJsonList<{ name: string; text: string; relation: string }>(type.node.properties.bases) }];
     const found: CSharpType[] = [];
     for (const decl of decls) {
       // A base name is written outside the type's own body: its member types are not in scope.
-      const scope: CSharpTypeScope = { fileId: decl.fileId, typeId: outerType?.id ?? null, namespace: type.namespace };
+      const scope: CSharpTypeScope = { fileId: decl.fileId, typeId: outerType?.id ?? null, namespace: type.namespace, ...(decl.line === undefined ? {} : { line: decl.line }) };
       for (const base of decl.bases) {
         if (base.relation === "underlying") continue;
-        const target = resolve(base.name, scope, genericArity(base.text)) ?? resolve(base.name, scope);
+        // `Stack<int>` is a type of one generic parameter: a non-generic `Stack` is not it.
+        const target = resolve(base.name, scope, trailingArity(base.text));
         if (target && target.id !== type.id && !found.includes(target)) found.push(target);
       }
     }

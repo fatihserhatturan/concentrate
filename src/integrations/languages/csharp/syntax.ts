@@ -6,7 +6,7 @@ export type CSharpVisibility = "public" | "internal" | "protected" | "private" |
 
 // What a name is known to hold: a declared (or `new`-inferred) type, or nothing known (`null`: the name is
 // a local, its type is not). `fullType` keeps the generic arguments (`List<Foo>`).
-export type CSharpLocal = { type?: string; fullType?: string };
+export type CSharpLocal = { type?: string; fullType?: string; initializer?: string };
 
 // `annotations` (only when the parameter has attributes): `[FromBody]` is { name: "FromBody", args: [] }.
 export type CSharpParameterAttribute = { name: string; args: string[] };
@@ -37,6 +37,12 @@ export const compactNoSpace = (text: string): string => text.replace(/\s+/gu, ""
 // An expression on one line: spaces around dots and inside parentheses go, other runs become one space.
 export const compactExpression = (text: string): string =>
   text.replace(/\s*\.\s*/gu, ".").replace(/\s*([(),])\s*/gu, "$1").replace(/\s+/gu, " ").trim();
+
+// Verbatim identifiers (`@class`) are stored without the `@` everywhere (names, qualified names, locals, callees).
+export const plainName = (text: string): string => (text.includes("@") ? text.replace(/@/gu, "") : text);
+
+/** The text of a name node without verbatim `@` prefixes, or undefined. */
+export const nameText = (node: SyntaxNode | null | undefined): string | undefined => (node ? plainName(node.text) : undefined);
 
 export const isComment = (node: SyntaxNode): boolean => node.type === "comment";
 
@@ -155,7 +161,7 @@ export function lastSegment(name: string): string {
 // Names of the type parameters: `<T, out U>` is ["T", "U"].
 export function typeParametersOf(node: SyntaxNode): string[] {
   const list = node.childForFieldName("type_parameters") ?? node.namedChildren.find((child) => child.type === "type_parameter_list") ?? null;
-  return list?.namedChildren.filter((child) => child.type === "type_parameter").map((child) => child.childForFieldName("name")?.text ?? compact(child.text)) ?? [];
+  return list?.namedChildren.filter((child) => child.type === "type_parameter").map((child) => plainName(child.childForFieldName("name")?.text ?? compact(child.text))) ?? [];
 }
 
 // `where T : class, new()` is { param: "T", constraints: ["class", "new()"] }.
@@ -186,7 +192,7 @@ export function csharpParameters(list: SyntaxNode | null | undefined): CSharpPar
       loose.push(child);
     } else if (child.type === "parameter") {
       loose = [];
-      const name = child.childForFieldName("name")?.text;
+      const name = nameText(child.childForFieldName("name"));
       if (!name) continue;
       const modifiers = child.namedChildren.filter((candidate) => candidate.type === "modifier").map((candidate) => candidate.text);
       const attributes = attributesOf(child.namedChildren.filter((candidate) => candidate.type === "attribute_list")).map((attribute) => ({ name: attribute.name, args: attribute.args }));
@@ -201,7 +207,7 @@ export function csharpParameters(list: SyntaxNode | null | undefined): CSharpPar
       if (attributes.length > 0) parameter.annotations = attributes;
       parameters.push(parameter);
     } else if (child.type === "params" && !child.isNamed) {
-      const name = list.childForFieldName("name")?.text;
+      const name = nameText(list.childForFieldName("name"));
       if (!name) continue;
       const annotations = attributesOf(loose).map((attribute) => ({ name: attribute.name, args: attribute.args }));
       loose = [];
@@ -230,28 +236,30 @@ export function dottedName(node: SyntaxNode | null | undefined): string | null {
   // Iterative: walk down the leftmost side, collecting the names from the right.
   while (current) {
     if (current.type === "identifier") {
-      segments.push(current.text);
+      segments.push(plainName(current.text));
       break;
     }
     if (current.type === "generic_name") {
       const id = current.namedChildren.find((child) => child.type === "identifier");
       if (!id) return null;
-      segments.push(id.text);
+      segments.push(plainName(id.text));
       break;
     }
     if (current.type === "member_access_expression") {
       const name = current.childForFieldName("name");
-      const nameText = name?.type === "generic_name" ? name.namedChildren.find((child) => child.type === "identifier")?.text : name?.type === "identifier" ? name.text : null;
-      if (!nameText) return null;
-      segments.push(nameText);
+      const rawName = name?.type === "generic_name" ? name.namedChildren.find((child) => child.type === "identifier")?.text : name?.type === "identifier" ? name.text : null;
+      const segmentName = rawName ? plainName(rawName) : null;
+      if (!segmentName) return null;
+      segments.push(segmentName);
       current = current.childForFieldName("expression");
       continue;
     }
     if (current.type === "qualified_name") {
       const name = current.childForFieldName("name");
-      const nameText = name?.type === "generic_name" ? name.namedChildren.find((child) => child.type === "identifier")?.text : name?.text;
-      if (!nameText) return null;
-      segments.push(nameText);
+      const rawName = name?.type === "generic_name" ? name.namedChildren.find((child) => child.type === "identifier")?.text : name?.text;
+      const segmentName = rawName ? plainName(rawName) : null;
+      if (!segmentName) return null;
+      segments.push(segmentName);
       current = current.childForFieldName("qualifier");
       continue;
     }
@@ -264,4 +272,49 @@ export function dottedName(node: SyntaxNode | null | undefined): string | null {
     return null;
   }
   return segments.length === 0 ? null : segments.reverse().join(".");
+}
+
+// The generic arguments of the LAST segment of a type as written (`Outer<int>.Box<string>?` is ["string"]); null when the
+// last segment has none (`Outer<int>.Inner`, `Foo`, `int[]`). This is the arity a use site pins down.
+export function trailingGenericArguments(text: string | null | undefined): string[] | null {
+  if (!text) return null;
+  let end = text.length - 1;
+  while (end >= 0 && (text[end] === "?" || text[end] === " ")) end -= 1;
+  if (end < 0 || text[end] !== ">") return null;
+  let depth = 0;
+  let open = -1;
+  for (let position = end; position >= 0; position -= 1) {
+    const char = text[position];
+    if (char === ">") depth += 1;
+    else if (char === "<") {
+      depth -= 1;
+      if (depth === 0) {
+        open = position;
+        break;
+      }
+    }
+  }
+  if (open < 0) return null;
+  const args: string[] = [];
+  let level = 0;
+  let start = open + 1;
+  for (let position = open + 1; position < end; position += 1) {
+    const char = text[position];
+    if (char === "<" || char === "(" || char === "[") level += 1;
+    else if (char === ">" || char === ")" || char === "]") level -= 1;
+    else if (char === "," && level === 0) {
+      args.push(text.slice(start, position).trim());
+      start = position + 1;
+    }
+  }
+  const last = text.slice(start, end).trim();
+  if (last) args.push(last);
+  else if (args.length > 0) args.push("");
+  return args;
+}
+
+/** Number of generic arguments the last segment of a type was written with, or undefined when it has none. */
+export function trailingArity(text: string | null | undefined): number | undefined {
+  const args = trailingGenericArguments(text);
+  return args === null ? undefined : args.length || undefined;
 }

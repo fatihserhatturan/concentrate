@@ -11,7 +11,7 @@ export const csharpGraphSchema: GraphSchemaExtension = {
   id: "csharp-language",
   nodeProperties: [
     { label: "File", after: "allNames", properties: { csharpNamespaces: "STRING", csharpPartials: "STRING", hasTopLevelStatements: "BOOLEAN" } },
-    { label: "Import", after: "isModule", properties: { isStatic: "BOOLEAN", importKind: "STRING", isGlobal: "BOOLEAN", usingScope: "STRING" } },
+    { label: "Import", after: "isModule", properties: { isStatic: "BOOLEAN", importKind: "STRING", isGlobal: "BOOLEAN", usingScope: "STRING", usingScopeStart: "INT64", usingScopeEnd: "INT64", sourceArity: "INT64" } },
     {
       label: "Class",
       after: "qualifiedName",
@@ -34,7 +34,7 @@ export const csharpGraphSchema: GraphSchemaExtension = {
       properties: {
         isStatic: "BOOLEAN", parameterCount: "INT64", isVirtual: "BOOLEAN", isOverride: "BOOLEAN", isSealed: "BOOLEAN", isPartial: "BOOLEAN",
         requiredParameterCount: "INT64", hasParams: "BOOLEAN", isExtension: "BOOLEAN", extensionReceiver: "STRING", explicitInterface: "STRING",
-        constraints: "STRING", csharpLocals: "STRING",
+        constraints: "STRING", csharpLocals: "STRING", hasBody: "BOOLEAN",
       },
     },
     {
@@ -49,7 +49,7 @@ export const csharpGraphSchema: GraphSchemaExtension = {
     {
       label: "Call",
       after: "qualifier",
-      properties: { argumentCount: "INT64", argumentTypes: "STRING", callKind: "STRING", receiverKind: "STRING", isConditional: "BOOLEAN", typeArguments: "STRING" },
+      properties: { argumentCount: "INT64", argumentTypes: "STRING", callKind: "STRING", receiverKind: "STRING", isConditional: "BOOLEAN", typeArguments: "STRING", typeArity: "INT64", receiverTruncated: "BOOLEAN" },
     },
   ],
   relationshipTables: [

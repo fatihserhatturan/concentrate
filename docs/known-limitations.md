@@ -2701,15 +2701,49 @@ that scope.
   The facts of each part (modifiers, bases, fields, methods) are in
   `File.csharpPartials`.
 - Generic substitution happens only through a member's own owner (`Box<Foo>.Get()`
-  is a `Foo`). A base with type arguments is not substituted (`class S : Base<Foo>`
-  does not give `S` members typed `Foo`), and method type arguments are not inferred
-  from the call (`Map(x => ...)`).
+  is a `Foo`, also through `new Box<Foo>().Get()`). A base with type arguments is not
+  substituted (`class S : Base<Foo>` does not give `S` members typed `Foo`), and method
+  type arguments are not inferred from the call (`Map(x => ...)`). A use site with
+  type arguments only matches a type of that arity: `new Stack<int>()` and
+  `class Q : Stack<int>` never resolve to a non-generic `Stack`, and `using IntBox =
+  N.Box<int>;` keeps its arity. Arguments of a type written without any (`new Box(1)`)
+  match a type of that name when it is the only one or the only non-generic one.
 - Accessor calls are not modelled: reading or writing a property, indexer or event
-  is no call to its `get`, `set`, `add` or `remove`. Delegate and event invocations,
-  local-function calls, receivers that are element accesses (`items[0].M()`) and
-  lambda-typed receivers stay unresolved.
+  is no call to its `get`, `set`, `add` or `remove`. A call of a local function,
+  a delegate (local or parameter, `cb()`), an event (`Changed(this, e)`,
+  `Changed?.Invoke()`) or a method on an element access (`items[0].M()`) is a `Call`
+  node that never resolves, so it counts in the caller's `unresolvedCalls`. A call of
+  an element or of a parenthesized expression (`items[0]()`, `(f)()`) has no name and
+  is not a `Call` node at all. Calls inside a local function or lambda belong to the
+  enclosing method; the local function is not a function of its own. A bare
+  call whose name is a local function, a delegate local or a delegate parameter is
+  never linked to a method of the class or a `using static` type; a local of a plain
+  type (`int Count`) does not hide the method `Count()`.
+- **Locals are typed by what is certain.** A declared type, `new T()`, a cast or `as`
+  give a local its type. `var x = Make();`, `var x = a.B;`, `var x = await M();` (a
+  `Task<T>` or `ValueTask<T>` gives `T`) and `var y = x;` are typed when the resolver
+  runs, from the initializer, when it resolves. A local that shares its name with a
+  field or property of the type (for example a declaration in a sibling block) is
+  unknown, not guessed; a parameter wins over the field. A name declared twice with
+  different types is unknown.
 - Overloads are narrowed by argument count, then by conservative argument types.
   When candidates remain, each gets a `CALL_RESOLVES_TO` edge with `via: "overload"`.
+  A `partial` method declaration and its implementation are one method: the call
+  links to the part with the body (the declaration alone when there is none).
+- **Dispatch has no fan-out cap.** A call through an interface, an abstract or a
+  virtual method links to every override and implementation in the scan, as in Java.
+  A very wide hierarchy (an interface with thousands of implementations) gives a call
+  as many edges. An interface member is linked to the method an implementing type
+  sees: a derived class's `new` method is only linked when that class lists the
+  interface itself.
+- Usings are scoped per namespace block: a `using` inside `namespace A { ... }` only
+  counts in that block, also when the file opens `A` a second time. The `Import` node
+  carries the block's lines (`usingScopeStart`, `usingScopeEnd`).
+- Verbatim identifiers (`@class`) are stored without the `@` in every name, qualified
+  name and local; `global::A.B` receivers are read as `A.B`. Receivers and
+  expressions longer than 1 000 characters are cut on the `Call` node (the call is
+  marked `receiverTruncated` and a call on such a receiver stays unresolved); the
+  grammar itself keeps only the first links of a very long chain.
 - A name in two used namespaces (CS0104) is not diagnosed: the first match wins.
 - Unused detection is based on name mentions in the scanned C# source, which is
   conservative: a name in a string counts as a possible reflective use. Members with

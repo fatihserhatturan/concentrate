@@ -12,6 +12,9 @@ import {
   csharpParameters,
   isComment,
   modifiersOf,
+  nameText,
+  plainName,
+  trailingArity,
   normalizeCSharpType,
   dottedName,
   typeDeclarationTypes,
@@ -264,6 +267,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       typeParameters: string[];
       constraints?: CSharpConstraint[];
       explicitInterface?: string | null;
+      hasBody?: boolean;
       roots: readonly SyntaxNode[];
     };
 
@@ -298,7 +302,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
         isVirtual: spec.words.has("virtual"),
         isOverride: spec.words.has("override"),
         isSealed: spec.words.has("sealed"),
-        ...(spec.words.has("partial") ? { isPartial: true } : {}),
+        ...(spec.words.has("partial") ? { isPartial: true, ...(spec.hasBody === undefined ? {} : { hasBody: spec.hasBody }) } : {}),
         ...(isExtension ? { isExtension: true, extensionReceiver: normalizeCSharpType(first!.type) } : {}),
         ...(spec.explicitInterface ? { explicitInterface: spec.explicitInterface } : {}),
         ...(spec.constraints && spec.constraints.length > 0 ? { constraints: JSON.stringify(spec.constraints) } : {}),
@@ -327,7 +331,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
     };
 
     const handleMethod = (member: SyntaxNode, owner: Owner): void => {
-      const name = member.childForFieldName("name")?.text;
+      const name = nameText(member.childForFieldName("name"));
       if (!name) return;
       const { words, attributeLists } = modifiersOf(member);
       const body = member.childForFieldName("body");
@@ -348,6 +352,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
         typeParameters: typeParametersOf(member),
         constraints: constraintsOf(member),
         explicitInterface,
+        hasBody: body !== null,
         roots: body ? [body] : [],
       });
     };
@@ -445,7 +450,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       const attributes = attributesOf(attributeLists);
       const declaredType = typeText(declaration.childForFieldName("type"));
       for (const declarator of declaration.namedChildren.filter((child) => child.type === "variable_declarator")) {
-        const name = declarator.childForFieldName("name")?.text;
+        const name = nameText(declarator.childForFieldName("name"));
         if (!name) continue;
         addField(owner, {
           node: declarator,
@@ -471,7 +476,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       if (arrow) declared.push({ accessor: "get", node: arrow, roots: [arrow], words, attributes: [] });
       for (const accessor of list?.namedChildren ?? []) {
         if (accessor.type !== "accessor_declaration") continue;
-        const accessorName = accessor.childForFieldName("name")?.text;
+        const accessorName = nameText(accessor.childForFieldName("name"));
         const body = accessor.childForFieldName("body");
         if (!accessorName || !body) continue;
         const own = modifiersOf(accessor);
@@ -502,7 +507,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       const names: string[] = [];
       for (const accessor of member.childForFieldName("accessors")?.namedChildren ?? []) {
         if (accessor.type === "accessor_declaration") {
-          const name = accessor.childForFieldName("name")?.text;
+          const name = nameText(accessor.childForFieldName("name"));
           if (name) names.push(name);
         }
       }
@@ -511,7 +516,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
     };
 
     const handleProperty = (member: SyntaxNode, owner: Owner): void => {
-      const name = member.childForFieldName("name")?.text;
+      const name = nameText(member.childForFieldName("name"));
       if (!name) return;
       const { words, attributeLists } = modifiersOf(member);
       const explicitInterface = explicitInterfaceOf(member);
@@ -574,7 +579,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
     };
 
     const handleEvent = (member: SyntaxNode, owner: Owner): void => {
-      const name = member.childForFieldName("name")?.text;
+      const name = nameText(member.childForFieldName("name"));
       if (!name) return;
       const { words, attributeLists } = modifiersOf(member);
       const explicitInterface = explicitInterfaceOf(member);
@@ -630,7 +635,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
             handleEvent(member, owner);
             break;
           case "enum_member_declaration": {
-            const name = member.childForFieldName("name")?.text;
+            const name = nameText(member.childForFieldName("name"));
             if (!name) break;
             addField(owner, {
               node: member, name, declaredType: owner.qualifiedName, visibility: "public", isStatic: true, isReadonly: true, fieldKind: "enum-constant",
@@ -650,7 +655,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
     };
 
     const handleType = (node: SyntaxNode, outer: Owner | null, namespace: string): Owner | null => {
-      const name = node.childForFieldName("name")?.text;
+      const name = nameText(node.childForFieldName("name"));
       let kind = kindOfDeclaration[node.type];
       if (kind === "record" && node.children.some((child) => child.type === "struct")) kind = "record struct";
       if (!name || !kind) return null;
@@ -735,7 +740,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       else owner.node.properties.fields = JSON.stringify(owner.fields);
     };
 
-    const handleUsing = (node: SyntaxNode, scope: string): void => {
+    const handleUsing = (node: SyntaxNode, scope: string, block: { start: number; end: number } | null): void => {
       const children = node.children;
       const isAlias = children.some((child) => child.type === "=");
       const aliasNode = isAlias ? node.childForFieldName("name") : null;
@@ -745,7 +750,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       const isStatic = children.some((child) => child.type === "static");
       const line = node.startPosition.row + 1;
       const importKind = isAlias ? "alias" : isStatic ? "static" : "normal";
-      const id = uniqueId(`${fileNodeId}:import:${line}:${isAlias ? `${aliasNode?.text}=` : ""}${source}`, node);
+      const id = uniqueId(`${fileNodeId}:import:${line}:${isAlias ? `${plainName(aliasNode?.text ?? "")}=` : ""}${source}`, node);
       add({
         id,
         label: "Import",
@@ -758,7 +763,10 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
           importKind,
           isGlobal: children.some((child) => child.type === "global"),
           usingScope: scope,
-          ...(aliasNode ? { alias: aliasNode.text } : {}),
+          // The lines of the namespace block the `using` is in: the same namespace opened twice in a file has two scopes.
+          ...(block && scope !== "" ? { usingScopeStart: block.start, usingScopeEnd: block.end } : {}),
+          ...(isAlias && trailingArity(typeText(target)) !== undefined ? { sourceArity: trailingArity(typeText(target)) } : {}),
+          ...(aliasNode ? { alias: plainName(aliasNode.text) } : {}),
         },
       }, fileNodeId, "IMPORTS");
     };
@@ -766,8 +774,8 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
     // Top level: usings, namespaces (block and file-scoped), types and top-level statements. Namespaces are scoped in one another, so the
     // walk keeps its own stack of scopes.
     const topLevel: SyntaxNode[] = [];
-    type Frame = { children: readonly SyntaxNode[]; index: number; namespace: string };
-    const frames: Frame[] = [{ children: tree.rootNode.namedChildren, index: 0, namespace: "" }];
+    type Frame = { children: readonly SyntaxNode[]; index: number; namespace: string; block: { start: number; end: number } | null };
+    const frames: Frame[] = [{ children: tree.rootNode.namedChildren, index: 0, namespace: "", block: null }];
     while (frames.length > 0) {
       const frame = frames[frames.length - 1]!;
       if (frame.index >= frame.children.length) {
@@ -777,19 +785,20 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       const child = frame.children[frame.index++]!;
       switch (child.type) {
         case "using_directive":
-          handleUsing(child, frame.namespace);
+          handleUsing(child, frame.namespace, frame.block);
           break;
         case "namespace_declaration": {
           const name = child.childForFieldName("name");
-          const namespace = qualify(frame.namespace, name ? compactNoSpace(name.text) : "");
+          const namespace = qualify(frame.namespace, name ? plainName(compactNoSpace(name.text)) : "");
           namespaces.add(namespace);
-          frames.push({ children: child.childForFieldName("body")?.namedChildren ?? [], index: 0, namespace });
+          frames.push({ children: child.childForFieldName("body")?.namedChildren ?? [], index: 0, namespace, block: { start: child.startPosition.row + 1, end: child.endPosition.row + 1 } });
           break;
         }
         case "file_scoped_namespace_declaration": {
           const name = child.childForFieldName("name");
           if (name) {
-            frame.namespace = qualify("", compactNoSpace(name.text));
+            frame.namespace = qualify("", plainName(compactNoSpace(name.text)));
+            frame.block = { start: child.startPosition.row + 1, end: Number.MAX_SAFE_INTEGER };
             namespaces.add(frame.namespace);
           }
           break;

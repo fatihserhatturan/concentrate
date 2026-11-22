@@ -504,7 +504,7 @@ class Other { static readonly Cache C = new(); Repo R = new() { A = 1 }; int V =
     assert.deepEqual(locals.cast, { type: "Widget" });
     assert.deepEqual(locals.maybe, { type: "Gadget" });
     assert.deepEqual(locals.typed, { type: "Repo" });
-    assert.equal(locals.unknown, null);
+    assert.deepEqual(locals.unknown, { initializer: "Compute()" });
     assert.deepEqual(locals.pet, { type: "Dog" });
     assert.deepEqual(locals.res, { type: "Res" });
     assert.equal(locals.n, null);
