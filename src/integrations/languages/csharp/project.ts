@@ -1,9 +1,10 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
+import { emptyCSharpProjectModel, type CSharpProjectModel } from "./project/types.js";
 
 // What the import resolution step of a scan learns about C# namespaces and hands to the call and inheritance
 // resolvers of the same scan (the way Java's import step installs its module filter). One namespace spans many
 // files, so a namespace is a name that maps to every file that declares it, and to the types declared in it.
-// This phase treats the whole scan as one project.
+// Visibility between projects is applied on top of this index (see namespaces.ts).
 export type CSharpNamespaceIndex = {
   /** Every namespace that exists in the scan: the declared ones and each of their ancestors (`A` for `A.B.C`). */
   readonly namespaces: readonly string[];
@@ -30,4 +31,16 @@ export function setCSharpNamespaceIndex(graph: IGraphContributor | object, index
 
 export function csharpNamespaceIndexOf(graph: IGraphContributor | object): CSharpNamespaceIndex {
   return indexes.get(graph) ?? emptyCSharpNamespaceIndex;
+}
+
+// The project and solution model of the scan, read once by the import resolution step (`readCSharpProjectModel`) and
+// handed to the later resolvers of the same scan, like the namespace index. `emptyCSharpProjectModel()` when the scan has no project file.
+const projectModels = new WeakMap<object, CSharpProjectModel>();
+
+export function setCSharpProjectModel(graph: IGraphContributor | object, model: CSharpProjectModel): void {
+  projectModels.set(graph, model);
+}
+
+export function csharpProjectModelOf(graph: IGraphContributor | object): CSharpProjectModel {
+  return projectModels.get(graph) ?? emptyCSharpProjectModel();
 }

@@ -27,6 +27,18 @@
     "aggregator": "BOOLEAN",
     "mainClass": "STRING",
     "mainClassSource": "STRING",
+    "projectFile": "STRING",
+    "sdk": "STRING",
+    "outputType": "STRING",
+    "executable": "BOOLEAN",
+    "rootNamespace": "STRING",
+    "assemblyName": "STRING",
+    "targetFrameworks": "STRING",
+    "implicitUsings": "BOOLEAN",
+    "usings": "STRING",
+    "isTestProject": "BOOLEAN",
+    "solutions": "STRING",
+    "packageReferences": "STRING",
     "unresolved": "INT64"
    }
   },
