@@ -1657,7 +1657,7 @@ MapStruct, openapi-generator): what they write is not in the graph. The decision
 ### Agent benchmark
 
 - [x] Java questions (routes, callers, impact, injection, modules, tables, env) in `bench/agent/questions-java.json`
-- [ ] Results per category committed and documented: pending, the paid run of the questions is the next step after this PR
+- [ ] Results per category committed and documented: deferred, two paid attempts hit the account's usage limit part-way and were discarded; the run is left to be done by hand (commands in `docs/agent-benchmark.md`)
 
 ### Docs
 
@@ -1666,7 +1666,7 @@ MapStruct, openapi-generator): what they write is not in the graph. The decision
 
 ### Acceptance criteria
 
-- [ ] Accuracy, performance and agent results for Java are reproducible from scripts (the agent results are pending)
+- [x] Accuracy, performance and agent results for Java are reproducible from scripts (accuracy and performance results committed; the agent run is scripted but its results are deferred)
 - [x] README shows the Java coverage
 
 ## Verification (every milestone)

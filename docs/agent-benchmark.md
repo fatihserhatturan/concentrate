@@ -814,7 +814,8 @@ and the runs in which the agent called a Concentrate tool:
 four Java samples (Spring PetClinic REST, the Spring Boot RealWorld app, the grpc-java examples
 and Netflix concurrency-limits): routes, callers, impact, dependency injection, Gradle modules, tables and env. Expected
 answers were written from the source, not from Concentrate output. No results are recorded yet:
-the paid run waits for approval of its cost estimate.
+two paid attempts in Phase 43 hit the account's usage limit part-way and were discarded, so the
+run is left to be done by hand with the commands below.
 
 ```bash
 npm run bench:agent -- --questions bench/agent/questions-java.json --runs 3 --model sonnet --max-turns 25
