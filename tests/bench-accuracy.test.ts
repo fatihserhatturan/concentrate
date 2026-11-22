@@ -108,6 +108,16 @@ describe("accuracy comparator: constructor overloads", () => {
     const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo", line: 20 } }] });
     assert.deepEqual([score.tp, score.fp, score.fn], [1, 1, 0]);
   });
+  it("applies the line to a `constructor` label that matches the class function too", () => {
+    const run = (labelLine: number) => {
+      const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", line: 10 } }]);
+      return compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "constructor", className: "Foo", line: labelLine } }] });
+    };
+    const hit = run(10);
+    assert.deepEqual([hit.tp, hit.fp, hit.fn], [1, 0, 0]);
+    const miss = run(20);
+    assert.deepEqual([miss.tp, miss.fp, miss.fn], [0, 1, 1]);
+  });
   it("keeps labels without a line matching any overload", () => {
     const graph = callGraph([{ file: "a.ts", line: 1, callee: "Foo", target: ctor(10) }]);
     const score = compareCalls(graph, { files: ["a.ts"], items: [{ file: "a.ts", line: 1, callee: "Foo", target: { file: "b.ts", name: "Foo", className: "Foo" } }] });

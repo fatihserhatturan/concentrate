@@ -289,7 +289,8 @@ const sameTarget = (label: CallTarget, found: CallTarget) => {
   if (label.name === found.name && (label.className ?? null) === (found.className ?? null)) {
     return label.line === undefined || found.line === undefined || label.line === found.line;
   }
-  return label.name === "constructor" && found.name === label.className && found.className === undefined;
+  return label.name === "constructor" && found.name === label.className && found.className === undefined
+    && (label.line === undefined || found.line === undefined || label.line === found.line);
 };
 
 // Resolution accuracy at labeled call sites:

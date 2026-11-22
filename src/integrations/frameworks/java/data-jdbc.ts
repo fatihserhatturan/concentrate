@@ -149,10 +149,19 @@ const readSites: JavaParsePlugin = ({ fileNodeId, root, nodes, functions }) => {
     }
     if (sites.length > 0) node.properties.javaJdbcSql = JSON.stringify(sites.sort((a, b) => a[0] - b[0] || a[1] - b[1]));
     if (runs.length > 0) node.properties.javaJdbcInserts = JSON.stringify(runs.sort((a, b) => a[0] - b[0] || a[1] - b[1]));
+    // The binding and receiver names that are locals or parameters of this method (not fields).
+    if (sites.length > 0 || runs.length > 0) {
+      const names = javaLocalNames([body]);
+      const used = new Set<string>();
+      for (const site of sites) if (site[4]?.startsWith("bind:")) used.add(site[4].slice("bind:".length));
+      for (const run of runs) used.add(run[3].startsWith("this.") ? run[3].slice("this.".length) : run[3]);
+      const locals = [...used].filter((name) => names.has(name) && !runs.some((run) => run[3] === `this.${name}`)).sort();
+      if (locals.length > 0) node.properties.javaJdbcLocals = JSON.stringify(locals);
+    }
   }
 };
 
-export const javaDataJdbcPlugin: JavaParsePlugin & { version: string } = Object.assign(readSites, { version: "3" });
+export const javaDataJdbcPlugin: JavaParsePlugin & { version: string } = Object.assign(readSites, { version: "4" });
 
 // Whether the call `callee` on a receiver of this type is one that carries SQL.
 function carriesSql(callee: string, type: JavaReceiverType | null): "sql" | "table" | null {
@@ -210,6 +219,13 @@ export const javaDataJdbcContributor: ISemanticContributor = {
         if (model) addInsertTable(`${typeId}:${String(field.properties.name)}`, model);
       }
       const sitesOf = new Map<string, Site[]>();
+      // Names that are locals or parameters of a method: they never mean the owner's field of that name.
+      const localsOf = new Map<string, Set<string>>();
+      for (const fn of functions) {
+        if (typeof fn.properties.javaJdbcLocals !== "string") continue;
+        localsOf.set(fn.id, new Set(JSON.parse(fn.properties.javaJdbcLocals) as string[]));
+        delete fn.properties.javaJdbcLocals;
+      }
       for (const fn of functions) {
         if (typeof fn.properties.javaJdbcSql !== "string") continue;
         sitesOf.set(fn.id, JSON.parse(fn.properties.javaJdbcSql) as Site[]);
@@ -231,11 +247,13 @@ export const javaDataJdbcContributor: ISemanticContributor = {
             // Configuring the insert is no access: the table is created where the insert runs.
             const model = tableModel(text);
             if (!model) continue;
-            if (binding === "run") accesses.push({ callId: call.id, modelId: model, operation: "create", library: "jdbc", line: call.properties.line, expression });
-            else if (binding?.startsWith("bind:")) {
+            // "run": the chain runs the insert. A name: it is kept for where the insert runs (a local only for this
+            // method, a field for the owner). No binding (returned, passed on, ...): created where it is configured.
+            if (binding === "run" || !binding?.startsWith("bind:")) accesses.push({ callId: call.id, modelId: model, operation: "create", library: "jdbc", line: call.properties.line, expression });
+            else {
               const name = binding.slice("bind:".length);
-              addInsertTable(`${method.owner.id}:${name}`, model);
               addInsertTable(`${fn.id}:${name}`, model);
+              if (!localsOf.get(fn.id)?.has(name)) addInsertTable(`${method.owner.id}:${name}`, model);
             }
             continue;
           }
@@ -256,7 +274,8 @@ export const javaDataJdbcContributor: ISemanticContributor = {
           if (!call || call.properties.callee !== callee || !receiverMatches(receivers.typeOfCall(call, fn), INSERTS)) continue;
           const name = receiver.startsWith("this.") ? receiver.slice("this.".length) : receiver;
           if (!identifier.test(name) || name.includes(".")) continue;
-          const tables = insertTables.get(`${fn.id}:${name}`) ?? insertTables.get(`${method.owner.id}:${name}`) ?? [];
+          const isLocal = localsOf.get(fn.id)?.has(name) === true;
+          const tables = insertTables.get(`${fn.id}:${name}`) ?? (isLocal ? [] : insertTables.get(`${method.owner.id}:${name}`)) ?? [];
           for (const modelId of tables) accesses.push({ callId: call.id, modelId, operation: "create", library: "jdbc", line: call.properties.line, expression: call.properties.expression });
         }
       }
