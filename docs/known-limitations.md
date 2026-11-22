@@ -2674,6 +2674,55 @@ that scope.
   not to a Java function; only `System.getenv`, `@Value` placeholders and the Spring config
   are Java env reads, so `list_env_config` on a Java project can show variables no Java code uses.
 
+## C#
+
+- The grammar is tree-sitter-c-sharp, vendored as `vendor/grammars/csharp.wasm`. The
+  extensions are `.cs` and `.csx`. `*.g.cs`, `*.g.i.cs`, `*.Designer.cs` and every
+  file under an `obj/` directory are generated (the descriptor's
+  `generatedDirectories`). A file with a syntax error is kept as a partial graph
+  and gets a scan warning.
+- Covered: block-scoped and file-scoped namespaces, `using`, `using static`,
+  `using Alias = ...` and `global using`; classes, structs, records, enums, delegates
+  (all `Class` nodes told apart by `kind`) and interfaces, nested too; methods,
+  constructors, operators, properties, indexers, events and fields; attributes as
+  `Decorator` nodes; calls resolved through usings, extension methods and
+  inheritance with interface and override dispatch; `static Main` and top-level
+  statements as entrypoints; xUnit, NUnit and MSTest tests; unused-export rules.
+- **The scan is one project.** The whole scan is treated as one assembly: `global
+  using` and `internal` visibility apply scan-wide. `.csproj` files are not read
+  (projects come in Phase 45), and the SDK implicit usings (`System`, `System.Linq`,
+  ...) are not applied.
+- `new T()` for a class with no explicit constructor stays unresolved. The graph
+  has no synthetic constructor to point at, as in Java.
+- An interface that extends another interface is recorded in `Interface.embeds`,
+  not as an EXTENDS edge. The schema allows EXTENDS from Class to Class only. Calls
+  still follow the inherited interface members.
+- **Partial types are one node.** `line` and `endLine` are those of the first part.
+  The facts of each part (modifiers, bases, fields, methods) are in
+  `File.csharpPartials`.
+- Generic substitution happens only through a member's own owner (`Box<Foo>.Get()`
+  is a `Foo`). A base with type arguments is not substituted (`class S : Base<Foo>`
+  does not give `S` members typed `Foo`), and method type arguments are not inferred
+  from the call (`Map(x => ...)`).
+- Accessor calls are not modelled: reading or writing a property, indexer or event
+  is no call to its `get`, `set`, `add` or `remove`. Delegate and event invocations,
+  local-function calls, receivers that are element accesses (`items[0].M()`) and
+  lambda-typed receivers stay unresolved.
+- Overloads are narrowed by argument count, then by conservative argument types.
+  When candidates remain, each gets a `CALL_RESOLVES_TO` edge with `via: "overload"`.
+- A name in two used namespaces (CS0104) is not diagnosed: the first match wins.
+- Unused detection is based on name mentions in the scanned C# source, which is
+  conservative: a name in a string counts as a possible reflective use. Members with
+  attributes, overrides, virtual and abstract members, interface implementations
+  and members of types implementing an external interface are never reported.
+- An import counts as unresolved only when its root namespace is one of the scan's
+  own roots (`Acme.Missing` when the scan declares `Acme.Orders`). `System.*`,
+  `Microsoft.*` and any other root the scan does not declare are external.
+- `[assembly: ...]` attributes are not emitted.
+- The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
+  was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
+- Not read yet: `.csproj` and solutions (Phase 45) and frameworks (later phases).
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.
