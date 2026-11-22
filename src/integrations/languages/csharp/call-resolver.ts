@@ -4,8 +4,8 @@ import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js"
 import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { isCSharpFile } from "../file-kind.js";
 import { canonicalExternalType, externalSupertypes, isTypeVariableName, splitChain, type Segment } from "./receiver-chain.js";
-import { normalizeCSharpType } from "./syntax.js";
-import { createCSharpTypeIndex, genericArguments, genericArity, parseJsonList, typeParameterNames, type CSharpType, type CSharpTypeScope } from "./types.js";
+import { normalizeCSharpType, trailingArity, trailingGenericArguments } from "./syntax.js";
+import { createCSharpTypeIndex, parseJsonList, typeParameterNames, type CSharpType, type CSharpTypeScope } from "./types.js";
 
 // C# calls. A call reaches the declarations it names through what is known of the receiver:
 //   Foo()               a method of the enclosing types (own or inherited), then `using static` types
@@ -31,7 +31,7 @@ type Candidate = { fn: GraphNode; owner: CSharpType };
 // What an expression is: a type of the scan (`type`), a type outside it (`ext`, normalised: `string`, `List`), with
 // the generic arguments it was written with. `isType`: the expression names the type itself (static access).
 type Value = { type: CSharpType | null; ext: string | null; isType: boolean; exact?: boolean; superRef?: boolean; args?: Array<Value | null> };
-type Local = { type?: string; fullType?: string } | null;
+type Local = { type?: string; fullType?: string; initializer?: string } | null;
 type Scope = {
   call: GraphNode;
   fileId: string;
@@ -39,8 +39,12 @@ type Scope = {
   namespace: string;
   fn: GraphNode | undefined;
   locals: Map<string, Local>;
+  /** The line of the caller, which tells the namespace blocks of a file apart. */
+  line: number | undefined;
+  /** Locals whose initializer is being typed (a cycle `var a = b; var b = a;` types nothing). */
+  resolving: Set<string>;
 };
-type Context = { fileId: string; type: CSharpType | null; namespace: string; fn?: GraphNode | undefined };
+type Context = { fileId: string; type: CSharpType | null; namespace: string; fn?: GraphNode | undefined; line?: number | undefined };
 const primitiveTypes: ReadonlySet<string> = new Set(["int", "long", "double", "float", "decimal", "bool", "char", "short", "byte", "sbyte", "uint", "ulong", "ushort"]);
 
 export function createCSharpCallSession(graph: IGraphContributor, index: ResolutionRelationshipIndex): CallResolutionSession {
@@ -82,7 +86,13 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     const written = node ? /^(file:.*?):(?:function|field):/u.exec(node.id)?.[1] : undefined;
     return written ?? owner?.fileIds[0] ?? null;
   };
-  const contextOf = (owner: CSharpType, member?: GraphNode): Context => ({ fileId: fileOfMember(member, owner) ?? owner.fileIds[0]!, type: owner, namespace: owner.namespace, fn: member });
+  const lineOf = (member: GraphNode | undefined, owner: CSharpType | null): number | undefined => {
+    if (typeof member?.properties.line === "number") return member.properties.line;
+    // A type declared in one file only has one declaration line (a `partial` one has several).
+    return !member && owner && owner.fileIds.length === 1 && typeof owner.node.properties.line === "number" ? owner.node.properties.line : undefined;
+  };
+  const contextOf = (owner: CSharpType, member?: GraphNode): Context => ({ fileId: fileOfMember(member, owner) ?? owner.fileIds[0]!, type: owner, namespace: owner.namespace, fn: member, line: lineOf(member, owner) });
+  const scopeOfContext = (context: Context): CSharpTypeScope => ({ fileId: context.fileId, typeId: context.type?.id ?? null, namespace: context.namespace, ...(context.line === undefined ? {} : { line: context.line }) });
 
   const paramsCache = new Map<string, Param[]>();
   const paramsOf = (fn: GraphNode): Param[] => {
@@ -101,12 +111,10 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       locals = new Map();
       try {
         const parsed = typeof fn.properties.csharpLocals === "string" ? JSON.parse(fn.properties.csharpLocals) : {};
-        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown; fullType?: unknown } | null>)) {
-          if (!value || typeof value.type !== "string") {
-            locals.set(name, null);
-            continue;
-          }
-          locals.set(name, typeof value.fullType === "string" ? { type: value.type, fullType: value.fullType } : { type: value.type });
+        for (const [name, value] of Object.entries(parsed as Record<string, { type?: unknown; fullType?: unknown; initializer?: unknown } | null>)) {
+          if (value && typeof value.type === "string") locals.set(name, typeof value.fullType === "string" ? { type: value.type, fullType: value.fullType } : { type: value.type });
+          else if (value && typeof value.initializer === "string") locals.set(name, { initializer: value.initializer });
+          else locals.set(name, null);
         }
       } catch {
         locals = new Map();
@@ -129,11 +137,13 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     const name = normalizeCSharpType(written);
     if (!name) return null;
     if (!name.includes(".") && typeVariables(context.type, context.fn).has(name)) return null;
-    const scope: CSharpTypeScope = { fileId: context.fileId, typeId: context.type?.id ?? null, namespace: context.namespace };
+    const scope = scopeOfContext(context);
     const text = written ?? "";
-    const args = depth < 3 && text.includes("<") ? genericArguments(text).map((argument) => typeValue(argument, context, depth + 1)) : undefined;
+    const written_ = trailingGenericArguments(text);
+    const args = depth < 3 && written_ ? written_.map((argument) => typeValue(argument, context, depth + 1)) : undefined;
     if (name.endsWith("[]")) return { type: null, ext: name, isType: false };
-    const type = types.resolve(name, scope, text.includes("<") ? genericArity(text) : undefined) ?? types.resolve(name, scope);
+    // `Box<int>` is a type of one generic parameter: a non-generic `Box` is not it (no arity-less fallback).
+    const type = types.resolve(name, scope, trailingArity(text));
     const value: Value = type ? { type, ext: null, isType: false } : { type: null, ext: canonicalExternalType(name), isType: false };
     if (args && args.length > 0) value.args = args;
     return value;
@@ -155,8 +165,8 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     const value = typeValue(written, contextOf(owner, member));
     // `Box<T> Self()` on a `Box<Item>`: the arguments that are type parameters of the owner take the receiver's.
     if (value?.args && ownerParameters.length > 0 && receiver?.type?.id === owner.id) {
-      const written_ = genericArguments(written ?? "");
-      value.args = value.args.map((argument, position) => argument ?? bound(normalizeCSharpType(written_[position]) ?? ""));
+      const writtenArguments = trailingGenericArguments(written ?? "") ?? [];
+      value.args = value.args.map((argument, position) => argument ?? bound(normalizeCSharpType(writtenArguments[position]) ?? ""));
     }
     return value;
   };
@@ -194,6 +204,12 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     });
   };
 
+  const sameParameters = (left: GraphNode, right: GraphNode): boolean => {
+    const leftParams = paramsOf(left);
+    const rightParams = paramsOf(right);
+    return leftParams.length === rightParams.length && leftParams.every((param, position) => normOf(param.type) === normOf(rightParams[position]!.type));
+  };
+
   // The methods called `name` that fit `arity` on a type and its supertypes, nearest first, without the ones a nearer declaration replaces.
   const findMethods = (start: CSharpType, name: string, arity: number | undefined): Candidate[] => {
     const found: Candidate[] = [];
@@ -203,9 +219,12 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       const type = queue.shift()!;
       if (seen.has(type.id)) continue;
       seen.add(type.id);
-      for (const fn of methodsByOwner.get(type.id) ?? []) {
+      const own = methodsByOwner.get(type.id) ?? [];
+      for (const fn of own) {
         // An explicit interface implementation (`void IFoo.M()`) cannot be called through the class.
         if (fn.properties.kind !== "method" || fn.properties.name !== name || typeof fn.properties.explicitInterface === "string" || !accepts(fn, arity)) continue;
+        // A `partial` method declaration without a body is the implementing part's: one target, the part with the body.
+        if (fn.properties.isPartial === true && fn.properties.hasBody === false && own.some((other) => other !== fn && other.properties.isPartial === true && other.properties.hasBody === true && other.properties.name === name && sameParameters(other, fn))) continue;
         if (found.some((other) => other.owner.id !== type.id && overrides(other.fn, other.owner, fn, type))) continue;
         found.push({ fn, owner: type });
       }
@@ -249,7 +268,7 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
 
   // `using static` types in scope that bring `name` into scope as a method, as (type, candidates).
   const staticImported = (scope: Scope, name: string, arity: number | undefined): { type: CSharpType; candidates: Candidate[] } | null => {
-    for (const level of types.usingScope(scope.fileId, scope.namespace)) {
+    for (const level of types.usingScope(scope.fileId, scope.namespace, scope.line)) {
       for (const source of level.statics) {
         const type = types.byQualifiedName(source);
         if (!type) continue;
@@ -272,9 +291,9 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
 
   // ---- Extension methods ----
   const extensionVisible = (owner: CSharpType, scope: Scope): boolean => {
-    for (const level of types.usingScope(scope.fileId, scope.namespace)) {
+    // An alias (`using E = Acme.Ext;`) brings no extension methods into scope, but it does not hide the ones another level does.
+    for (const level of types.usingScope(scope.fileId, scope.namespace, scope.line)) {
       if (level.namespace === owner.namespace || level.usings.includes(owner.namespace) || level.statics.includes(owner.qualifiedName)) return true;
-      for (const target of level.aliases.values()) if (target === owner.namespace) return false;
     }
     return false;
   };
@@ -293,12 +312,12 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       // `this T x where T : Shape`: a constraint the scan resolves must hold; the others (`class`, `new()`, System types) are not checked.
       const constraints = parseJsonList<{ param: string; constraints: string[] }>(fn.properties.constraints).filter((entry) => entry.param === name).flatMap((entry) => entry.constraints);
       for (const constraint of constraints) {
-        const target = types.resolve(normalizeCSharpType(constraint) ?? "", { fileId: context.fileId, typeId: owner.id, namespace: owner.namespace });
+        const target = types.resolve(normalizeCSharpType(constraint) ?? "", { ...scopeOfContext(context), typeId: owner.id });
         if (target && !(receiver.type && closureOf(receiver.type).some((type) => type.id === target.id))) return false;
       }
       return true;
     }
-    const target = types.resolve(name, { fileId: context.fileId, typeId: owner.id, namespace: owner.namespace });
+    const target = types.resolve(name, { ...scopeOfContext(context), typeId: owner.id });
     if (target) return receiver.type !== null && closureOf(receiver.type).some((type) => type.id === target.id);
     const wanted = canonicalExternalType(name);
     if (wanted === "object") return true;
@@ -319,10 +338,36 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     (extensionsByName.get(name) ?? []).filter((candidate) => accepts(candidate.fn, arity, 1) && extensionVisible(candidate.owner, scope) && receiverMatches(candidate, receiver));
 
   // ---- Walking receivers ----
+  const contextOfScope = (scope: Scope): Context => ({ fileId: scope.fileId, type: scope.type, namespace: scope.namespace, fn: scope.fn, line: scope.line });
+
+  // A field or property called `name` of the owner (enclosing types and their supertypes).
+  const fieldNamed = (scope: Scope, name: string): ReturnType<typeof findField> => {
+    let field: ReturnType<typeof findField> = null;
+    for (let owner = scope.type; owner && !field; owner = types.enclosing(owner)) field = findField(owner, name);
+    return field;
+  };
+
   const lookupLocal = (scope: Scope, name: string): Value | null => {
     const local = scope.locals.get(name);
-    if (!local?.type) return null;
-    return typeValue(local.fullType ?? local.type, { fileId: scope.fileId, type: scope.type, namespace: scope.namespace, fn: scope.fn });
+    if (!local) return null;
+    // A local declared in a sibling block can share its name with a field: which one the use site means is not known.
+    if (!(scope.fn && paramsOf(scope.fn).some((param) => param.name === name)) && fieldNamed(scope, name)) return null;
+    if (local.type) return typeValue(local.fullType ?? local.type, contextOfScope(scope));
+    if (!local.initializer || scope.resolving.has(name)) return null;
+    // `var x = Make();`, `var x = obj.Prop;`, `var x = await M();`: the type of the initializer.
+    scope.resolving.add(name);
+    try {
+      let text = local.initializer;
+      const awaited = /^await\s+/u.test(text);
+      if (awaited) text = text.replace(/^await\s+/u, "");
+      const value = evaluate(text, scope);
+      if (!value || value.isType) return null;
+      if (!awaited) return value;
+      // `Task<T>` / `ValueTask<T>` awaits to `T`; anything else (a plain `Task`, an unknown awaitable) is not typed.
+      return value.ext !== null && (value.ext === "Task" || value.ext === "ValueTask") ? value.args?.[0] ?? null : null;
+    } finally {
+      scope.resolving.delete(name);
+    }
   };
 
   // The methods `name` reaches on a value: the type's own, then (for an instance) extension methods in scope.
@@ -347,13 +392,14 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     const first = segments[0]!;
     let current: Value | null = null;
     let position = 1;
-    const context: Context = { fileId: scope.fileId, type: scope.type, namespace: scope.namespace, fn: scope.fn };
+    const context = contextOfScope(scope);
     switch (first.kind) {
       case "literal":
         current = literalValue(first);
         break;
       case "new": {
-        const value = typeValue(first.typeName, context);
+        // `new Box<Foo>()`: the arguments it is written with go into the chain (`.Get()` is a `Foo`).
+        const value = typeValue(first.written, context);
         current = value ? { ...value, exact: true } : null;
         break;
       }
@@ -375,12 +421,11 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
         } else if (scope.locals.has(first.name)) {
           current = lookupLocal(scope, first.name);
         } else {
-          let field: ReturnType<typeof findField> = null;
-          for (let owner = scope.type; owner && !field; owner = types.enclosing(owner)) field = findField(owner, first.name);
+          const field = fieldNamed(scope, first.name);
           if (field) {
             current = valueOfField(field, null);
           } else {
-            const typeScope: CSharpTypeScope = { fileId: scope.fileId, typeId: scope.type?.id ?? null, namespace: scope.namespace };
+            const typeScope = scopeOfContext(context);
             let written = first.name;
             let type = types.resolve(written, typeScope);
             // `Ns.Type`, `Alias.Type`, `Outer.Inner`: the leading names are a namespace or an outer type.
@@ -432,7 +477,7 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       if (value.type) return { kind: "scan", type: value.type };
       return value.ext === "string" ? { kind: "string" } : value.ext !== null && primitiveTypes.has(value.ext) ? { kind: "primitive" } : null;
     }
-    const type = types.resolve(token, { fileId: scope.fileId, typeId: scope.type?.id ?? null, namespace: scope.namespace });
+    const type = types.resolve(token, scopeOfContext(contextOfScope(scope)));
     return type ? { kind: "scan", type } : null;
   };
   const parameterKind = (param: Param, owner: CSharpType, fn: GraphNode): Kind | null => {
@@ -442,7 +487,7 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     if (primitiveTypes.has(name)) return { kind: "primitive" };
     if (name === "string") return { kind: "string" };
     if (!name.includes(".") && typeVariables(owner, fn).has(name)) return null;
-    const type = types.resolve(name, { fileId: contextOf(owner, fn).fileId, typeId: owner.id, namespace: owner.namespace });
+    const type = types.resolve(name, scopeOfContext(contextOf(owner, fn)));
     return type ? { kind: "scan", type } : null;
   };
   const incompatible = (argument: Kind, parameter: Kind): boolean => {
@@ -478,7 +523,9 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       for (const other of findMethods(subtype, String(fn.properties.name), undefined)) {
         if (other.owner.id === owner.id || other.fn.id === fn.id || paramsOf(other.fn).length !== arity) continue;
         if (!overrides(other.fn, other.owner, fn, owner)) continue;
-        if (owner.isInterface || other.fn.properties.isOverride === true) add(other.fn, "override");
+        // An interface member is implemented by the method the implementing type sees: a derived class's `new` method that
+        // does not re-implement the interface is not it.
+        if (other.fn.properties.isOverride === true || (owner.isInterface && implementsDirectly(subtype, owner))) add(other.fn, "override");
       }
       if (owner.isInterface) {
         // `void IFoo.M()` in an implementing type runs when the interface method is called.
@@ -489,6 +536,10 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       }
     }
   };
+
+  // True when `type` lists `iface` (or an interface that extends it) in its own base list.
+  const implementsDirectly = (type: CSharpType, iface: CSharpType): boolean =>
+    types.supertypes(type).some((parent) => parent.isInterface && (parent.id === iface.id || types.subtypes(iface).some((sub) => sub.id === parent.id)));
 
   // The targets of a method reached on `receiver`: the method itself, and the overrides below it.
   const toTargets = (candidates: Candidate[], receiver: Value | null): ResolvedCallTarget[] => {
@@ -533,6 +584,8 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
       namespace: owner?.namespace ?? (typeof fn?.properties.namespace === "string" ? fn.properties.namespace : ""),
       fn,
       locals: localsOf(fn),
+      line: typeof fn?.properties.line === "number" ? fn.properties.line : undefined,
+      resolving: new Set(),
     };
     const callee = typeof call.properties.callee === "string" ? call.properties.callee : "";
     const receiver = typeof call.properties.receiver === "string" ? call.properties.receiver : null;
@@ -540,9 +593,16 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
     switch (call.properties.callKind) {
       case "method": {
         if (receiver === null) {
+          // `Helper()` where `Helper` is a local function, a delegate local or a delegate parameter is not a method of the class.
+          if (scope.locals.has(callee)) {
+            const local = scope.locals.get(callee);
+            if (!local || !local.type || !(primitiveTypes.has(local.type) || local.type === "string")) return [];
+          }
           const found = bareMethods(scope, callee, arity);
           return found ? toTargets(narrow(found.candidates, scope), found.value) : [];
         }
+        // A receiver too long to be stored whole is not evaluated.
+        if (call.properties.receiverTruncated === true) return [];
         return methodTargets(evaluate(receiver, scope), callee, arity, scope);
       }
       case "explicitConstructor":
@@ -550,10 +610,12 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
         return constructorsOf(callee === "base" ? superclassOf(owner) : owner, arity, scope);
       case "constructor": {
         const qualifier = typeof call.properties.qualifier === "string" ? call.properties.qualifier : null;
-        const typeArguments = parseJsonList<unknown>(call.properties.typeArguments).length;
+        // `new T()` where `T` is a type parameter constructs nothing of the scan.
+        if (qualifier === null && typeVariables(owner, fn).has(callee)) return [];
+        const typeArity = typeof call.properties.typeArity === "number" ? call.properties.typeArity : undefined;
         const written = qualifier ? `${qualifier}.${callee}` : callee;
-        const typeScope: CSharpTypeScope = { fileId: scope.fileId, typeId: owner?.id ?? null, namespace: scope.namespace };
-        const type = (typeArguments > 0 ? types.resolve(written, typeScope, typeArguments) : null) ?? types.resolve(written, typeScope);
+        // `new Box<string>()` is the `Box<T>`: with the arity written there is no arity-less fallback.
+        const type = types.resolve(written, scopeOfContext(contextOfScope(scope)), typeArity);
         return constructorsOf(type, arity, scope);
       }
       default:

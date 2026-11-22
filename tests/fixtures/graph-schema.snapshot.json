@@ -87,7 +87,10 @@
     "isStatic": "BOOLEAN",
     "importKind": "STRING",
     "isGlobal": "BOOLEAN",
-    "usingScope": "STRING"
+    "usingScope": "STRING",
+    "usingScopeStart": "INT64",
+    "usingScopeEnd": "INT64",
+    "sourceArity": "INT64"
    }
   },
   {
@@ -129,6 +132,7 @@
     "explicitInterface": "STRING",
     "constraints": "STRING",
     "csharpLocals": "STRING",
+    "hasBody": "BOOLEAN",
     "unresolvedCalls": "STRING"
    }
   },
@@ -249,7 +253,9 @@
     "callKind": "STRING",
     "receiverKind": "STRING",
     "isConditional": "BOOLEAN",
-    "typeArguments": "STRING"
+    "typeArguments": "STRING",
+    "typeArity": "INT64",
+    "receiverTruncated": "BOOLEAN"
    }
   },
   {

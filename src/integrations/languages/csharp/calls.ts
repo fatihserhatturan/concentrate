@@ -9,7 +9,11 @@ import {
   genericTypeText,
   isComment,
   lastSegment,
+  nameText,
   normalizeCSharpType,
+  plainName,
+  trailingArity,
+  trailingGenericArguments,
   typeText,
   type CSharpLocal,
   type CSharpParameter,
@@ -22,8 +26,16 @@ import {
 // not known: `var x = F()`, an untyped lambda parameter, a tuple deconstruction, a name declared twice with
 // different types). Types are normalized names (generic arguments removed: `List<string>` is `List`; arrays
 // keep `[]`). `var x = new T()`, `var x = (T)y` and `var x = y as T` are `{"type": "T"}`.
+// A local function's name is a `null` entry too (a bare call of that name is the local function, never a method of
+// the class). `var x = Make();` / `var x = obj.Prop;` / `var x = await M();` keep the initializer text
+// (`{"initializer": "Make()"}`) for the resolver to type at resolution time.
 // Local functions and lambdas are not functions of their own: their calls and names belong to the member
 // that holds them.
+
+// Longest receiver / expression text kept on a Call node (longer ones are cut and marked `receiverTruncated`).
+export const MAX_RECEIVER_TEXT = 1000;
+const MAX_STORED_TEXT = 160;
+const MAX_INITIALIZER_TEXT = 300;
 
 export type CSharpLocals = Map<string, CSharpLocal | null>;
 
@@ -46,6 +58,17 @@ function declared(typeNode: SyntaxNode | null, value: SyntaxNode | null): CSharp
   return fullType && !type.endsWith("[]") ? { type, fullType } : { type };
 }
 
+// `var x = F();`, `var x = a.B;`, `var x = await F();`, `var y = x;`: nothing certain, but the resolver can type the
+// expression later.
+function initializerOf(value: SyntaxNode): CSharpLocal | null {
+  let node: SyntaxNode | null = value;
+  if (node.type === "await_expression") node = unwrap(node.namedChildren.find((child) => !isComment(child)) ?? null);
+  if (!node || !["invocation_expression", "member_access_expression", "identifier"].includes(node.type)) return null;
+  if (value.endIndex - value.startIndex > MAX_INITIALIZER_TEXT) return null;
+  const text = compactExpression(value.text);
+  return text.length <= MAX_INITIALIZER_TEXT ? { initializer: text } : null;
+}
+
 function unwrap(node: SyntaxNode | null): SyntaxNode | null {
   let value = node;
   while (value && (value.type === "parenthesized_expression" || (value.type === "postfix_unary_expression" && value.text.endsWith("!"))) && value.namedChildren[0]) value = value.namedChildren[0]!;
@@ -62,6 +85,7 @@ function inferred(written: SyntaxNode | null): CSharpLocal | null {
     const fullType = genericTypeText(text);
     return fullType ? { type, fullType } : { type };
   }
+  if (value.type === "invocation_expression" || value.type === "member_access_expression" || value.type === "await_expression" || value.type === "identifier") return initializerOf(value);
   if (value.type === "cast_expression") {
     const type = normalizeCSharpType(typeText(value.childForFieldName("type")));
     return type ? { type } : null;
@@ -85,7 +109,7 @@ function designationNames(root: SyntaxNode): string[] {
   const stack: SyntaxNode[] = [root];
   while (stack.length > 0) {
     const node = stack.pop()!;
-    if (node.type === "identifier") names.push(node.text);
+    if (node.type === "identifier") names.push(plainName(node.text));
     else for (const child of node.namedChildren) stack.push(child);
   }
   return names;
@@ -105,7 +129,7 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly CS
       case "variable_declaration": {
         const typeNode = node.childForFieldName("type");
         for (const declarator of node.namedChildren.filter((child) => child.type === "variable_declarator")) {
-          const name = declarator.childForFieldName("name")?.text;
+          const name = nameText(declarator.childForFieldName("name"));
           if (name) merge(locals, name, declared(typeNode, declaratorValue(declarator)));
           else for (const bound of designationNames(declarator.namedChildren.find((child) => child.type !== "identifier") ?? declarator)) merge(locals, bound, null);
         }
@@ -113,34 +137,39 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly CS
       }
       case "foreach_statement": {
         const left = node.childForFieldName("left");
-        if (left?.type === "identifier") merge(locals, left.text, declared(node.childForFieldName("type"), null));
+        if (left?.type === "identifier") merge(locals, plainName(left.text), declared(node.childForFieldName("type"), null));
         else if (left) for (const bound of designationNames(left)) merge(locals, bound, null);
         break;
       }
       case "catch_declaration": {
-        const name = node.childForFieldName("name")?.text;
+        const name = nameText(node.childForFieldName("name"));
         if (name) merge(locals, name, declared(node.childForFieldName("type"), null));
         break;
       }
       case "declaration_pattern":
       case "declaration_expression": {
-        const name = node.childForFieldName("name")?.text;
+        const name = nameText(node.childForFieldName("name"));
         if (name) merge(locals, name, declared(node.childForFieldName("type"), null));
         break;
       }
       case "single_variable_designation":
-        merge(locals, node.text, null);
+        merge(locals, plainName(node.text), null);
         break;
+      case "local_function_statement": {
+        const name = nameText(node.childForFieldName("name"));
+        if (name) merge(locals, name, null);
+        break;
+      }
       case "parameter": {
         // A lambda or local function parameter (the member's own parameters are not in its body).
-        const name = node.childForFieldName("name")?.text;
+        const name = nameText(node.childForFieldName("name"));
         const typeNode = node.childForFieldName("type");
         if (name) merge(locals, name, typeNode ? declared(typeNode, null) : null);
         break;
       }
       case "lambda_expression": {
         const list = node.childForFieldName("parameters");
-        if (list?.type === "identifier") merge(locals, list.text, null);
+        if (list?.type === "identifier") merge(locals, plainName(list.text), null);
         break;
       }
       default:
@@ -207,11 +236,13 @@ function argumentType(argument: SyntaxNode, locals: CSharpLocals): string | null
     }
     case "this":
       return "this";
-    case "identifier":
-      return locals.has(value.text) ? locals.get(value.text)?.type ?? null : `@${value.text}`;
+    case "identifier": {
+      const name = plainName(value.text);
+      return locals.has(name) ? locals.get(name)?.type ?? null : `@${name}`;
+    }
     case "member_access_expression": {
       const name = value.childForFieldName("name");
-      return value.childForFieldName("expression")?.type === "this" && name?.type === "identifier" && !locals.has(name.text) ? `@${name.text}` : null;
+      return value.childForFieldName("expression")?.type === "this" && name?.type === "identifier" && !locals.has(plainName(name.text)) ? `@${plainName(name.text)}` : null;
     }
     case "object_creation_expression":
       return normalizeCSharpType(typeText(value.childForFieldName("type")));
@@ -291,9 +322,17 @@ function receiverProperties(receiver: SyntaxNode | null, locals: CSharpLocals): 
     const type = normalizeCSharpType(typeText(node.childForFieldName(node.type === "cast_expression" ? "type" : "right")));
     return type ? { receiverType: type } : {};
   }
-  if (node.type !== "identifier" || !locals.has(node.text)) return {};
-  const local = locals.get(node.text);
+  if (node.type !== "identifier" || !locals.has(plainName(node.text))) return {};
+  const local = locals.get(plainName(node.text));
   return local?.type ? { receiverIsLocal: true, receiverType: local.type } : { receiverIsLocal: true };
+}
+
+// The receiver of a call as stored: its compacted text, or (when longer than `MAX_RECEIVER_TEXT`, without reading all of
+// it) a cut prefix marked truncated. A truncated receiver is never evaluated.
+function receiverOf(node: SyntaxNode): { text: string; truncated: boolean } {
+  if (node.endIndex - node.startIndex > MAX_RECEIVER_TEXT) return { text: `${compactExpression(node.text.slice(0, MAX_STORED_TEXT))}~${node.startIndex}-${node.endIndex}`, truncated: true };
+  const text = compactExpression(node.text);
+  return text.length > MAX_RECEIVER_TEXT ? { text: `${text.slice(0, MAX_STORED_TEXT)}~${node.startIndex}-${node.endIndex}`, truncated: true } : { text, truncated: false };
 }
 
 function build(
@@ -310,18 +349,21 @@ function build(
   const line = node.startPosition.row + 1;
   const qualifier = qualifierOf(unwrap(receiver), locals);
   const receiverKind = receiverKindOf(receiver);
+  // A long expression (`a.B().C()...`) is cut for the id and the name; the position keeps the id unique.
+  const shown = expression.length > MAX_STORED_TEXT ? `${expression.slice(0, MAX_STORED_TEXT)}~${expression.length}` : expression;
   return {
-    id: `${functionId}:call:${line}:${node.startPosition.column}:${expression}`,
+    id: `${functionId}:call:${line}:${node.startPosition.column}:${shown}`,
     label: "Call",
     properties: {
-      name: expression,
-      expression,
+      name: shown,
+      expression: shown,
       callee,
       receiver: receiverText,
       line,
       columnNumber: node.startPosition.column,
       callKind: kind,
       ...(receiverKind === null ? {} : { receiverKind }),
+      ...(receiverText !== null && receiverText.includes("~") && /~\d+-\d+$/u.test(receiverText) ? { receiverTruncated: true } : {}),
       ...(qualifier === null ? {} : { qualifier }),
       ...receiverProperties(receiver, locals),
       ...extra,
@@ -338,27 +380,41 @@ function withArguments(node: SyntaxNode, locals: CSharpLocals): Record<string, s
 // The simple name and generic arguments of a method name (`Gen<int>` is `Gen`, `int`).
 function nameAndTypeArguments(node: SyntaxNode | null): { name: string; typeArguments: string | null } | null {
   if (!node) return null;
-  if (node.type === "identifier") return { name: node.text, typeArguments: null };
+  if (node.type === "identifier") return { name: plainName(node.text), typeArguments: null };
   if (node.type === "generic_name") {
     const id = node.namedChildren.find((child) => child.type === "identifier");
     const list = node.namedChildren.find((child) => child.type === "type_argument_list");
-    return id ? { name: id.text, typeArguments: list ? compactNoSpace(list.text).slice(1, -1) : null } : null;
+    return id ? { name: plainName(id.text), typeArguments: list ? compactNoSpace(list.text).slice(1, -1) : null } : null;
   }
   return null;
 }
 
 // What `new()` constructs when the declaration around it says so: `Foo x = new();`, a field or property `Foo X = new();`,
 // `x = new();` for a local `x` of known type. Null when the type is not written anywhere near.
-function implicitTargetType(node: SyntaxNode, locals: CSharpLocals): string | null {
+function implicitTargetType(node: SyntaxNode, locals: CSharpLocals): { type: string; written: string } | null {
   const parent = node.parent;
   if (!parent) return null;
-  if (parent.type === "variable_declarator" && parent.parent?.type === "variable_declaration") return normalizeCSharpType(typeText(parent.parent.childForFieldName("type")));
-  if (parent.type === "property_declaration") return normalizeCSharpType(typeText(parent.childForFieldName("type")));
+  const from = (text: string | null | undefined): { type: string; written: string } | null => {
+    const type = normalizeCSharpType(text);
+    return type ? { type, written: text! } : null;
+  };
+  if (parent.type === "variable_declarator" && parent.parent?.type === "variable_declaration") return from(typeText(parent.parent.childForFieldName("type")));
+  if (parent.type === "property_declaration") return from(typeText(parent.childForFieldName("type")));
   if (parent.type === "assignment_expression" && parent.childForFieldName("right")?.id === node.id) {
     const left = parent.childForFieldName("left");
-    if (left?.type === "identifier") return locals.get(left.text)?.type ?? null;
+    if (left?.type === "identifier") {
+      const local = locals.get(plainName(left.text));
+      return local?.type ? { type: local.type, written: local.fullType ?? local.type } : null;
+    }
   }
   return null;
+}
+
+// `typeArity` of a constructor call: the generic arguments the type was written with (`new Box<string>()` is 1).
+function typeArityProperties(written: string): Record<string, string | number> {
+  const args = trailingGenericArguments(written);
+  const arity = trailingArity(written);
+  return args !== null && arity !== undefined ? { typeArity: arity, typeArguments: args.join(",") } : {};
 }
 
 // The Call node of an invocation, `new T(...)`, target-typed `new(...)` or `this(...)` / `base(...)`; null when `node`
@@ -378,7 +434,8 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: CSh
         const parts = nameAndTypeArguments(fn.childForFieldName("name"));
         const object = fn.childForFieldName("expression");
         if (!parts || !object) return null;
-        return build(functionId, node, `${compactExpression(object.text)}.${parts.name}`, parts.name, object, compactExpression(object.text), "method", { ...args, ...(parts.typeArguments ? { typeArguments: parts.typeArguments } : {}) }, locals);
+        const stored = receiverOf(object);
+        return build(functionId, node, `${stored.text}.${parts.name}`, parts.name, object, stored.text, "method", { ...args, ...(parts.typeArguments ? { typeArguments: parts.typeArguments } : {}) }, locals);
       }
       if (fn.type === "conditional_access_expression") {
         const condition = fn.childForFieldName("condition");
@@ -386,14 +443,15 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: CSh
         if (!condition || !tail) return null;
         let nameNode: SyntaxNode | null = null;
         let receiver: SyntaxNode | null = condition;
-        let receiverText = compactExpression(condition.text);
+        let receiverText = receiverOf(condition).text;
         if (tail.type === "member_binding_expression") {
           nameNode = tail.childForFieldName("name");
         } else if (tail.type === "member_access_expression") {
           nameNode = tail.childForFieldName("name");
           // `a?.B.C()`: the receiver is everything before `.C`.
           receiver = null;
-          receiverText = compactExpression(fn.text.slice(0, (nameNode?.startIndex ?? fn.endIndex) - fn.startIndex)).replace(/\.$/u, "");
+          const cut = (nameNode?.startIndex ?? fn.endIndex) - fn.startIndex;
+          receiverText = (cut > MAX_RECEIVER_TEXT ? `${compactExpression(fn.text.slice(0, MAX_STORED_TEXT))}~${fn.startIndex}-${fn.startIndex + cut}` : compactExpression(fn.text.slice(0, cut))).replace(/\.$/u, "");
         } else return null;
         const parts = nameAndTypeArguments(nameNode);
         if (!parts) return null;
@@ -405,14 +463,15 @@ export function createCallNode(functionId: string, node: SyntaxNode, locals: CSh
       const typeNode = node.childForFieldName("type");
       const type = normalizeCSharpType(typeText(typeNode));
       if (!type) return null;
-      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, null, "constructor", withArguments(node, locals), locals);
+      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, null, "constructor", { ...withArguments(node, locals), ...typeArityProperties(typeText(typeNode)) }, locals);
       if (type.includes(".")) call.properties.qualifier = type.slice(0, type.lastIndexOf("."));
       return call;
     }
     case "implicit_object_creation_expression": {
-      const type = implicitTargetType(node, locals);
-      if (!type) return build(functionId, node, "new()", "new", null, null, "constructor", { ...withArguments(node, locals), receiverKind: "implicit-new" }, locals);
-      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, null, "constructor", { ...withArguments(node, locals), receiverKind: "implicit-new" }, locals);
+      const target = implicitTargetType(node, locals);
+      if (!target) return build(functionId, node, "new()", "new", null, null, "constructor", { ...withArguments(node, locals), receiverKind: "implicit-new" }, locals);
+      const { type } = target;
+      const call = build(functionId, node, `new ${type}`, lastSegment(type), null, null, "constructor", { ...withArguments(node, locals), ...typeArityProperties(target.written), receiverKind: "implicit-new" }, locals);
       if (type.includes(".")) call.properties.qualifier = type.slice(0, type.lastIndexOf("."));
       return call;
     }

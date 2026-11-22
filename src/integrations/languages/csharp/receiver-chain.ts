@@ -5,20 +5,27 @@ import { normalizeCSharpType } from "./syntax.js";
 export type Segment =
   | { kind: "name"; name: string }
   | { kind: "call"; name: string; argCount: number }
-  | { kind: "new"; typeName: string; argCount: number }
+  | { kind: "new"; typeName: string; /** The type as written, with its generic arguments (`Box<Foo>`). */ written: string; argCount: number }
   | { kind: "literal"; type: string }
   /** `(expr)`, `((T)expr)` (cast: `cast` is T) or `(expr as T)`. */
   | { kind: "paren"; inner: string; cast: string | null };
 
-const identifier = /^[\p{L}_@][\p{L}\p{N}_]*/u;
+// Sticky patterns: matched at `position` of the source, so the walk never slices the rest of the text.
+const identifier = /[\p{L}_@][\p{L}\p{N}_]*/uy;
+const stringStart = /(?:\$@|@\$|\$|@)?"/uy;
+const numberLiteral = /(?:\d+\.\d+(?:[dDfFmM])?|\d+(?:[uUlL]{0,2})|true|false|'(?:\\.|[^'\\])')(?![\p{L}\p{N}_])/uy;
+const matchAt = (pattern: RegExp, source: string, position: number): string | undefined => {
+  pattern.lastIndex = position;
+  return pattern.exec(source)?.[0];
+};
 
 export function splitChain(text: string): Segment[] | null {
   const segments: Segment[] = [];
   let position = 0;
-  const source = text.trim();
+  // `global::A.B` is `A.B`.
+  const source = text.trim().replace(/^global::/u, "");
   while (position < source.length) {
-    const rest = source.slice(position);
-    if (rest.startsWith("new ") || rest.startsWith("new(")) {
+    if (source.startsWith("new ", position) || source.startsWith("new(", position)) {
       let end = position + 3;
       while (source[end] === " ") end += 1;
       let depth = 0;
@@ -31,7 +38,7 @@ export function splitChain(text: string): Segment[] | null {
       const typeName = normalizeCSharpType(source.slice(position + 3, end));
       const close = matching(source, end);
       if (!typeName || close < 0) return null;
-      segments.push({ kind: "new", typeName, argCount: countArguments(source.slice(end + 1, close)) });
+      segments.push({ kind: "new", typeName, written: source.slice(position + 3, end).trim(), argCount: countArguments(source.slice(end + 1, close)) });
       position = close + 1;
       // An object or collection initializer, `{ A = 1 }`.
       while (source[position] === " ") position += 1;
@@ -40,10 +47,11 @@ export function splitChain(text: string): Segment[] | null {
         if (closeBrace < 0) return null;
         position = closeBrace + 1;
       }
-    } else if (/^(?:\$@|@\$|\$|@)?"/u.test(rest)) {
-      const start = position + rest.indexOf("\"");
+    } else if (matchAt(stringStart, source, position) !== undefined) {
+      const prefix = matchAt(stringStart, source, position)!;
+      const start = position + prefix.length - 1;
       let end = start + 1;
-      const verbatim = rest.startsWith("@") || rest.startsWith("$@") || rest.startsWith("@$");
+      const verbatim = prefix.includes("@");
       while (end < source.length) {
         if (!verbatim && source[end] === "\\") end += 2;
         else if (verbatim && source[end] === "\"" && source[end + 1] === "\"") end += 2;
@@ -53,19 +61,19 @@ export function splitChain(text: string): Segment[] | null {
       if (end >= source.length) return null;
       segments.push({ kind: "literal", type: "string" });
       position = end + 1;
-    } else if (rest.startsWith("(")) {
+    } else if (source[position] === "(") {
       const close = matching(source, position);
       if (close < 0) return null;
       const inner = source.slice(position + 1, close);
       segments.push({ kind: "paren", inner, cast: castTypeOf(inner) });
       position = close + 1;
     } else {
-      const literal = /^(?:\d+\.\d+(?:[dDfFmM])?|\d+(?:[uUlL]{0,2})|true|false|'(?:\\.|[^'\\])')(?![\p{L}\p{N}_])/u.exec(rest)?.[0];
-      if (literal && segments.length === 0) {
+      const literal = segments.length === 0 ? matchAt(numberLiteral, source, position) : undefined;
+      if (literal) {
         segments.push({ kind: "literal", type: literalType(literal) });
         position += literal.length;
       } else {
-        const name = identifier.exec(rest)?.[0];
+        const name = matchAt(identifier, source, position);
         if (!name) return null;
         position += name.length;
         // `Name<T>(..)`: a generic method call.
