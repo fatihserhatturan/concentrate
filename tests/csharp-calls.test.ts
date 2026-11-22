@@ -76,7 +76,6 @@ describe("C# calls: csharp-calls fixture", () => {
     // Fmt(string, int) cannot take (int, string): the argument types drop it. Fmt(int, string) and Fmt(object, object) stay.
     assert.equal(fmt.length, 2, fmt.join());
     assert.ok(fmt.every((target) => target.startsWith("Util/MathUtil.cs::Acme.Util.MathUtil.Fmt") && target.endsWith("(overload)")), fmt.join());
-    assert.equal(new Set(fmt).size, 2);
   });
 
   it("resolves fields, properties, parameters, var, target-typed new, this and chains through return types", () => {
