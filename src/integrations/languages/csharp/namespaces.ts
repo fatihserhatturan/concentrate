@@ -1,5 +1,7 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
-import { csharpNamespaceIndexOf, setCSharpNamespaceIndex, type CSharpNamespaceIndex } from "./project.js";
+import { projectOfFile, visibleProjects } from "./project/index.js";
+import type { CSharpProject } from "./project/types.js";
+import { csharpNamespaceIndexOf, csharpProjectModelOf, setCSharpNamespaceIndex, type CSharpNamespaceIndex } from "./project.js";
 
 // The namespace index of a C# scan plus everything the `using` directives add on top of it.
 //
@@ -58,7 +60,16 @@ export interface CSharpUsingIndex {
   typeIdsByName(qualifiedName: string): readonly string[];
   /** Files declaring the type (every file of a partial type). */
   typeFiles(qualifiedName: string): readonly string[];
-  resolveUsing(shape: CSharpUsingShape): CSharpUsingResolution;
+  /** Resolves a `using`; `viewerFileId` (the file whose view applies) restricts it to the namespaces and types its project can see. */
+  resolveUsing(shape: CSharpUsingShape, viewerFileId?: string): CSharpUsingResolution;
+  /** True when the scan has C# projects, so visibility can hide something. */
+  readonly projectScoped: boolean;
+  /** Whether `targetFileId` is visible from `viewerFileId`: same project or a transitive ProjectReference; files in no project see and are seen by everything. */
+  canSee(viewerFileId: string, targetFileId: string): boolean;
+  /** Whether `namespace` (declared or an ancestor of one) exists in the view of `viewerFileId`. */
+  hasNamespaceFor(viewerFileId: string, namespace: string): boolean;
+  /** The `global using`s that apply to `fileId`: those written in files of its project (of the project-less files for a file in no project), then the project's model usings (SDK implicit and `<Using>` items). */
+  globalUsingsFor(fileId: string): readonly CSharpUsing[];
   /** All usings of the scan in (file id, import id) order, resolved. */
   readonly usings: readonly CSharpUsing[];
   readonly globalUsings: readonly CSharpUsing[];
@@ -110,6 +121,30 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
       declaredBy.set(namespace, files);
     }
   }
+  // Projects: the project of each file and what each project sees, computed once per scan.
+  const model = csharpProjectModelOf(graph);
+  const projectScoped = model.projects.length > 0;
+  const projectByFileId = new Map<string, CSharpProject | undefined>();
+  const projectKey = (fileId: string): string => {
+    if (!projectScoped) return "";
+    let project = projectByFileId.get(fileId);
+    if (project === undefined && !projectByFileId.has(fileId)) {
+      const relative = graph.node(fileId)?.properties.relativePath;
+      project = typeof relative === "string" ? projectOfFile(model, relative) : undefined;
+      projectByFileId.set(fileId, project);
+    }
+    return project?.file ?? "";
+  };
+  const visibleOf = new Map<string, Set<string>>();
+  for (const project of model.projects) visibleOf.set(project.file, visibleProjects(model, project.file));
+  const canSee = (viewerFileId: string, targetFileId: string): boolean => {
+    if (!projectScoped) return true;
+    const viewer = projectKey(viewerFileId);
+    if (viewer === "") return true;
+    const target = projectKey(targetFileId);
+    return target === "" || target === viewer || (visibleOf.get(viewer)?.has(target) ?? false);
+  };
+
   const known = new Set<string>();
   for (const namespace of declaredBy.keys()) for (const part of enclosingChain(namespace)) known.add(part);
   const namespaces = [...known].sort(byText);
@@ -157,17 +192,53 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
     return roots.has(root) && !PLATFORM_ROOTS.has(root);
   };
   const typeFiles = (name: string): readonly string[] => filesByName.get(name) ?? [];
-  const resolveUsing = ({ source, kind, scope }: CSharpUsingShape): CSharpUsingResolution => {
+
+  // The namespaces one project sees, built once per project on first use. Files in no project see everything.
+  type View = { declared: Map<string, string[]>; known: Set<string> };
+  const fullView: View = { declared: declaredBy, known };
+  const views = new Map<string, View>();
+  const viewOfKey = (key: string): View => {
+    if (key === "") return fullView;
+    let view = views.get(key);
+    if (!view) {
+      const visible = visibleOf.get(key);
+      const declared = new Map<string, string[]>();
+      const knownHere = new Set<string>();
+      for (const [namespace, files] of declaredBy) {
+        const kept = files.filter((id) => {
+          const target = projectKey(id);
+          return target === "" || target === key || (visible?.has(target) ?? false);
+        });
+        if (kept.length === 0) continue;
+        declared.set(namespace, kept);
+        for (const part of enclosingChain(namespace)) knownHere.add(part);
+      }
+      views.set(key, view = { declared, known: knownHere });
+    }
+    return view;
+  };
+  const viewOfFile = (fileId: string | undefined): View => (fileId === undefined ? fullView : viewOfKey(projectKey(fileId)));
+  const visibleTypeFiles = (name: string, viewer: string | undefined): readonly string[] => {
+    const files = typeFiles(name);
+    return viewer === undefined || !projectScoped ? files : files.filter((id) => canSee(viewer, id));
+  };
+
+  const resolveUsing = ({ source, kind, scope }: CSharpUsingShape, viewerFileId?: string): CSharpUsingResolution => {
     const written = stripGlobal(source);
+    const view = viewOfFile(viewerFileId);
     for (const name of candidates(written, scope)) {
       // `using X;` names a namespace, `using static X.Y;` a type, an alias either.
-      if (kind !== "static" && declaredBy.has(name)) return { target: name, targetKind: "namespace", fileIds: index.filesOf(name), expected: true };
-      if (kind !== "normal" && idsByName.has(name)) return { target: name, targetKind: "type", fileIds: typeFiles(name), expected: true };
+      const files = kind !== "static" ? view.declared.get(name) : undefined;
+      if (files !== undefined) return { target: name, targetKind: "namespace", fileIds: [...files].sort(byText), expected: true };
+      if (kind !== "normal" && idsByName.has(name)) {
+        const here = visibleTypeFiles(name, viewerFileId);
+        if (here.length > 0 || !projectScoped) return { target: name, targetKind: "type", fileIds: here, expected: true };
+      }
       // Ancestor-only namespace: real, but no file declares it. Not an error and no file.
-      if (kind !== "static" && known.has(name)) return { target: name, targetKind: "namespace", fileIds: [], expected: false };
+      if (kind !== "static" && view.known.has(name)) return { target: name, targetKind: "namespace", fileIds: [], expected: false };
     }
-    // Declared nowhere: a name under the scan's own root namespace counts as unresolved; System, Microsoft and
-    // foreign roots (NuGet packages) are external.
+    // Declared nowhere (or only in a project this one cannot see): a name under the scan's own root namespace counts
+    // as unresolved; System, Microsoft and foreign roots (NuGet packages) are external.
     return { target: written, targetKind: "external", fileIds: [], expected: isProjectRoot(written) };
   };
 
@@ -178,7 +249,7 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
     if (fileId === undefined || typeof p.source !== "string") continue;
     const kind = p.importKind === "static" || p.importKind === "alias" ? p.importKind : "normal";
     const scope = typeof p.usingScope === "string" ? p.usingScope : "";
-    const resolution = resolveUsing({ source: p.source, kind, scope });
+    const resolution = resolveUsing({ source: p.source, kind, scope }, fileId);
     usings.push({
       fileId,
       importId: node.id,
@@ -202,7 +273,47 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
     list.push(using);
     byFile.set(using.fileId, list);
   }
+  // `global using`s per project (key "" = files in no project): written in a file of the project, then the model's
+  // `usings`. Computed once per project.
+  const firstFileByKey = new Map<string, string>();
+  for (const id of fileSet) {
+    const key = projectKey(id);
+    if (key !== "" && !firstFileByKey.has(key)) firstFileByKey.set(key, id);
+  }
+  const globalsByKey = new Map<string, CSharpUsing[]>();
+  const globalsOfKey = (key: string): CSharpUsing[] => {
+    const cached = globalsByKey.get(key);
+    if (cached) return cached;
+    const list = usings.filter((using) => using.isGlobal && projectKey(using.fileId) === key);
+    const project = key === "" ? undefined : model.projects.find((candidate) => candidate.file === key);
+    (project?.usings ?? []).forEach((entry, position) => {
+      const kind = entry.static ? "static" : entry.alias !== null ? "alias" : "normal";
+      const resolution = resolveUsing({ source: entry.namespace, kind, scope: "" }, firstFileByKey.get(key));
+      list.push({
+        fileId: key,
+        importId: `csharp:project-using:${key}:${position}`,
+        source: entry.namespace,
+        kind,
+        alias: entry.alias ?? undefined,
+        isGlobal: true,
+        scope: "",
+        scopeStart: undefined,
+        scopeEnd: undefined,
+        arity: undefined,
+        target: resolution.target,
+        targetKind: resolution.targetKind,
+        fileIds: resolution.fileIds,
+      });
+    });
+    globalsByKey.set(key, list);
+    return list;
+  };
+
   extras.set(index, {
+    projectScoped,
+    canSee,
+    hasNamespaceFor: (viewerFileId, namespace) => viewOfFile(viewerFileId).known.has(namespace),
+    globalUsingsFor: (fileId) => globalsOfKey(projectKey(fileId)),
     typeIdsByName: (name) => idsByName.get(name) ?? [],
     typeFiles,
     resolveUsing,
@@ -245,7 +356,7 @@ export function usingsInScope(source: IGraphContributor | CSharpNamespaceIndex, 
   const ordered = [
     ...own.filter((using) => using.scope !== "").sort((a, b) => b.scope.length - a.scope.length),
     ...own.filter((using) => using.scope === ""),
-    ...usingIndex.globalUsings,
+    ...usingIndex.globalUsingsFor(fileId),
   ];
   for (const using of ordered) {
     if (using.kind === "alias" && using.alias !== undefined) {

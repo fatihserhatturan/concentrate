@@ -57,7 +57,10 @@ export type CSharpUsingLevel = {
 export type CSharpTypeIndex = {
   types: readonly CSharpType[];
   byId: ReadonlyMap<string, CSharpType>;
-  byQualifiedName(name: string, arity?: number): CSharpType | null;
+  /** `fileId`: the use site, when known; types of projects it cannot see are not found. */
+  byQualifiedName(name: string, arity?: number, fileId?: string): CSharpType | null;
+  /** Whether `type` is visible from `fileId` (same project or a transitive ProjectReference; files in no project see everything). */
+  visibleFrom(fileId: string, type: CSharpType): boolean;
   /** The type `name` means when written inside `scope` (`name` may be dotted; `arity`: number of generic arguments when known). */
   resolve(name: string, scope: CSharpTypeScope, arity?: number): CSharpType | null;
   /** The type that encloses `type` (null for a top-level type). */
@@ -70,7 +73,7 @@ export type CSharpTypeIndex = {
   usingScope(fileId: string, namespace: string, line?: number): readonly CSharpUsingLevel[];
   /** The namespace `name` is (a declared namespace or an ancestor of one), resolved through namespace aliases of the scope. */
   namespaceNamed(name: string, scope: CSharpTypeScope): string | null;
-  hasNamespace(name: string): boolean;
+  hasNamespace(name: string, fileId?: string): boolean;
 };
 
 const keywordTypes: ReadonlySet<string> = new Set([
@@ -275,7 +278,11 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     const plain = list.filter((type) => type.arity === 0);
     return plain.length === 1 ? plain[0]! : null;
   };
-  const byQualifiedName = (name: string, arity?: number): CSharpType | null => pick(byQualified.get(name), arity);
+  const scoped = csharpUsingIndexOf(graph);
+  const visibleFrom = (fileId: string, type: CSharpType): boolean => scoped === undefined || !scoped.projectScoped || type.fileIds.some((id) => scoped.canSee(fileId, id));
+  const visibleOnly = (list: readonly CSharpType[] | undefined, fileId: string | undefined): readonly CSharpType[] | undefined =>
+    list === undefined || fileId === undefined || scoped === undefined || !scoped.projectScoped ? list : list.filter((type) => visibleFrom(fileId, type));
+  const byQualifiedName = (name: string, arity?: number, fileId?: string): CSharpType | null => pick(visibleOnly(byQualified.get(name), fileId), arity);
   const enclosing = (type: CSharpType): CSharpType | null => {
     if (type.outer === null) return null;
     const list = byQualified.get(type.outer);
@@ -299,7 +306,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     const own = (usingIndex?.usingsOfFile(fileId) ?? []).filter((using) => usingAppliesAt(using, line));
     return namespaceChain(namespace).map((level) => {
       const result: CSharpUsingLevel = { namespace: level, usings: [], aliases: new Map(), statics: [], aliasArities: new Map() };
-      const resolved = [...own.filter((using) => using.scope === level && !using.isGlobal), ...(level === "" ? usingIndex?.globalUsings ?? [] : [])];
+      const resolved = [...own.filter((using) => using.scope === level && !using.isGlobal), ...(level === "" ? usingIndex?.globalUsingsFor(fileId) ?? [] : [])];
       for (const using of resolved) {
         if (!using.source) continue;
         if (using.kind === "alias" && using.alias !== undefined) {
@@ -333,7 +340,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     return parseJsonList<string>(graph.node(scope.fileId)?.properties.csharpNamespaces)[0] ?? "";
   };
 
-  const hasNamespace = (name: string): boolean => namespaceIndex.hasNamespace(name);
+  const hasNamespace = (name: string, fileId?: string): boolean => (fileId !== undefined && usingIndex !== undefined ? usingIndex.hasNamespaceFor(fileId, name) : namespaceIndex.hasNamespace(name));
   const namespaceNamed = (name: string, scope: CSharpTypeScope): string | null => {
     const levels = usingScope(scope.fileId, namespaceOfScope(scope), scope.line);
     const [first, ...rest] = name.split(".");
@@ -341,17 +348,17 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       const target = level.aliases.get(first!);
       if (target !== undefined) {
         const full = [target, ...rest].join(".");
-        return hasNamespace(full) ? full : null;
+        return hasNamespace(full, scope.fileId) ? full : null;
       }
     }
     for (const level of levels) {
       const full = level.namespace === "" ? name : `${level.namespace}.${name}`;
-      if (hasNamespace(full)) return full;
+      if (hasNamespace(full, scope.fileId)) return full;
     }
     return null;
   };
 
-  const topLevel = (namespace: string, name: string, arity: number | undefined): CSharpType | null => pick(topLevelByNamespace.get(namespace)?.get(name), arity);
+  const topLevel = (namespace: string, name: string, arity: number | undefined, fileId: string): CSharpType | null => pick(visibleOnly(topLevelByNamespace.get(namespace)?.get(name), fileId), arity);
 
   const inheritedMember = (type: CSharpType, name: string, arity: number | undefined, seen: Set<string>): CSharpType | null => {
     if (seen.has(type.id)) return null;
@@ -367,7 +374,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     if (seen.has(target)) return null;
     seen.add(target);
     // The arity the alias was written with is never dropped: `using IntBox = N.Box<int>;` is `Box<T>`, not a plain `Box`.
-    return byQualifiedName(target, arity) ?? resolveDotted(target, { fileId: scope.fileId, namespace: "" }, arity, seen);
+    return byQualifiedName(target, arity, scope.fileId) ?? resolveDotted(target, { fileId: scope.fileId, namespace: "" }, arity, seen);
   };
 
   const resolveSimple = (name: string, scope: CSharpTypeScope, arity: number | undefined, seen: Set<string> = new Set()): CSharpType | null => {
@@ -377,7 +384,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       if (nested) return nested;
     }
     for (const level of usingScope(scope.fileId, namespaceOfScope(scope), scope.line)) {
-      const here = topLevel(level.namespace, name, arity);
+      const here = topLevel(level.namespace, name, arity, scope.fileId);
       if (here) return here;
       const target = level.aliases.get(name);
       if (target !== undefined) {
@@ -385,11 +392,11 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
         if (aliased) return aliased;
       }
       for (const using of level.usings) {
-        const found = topLevel(using, name, arity);
+        const found = topLevel(using, name, arity, scope.fileId);
         if (found) return found;
       }
       for (const source of level.statics) {
-        const owner = byQualifiedName(source);
+        const owner = byQualifiedName(source, undefined, scope.fileId);
         const found = owner ? member(owner, name, arity) : null;
         if (found) return found;
       }
@@ -411,11 +418,11 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     for (const level of usingScope(scope.fileId, namespaceOfScope(scope), scope.line)) {
       const target = level.aliases.get(first!);
       if (target !== undefined && rest.length > 0) {
-        const found = byQualifiedName(`${target}.${rest.join(".")}`, arity);
+        const found = byQualifiedName(`${target}.${rest.join(".")}`, arity, scope.fileId);
         if (found) return found;
       }
       const full = level.namespace === "" ? name : `${level.namespace}.${name}`;
-      const found = byQualifiedName(full, arity);
+      const found = byQualifiedName(full, arity, scope.fileId);
       if (found) return found;
     }
     return null;
@@ -482,7 +489,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     return subtypesById.get(type.id) ?? [];
   };
 
-  return { types, byId, byQualifiedName, resolve, enclosing, supertypes, subtypes, usingScope, namespaceNamed, hasNamespace };
+  return { types, byId, byQualifiedName, visibleFrom, resolve, enclosing, supertypes, subtypes, usingScope, namespaceNamed, hasNamespace };
 }
 
 function push<K, V>(map: Map<K, V[]>, key: K, value: V): void {

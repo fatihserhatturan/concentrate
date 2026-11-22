@@ -17,7 +17,7 @@ export const csharpImportResolver: ILanguageImportResolver = {
   // The session installs the namespace index the call and inheritance resolvers read, so it runs even without Import nodes.
   sessionWithoutImports: true,
   async createSession({ graph, rootPath, fileIdByRelativePath }) {
-    // Wave 2 track D consumes the model (`csharpProjectModelOf(graph)`) to scope usings and namespaces per project.
+    // The model scopes usings and namespace visibility per project (`namespaces.ts` reads it back from the graph).
     setCSharpProjectModel(graph, await readCSharpProjectModel(rootPath, fileIdByRelativePath.keys()));
     const index = buildCSharpNamespaceIndex(graph);
     setCSharpNamespaceIndex(graph, index);
@@ -25,7 +25,7 @@ export const csharpImportResolver: ILanguageImportResolver = {
     return (node, importerFileId, source) => {
       const kind = node.properties.importKind === "static" || node.properties.importKind === "alias" ? node.properties.importKind : "normal";
       const scope = typeof node.properties.usingScope === "string" ? node.properties.usingScope : "";
-      const resolution = usingIndex.resolveUsing({ source, kind, scope });
+      const resolution = usingIndex.resolveUsing({ source, kind, scope }, importerFileId);
       const fileIds = resolution.fileIds.filter((id) => id !== importerFileId);
       return { fileIds, expected: resolution.fileIds.length === 0 ? resolution.expected : false };
     };
