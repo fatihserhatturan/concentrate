@@ -1,0 +1,12 @@
+<Project>
+  <PropertyGroup>
+    <Company>Acme</Company>
+    <Copyright>Copyright $(Company) 2026</Copyright>
+    <Nullable>enable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="System.Diagnostics" />
+  </ItemGroup>
+</Project>

@@ -1,7 +1,8 @@
 import type { ILanguageImportResolver } from "../../../core/contracts/import-resolver.js";
 import { isCSharpFile } from "../file-kind.js";
 import { buildCSharpNamespaceIndex, csharpUsingIndexOf } from "./namespaces.js";
-import { setCSharpNamespaceIndex } from "./project.js";
+import { readCSharpProjectModel } from "./project/index.js";
+import { setCSharpNamespaceIndex, setCSharpProjectModel } from "./project.js";
 
 // A `using X;` resolves to every file declaring namespace X (a namespace spans many files); `using static X.Y;`
 // and an alias target resolve to the file(s) declaring the type (every file of a partial type), or to the
@@ -15,7 +16,9 @@ export const csharpImportResolver: ILanguageImportResolver = {
   supports: isCSharpFile,
   // The session installs the namespace index the call and inheritance resolvers read, so it runs even without Import nodes.
   sessionWithoutImports: true,
-  async createSession({ graph }) {
+  async createSession({ graph, rootPath, fileIdByRelativePath }) {
+    // Wave 2 track D consumes the model (`csharpProjectModelOf(graph)`) to scope usings and namespaces per project.
+    setCSharpProjectModel(graph, await readCSharpProjectModel(rootPath, fileIdByRelativePath.keys()));
     const index = buildCSharpNamespaceIndex(graph);
     setCSharpNamespaceIndex(graph, index);
     const usingIndex = csharpUsingIndexOf(index)!;

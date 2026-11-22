@@ -77,8 +77,9 @@ import { csharpGraphSchema } from "../integrations/languages/csharp/schema.js";
 import { csharpLanguages } from "../integrations/languages/csharp/descriptor.js";
 import { csharpParser } from "../integrations/languages/csharp/parser.js";
 import { csharpCallResolver, csharpInheritanceResolver } from "../integrations/languages/csharp/resolvers.js";
+import { csharpManifestReader } from "../integrations/languages/csharp/manifest.js";
 import { csharpImportResolver } from "../integrations/languages/csharp/import-resolver.js";
-import { csharpEntrypointsContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
+import { csharpEntrypointsContributor, csharpProjectsContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -116,7 +117,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   }
 
   // js-ts first: it owns a directory that has both a package.json and a pyproject.toml; Java comes last.
-  for (const reader of [jsTsManifestReader, pythonManifestReader, javaManifestReader]) {
+  for (const reader of [jsTsManifestReader, pythonManifestReader, javaManifestReader, csharpManifestReader]) {
     registry.registerProjectManifestReader(reader);
   }
 
@@ -181,6 +182,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     scriptsContributor,
     cppBuildContributor,
     javaBuildContributor,
+    csharpProjectsContributor,
     stylesContributor,
     dataAccessContributor,
     nuxtAutoImportsContributor,

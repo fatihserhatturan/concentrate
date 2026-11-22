@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <UserSecretsId>$(Nope)</UserSecretsId>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Shop.Core\Shop.Core.csproj" />
+    <ProjectReference Include="..\Shop.Data\Shop.Data.csproj" />
+    <ProjectReference Include="..\Shop.Missing\Shop.Missing.csproj" />
+  </ItemGroup>
+</Project>
