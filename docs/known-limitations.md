@@ -2690,10 +2690,10 @@ that scope.
   inheritance with interface and override dispatch; `static Main` and top-level
   statements as entrypoints; xUnit, NUnit and MSTest tests; unused-export rules.
 - **Entrypoints.** A static `Main` with a valid signature and every file's
-  top-level statements are entrypoints. CS7022 (top-level statements win over
-  `Main` within a project) is not applied until project boundaries are read
-  (Phase 45). The unused-export rule likewise treats a valid static `Main` as an
-  entrypoint (a type holding one is kept).
+  top-level statements are entrypoints. CS7022 applies per project: in a project
+  that has top-level statements, a `static Main` is no entrypoint. Files in no
+  project keep the old behavior. The unused-export rule treats a valid static `Main`
+  as an entrypoint (a type holding one is kept).
 - **Tests are detected per framework.** xUnit (`Fact`, `Theory`), NUnit (`Test`,
   `TestCase`, `TestCaseSource`, `Theory`, `TestFixture`, `SetUp`, `TearDown`,
   `OneTimeSetUp`, `OneTimeTearDown`) and MSTest (`TestMethod`, `DataTestMethod`,
@@ -2701,10 +2701,33 @@ that scope.
   attribute name counts only when that framework's namespace is imported in the
   file (at any scope) or by a `global using`, or when it is written qualified.
   `using F = Xunit.FactAttribute; [F]` works; `using Xunit; [Test]` is no test.
-- **The scan is one project.** The whole scan is treated as one assembly: `global
-  using` and `internal` visibility apply scan-wide. `.csproj` files are not read
-  (projects come in Phase 45), and the SDK implicit usings (`System`, `System.Linq`,
-  ...) are not applied.
+- **Projects and solutions.** Every `.csproj` is a project and a `Package` node
+  (manager `dotnet`), with a dependency on each project it references through
+  `ProjectReference`. `.sln` and `.slnx` files say which solutions list a project.
+  `Directory.Build.props` and `Directory.Packages.props` apply (central package
+  versions included). The project's SDK implicit usings, `<Using>` items and
+  `global using` declarations of its own files apply to its files only. A file
+  resolves namespaces in its own project and in the projects it references,
+  directly or transitively. Names declared only in a project it does not reference
+  stay unresolved. A file in no project sees every project-less file and every
+  project. An executable project (`OutputType` `Exe` or `WinExe`, or a Web or Worker
+  SDK) is an `EntryPoint` of kind `csharp-project` that runs its top-level statements
+  or its `static Main`.
+- **MSBuild is read, not run.** `Condition` attributes are not evaluated: every
+  element counts, except a property written as `Condition="'$(X)' == ''"`, which
+  only applies when `X` is not set yet. `.targets` files and the properties NuGet
+  packages bring are not read. `$(Name)` is expanded from properties of the project
+  and its `Directory.Build.props` and the usual built-ins; environment variables,
+  `SolutionDir` and property functions other than `GetPathOfFileAbove` stay
+  unresolved. Unresolved properties, missing `ProjectReference` targets, missing
+  solution entries and unknown imports are counted (`unresolved`), not guessed.
+- **Project edge cases.** Two projects in one directory: the first by path is the
+  `Package`, the other is not. Multi-targeting (`TargetFrameworks`) is one project,
+  not one per framework. A `.cs` file belongs to the project with the longest
+  directory above it, so a file in a directory outside any project is project-less, and project-less files
+  are visible from every project.
+  A `PackageReference` named like a scanned project links to that project. `bin/`
+  is not ignored (only `obj/` is generated). `.fsproj` and `.vbproj` are not read.
 - `new T()` for a class with no explicit constructor stays unresolved. The graph
   has no synthetic constructor to point at, as in Java.
 - An interface that extends another interface is recorded in `Interface.embeds`,
@@ -2780,7 +2803,7 @@ that scope.
 - `[assembly: ...]` attributes are not emitted.
 - The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
   was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
-- Not read yet: `.csproj` and solutions (Phase 45) and frameworks (later phases).
+- Not read yet: C# frameworks (later phases).
 
 ## Non-code files
 
