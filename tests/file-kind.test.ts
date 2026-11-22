@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import type { LanguageDescriptor } from "../src/core/contracts/language-descriptor.js";
 import { createLanguageFileMatcher, fileMatchesLanguage } from "../src/core/scan/language.js";
-import { isCppFile, isGoFile, isJsTsFile, isPythonFile, isRustFile } from "../src/integrations/languages/file-kind.js";
+import { isCSharpFile, isCppFile, isGoFile, isJsTsFile, isPythonFile, isRustFile } from "../src/integrations/languages/file-kind.js";
 
 // The hand-written lists file-kind.ts used before it read the descriptors.
 const legacy: Record<string, { test: (fileId: string) => boolean; extensions: string[] }> = {
@@ -29,6 +29,11 @@ describe("file-kind through language descriptors", () => {
       assert.deepEqual(accepted, expected.sort());
     });
   }
+
+  it("csharp accepts .cs and .csx only", () => {
+    for (const extension of [".cs", ".csx"]) assert.ok(isCSharpFile(`file:src/a${extension}`), extension);
+    for (const extension of [".csproj", ".c", ".css", ".java", ".cshtml"]) assert.equal(isCSharpFile(`file:src/a${extension}`), false, extension);
+  });
 
   it("matches the extension of the last path segment only", () => {
     assert.equal(isJsTsFile("file:src/a.ts/readme"), false);

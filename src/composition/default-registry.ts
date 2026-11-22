@@ -59,6 +59,7 @@ import { goImportResolver } from "../integrations/languages/go/import-resolver.j
 import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resolver.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
+import { csharpUnusedRules } from "../integrations/languages/csharp/unused.js";
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
 import { javaBuildContributor, javaConfigEnvContributor, javaDataJdbcContributor, javaDataJpaContributor, javaDiContributor, javaHttpClientsContributor, javaEntrypointsContributor, javaFrameworkEntrypointsContributor, javaFrameworkParser, javaGrpcContributor, javaRoutesContributor, javaTestsContributor, javaWebfluxContributor } from "../integrations/frameworks/java/index.js";
@@ -72,6 +73,12 @@ import { cppBuildGraphSchema } from "../integrations/frameworks/cpp/schema.js";
 import { cppGraphSchema } from "../integrations/languages/cpp/schema.js";
 import { javaGraphSchema } from "../integrations/languages/java/schema.js";
 import { javaLanguages } from "../integrations/languages/java/descriptor.js";
+import { csharpGraphSchema } from "../integrations/languages/csharp/schema.js";
+import { csharpLanguages } from "../integrations/languages/csharp/descriptor.js";
+import { csharpParser } from "../integrations/languages/csharp/parser.js";
+import { csharpCallResolver, csharpInheritanceResolver } from "../integrations/languages/csharp/resolvers.js";
+import { csharpImportResolver } from "../integrations/languages/csharp/import-resolver.js";
+import { csharpEntrypointsContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -81,30 +88,30 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   const registry = new CoreIntegrationRegistry();
 
   // Plain languages first: a file name or extension a later descriptor also claims goes to the later one.
-  for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages, ...javaLanguages]) {
+  for (const descriptor of [...plainLanguages, ...jsTsLanguages, ...pythonLanguages, ...goLanguages, ...rustLanguages, ...cppLanguages, ...javaLanguages, ...csharpLanguages]) {
     registry.registerLanguage(descriptor);
   }
 
   // Graph properties each integration adds to the core tables. Rust before C/C++: both add Import
   // properties after `isModule`, and the merged order must stay what the closed schema had.
-  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema, javaGraphSchema]) {
+  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema, javaGraphSchema, csharpGraphSchema]) {
     registry.registerGraphSchema(extension);
   }
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaFrameworkParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaFrameworkParser, csharpParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
-  for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver, javaCallResolver]) {
+  for (const resolver of [cppCallResolver, goCallResolver, rustCallResolver, pythonCallResolver, javaCallResolver, csharpCallResolver]) {
     registry.registerCallResolver(resolver);
   }
 
   // The first that supports an importing file resolves its imports.
-  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, javaImportResolver, jsTsImportResolver]) {
+  for (const resolver of [styleImportResolver, protoImportResolver, rustImportResolver, cppImportResolver, pythonImportResolver, goImportResolver, javaImportResolver, csharpImportResolver, jsTsImportResolver]) {
     registry.registerImportResolver(resolver);
   }
 
-  for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver, javaInheritanceResolver]) {
+  for (const resolver of [goInheritanceResolver, cppInheritanceResolver, pythonInheritanceResolver, rustInheritanceResolver, javaInheritanceResolver, csharpInheritanceResolver]) {
     registry.registerInheritanceResolver(resolver);
   }
 
@@ -114,7 +121,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   }
 
   // The order is the order of the find_unused_exports note's language paragraphs.
-  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules, javaUnusedRules]) {
+  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules, javaUnusedRules, csharpUnusedRules]) {
     registry.registerUnusedExportRules(rules);
   }
 
@@ -160,6 +167,8 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     javaDataJdbcContributor,
     javaConfigEnvContributor,
     javaHttpClientsContributor,
+    csharpEntrypointsContributor,
+    csharpTestsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,

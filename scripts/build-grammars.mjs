@@ -27,6 +27,7 @@ const grammars = [
   { name: "c", package: "tree-sitter-c", version: "0.24.1", dir: "." },
   { name: "cpp", package: "tree-sitter-cpp", version: "0.23.4", dir: "." },
   { name: "java", package: "tree-sitter-java", version: "0.23.5", dir: "." },
+  { name: "csharp", package: "tree-sitter-c-sharp", version: "0.23.5", dir: "." },
   // Non-code files (Phase 22). tree-sitter-powershell 0.26.6 is under two weeks old, so 0.26.4.
   { name: "css", package: "tree-sitter-css", version: "0.25.0", dir: "." },
   { name: "scss", package: "tree-sitter-scss", version: "1.0.0", dir: "." },

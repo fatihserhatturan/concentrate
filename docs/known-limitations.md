@@ -2674,6 +2674,114 @@ that scope.
   not to a Java function; only `System.getenv`, `@Value` placeholders and the Spring config
   are Java env reads, so `list_env_config` on a Java project can show variables no Java code uses.
 
+## C#
+
+- The grammar is tree-sitter-c-sharp, vendored as `vendor/grammars/csharp.wasm`. The
+  extensions are `.cs` and `.csx`. `*.g.cs`, `*.g.i.cs`, `*.Designer.cs` and every
+  `.cs` or `.csx` file under an `obj/` directory are generated (the descriptor's
+  `generatedDirectories`, which applies to C# files only: `src/obj/model.py` stays
+  production). A file with a syntax error is kept as a partial graph
+  and gets a scan warning.
+- Covered: block-scoped and file-scoped namespaces, `using`, `using static`,
+  `using Alias = ...` and `global using`; classes, structs, records, enums, delegates
+  (all `Class` nodes told apart by `kind`) and interfaces, nested too; methods,
+  constructors, operators, properties, indexers, events and fields; attributes as
+  `Decorator` nodes; calls resolved through usings, extension methods and
+  inheritance with interface and override dispatch; `static Main` and top-level
+  statements as entrypoints; xUnit, NUnit and MSTest tests; unused-export rules.
+- **Entrypoints.** A static `Main` with a valid signature and every file's
+  top-level statements are entrypoints. CS7022 (top-level statements win over
+  `Main` within a project) is not applied until project boundaries are read
+  (Phase 45). The unused-export rule likewise treats a valid static `Main` as an
+  entrypoint (a type holding one is kept).
+- **Tests are detected per framework.** xUnit (`Fact`, `Theory`), NUnit (`Test`,
+  `TestCase`, `TestCaseSource`, `Theory`, `TestFixture`, `SetUp`, `TearDown`,
+  `OneTimeSetUp`, `OneTimeTearDown`) and MSTest (`TestMethod`, `DataTestMethod`,
+  `TestClass`, `TestInitialize`, ...) each have their own attribute set. A simple
+  attribute name counts only when that framework's namespace is imported in the
+  file (at any scope) or by a `global using`, or when it is written qualified.
+  `using F = Xunit.FactAttribute; [F]` works; `using Xunit; [Test]` is no test.
+- **The scan is one project.** The whole scan is treated as one assembly: `global
+  using` and `internal` visibility apply scan-wide. `.csproj` files are not read
+  (projects come in Phase 45), and the SDK implicit usings (`System`, `System.Linq`,
+  ...) are not applied.
+- `new T()` for a class with no explicit constructor stays unresolved. The graph
+  has no synthetic constructor to point at, as in Java.
+- An interface that extends another interface is recorded in `Interface.embeds`,
+  not as an EXTENDS edge. The schema allows EXTENDS from Class to Class only. Calls
+  still follow the inherited interface members.
+- **Partial types are one node.** `line` and `endLine` are those of the first part.
+  The facts of each part (modifiers, bases, fields, methods) are in
+  `File.csharpPartials`.
+- Generic substitution happens only through a member's own owner (`Box<Foo>.Get()`
+  is a `Foo`, also through `new Box<Foo>().Get()`). A base with type arguments is not
+  substituted (`class S : Base<Foo>` does not give `S` members typed `Foo`), and method
+  type arguments are not inferred from the call (`Map(x => ...)`). A use site with
+  type arguments only matches a type of that arity: `new Stack<int>()` and
+  `class Q : Stack<int>` never resolve to a non-generic `Stack`, and `using IntBox =
+  N.Box<int>;` keeps its arity. Arguments of a type written without any (`new Box(1)`)
+  match a type of that name when it is the only one or the only non-generic one.
+- Accessor calls are not modelled: reading or writing a property, indexer or event
+  is no call to its `get`, `set`, `add` or `remove`. A call of a local function,
+  a delegate (local or parameter, `cb()`), an event (`Changed(this, e)`,
+  `Changed?.Invoke()`) or a method on an element access (`items[0].M()`) is a `Call`
+  node that never resolves, so it counts in the caller's `unresolvedCalls`. A call of
+  an element or of a parenthesized expression (`items[0]()`, `(f)()`) has no name and
+  is not a `Call` node at all. Calls inside a local function or lambda belong to the
+  enclosing method; the local function is not a function of its own. A bare
+  call whose name is a local function, a delegate local or a delegate parameter is
+  never linked to a method of the class or a `using static` type; a local of a plain
+  type (`int Count`) does not hide the method `Count()`.
+- **Locals are typed by what is certain.** A declared type, `new T()`, a cast or `as`
+  give a local its type. `var x = Make();`, `var x = a.B;`, `var x = await M();` (a
+  `Task<T>` or `ValueTask<T>` gives `T`) and `var y = x;` are typed when the resolver
+  runs, from the initializer, when it resolves. A local that shares its name with a
+  field or property of the type (for example a declaration in a sibling block) is
+  unknown, not guessed; a parameter wins over the field. A name declared twice with
+  different types is unknown.
+- Overloads are narrowed by argument count, then by conservative argument types.
+  When candidates remain, each gets a `CALL_RESOLVES_TO` edge with `via: "overload"`.
+  A `partial` method declaration and its implementation are one method: the call
+  links to the part with the body (the declaration alone when there is none).
+- **Dispatch has no fan-out cap.** A call through an interface, an abstract or a
+  virtual method links to every override and implementation in the scan, as in Java.
+  A very wide hierarchy (an interface with thousands of implementations) gives a call
+  as many edges. An interface member is linked to the method an implementing type
+  sees: a derived class's `new` method is only linked when that class lists the
+  interface itself.
+- Usings are scoped per namespace block: a `using` inside `namespace A { ... }` only
+  counts in that block, also when the file opens `A` a second time. The `Import` node
+  carries the block's lines (`usingScopeStart`, `usingScopeEnd`).
+- Verbatim identifiers (`@class`) are stored without the `@` in every name, qualified
+  name and local; `global::A.B` receivers are read as `A.B`. Receivers and
+  expressions longer than 1 000 characters are cut on the `Call` node (the call is
+  marked `receiverTruncated` and a call on such a receiver stays unresolved); the
+  grammar itself keeps only the first links of a very long chain.
+- A name in two used namespaces (CS0104) is not diagnosed: the first match wins.
+- Unused detection is based on name mentions in the scanned C# source, which is
+  conservative: a name in a string counts as a possible reflective use. Access
+  modifiers do not widen or narrow the judgement the way they do in Java: public,
+  internal and protected members are judged alike, by a mention anywhere in the
+  scan (tests included); only `private` and `private protected` members are judged
+  within the files of their type. Members with attributes, overrides, virtual and
+  abstract members, interface implementations and members of types implementing an
+  external interface are never reported. A record or record struct built only with
+  `new Rec(...)` is used; its primary constructor in the type header is no extra
+  mention. Public, internal and protected methods and properties the language binds
+  by name are never reported: `GetEnumerator`, `MoveNext`, `Current`, `Reset`,
+  `Deconstruct`, `GetAwaiter`, `GetResult`, `IsCompleted`, `OnCompleted`,
+  `UnsafeOnCompleted`, `Dispose`, `DisposeAsync`, `Add`, `GetPinnableReference`,
+  `Slice`, `Length`, `Count`, the LINQ query operators (`Select`, `SelectMany`,
+  `Where`, `OrderBy`, `OrderByDescending`, `ThenBy`, `ThenByDescending`, `GroupBy`,
+  `Join`, `GroupJoin`, `Cast`), `Equals`, `GetHashCode` and `ToString`.
+- An import counts as unresolved only when its root namespace is one of the scan's
+  own roots (`Acme.Missing` when the scan declares `Acme.Orders`). `System.*`,
+  `Microsoft.*` and any other root the scan does not declare are external.
+- `[assembly: ...]` attributes are not emitted.
+- The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
+  was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
+- Not read yet: `.csproj` and solutions (Phase 45) and frameworks (later phases).
+
 ## Non-code files
 
 - Every discovered file is a `File` node with a `language` and a `sourceType`.

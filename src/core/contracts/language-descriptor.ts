@@ -40,6 +40,8 @@ export interface LanguageDescriptor {
   readonly generatedFile?: (fileName: string) => boolean;
   /** True for the name of a test helper (mock, stub, setup file). */
   readonly supportFile?: (fileName: string) => boolean;
+  /** Directory names whose files are generated, at any depth (`obj` for .NET build output). */
+  readonly generatedDirectories?: readonly string[];
   /** Lockfiles written by this language's package managers; classified as generated and never parsed. */
   readonly lockfiles?: readonly string[];
   /** Gitignore patterns for what the discovery never walks (`node_modules`, `*.min.js`). */
@@ -58,6 +60,8 @@ export interface FileConventions {
   readonly generatedFile: (fileName: string) => boolean;
   readonly supportFile: (fileName: string) => boolean;
   readonly lockfiles: ReadonlySet<string>;
+  /** Directory names whose files are generated, per language id, from the languages' `generatedDirectories`: they apply to files of that language only. */
+  readonly generatedDirectories: ReadonlyMap<string, readonly string[]>;
   /** Exact file names a language claims (`fileNames`): never documentation because of their extension. */
   readonly claimedFileNames: ReadonlySet<string>;
   readonly ignoredPatterns: readonly string[];

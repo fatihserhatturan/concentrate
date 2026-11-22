@@ -50,11 +50,11 @@ src/
     scan/           — Orchestration, file discovery, manifest, report
       resolution/   — Default call, inheritance and name lookup
   integrations/
-    languages/      — One directory per language (plain, js-ts, python, go, rust, cpp, java): descriptor,
+    languages/      — One directory per language (plain, js-ts, python, go, rust, cpp, java, csharp): descriptor,
                       parser, call/import/inheritance resolvers, unused rules, schema
       syntax/       — tree-sitter on WebAssembly (the only web-tree-sitter importer)
       file-kind.ts  — isXFile helpers built from the descriptors
-    frameworks/     — cpp, go, java, js-ts, proto, python, rust, scripts, sql, styles: routes, dependency
+    frameworks/     — cpp, csharp, go, java, js-ts, proto, python, rust, scripts, sql, styles: routes, dependency
                       injection, environment, data-access and other framework facts
     resolution/     — imports.ts dispatches to the registered import resolvers
 vendor/grammars/    — Prebuilt tree-sitter grammars (.wasm) and their manifest
