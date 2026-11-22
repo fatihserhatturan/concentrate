@@ -22,7 +22,8 @@ export function csharpMethods(graph: IGraphContributor): CSharpMethod[] {
 }
 
 // The File id a graph node id belongs to: members, decorators and calls are `file:<path>:<kind>:<line>...`.
-const FILE_OF_ID = /^(file:.+?):(?:function|field|class|interface|decorator|call)[:\d]/u;
+// The kind segment is `:<kind>:<line>` (a digit run then `:` or the end), so a directory such as `class1/` or `call/` is not one.
+const FILE_OF_ID = /^(file:.+?):(?:function|field|class|interface|decorator|call):\d+(?::|$)/u;
 export const csharpFileOfId = (id: string): string | undefined => FILE_OF_ID.exec(id)?.[1];
 
 // Reads a JSON-list property (`parameters`, `primaryParameters`, `bases`, `baseNames`, `typeParameters`); [] when absent or broken.

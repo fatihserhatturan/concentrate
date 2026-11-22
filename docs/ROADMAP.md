@@ -1700,6 +1700,7 @@ generators are not run: what they write is not in the graph. The decisions of M9
 
 - [x] `services.AddScoped/AddTransient/AddSingleton<IFoo, Foo>()` and factory registrations as providers
 - [x] Constructor and primary-constructor injection, `[FromServices]` parameters and minimal-API handler parameters
+  - Caveat: a handler-parameter `INJECTS` goes from the class declaring the handler method (INJECTS is Class to Class); top-level-statement lambdas get no edge and no ambiguity count, and lambda routes link to the enclosing function, so `impact_of` over-reports sibling lambda routes (e.g. `GET /health`)
 - [x] An interface with one registration resolves to it; anything else counted as ambiguous
 
 ### Acceptance criteria
