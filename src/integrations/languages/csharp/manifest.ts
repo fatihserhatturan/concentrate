@@ -12,7 +12,7 @@ const SCAN_CONVENTIONS = { ignoredPatterns: ["node_modules", ".next", ".turbo"],
 export function declaredCSharpProjects(model: CSharpProjectModel): CSharpProject[] {
   const kept: CSharpProject[] = [];
   const dirs = new Set<string>();
-  for (const project of [...model.projects].sort((a, b) => a.file.localeCompare(b.file))) {
+  for (const project of [...model.projects].sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))) {
     if (dirs.has(project.dir)) continue;
     dirs.add(project.dir);
     kept.push(project);
@@ -23,20 +23,25 @@ export function declaredCSharpProjects(model: CSharpProjectModel): CSharpProject
 async function readPackages({ rootPath, filePaths }: ProjectManifestContext): Promise<DeclaredPackage[]> {
   const model = await readCSharpProjectModel(rootPath, filePaths);
   if (model.projects.length === 0) return [];
-  const nameByFile = new Map(model.projects.map((project) => [project.file, project.name]));
-  return declaredCSharpProjects(model).map((project) => ({
+  const declared = declaredCSharpProjects(model);
+  // A ProjectReference becomes an edge only to a declared project whose name is unique among the declared ones (the
+  // core matches dependencies by name, so a duplicated name would be a wrong edge). Package references are not manifest
+  // dependencies: core drops them, and they are shown as `packageReferences` on the Package node.
+  const nameCount = new Map<string, number>();
+  for (const project of declared) nameCount.set(project.name, (nameCount.get(project.name) ?? 0) + 1);
+  const nameByFile = new Map(declared.filter((project) => nameCount.get(project.name) === 1).map((project) => [project.file, project.name]));
+  return declared.map((project) => ({
     dir: project.dir,
     name: project.name,
     version: null,
     isPrivate: false,
     manager: "dotnet",
     metadataFile: path.posix.basename(project.file),
-    // Project references are internal (matched by project name); package references name third-party packages, which
-    // core ignores unless a scanned project has the same name.
-    dependencies: [
-      ...project.projectReferences.flatMap((file) => nameByFile.get(file) ?? []).map((name) => ({ name, type: "project" })),
-      ...project.packageReferences.map((reference) => ({ name: reference.name, type: "package" })),
-    ],
+    dependencies: project.projectReferences
+      .filter((file) => file !== project.file)
+      .flatMap((file) => nameByFile.get(file) ?? [])
+      .filter((name) => name !== project.name)
+      .map((name) => ({ name, type: "project" })),
   }));
 }
 

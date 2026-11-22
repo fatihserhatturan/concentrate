@@ -38,6 +38,7 @@
     "usings": "STRING",
     "isTestProject": "BOOLEAN",
     "solutions": "STRING",
+    "packageReferences": "STRING",
     "unresolved": "INT64"
    }
   },

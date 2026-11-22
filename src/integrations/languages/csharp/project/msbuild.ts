@@ -37,7 +37,22 @@ const CONFIG_KEYS = [
   "TreatWarningsAsErrors",
   "Version",
 ];
-const TEST_PACKAGES = new Set(["microsoft.net.test.sdk", "xunit", "nunit", "mstest.testframework"]);
+const TEST_PACKAGES = new Set([
+  "microsoft.net.test.sdk",
+  "xunit",
+  "xunit.v3",
+  "xunit.runner.visualstudio",
+  "nunit",
+  "nunit3testadapter",
+  "mstest.testframework",
+  "mstest.testadapter",
+  "tunit",
+]);
+const isTestPackage = (name: string): boolean => {
+  const lower = name.toLowerCase();
+  return TEST_PACKAGES.has(lower) || lower.startsWith("xunit.v3.") || lower.startsWith("tunit.");
+};
+const isCsprojName = (file: string): boolean => /\.csproj$/iu.test(file);
 // Imports from the build toolchain (not from the repository): not counted when their location is an unknown property.
 const TOOLCHAIN_PROPS = /\$\((MSBuildToolsPath|MSBuildBinPath|MSBuildExtensionsPath\w*|MSBuildSDKsPath|VSToolsPath|MSBuildToolsVersion)\)/iu;
 const FILE_ABOVE = /^\$\(\[MSBuild\]::GetPathOfFileAbove\(\s*([^,]+?)\s*(?:,\s*(.*?)\s*)?\)\)$/iu;
@@ -55,7 +70,11 @@ type Context = {
   versions: Map<string, string>;
   applied: string[];
   chain: Set<string>;
+  /** ItemGroup children in evaluation order: MSBuild evaluates every property (and import) before any item. */
+  items: Array<{ file: string; element: XmlElement }>;
   unresolved: number;
+  /** ProjectReference items whose target could not be expanded or was not found among the scanned files. */
+  unresolvedReferences: number;
   project: { name: string; file: string; dir: string; sdk: string | null };
 };
 
@@ -113,7 +132,7 @@ function builtin(name: string, context: Context, thisFile: string): string | und
     case "msbuildprojectfullpath":
       return virtual(project.file);
     case "msbuildprojectextension":
-      return ".csproj";
+      return /\.[^./]*$/u.exec(project.file)?.[0] ?? ".csproj";
     case "msbuildthisfile":
       return path.posix.basename(thisFile);
     case "msbuildthisfilename":
@@ -184,7 +203,22 @@ type Locator = {
   texts: Map<string, string>;
   parsed: Map<string, { root: XmlElement | null; wellFormed: boolean }>;
   nearest: Map<string, string | null>;
+  /** lower-case path -> canonical path (first by code-unit order), for case-insensitive references. */
+  lower?: Map<string, string>;
 };
+
+/** A referenced path as scanned: exact match, else a match that differs only in case; null when not scanned. */
+function canonicalFile(locator: Locator, target: string): string | null {
+  if (locator.files.has(target)) return target;
+  if (!locator.lower) {
+    locator.lower = new Map();
+    for (const file of [...locator.files].sort()) {
+      const key = file.toLowerCase();
+      if (!locator.lower.has(key)) locator.lower.set(key, file);
+    }
+  }
+  return locator.lower.get(target.toLowerCase()) ?? null;
+}
 
 function parseFile(locator: Locator, file: string): { root: XmlElement | null; wellFormed: boolean } {
   let entry = locator.parsed.get(file);
@@ -231,10 +265,10 @@ function evaluateFile(locator: Locator, context: Context, file: string, isProjec
     for (const element of parsed.root.children) {
       switch (element.name) {
         case "PropertyGroup":
-          for (const property of element.children) defineProperty(context, file, property);
+          for (const property of element.children) defineProperty(context, file, property, attr(element, "Condition"));
           break;
         case "ItemGroup":
-          for (const item of element.children) applyItem(locator, context, file, item);
+          for (const item of element.children) context.items.push({ file, element: item });
           break;
         case "Import":
           applyImport(locator, context, file, element);
@@ -247,9 +281,10 @@ function evaluateFile(locator: Locator, context: Context, file: string, isProjec
   context.chain.delete(file);
 }
 
-function defineProperty(context: Context, file: string, element: XmlElement): void {
+function defineProperty(context: Context, file: string, element: XmlElement, groupCondition?: string): void {
   const key = element.name.toLowerCase();
-  if (isDefaultIfEmpty(attr(element, "Condition"), element.name) && (context.props.get(key) ?? "") !== "") return;
+  const isDefault = isDefaultIfEmpty(attr(element, "Condition"), element.name) || isDefaultIfEmpty(groupCondition, element.name);
+  if (isDefault && (context.props.get(key) ?? "") !== "") return;
   const value = expand(element.text.trim(), context, file, element.name).text.trim();
   context.props.set(key, value);
 }
@@ -274,19 +309,25 @@ function applyItem(locator: Locator, context: Context, file: string, item: XmlEl
     const include = expandAttr("Include");
     const remove = expandAttr("Remove");
     if (include !== undefined) {
+      const rawInclude = attr(item, "Include") ?? "";
+      const expandable = !/\$\(/u.test(rawInclude) || expand(rawInclude, context, file, null, true).unknown === 0;
       for (const raw of splitList(include)) {
         if (raw.includes("*")) continue;
-        const target = resolvePath(project.dir, raw);
-        if (target === null || !locator.files.has(target)) {
+        const written = resolvePath(project.dir, raw);
+        const target = written === null ? null : canonicalFile(locator, written);
+        if (target === null || !expandable) {
           context.unresolved += 1;
-        } else if (target.endsWith(".csproj") && !context.projectRefs.includes(target)) {
+          context.unresolvedReferences += 1;
+        } else if (target !== project.file && isCsprojName(target) && !context.projectRefs.includes(target)) {
           context.projectRefs.push(target);
         }
       }
+      if (include === "" && rawInclude !== "") context.unresolvedReferences += 1;
     }
     if (remove !== undefined) {
       for (const raw of splitList(remove)) {
-        const target = resolvePath(project.dir, raw);
+        const written = resolvePath(project.dir, raw);
+        const target = written === null ? null : canonicalFile(locator, written);
         const at = target === null ? -1 : context.projectRefs.indexOf(target);
         if (at >= 0) context.projectRefs.splice(at, 1);
       }
@@ -348,8 +389,9 @@ function applyImport(locator: Locator, context: Context, file: string, element: 
   } else {
     const expanded = expand(raw, context, file, null, true);
     if (expanded.unknown === 0) {
-      const resolved = resolvePath(dir, expanded.text);
-      if (resolved !== null && locator.files.has(resolved)) {
+      const written = resolvePath(dir, expanded.text);
+      const resolved = written === null ? null : canonicalFile(locator, written);
+      if (resolved !== null) {
         if (locator.texts.has(resolved)) target = resolved;
         else return; // scanned but not interpreted (a .targets file, an unreadable file)
       }
@@ -371,7 +413,9 @@ function newContext(project: Context["project"]): Context {
     versions: new Map(),
     applied: [],
     chain: new Set(),
+    items: [],
     unresolved: 0,
+    unresolvedReferences: 0,
     project,
   };
 }
@@ -385,9 +429,24 @@ function effectiveUsings(sdk: string | null, enabled: boolean, ops: UsingOp[]): 
   return usings;
 }
 
+function projectFlagFalse(root: XmlElement | null, name: string): boolean {
+  if (!root) return false;
+  let value: string | undefined;
+  for (const group of childElements(root, "PropertyGroup")) {
+    for (const property of group.children) if (property.name.toLowerCase() === name.toLowerCase()) value = property.text.trim().toLowerCase();
+  }
+  return value === "false";
+}
+
+// MSBuild's default RootNamespace: the project name with characters outside [A-Za-z0-9_.] replaced by `_`, and a `_` in
+// front of each dot-separated segment that starts with a digit.
+function defaultRootNamespace(name: string): string {
+  return name.replace(/[^A-Za-z0-9_.]/gu, "_").split(".").map((segment) => (/^[0-9]/u.test(segment) ? `_${segment}` : segment)).join(".");
+}
+
 function interpretProject(locator: Locator, file: string): { project: CSharpProject; applied: string[] } {
   const parsed = parseFile(locator, file);
-  const name = path.posix.basename(file).replace(/\.csproj$/u, "");
+  const name = path.posix.basename(file).replace(/\.csproj$/iu, "");
   const dir = dirOf(file);
   let sdk: string | null = null;
   if (parsed.root) {
@@ -401,18 +460,17 @@ function interpretProject(locator: Locator, file: string): { project: CSharpProj
   }
   const context = newContext({ name, file, dir, sdk });
 
-  const buildProps = fileAbove(locator, "Directory.Build.props", dir);
+  // `ImportDirectoryBuildProps` / `ImportDirectoryPackagesProps` set to false in the project file disable the auto-import.
+  const importBuildProps = !projectFlagFalse(parsed.root, "ImportDirectoryBuildProps");
+  const importPackagesProps = !projectFlagFalse(parsed.root, "ImportDirectoryPackagesProps");
+  // Properties and imports first (Directory.Build.props, the project, then Directory.Packages.props, which sees both's
+  // properties), items after, with the final property set. The shared files' unresolved counts are per project.
+  const buildProps = importBuildProps ? fileAbove(locator, "Directory.Build.props", dir) : null;
   if (buildProps !== null && buildProps !== file) evaluateFile(locator, context, buildProps, false);
   evaluateFile(locator, context, file, true);
-
-  const packagesProps = fileAbove(locator, "Directory.Packages.props", dir);
-  if (packagesProps !== null) {
-    const central = newContext(context.project);
-    evaluateFile(locator, central, packagesProps, false);
-    context.unresolved += central.unresolved;
-    for (const applied of central.applied) if (!context.applied.includes(applied)) context.applied.push(applied);
-    for (const [key, version] of central.versions) context.versions.set(key, version);
-  }
+  const packagesProps = importPackagesProps ? fileAbove(locator, "Directory.Packages.props", dir) : null;
+  if (packagesProps !== null && packagesProps !== file) evaluateFile(locator, context, packagesProps, false);
+  for (const { file: itemFile, element } of context.items) applyItem(locator, context, itemFile, element);
 
   const get = (key: string): string | undefined => context.props.get(key.toLowerCase());
   const finalSdk = context.project.sdk;
@@ -420,7 +478,7 @@ function interpretProject(locator: Locator, file: string): { project: CSharpProj
     name: entry.name,
     version: entry.override ?? entry.version ?? context.versions.get(entry.name.toLowerCase()) ?? null,
   }));
-  const webLike = finalSdk === "Microsoft.NET.Sdk.Web" || finalSdk === "Microsoft.NET.Sdk.Worker";
+  const webLike = finalSdk === "Microsoft.NET.Sdk.Web" || finalSdk === "Microsoft.NET.Sdk.Worker" || finalSdk === "Microsoft.NET.Sdk.BlazorWebAssembly";
   const outputType = get("OutputType") || (webLike ? "Exe" : "Library");
   const outputLower = outputType.toLowerCase();
   const frameworks = splitList(get("TargetFrameworks") ?? "");
@@ -441,18 +499,19 @@ function interpretProject(locator: Locator, file: string): { project: CSharpProj
     sdk: finalSdk,
     outputType,
     executable: outputLower === "exe" || outputLower === "winexe" || (webLike && outputLower !== "library"),
-    rootNamespace: get("RootNamespace") || name,
+    rootNamespace: get("RootNamespace") || defaultRootNamespace(name),
     assemblyName: get("AssemblyName") || name,
     targetFrameworks,
     implicitUsings,
     usings: effectiveUsings(finalSdk, implicitUsings, context.usingOps),
     projectReferences: [...context.projectRefs].sort(),
     packageReferences,
-    isTestProject: get("IsTestProject")?.toLowerCase() === "true" || packageReferences.some((pkg) => TEST_PACKAGES.has(pkg.name.toLowerCase())),
+    isTestProject: get("IsTestProject")?.toLowerCase() === "true" || packageReferences.some((pkg) => isTestPackage(pkg.name)) || /^MSTest\.Sdk$/iu.test(finalSdk ?? ""),
     importedProps: context.applied,
     solutions: [],
     config,
     unresolved: context.unresolved,
+    unresolvedReferences: context.unresolvedReferences,
     line: 1,
   };
   return { project, applied: context.applied };
@@ -460,7 +519,7 @@ function interpretProject(locator: Locator, file: string): { project: CSharpProj
 
 export function interpretMsbuild(input: MsbuildInput): MsbuildResult {
   const locator: Locator = { files: input.files, texts: input.texts, parsed: new Map(), nearest: new Map() };
-  const projectFiles = [...input.texts.keys()].filter((file) => file.endsWith(".csproj")).sort();
+  const projectFiles = [...input.texts.keys()].filter(isCsprojName).sort();
   const projects: CSharpProject[] = [];
   const read = new Set<string>();
   let unresolved = 0;

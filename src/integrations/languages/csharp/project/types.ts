@@ -47,6 +47,8 @@ export type CSharpProject = {
   config: Array<{ key: string; value: string }>;
   /** Unknown `$(Prop)`, missing ProjectReference target, unknown `Import`. */
   unresolved: number;
+  /** ProjectReference items whose target could not be expanded (e.g. `$(SolutionDir)`) or is not among the scanned files. */
+  unresolvedReferences: number;
   /** Always 1. */
   line: number;
 };

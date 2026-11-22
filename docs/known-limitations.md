@@ -2709,10 +2709,14 @@ that scope.
   `global using` declarations of its own files apply to its files only. A file
   resolves namespaces in its own project and in the projects it references,
   directly or transitively. Names declared only in a project it does not reference
-  stay unresolved. A file in no project sees every project-less file and every
-  project. An executable project (`OutputType` `Exe` or `WinExe`, or a Web or Worker
-  SDK) is an `EntryPoint` of kind `csharp-project` that runs its top-level statements
-  or its `static Main`.
+  stay unresolved. A project with a `ProjectReference` that cannot be resolved
+  (`unresolvedReferences`, for example `$(SolutionDir)`) sees every project, as before
+  projects were read. A file in no project sees every project-less file and every
+  project. An executable project (`OutputType` `Exe` or `WinExe`, or a Web, Worker or
+  Blazor WebAssembly SDK) is an `EntryPoint` of kind `csharp-project` that `RUNS` the
+  `main` EntryPoint of its top-level statements, or of each valid `static Main`; it has
+  `resolved: false` when there is neither. Its `PackageReference` items are listed as
+  `packageReferences` (JSON `[{name, version}]`) on the Package node.
 - **MSBuild is read, not run.** `Condition` attributes are not evaluated: every
   element counts, except a property written as `Condition="'$(X)' == ''"`, which
   only applies when `X` is not set yet. `.targets` files and the properties NuGet
@@ -2720,13 +2724,28 @@ that scope.
   and its `Directory.Build.props` and the usual built-ins; environment variables,
   `SolutionDir` and property functions other than `GetPathOfFileAbove` stay
   unresolved. Unresolved properties, missing `ProjectReference` targets, missing
-  solution entries and unknown imports are counted (`unresolved`), not guessed.
+  solution entries and unknown imports are counted (`unresolved`), not guessed. Properties
+  and imports are evaluated before items, as MSBuild does, so an item may use a property
+  defined later in the file. `Directory.Packages.props` is evaluated in the project's own
+  context after its body; the shared props files' unresolved counts are added per project.
+  `ImportDirectoryBuildProps` and `ImportDirectoryPackagesProps` set to `false` in the
+  project file turn the auto-import off. `<Choose>/<When>` is not read, `GlobalPackageReference`
+  is ignored, and `.slnf` solution filters are not read. `<Compile Include/Remove>` and
+  linked files are not modelled: a linked file outside every project directory is project-less
+  and visible everywhere. `.csproj`, `.sln` and `.slnx` extensions and references that differ
+  only in case match the scanned file.
 - **Project edge cases.** Two projects in one directory: the first by path is the
-  `Package`, the other is not. Multi-targeting (`TargetFrameworks`) is one project,
+  `Package`, the other is not (by code-unit order of the file path). Two declared
+  projects with the same name: a `ProjectReference` to either creates no dependency edge
+  (core matches by name), and a project referencing itself is skipped. Multi-targeting (`TargetFrameworks`) is one project,
   not one per framework. A `.cs` file belongs to the project with the longest
   directory above it, so a file in a directory outside any project is project-less, and project-less files
   are visible from every project.
-  A `PackageReference` named like a scanned project links to that project. `bin/`
+  A file belongs to the innermost project directory: nested project directories are not part
+  of the outer project. Interface and virtual dispatch targets are not limited to the
+  projects the caller can see, and unused-export rules stay name-based scan-wide (a member
+  named only in an unreferenced project still counts as used). `PackageReference` items are
+  not dependencies (they are shown as `packageReferences`). `bin/`
   is not ignored (only `obj/` is generated). `.fsproj` and `.vbproj` are not read.
 - `new T()` for a class with no explicit constructor stays unresolved. The graph
   has no synthetic constructor to point at, as in Java.

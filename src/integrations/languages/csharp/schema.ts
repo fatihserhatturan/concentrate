@@ -16,7 +16,7 @@ export const csharpGraphSchema: GraphSchemaExtension = {
       after: "mainClassSource",
       properties: {
         projectFile: "STRING", sdk: "STRING", outputType: "STRING", executable: "BOOLEAN", rootNamespace: "STRING", assemblyName: "STRING",
-        targetFrameworks: "STRING", implicitUsings: "BOOLEAN", usings: "STRING", isTestProject: "BOOLEAN", solutions: "STRING",
+        targetFrameworks: "STRING", implicitUsings: "BOOLEAN", usings: "STRING", isTestProject: "BOOLEAN", solutions: "STRING", packageReferences: "STRING",
       },
     },
     { label: "Import", after: "isModule", properties: { isStatic: "BOOLEAN", importKind: "STRING", isGlobal: "BOOLEAN", usingScope: "STRING", usingScopeStart: "INT64", usingScopeEnd: "INT64", sourceArity: "INT64" } },
