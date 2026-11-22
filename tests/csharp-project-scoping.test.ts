@@ -5,6 +5,9 @@ import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import type { BuildCodeGraphResult } from "../src/core/scan/result.js";
+import type { IGraphContributor } from "../src/core/contracts/graph-contributor.js";
+import { buildCSharpNamespaceIndex, csharpUsingIndexOf } from "../src/integrations/languages/csharp/namespaces.js";
+import { setCSharpProjectModel } from "../src/integrations/languages/csharp/project.js";
 
 // Phase 45 track D: usings and namespace visibility are scoped to projects. A file resolves namespaces and types only
 // inside its own project and the projects it references (transitively); `global using`s and the project model's
@@ -162,5 +165,49 @@ describe("C# project scoping (inline projects)", () => {
     });
     assert.deepEqual(hierarchy(result), []);
     assert.equal(result.report.unresolvedRelativeImports, 0);
+  });
+});
+
+// F2: a project with unresolved ProjectReferences sees everything; ownership follows the declared (first-per-directory) project.
+describe("csharp project scoping: unresolved references and ownership", () => {
+  const project = (file: string, extra: Record<string, unknown> = {}): unknown => {
+    const dir = file.includes("/") ? file.slice(0, file.lastIndexOf("/")) : ".";
+    return { name: path.basename(file, ".csproj"), file, dir, projectReferences: [], usings: [], ...extra };
+  };
+  const build = (projects: unknown[], files: Record<string, string[]>) => {
+    const nodes = Object.entries(files).map(([relativePath, namespaces]) => ({
+      id: `file:${relativePath}`,
+      label: "File",
+      properties: { language: "csharp", relativePath, csharpNamespaces: JSON.stringify(namespaces) },
+    }));
+    const graph = {
+      nodes,
+      relationships: [],
+      node: (id: string) => nodes.find((n) => n.id === id),
+      nodesWithLabel: (label: string) => (label === "File" ? nodes : []),
+      relationshipsOfType: () => [],
+    } as unknown as IGraphContributor;
+    setCSharpProjectModel(graph, { projects, solutions: [], files: [], unresolved: 0 } as never);
+    return buildCSharpNamespaceIndex(graph);
+  };
+  const files = { "a/Types.cs": ["A"], "b/Use.cs": ["B"] };
+
+  it("scopes a project without references and shows everything to one with unresolved references", () => {
+    const scoped = csharpUsingIndexOf(build([project("a/A.csproj"), project("b/B.csproj")], files))!;
+    assert.equal(scoped.canSee("file:b/Use.cs", "file:a/Types.cs"), false);
+    assert.equal(scoped.hasNamespaceFor("file:b/Use.cs", "A"), false);
+    const open = csharpUsingIndexOf(build([project("a/A.csproj"), project("b/B.csproj", { unresolvedReferences: 1 })], files))!;
+    assert.equal(open.canSee("file:b/Use.cs", "file:a/Types.cs"), true);
+    assert.equal(open.hasNamespaceFor("file:b/Use.cs", "A"), true);
+    assert.equal(open.resolveUsing({ source: "A", kind: "normal", scope: "" }, "file:b/Use.cs").targetKind, "namespace");
+    // Only the viewer's own flag counts: A (unflagged) still does not see B.
+    assert.equal(open.canSee("file:a/Types.cs", "file:b/Use.cs"), false);
+  });
+
+  it("assigns files to the project the manifest declares when several share a directory", () => {
+    const index = csharpUsingIndexOf(build([project("x/Z.csproj"), project("x/A.csproj"), project("y/Y.csproj", { projectReferences: ["x/Z.csproj"] })], { "x/F.cs": ["X"], "y/G.cs": ["Y"] }))!;
+    // x/A.csproj owns directory x (code-unit order); Y's reference to x/Z.csproj stands for that owner.
+    assert.equal(index.canSee("file:y/G.cs", "file:x/F.cs"), true);
+    assert.equal(index.canSee("file:x/F.cs", "file:y/G.cs"), false);
   });
 });
