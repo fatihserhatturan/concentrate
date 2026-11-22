@@ -129,7 +129,7 @@ describe("Java unused exports (fixtures/java-unused)", () => {
   it("names the language in the tool note", () => {
     const note = unusedNote(coreIntegrationRegistry);
     assert.ok(note.includes("Java: public and protected"), note);
-    assert.ok(/ and Java\.$/u.test(note), note);
+    assert.ok(/ Java and C#\.$/u.test(note), note);
   });
 
   it("strips comments but keeps strings", () => {

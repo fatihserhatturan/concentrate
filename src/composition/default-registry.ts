@@ -59,6 +59,7 @@ import { goImportResolver } from "../integrations/languages/go/import-resolver.j
 import { jsTsImportResolver } from "../integrations/languages/js-ts/import-resolver.js";
 import { rustCallResolver, rustInheritanceResolver } from "../integrations/languages/rust/resolvers.js";
 
+import { csharpUnusedRules } from "../integrations/languages/csharp/unused.js";
 import { cppUnusedRules } from "../integrations/languages/cpp/unused.js";
 import { javaUnusedRules } from "../integrations/languages/java/unused.js";
 import { javaBuildContributor, javaConfigEnvContributor, javaDataJdbcContributor, javaDataJpaContributor, javaDiContributor, javaHttpClientsContributor, javaEntrypointsContributor, javaFrameworkEntrypointsContributor, javaFrameworkParser, javaGrpcContributor, javaRoutesContributor, javaTestsContributor, javaWebfluxContributor } from "../integrations/frameworks/java/index.js";
@@ -120,7 +121,7 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
   }
 
   // The order is the order of the find_unused_exports note's language paragraphs.
-  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules, javaUnusedRules]) {
+  for (const rules of [jsTsUnusedRules, goUnusedRules, rustUnusedRules, pythonUnusedRules, cppUnusedRules, javaUnusedRules, csharpUnusedRules]) {
     registry.registerUnusedExportRules(rules);
   }
 
