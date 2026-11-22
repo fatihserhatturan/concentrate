@@ -1,19 +1,102 @@
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
+import type { GraphNode } from "../../../core/graph/model.js";
 import type { GraphSchemaExtension } from "../../../core/graph/schema.js";
 import type { VersionedCSharpParsePlugin } from "../../languages/csharp/parser.js";
+import type { CSharpType } from "../../languages/csharp/types.js";
+import { csharpAttributeReader, csharpStringLiteral, argumentExpression, findAttributes } from "./attributes.js";
+import { addCSharpEntryPoint } from "./emit.js";
+import { invocationInfo } from "./invocations.js";
+import { csharpMethods } from "./shared.js";
+import { csharpTypeResolver } from "./type-names.js";
 
-// WAVE 0 STUB (Track B): SignalR hubs (`Hub` / `Hub<T>` public methods, `MapHub<T>`).
-// Fill in the bodies below (see the phase 46 contract). A no-op until then.
+// SignalR hubs. A concrete class deriving from `Hub` / `Hub<TClient>` / `DynamicHub` (directly or through a user base
+// class) is a hub; every public, non-static, non-override instance method of it, own or inherited from a scanned
+// base, is invocable by clients: an EntryPoint (kind `signalr`, library `signalr`, trigger `Hub/method`; the name is
+// `[HubMethodName("x")]` when written). Overrides are the framework callbacks (`OnConnectedAsync`,
+// `OnDisconnectedAsync`, `Dispose`): not client-invokable, so not entrypoints. Abstract hubs have no instance: their
+// concrete subclasses carry the methods. `MapHub<T>("/path")` gives the EntryPoints `hubPath` (the first call's path;
+// null when no call names the hub or the path is not a literal); a `MapGroup` prefix is not applied.
 
-// Parse-time part (what only the syntax tree tells). Set `version` (a string, e.g. "1") when it starts producing output:
-// it joins the parser's cache fingerprint.
-export const csharpSignalrPlugin: VersionedCSharpParsePlugin = () => {};
+const SIGNALR_NAMESPACES = ["Microsoft.AspNetCore.SignalR"];
+const HUB_BASES = ["Hub", "DynamicHub"];
+
+// MapHub<T>("/path"): the literal path (null when it is a constant, an expression or absent), stored on the Call node
+// for the contributor, which removes it.
+export const csharpSignalrPlugin: VersionedCSharpParsePlugin = Object.assign(
+  ({ calls }: Parameters<VersionedCSharpParsePlugin>[0]) => {
+    for (const { syntax, node } of calls) {
+      if (node.properties.callee !== "MapHub") continue;
+      const info = invocationInfo(syntax);
+      if (!info || info.name !== "MapHub") continue;
+      const first = info.arguments[0];
+      node.properties.signalrMapHub = JSON.stringify({ path: first?.kind === "string" ? first.value ?? null : null });
+    }
+  },
+  { version: "1" },
+);
 
 export const csharpSignalrContributor: ISemanticContributor = {
   id: "csharp.signalr",
-  contribute() {},
+  contribute(graph) {
+    const resolver = csharpTypeResolver(graph);
+    const attributes = csharpAttributeReader(graph);
+    const methods = csharpMethods(graph);
+    const fileOfFunction = new Map(methods.map((method) => [method.node.id, method.fileId]));
+
+    const hubPaths = new Map<string, string | null>();
+    for (const call of graph.nodesWithLabel("Call")) {
+      const raw = call.properties.signalrMapHub;
+      if (typeof raw !== "string") continue;
+      delete call.properties.signalrMapHub;
+      if (typeof call.properties.typeArguments !== "string") continue;
+      const resolved = resolver.resolve(String(call.properties.typeArguments).split(",")[0]!.trim(), call);
+      if (!resolved) continue;
+      const path = (JSON.parse(raw) as { path: string | null }).path;
+      if (!hubPaths.has(resolved.id) || (hubPaths.get(resolved.id) === null && path !== null)) hubPaths.set(resolved.id, path);
+    }
+
+    const classChain = (type: CSharpType): CSharpType[] => {
+      const chain: CSharpType[] = [];
+      const seen = new Set<string>();
+      for (let current: CSharpType | undefined = type; current && !seen.has(current.id); current = resolver.index.supertypes(current).find((parent) => parent.node.label === "Class")) {
+        seen.add(current.id);
+        chain.push(current);
+      }
+      return chain;
+    };
+    const isInvocable = (fn: GraphNode): boolean =>
+      fn.properties.kind === "method" && fn.properties.methodKind !== "primary" && fn.properties.visibility === "public" && fn.properties.isStatic !== true && fn.properties.isOverride !== true;
+
+    for (const type of resolver.index.types) {
+      const cls = type.node;
+      if (cls.label !== "Class" || cls.properties.kind !== "class" || cls.properties.isAbstract === true || cls.properties.isStatic === true) continue;
+      if (!resolver.derivesFromExternal(type, HUB_BASES)) continue;
+      const hubName = type.name;
+      const path = hubPaths.get(type.id) ?? null;
+      const taken = new Set<string>();
+      for (const owner of classChain(type)) {
+        for (const fn of resolver.methodsOf(owner)) {
+          const name = String(fn.properties.name);
+          if (taken.has(name) || !isInvocable(fn)) continue;
+          taken.add(name);
+          const fileId = fileOfFunction.get(fn.id);
+          if (!fileId) continue;
+          let hubMethod = name;
+          const renamed = findAttributes(attributes.attributesOf(fn), "HubMethodName", SIGNALR_NAMESPACES)[0];
+          if (renamed) {
+            const written = csharpStringLiteral(argumentExpression(renamed, 0, "name") ?? "");
+            if (written) hubMethod = written;
+          }
+          const entry = addCSharpEntryPoint(graph, { fileId, kind: "signalr", trigger: `${hubName}/${hubMethod}`, line: Number(fn.properties.line), handler: fn, library: "signalr" });
+          entry.properties.hubPath = path;
+        }
+      }
+    }
+  },
 };
 
-// Graph schema additions of this track (new properties or tables its output needs). Registered in default-registry
-// through csharp/index.ts; leave as is when the output uses existing properties only.
-export const csharpSignalrSchema: GraphSchemaExtension = { id: "csharp-signalr" };
+// `hubPath` on the signalr EntryPoints: the `MapHub<T>("/path")` path.
+export const csharpSignalrSchema: GraphSchemaExtension = {
+  id: "csharp-signalr",
+  nodeProperties: [{ label: "EntryPoint", after: "handlerName", properties: { hubPath: "STRING" } }],
+};
