@@ -8,7 +8,8 @@ import { typeText } from "../../languages/csharp/syntax.js";
 import type { CSharpType } from "../../languages/csharp/types.js";
 import { csharpAttributeReader, csharpStringLiteral, hasAttribute } from "./attributes.js";
 import { invocationInfo, lambdaInfo, type ArgumentInfo } from "./invocations.js";
-import { parametersOf, primaryParametersOf, type CSharpParameterInfo } from "./shared.js";
+import { csharpUsingIndexOf } from "../../languages/csharp/namespaces.js";
+import { csharpFileOfId, parametersOf, primaryParametersOf, type CSharpParameterInfo } from "./shared.js";
 import { csharpTypeResolver, type CSharpTypeResolver } from "./type-names.js";
 
 // C# dependency injection (Microsoft.Extensions.DependencyInjection), as INJECTS between classes like Java and Go.
@@ -51,6 +52,8 @@ type Registration = {
   /** The literal key; null when it is not a string literal (`keyKnown` false). */
   key: string | null;
   keyKnown: boolean;
+  /** `TryAdd*`: only registers when the service has no registration yet. */
+  try?: boolean;
   line: number;
 };
 
@@ -148,7 +151,7 @@ function registrationOf(call: SyntaxNode): Registration | null {
   } else return null;
 
   if (impl === null) implKind = "unknown";
-  return { method: info.name, lifetime, service, impl, implKind, keyed, key, keyKnown, line };
+  return { method: info.name, lifetime, service, impl, implKind, keyed, key, keyKnown, try: info.name.startsWith("TryAdd"), line };
 }
 
 // Parse-time part: the shape of each registration call (arguments, `typeof`, factory lambda bodies are not in the graph).
@@ -160,7 +163,7 @@ export const csharpDiPlugin: VersionedCSharpParsePlugin = Object.assign(
       if (registration) node.properties.diRegistration = JSON.stringify(registration);
     }
   },
-  { version: "1" },
+  { version: "2" },
 );
 
 // ---- resolution
@@ -184,11 +187,23 @@ const typeArgsOf = (text: string): string[] | null => {
   return parts.map((part) => part.trim());
 };
 const isOpenGeneric = (text: string): boolean => /<,*>$/u.test(text.replace(/\s+/gu, ""));
-const argKey = (arg: string): string => arg.replace(/\s+/gu, "").replace(/global::/gu, "").replace(/\w+\./gu, "").replace(/\?/gu, "");
+const plainName = (arg: string): string => arg.replace(/\s+/gu, "").replace(/global::/gu, "").replace(/\w+\./gu, "").replace(/\?/gu, "");
 // `IRepo<>` / `Repo<,>` -> `IRepo<_>` / `Repo<_,_>` so the type resolver sees the arity.
 const closeOpen = (text: string): string => text.replace(/\s+/gu, "").replace(/<(,*)>$/u, (_all, commas: string) => `<${Array.from({ length: commas.length + 1 }, () => "_").join(",")}>`);
 
-type Candidate = { service: CSharpType; open: boolean; args: string[]; key: string | null; keyKnown: boolean; keyed: boolean; target: GraphNode | null; line: number };
+type Candidate = {
+  service: CSharpType;
+  open: boolean;
+  args: string[];
+  key: string | null;
+  keyKnown: boolean;
+  keyed: boolean;
+  target: GraphNode | null;
+  line: number;
+  fileId: string | undefined;
+  /** `TryAdd*`. */
+  try: boolean;
+};
 
 export type InjectionResolution = {
   /** The implementation classes (several only for a collection point). */
@@ -216,8 +231,20 @@ const COLLECTION = /^(?:System\.Collections\.Generic\.)?IEnumerable<(.+)>$/u;
 
 function buildResolver(graph: IGraphContributor): CSharpInjectionResolver {
   const types = csharpTypeResolver(graph);
+  const usingIndex = csharpUsingIndexOf(graph);
+  // A generic argument is compared by the type it resolves to (`A.User` is not `B.User`); an unresolvable one by its bare name.
+  const typeKey = (text: string, scope: GraphNode): string => {
+    const clean = text.replace(/\s+/gu, "").replace(/^global::/u, "").replace(/\?$/u, "");
+    const nested = typeArgsOf(clean);
+    const resolved = types.resolve(clean, scope);
+    const base = resolved ? resolved.id : plainName(nested ? clean.slice(0, clean.indexOf("<")) : clean);
+    return nested ? `${base}<${nested.map((part) => typeKey(part, scope)).join(",")}>` : base;
+  };
+  const argKeys = (written: string, scope: GraphNode): string[] => (typeArgsOf(written.replace(/\s+/gu, "")) ?? []).map((part) => typeKey(part, scope));
+  const fileOf = (node: GraphNode): string | undefined => csharpFileOfId(node.id);
   const candidates: Candidate[] = [];
   const providers = new Map<string, string>(); // class id -> lifetime
+  const registrations: Array<{ call: GraphNode; registration: Registration }> = [];
   for (const call of graph.nodesWithLabel("Call")) {
     if (typeof call.properties.diRegistration !== "string") continue;
     let registration: Registration;
@@ -226,22 +253,44 @@ function buildResolver(graph: IGraphContributor): CSharpInjectionResolver {
     } catch {
       continue;
     }
+    // Registrations in test files (fakes, overrides of a test host) never wire the product code.
+    const fileId = fileOf(call);
+    if (fileId && graph.node(fileId)?.properties.isTest === true) continue;
+    registrations.push({ call, registration });
+  }
+  const visible = (viewer: string | undefined, target: string | undefined): boolean =>
+    viewer === undefined || target === undefined || usingIndex === undefined || !usingIndex.projectScoped || usingIndex.canSee(viewer, target) || usingIndex.canSee(target, viewer);
+  type Raw = Omit<Candidate, "service"> & { service: CSharpType | null; lifetime: string | null };
+  const sameService = (a: Raw, b: Raw): boolean =>
+    a.service?.id === b.service?.id && a.open === b.open && a.args.join(",") === b.args.join(",") && a.keyed === b.keyed && a.keyKnown === b.keyKnown && a.key === b.key;
+  const raw: Raw[] = [];
+  for (const { call, registration } of registrations) {
     const implType = registration.impl ? types.resolve(closeOpen(registration.impl), call) : null;
     const target = implType && !implType.isInterface && implType.node.properties.isAbstract !== true && implType.node.properties.kind !== "enum" ? implType.node : null;
-    if (target && registration.lifetime && !providers.has(target.id)) providers.set(target.id, registration.lifetime);
     const service = registration.service ? types.resolve(closeOpen(registration.service), call) : null;
-    if (!service) continue;
-    const written = registration.service!;
-    candidates.push({
-      service,
+    const written = registration.service ?? "";
+    raw.push({
+      service, // null: the registration only provides (it is no candidate)
       open: isOpenGeneric(written),
-      args: (typeArgsOf(written.replace(/\s+/gu, "")) ?? []).map(argKey),
+      args: service ? argKeys(written, call) : [],
       key: registration.key,
       keyKnown: registration.keyKnown,
       keyed: registration.keyed,
       target,
       line: registration.line,
+      fileId: fileOf(call),
+      try: registration.try === true,
+      lifetime: registration.lifetime,
     });
+  }
+  // `TryAdd*` does nothing when a plain `Add*` of the same service and key exists in a project it composes with
+  // (`AddScoped<IFoo, A>(); TryAddScoped<IFoo, B>();`: B is never used, so it is neither a candidate nor a provider).
+  const live = raw.filter((entry) => !entry.try || !entry.service || !raw.some((other) => !other.try && other.service && sameService(entry, other) && visible(entry.fileId, other.fileId)));
+  for (const entry of live) {
+    if (entry.target && entry.lifetime && !providers.has(entry.target.id)) providers.set(entry.target.id, entry.lifetime);
+    if (!entry.service) continue;
+    const { lifetime: _lifetime, service, ...rest } = entry;
+    candidates.push({ ...rest, service });
   }
   for (const [id, lifetime] of providers) {
     const node = graph.node(id);
@@ -258,10 +307,13 @@ function buildResolver(graph: IGraphContributor): CSharpInjectionResolver {
     if (many) text = many[1]!.replace(/\?$/u, "");
     const wanted = types.resolve(text, scopeNode);
     if (!wanted) return none;
-    const wantedArgs = (typeArgsOf(text) ?? []).map(argKey);
+    const wantedArgs = argKeys(text, scopeNode);
     const keyed = request.key !== undefined || request.keyKnown === false;
+    // Registrations of the consumer's project, of the projects it references, and of the hosts that reference its project.
+    const consumerFile = fileOf(scopeNode);
     const matches = candidates.filter((candidate) => {
       if (candidate.service.id !== wanted.id) return false;
+      if (!visible(consumerFile, candidate.fileId)) return false;
       if (!candidate.open && candidate.args.join(",") !== wantedArgs.join(",")) return false;
       if (many || !keyed) return !candidate.keyed;
       if (!candidate.keyed) return false;
@@ -337,6 +389,10 @@ function keyOf(parameter: CSharpParameterInfo): InjectionRequest | null {
 
 const fromServices = (parameter: CSharpParameterInfo): boolean => parameter.annotations?.some((entry) => annotationSimple(entry.name) === "FromServices") === true;
 
+// The consumer classes `csharp.di` scanned per graph (their `[FromServices]` parameters are already INJECTS points).
+const consumerSets = new WeakMap<IGraphContributor, Set<string>>();
+export const diConsumerIds = (graph: IGraphContributor): ReadonlySet<string> => consumerSets.get(graph) ?? new Set();
+
 export const csharpDiContributor: ISemanticContributor = {
   id: "csharp.di",
   contribute(graph) {
@@ -374,21 +430,30 @@ export const csharpDiContributor: ISemanticContributor = {
     const added = new Set<string>();
     const relationships: GraphRelationship[] = [];
     const ambiguous = new Map<string, number>();
+    const counted = new Set<string>();
     const point = (consumer: GraphNode, scope: GraphNode, parameter: CSharpParameterInfo, via: string) => {
       if (parameter.modifier === "out" || parameter.modifier === "ref" || parameter.modifier === "in") return;
       const result = resolver.resolve(parameter.type, scope, keyOf(parameter) ?? undefined);
-      if (result.ambiguous) ambiguous.set(consumer.id, (ambiguous.get(consumer.id) ?? 0) + 1);
+      // The same parameter of an overload (or of a second constructor shape) is one injection point.
+      const pointKey = `${consumer.id}\0${parameter.name}\0${parameter.type}`;
+      if (result.ambiguous && !counted.has(pointKey)) {
+        counted.add(pointKey);
+        ambiguous.set(consumer.id, (ambiguous.get(consumer.id) ?? 0) + 1);
+      }
       for (const target of result.targets) {
         if (target.id === consumer.id) continue;
-        const key = `${consumer.id}\0${target.id}\0${parameter.name}\0${via}`;
+        const key = `${consumer.id}\0${target.id}\0${parameter.name}`;
         if (added.has(key)) continue;
         added.add(key);
         relationships.push(injectsRelationship(consumer.id, target.id, parameter.name, via));
       }
     };
 
+    const consumers = new Set<string>();
+    consumerSets.set(graph, consumers);
     for (const type of types.index.types) {
       if (!isConsumer(type)) continue;
+      consumers.add(type.node.id);
       const methods = types.methodsOf(type);
       // The constructor Microsoft DI picks: the only public instance one, else the one with the most parameters (no tie).
       const constructors = methods.filter((fn) => fn.properties.kind === "constructor" && fn.properties.isStatic !== true && (fn.properties.methodKind === "primary" || fn.properties.visibility === "public"));

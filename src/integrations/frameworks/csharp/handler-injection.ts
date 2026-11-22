@@ -1,7 +1,7 @@
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import { csharpStringLiteral } from "./attributes.js";
-import { createCSharpInjectionResolver, injectsRelationship } from "./di.js";
+import { createCSharpInjectionResolver, diConsumerIds, injectsRelationship } from "./di.js";
 import { jsonList, parametersOf, type CSharpParameterInfo } from "./shared.js";
 
 // Minimal-API handler parameters (`via: "handler-parameter"`). ASP.NET binds a handler parameter from the route, the query
@@ -64,7 +64,10 @@ export const csharpHandlerInjectionContributor: ISemanticContributor = {
       if (handler) handlerOf.set(relationship.from, handler);
     }
     const resolver = createCSharpInjectionResolver(graph);
+    const consumers = diConsumerIds(graph);
     const added = new Set<string>();
+    // Edges `csharp.di` already made: one INJECTS per (consumer, implementation, parameter) whatever the `via`.
+    for (const existing of graph.relationshipsOfType("INJECTS")) added.add(`edge\0${existing.from}\0${existing.to}\0${existing.properties.fieldName}`);
     const relationships: GraphRelationship[] = [];
     const ambiguous = new Map<string, number>();
     for (const route of routes) {
@@ -80,10 +83,14 @@ export const csharpHandlerInjectionContributor: ISemanticContributor = {
       if (!owner) continue;
       const path = typeof route.properties.path === "string" ? route.properties.path : "";
       const routeNames = new Set([...path.matchAll(/\{\*{0,2}([A-Za-z_]\w*)/gu)].map((match) => match[1]!));
+      // A method-group handler of a consumer class: `csharp.di` already read its `[FromServices]` parameters.
+      const methodGroup = handlerName !== "<lambda>";
+      const identity = methodGroup ? handler.id : `${handler.id}\0lambda@${String(route.properties.line)}`;
       for (const parameter of parameters) {
         if (!candidateService(parameter, routeNames)) continue;
+        if (methodGroup && consumers.has(owner.id) && parameter.annotations?.some((entry) => ["FromServices", "FromKeyedServices"].includes(simpleAnnotation(entry.name)))) continue;
         const result = resolver.resolve(parameter.type, handler, keyRequest(parameter));
-        const key = `${handler.id}\0${parameter.name}\0${parameter.type}`;
+        const key = `${identity}\0${parameter.name}\0${parameter.type}`;
         const seen = added.has(`point\0${key}`);
         added.add(`point\0${key}`);
         // The same handler can serve several routes (`MapMethods`): count and link each point once.
