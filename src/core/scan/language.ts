@@ -119,6 +119,7 @@ export function combineConventions(descriptors: readonly LanguageDescriptor[]): 
     generatedFile: any((descriptor) => descriptor.generatedFile),
     supportFile: any((descriptor) => descriptor.supportFile),
     lockfiles: new Set(descriptors.flatMap((descriptor) => descriptor.lockfiles ?? [])),
+    generatedDirectories: descriptors.flatMap((descriptor) => descriptor.generatedDirectories ?? []),
     claimedFileNames: new Set(descriptors.flatMap((descriptor) => descriptor.fileNames ?? [])),
     ignoredPatterns: descriptors.flatMap((descriptor) => descriptor.ignoredPatterns ?? []),
     ignoredInDirectory: (entryNames) => scoped.flatMap((hook) => hook(entryNames)),

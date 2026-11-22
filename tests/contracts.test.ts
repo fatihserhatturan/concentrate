@@ -37,6 +37,8 @@ const parserFixtures: Record<string, { root: string; file: string }> = {
   c: { root: "c-basic", file: "src/list.c" },
   cpp: { root: "cpp-calls", file: "src/shape.cpp" },
   java: { root: "java-parser-contract", file: "src/main/java/com/acme/Greeter.java" },
+  // Parser-only fixture inside tests/, not under fixtures/: a project there would need a golden graph.
+  csharp: { root: "../tests/fixtures/csharp-parser-contract", file: "Greeter.cs" },
   html: { root: "vanilla-html", file: "index.html" },
   vue: { root: "vue-components", file: "src/App.vue" },
   svelte: { root: "svelte-components", file: "src/App.svelte" },

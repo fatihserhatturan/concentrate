@@ -32,7 +32,7 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
     "dist",
     "build",
     "coverage",
-  ]) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
+  ]) || hasSegment(segments.slice(0, -1), conventions.generatedDirectories) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
 
   // Below a JVM source root (`src/main/java`, `src/test/kotlin`, …) directories
   // are package names (`org.springframework.samples.petclinic`), not layout
@@ -113,7 +113,7 @@ function jvmSourceRootEnd(segments: string[]): number {
 
 const JVM_LANGUAGE_DIRS = new Set(["java", "kotlin", "scala", "groovy"]);
 
-function hasSegment(segments: string[], names: string[]): boolean {
+function hasSegment(segments: readonly string[], names: readonly string[]): boolean {
   const normalizedNames = new Set(names);
   return segments.some((segment) => normalizedNames.has(segment));
 }

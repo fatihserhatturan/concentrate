@@ -33,6 +33,7 @@ describe("vendored grammars", () => {
       c: ["int main(void) { return 0; }", "function_definition"],
       cpp: ["namespace a { class B {}; }", "namespace_definition"],
       java: ["package a;\nclass B {}", "package_declaration"],
+      csharp: ["namespace A { class B {} }", "namespace_declaration"],
       css: ["a { b: c; }", "rule_set"],
       scss: ["$a: 1;\n.b { c: $a; }", "declaration"],
       json: ["{\"a\": [1, 2]}", "object"],

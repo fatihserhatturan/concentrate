@@ -114,6 +114,12 @@
       "version": "0.7.0",
       "sha256": "2edd39d0ef194dc70878fe99b277180547fabf252f85b58e537db5a11e3027fa",
       "bytes": 47378
+    },
+    "csharp": {
+      "package": "tree-sitter-c-sharp",
+      "version": "0.23.5",
+      "sha256": "a4b053f6fdedfc9c94876b415441ea953c0046ef83d45e0cbc4d9b8938ae6cbc",
+      "bytes": 5328842
     }
   }
 }
