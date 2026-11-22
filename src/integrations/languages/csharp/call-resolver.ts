@@ -270,7 +270,7 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
   const staticImported = (scope: Scope, name: string, arity: number | undefined): { type: CSharpType; candidates: Candidate[] } | null => {
     for (const level of types.usingScope(scope.fileId, scope.namespace, scope.line)) {
       for (const source of level.statics) {
-        const type = types.byQualifiedName(source);
+        const type = types.byQualifiedName(source, undefined, scope.fileId);
         if (!type) continue;
         const candidates = findMethods(type, name, arity).filter((candidate) => candidate.fn.properties.isStatic === true);
         if (candidates.length > 0) return { type, candidates };
@@ -292,6 +292,7 @@ export function createCSharpCallSession(graph: IGraphContributor, index: Resolut
   // ---- Extension methods ----
   const extensionVisible = (owner: CSharpType, scope: Scope): boolean => {
     // An alias (`using E = Acme.Ext;`) brings no extension methods into scope, but it does not hide the ones another level does.
+    if (!types.visibleFrom(scope.fileId, owner)) return false;
     for (const level of types.usingScope(scope.fileId, scope.namespace, scope.line)) {
       if (level.namespace === owner.namespace || level.usings.includes(owner.namespace) || level.statics.includes(owner.qualifiedName)) return true;
     }
