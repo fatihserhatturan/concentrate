@@ -2,14 +2,15 @@ import type { IGraphContributor } from "../../../core/contracts/graph-contributo
 import type { GraphNode, GraphRelationship } from "../../../core/graph/model.js";
 import type { ResolutionRelationshipIndex } from "../../../core/scan/resolution/indexes.js";
 import { isCSharpFile } from "../file-kind.js";
+import { csharpUsingIndexOf } from "./namespaces.js";
+import { csharpNamespaceIndexOf } from "./project.js";
 
 // Type names of C# code, resolved straight from the graph nodes: a name written in a file / namespace /
 // enclosing type is the Class or Interface node it means, or null (a System, third-party or unknown type).
 //
-// This index does not depend on the namespace index of the imports track: namespaces are read from the
-// `namespace` property of the Class and Interface nodes (and `File.csharpNamespaces`), usings from the raw
-// `Import` nodes (`importKind`, `alias`, `isGlobal`, `usingScope`). The one function that decides what a
-// `using` brings into scope is `buildUsingScope`: swap it for the imports track's helper if wanted.
+// Usings come from the imports track (`csharpUsingIndexOf`), already resolved, so how a `using` resolves is
+// decided in one place (`namespaces.ts`). Namespaces are read from the `namespace` property of the Class and
+// Interface nodes (and `File.csharpNamespaces`), which also covers types merged from `partial` declarations.
 //
 // A simple name is looked up, in order, in the enclosing types (their members and inherited member types),
 // then, for each enclosing namespace from the innermost to the global one, in the types of that namespace
@@ -230,10 +231,6 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
   const byId = new Map<string, CSharpType>();
   const byQualified = new Map<string, CSharpType[]>();
   const topLevelByNamespace = new Map<string, Map<string, CSharpType[]>>();
-  const namespaces = new Set<string>();
-  const addNamespace = (namespace: string) => {
-    for (let current = namespace; current !== ""; current = current.includes(".") ? current.slice(0, current.lastIndexOf(".")) : "") namespaces.add(current);
-  };
   for (const label of ["Class", "Interface"] as const) {
     for (const node of graph.nodesWithLabel(label)) {
       const fileIds = filesByType.get(node.id);
@@ -255,7 +252,6 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       types.push(type);
       byId.set(type.id, type);
       push(byQualified, qualifiedName, type);
-      addNamespace(namespace);
       if (type.outer === null) {
         let inNamespace = topLevelByNamespace.get(namespace);
         if (!inNamespace) topLevelByNamespace.set(namespace, inNamespace = new Map());
@@ -263,7 +259,6 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       }
     }
   }
-  for (const file of graph.nodesWithLabel("File")) for (const namespace of parseJsonList<string>(file.properties.csharpNamespaces)) if (typeof namespace === "string") addNamespace(namespace);
 
   const pick = (list: readonly CSharpType[] | undefined, arity: number | undefined): CSharpType | null => {
     if (!list || list.length === 0) return null;
@@ -282,36 +277,29 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
   const member = (owner: CSharpType, name: string, arity?: number): CSharpType | null => byQualifiedName(`${owner.qualifiedName}.${name}`, arity);
 
   // ---- usings ----
-  const importsByFile = new Map<string, GraphNode[]>();
-  const globalImports: GraphNode[] = [];
-  for (const node of graph.nodesWithLabel("Import")) {
-    const fileId = index.fileByImportId.get(node.id);
-    if (!fileId || !isCSharpFile(fileId)) continue;
-    push(importsByFile, fileId, node);
-    if (node.properties.isGlobal === true) globalImports.push(node);
-  }
+  // The imports track decides how a `using` resolves (scope-relative names, aliases, static types); this index only
+  // groups its resolved usings per namespace level of a use site.
+  const usingIndex = csharpUsingIndexOf(graph);
+  const namespaceIndex = csharpNamespaceIndexOf(graph);
   const namespaceChain = (namespace: string): string[] => {
     const levels: string[] = [];
     for (let current = namespace; current !== ""; current = current.includes(".") ? current.slice(0, current.lastIndexOf(".")) : "") levels.push(current);
     levels.push("");
     return levels;
   };
-  // What a `using` brings into scope: the one place that reads the raw Import nodes.
   const buildUsingScope = (fileId: string, namespace: string): CSharpUsingLevel[] => {
-    const own = importsByFile.get(fileId) ?? [];
+    const own = usingIndex?.usingsOfFile(fileId) ?? [];
     return namespaceChain(namespace).map((level) => {
       const result: CSharpUsingLevel = { namespace: level, usings: [], aliases: new Map(), statics: [] };
-      const nodes = [...own.filter((node) => String(node.properties.usingScope ?? "") === level && node.properties.isGlobal !== true), ...(level === "" ? globalImports : [])];
-      for (const node of nodes) {
-        const source = String(node.properties.source ?? "");
-        if (!source) continue;
-        const kind = node.properties.importKind;
-        if (kind === "alias" && typeof node.properties.alias === "string") {
-          if (!result.aliases.has(node.properties.alias)) result.aliases.set(node.properties.alias, source);
-        } else if (kind === "static" || node.properties.isStatic === true) {
-          if (!result.statics.includes(source)) result.statics.push(source);
-        } else if (!result.usings.includes(source)) {
-          result.usings.push(source);
+      const resolved = [...own.filter((using) => using.scope === level && !using.isGlobal), ...(level === "" ? usingIndex?.globalUsings ?? [] : [])];
+      for (const using of resolved) {
+        if (!using.source) continue;
+        if (using.kind === "alias" && using.alias !== undefined) {
+          if (!result.aliases.has(using.alias)) result.aliases.set(using.alias, using.target);
+        } else if (using.kind === "static") {
+          if (!result.statics.includes(using.target)) result.statics.push(using.target);
+        } else if (!result.usings.includes(using.target)) {
+          result.usings.push(using.target);
         }
       }
       return result;
@@ -332,7 +320,7 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
     return parseJsonList<string>(graph.node(scope.fileId)?.properties.csharpNamespaces)[0] ?? "";
   };
 
-  const hasNamespace = (name: string): boolean => namespaces.has(name);
+  const hasNamespace = (name: string): boolean => namespaceIndex.hasNamespace(name);
   const namespaceNamed = (name: string, scope: CSharpTypeScope): string | null => {
     const levels = usingScope(scope.fileId, namespaceOfScope(scope));
     const [first, ...rest] = name.split(".");
@@ -340,12 +328,12 @@ function build(graph: IGraphContributor, index: ResolutionRelationshipIndex): CS
       const target = level.aliases.get(first!);
       if (target !== undefined) {
         const full = [target, ...rest].join(".");
-        return namespaces.has(full) ? full : null;
+        return hasNamespace(full) ? full : null;
       }
     }
     for (const level of levels) {
       const full = level.namespace === "" ? name : `${level.namespace}.${name}`;
-      if (namespaces.has(full)) return full;
+      if (hasNamespace(full)) return full;
     }
     return null;
   };
