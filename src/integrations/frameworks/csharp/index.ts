@@ -11,6 +11,7 @@ export { csharpRoutesContributor, csharpRoutesPlugin, csharpRoutesSchema } from 
 export { csharpGrpcContributor, csharpGrpcPlugin, csharpGrpcSchema } from "./grpc.js";
 export { csharpSignalrContributor, csharpSignalrPlugin, csharpSignalrSchema } from "./signalr.js";
 export { csharpFrameworkEntrypointsContributor, csharpFrameworkEntrypointsPlugin, csharpFrameworkEntrypointsSchema } from "./framework-entrypoints.js";
+export { csharpHandlerInjectionContributor } from "./handler-injection.js";
 export { csharpDiContributor, csharpDiPlugin, csharpDiSchema } from "./di.js";
 
 // Each Phase 46 track adds its own plugin (and keeps its own schema extension) in its own file; this list only wires them.

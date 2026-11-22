@@ -59,11 +59,11 @@ const HTTP_ATTRIBUTES: Record<string, string> = { HttpGet: "GET", HttpPost: "POS
 const MINIMAL_VERBS: Record<string, string> = { MapGet: "GET", MapPost: "POST", MapPut: "PUT", MapDelete: "DELETE", MapPatch: "PATCH" };
 const KNOWN_METHODS = new Set(["GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE", "CONNECT"]);
 
-type Part = { value: string; resolved: boolean };
+export type Part = { value: string; resolved: boolean };
 
 // ---------------------------------------------------------------- paths shared by both halves
 
-function describePath(parts: readonly Part[]): { path: string | null; expression: string | null } {
+export function describePath(parts: readonly Part[]): { path: string | null; expression: string | null } {
   if (parts.every((part) => part.resolved)) return { path: joinRoutePath(...parts.map((part) => part.value.replace(/^~/u, ""))), expression: null };
   const written = parts.filter((part) => !part.resolved || part.value !== "").map((part) => (part.resolved ? JSON.stringify(part.value) : part.value));
   return { path: null, expression: written.join(" + ") };
@@ -127,8 +127,9 @@ const partOfArgument = (argument: ArgumentInfo): Part => (argument.kind === "str
 
 const MAX_GROUP_DEPTH = 8;
 
-export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
-  if (!root.text.includes("Map")) return;
+// Resolves the `MapGroup` prefix an endpoint builder expression stands for (`app` none, `app.MapGroup("/a")` /a, `api` a
+// local holding a group, nested groups). Shared by the minimal API routes and `MapHub` (SignalR).
+export function createGroupPrefixResolver(functions: Parameters<VersionedCSharpParsePlugin>[0]["functions"]): (expression: SyntaxNode | null, fn: GraphNode, line: number) => Part[] {
   const syntaxOf = new Map(functions.map((entry) => [entry.node.id, entry.syntax]));
   const declarators = new Map<string, Declarator[]>();
   const declaratorsFor = (fn: GraphNode): Declarator[] => {
@@ -140,8 +141,6 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     }
     return list;
   };
-
-  // The prefix an endpoint builder expression stands for: `app` none, `app.MapGroup("/a")` /a, `api` (a local holding a group) its prefix.
   const prefixOf = (expression: SyntaxNode | null, fn: GraphNode, line: number, depth: number): Part[] => {
     if (!expression || depth > MAX_GROUP_DEPTH) return [];
     const node = unwrapParentheses(expression);
@@ -159,6 +158,13 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     }
     return parts;
   };
+  return (expression, fn, line) => prefixOf(expression, fn, line, 0);
+}
+
+export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
+  if (!root.text.includes("Map")) return;
+  const syntaxOf = new Map(functions.map((entry) => [entry.node.id, entry.syntax]));
+  const groupPrefix = createGroupPrefixResolver(functions);
 
   const argumentAt = (info: InvocationInfo, name: string, index: number): ArgumentInfo | undefined =>
     info.arguments.find((argument) => argument.name === name) ?? info.arguments.filter((argument) => argument.name === null)[index];
@@ -189,7 +195,7 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     const nameNode = syntax.childForFieldName("function")?.childForFieldName("name") ?? syntax;
     const line = nameNode.startPosition.row + 1;
     const methods = isMethods ? methodsOfList(argumentAt(info, "httpMethods", 1)!.text) : isMap ? [ANY_METHOD] : [MINIMAL_VERBS[info.name]!];
-    const parts = [...prefixOf(info.receiver, fn, line, 0), partOfArgument(path)];
+    const parts = [...groupPrefix(info.receiver, fn, line), partOfArgument(path)];
     const record: MinimalRecord = { methods, parts, line, handler };
     node.properties.aspnetRoute = JSON.stringify(record);
   }

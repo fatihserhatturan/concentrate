@@ -29,7 +29,7 @@ import { csharpTypeResolver, type CSharpTypeResolver } from "./type-names.js";
 //     (it counts as a constructor), and `[FromServices]` / `[FromKeyedServices("k")]` parameters of any method of a
 //     consumer. `IEnumerable<IFoo>` injects every provider of IFoo (not the keyed ones).
 //   - `consumer -INJECTS-> implementation` with `fieldName` (parameter name) and `via` (constructor,
-//     primary-constructor, from-services; wave 2 adds handler-parameter). The service type must match exactly (Microsoft
+//     primary-constructor, from-services; `handler-parameter` is added by handler-injection.ts). The service type must match exactly (Microsoft
 //     DI has no subtype lookup); a closed generic point (`IRepo<User>`) matches an open registration and the same closed
 //     one. Exactly one distinct implementation resolves; two or more (Microsoft DI would take the last, the issue wants
 //     ambiguity reported) add one to the consumer's `ambiguousInjections` and link nothing. A factory registration whose
@@ -37,8 +37,8 @@ import { csharpTypeResolver, type CSharpTypeResolver } from "./type-names.js";
 //     nor counted, except a registered class asked for by its own type.
 //   - keys: `AddKeyedX<I, C>("k")` is matched by the literal key of `[FromKeyedServices("k")]`; an unkeyed point only sees
 //     unkeyed registrations. A key that is not a string literal is never guessed (it may match anything).
-// Not handled: `RemoveAll` / `Replace`, assembly scanning (Scrutor), `[ActivatorUtilitiesConstructor]`, Autofac modules,
-// minimal-API handler parameters (wave 2 uses `resolveCSharpInjection`).
+// Minimal-API handler parameters are read by handler-injection.ts (it reuses `resolveCSharpInjection`).
+// Not handled: `RemoveAll` / `Replace`, assembly scanning (Scrutor), `[ActivatorUtilitiesConstructor]`, Autofac modules.
 
 type Registration = {
   method: string;
