@@ -33,7 +33,7 @@ the only runtime dependency left is `web-tree-sitter`.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
   frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10), the Rust
-  ecosystem (M11), the Python ecosystem (M12) and the C/C++ ecosystem (M13).
+  ecosystem (M11), the Python ecosystem (M12), the C/C++ ecosystem (M13) and the Java ecosystem (M14).
 
 ### Dependency replacement map
 
@@ -1651,13 +1651,13 @@ MapStruct, openapi-generator): what they write is not in the graph. The decision
 
 ### Accuracy and performance
 
-- [x] Java rows in every `bench:accuracy` section; precision 100%, recall reported (100% on every row, with the unlabeled limits in accuracy.md)
+- [x] Java rows in every `bench:accuracy` section; precision 100%, recall reported (100% on every row in the final run; the first run before the fixes and the label conventions adapted to the scanner are in accuracy.md)
 - [x] Scan time and memory for the Java samples in `docs/benchmarks.md`
 
 ### Agent benchmark
 
 - [x] Java questions (routes, callers, impact, injection, modules, tables, env) in `bench/agent/questions-java.json`
-- [ ] Results per category committed and documented: pending approval of the cost estimate for a paid run
+- [ ] Results per category committed and documented: pending, the paid run of the questions is the next step after this PR
 
 ### Docs
 

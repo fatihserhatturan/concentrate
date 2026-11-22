@@ -2613,8 +2613,8 @@ Outbound HTTP (`api_consumers`):
 ### Java measurement (Phase 43)
 
 Measured on four pinned samples (`docs/accuracy.md`, "Java samples"): 20 of 20 routes, 451 of 451
-call sites, 153 of 153 data accesses, 6 of 6 env reads, 7 SQL tables, 10 rpcs, 12 build-target
-facts, 369 of 369 `import` resolutions and 31 of 31 injections, with no false positive. The labels
+call sites, 215 of 215 data accesses, 6 of 6 env reads, 7 SQL tables, 10 rpcs, 12 build-target
+facts, 369 of 369 `import` resolutions and 31 of 31 injections visible without Lombok, with no false positive. The labels
 are scoped to what a static read of the repository can see; what follows is what is outside
 that scope.
 
@@ -2637,8 +2637,26 @@ that scope.
   symbols and a mixed Java and Kotlin module has only its Java half in the graph.
 - **`@ConditionalOn*` beans are not evaluated.** A bean guarded by `@ConditionalOnProperty`,
   `@ConditionalOnMissingBean` or another condition counts as present; two such providers behind one
-  interface are ambiguous. `@Profile` is read (see Dependency injection above), but a
-  profile expression (`!dev`, `a & b`) is compatible with any profile.
+  interface are ambiguous. `@Profile` is read (see Dependency injection above), including
+  expressions with `!`, `&`, `|` and parentheses; an expression that does not parse and a
+  profile name that is a constant the scan cannot resolve are treated as compatible with every
+  profile, so such a provider may get an edge that no profile activates.
+- **One unprofiled default bean next to profiled alternatives is ambiguous.** A consumer of an
+  interface with one implementer without `@Profile` and others with `@Profile` gets no `INJECTS`
+  edge (`ambiguousInjections` counts it): which of them is active depends on the profile, and
+  the graph does not pick.
+- **A join `COUNT` stays a `read`.** `select count(*) from a join b ...` is an aggregate over
+  more than one table, so the scan does not know which table the count belongs to and keeps it
+  as a read of the tables it finds; only an aggregate-only `SELECT` over a single table is an
+  aggregate.
+- **A Gradle dependency between modules is emitted twice in the raw graph**: once as the
+  `PACKAGE_IMPORTS_PACKAGE` edge with its declared scope (`implementation`, `api`, ...) and again
+  with `dependencyType: "internalImport"` (the source import between the two modules). The accuracy harness dedupes them; a Cypher query over the raw graph
+  counts both.
+- **A wildcard import has no `RESOLVES_TO`.** `import a.b.*;` names a package, not a file, so
+  import-cycle detection (`find_import_cycles`) and the import views (`trace_import_chain`,
+  import graphs) do not see on-demand imports of Java. `affected` follows them to every file of
+  the package and so over-includes by design.
 - **A `@Bean` method that returns `new X()` under an interface type** (`Notifier notifier() { return
   new EmailNotifier(); }`) is not followed to `EmailNotifier`: the bean is the interface, so a consumer of
   the interface gets the edge to the configuration class, not to the implementer.

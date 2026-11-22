@@ -846,8 +846,12 @@ the same as before the phase; the new rows only add to them).
 
 `npm run bench:accuracy` now has Java rows in every section that applies (routes, calls,
 data access, env reads, SQL tables, rpcs, build targets, `import` resolution and dependency
-injection). Latest run, one `npm run bench:accuracy -- --sample <name>` per sample on
-2026-11-21: [`bench/results/accuracy-java-0.1.0-2026-11-21.json`](../bench/results/accuracy-java-0.1.0-2026-11-21.json).
+injection). The numbers below are from a full run (every sample, `--json`), recorded again on
+2026-11-22 after the review fixes:
+`npm run bench:accuracy -- --json bench/results/accuracy-java-0.1.0-2026-11-21.json`
+([`bench/results/accuracy-java-0.1.0-2026-11-21.json`](../bench/results/accuracy-java-0.1.0-2026-11-21.json),
+which also holds the non-Java samples). To score one sample: `npm run bench:accuracy -- --sample <name>`
+(the flag takes one name; repeating it keeps only the last).
 The labels were written from the pinned sources in `scripts/samples.json`, not from Concentrate
 output: [Spring PetClinic REST](https://github.com/spring-petclinic/spring-petclinic-rest) (JPA,
 JDBC and Spring Data repositories selected by profile), the Spring Boot RealWorld app
@@ -874,29 +878,35 @@ Label conventions decided in this phase (they are in each label file's `$comment
   runtime and the graph cannot tell which; implementers whose profile shares nothing with the
   consumer's own `@Profile` are dropped.
 - **Lombok-generated injection points are not labeled** (`@AllArgsConstructor`,
-  `@RequiredArgsConstructor`): the RealWorld sample has 49 of them (47 with a scanned provider)
-  that the scan cannot see, so its injection recall is not recall of the app's wiring.
+  `@RequiredArgsConstructor`): the RealWorld sample has 54 real injection points, of which 7 are
+  labeled and 47 (Lombok-generated, with a scanned provider) are not visible to the scan. Its
+  injection recall of 7 of 7, and the 31 of 31 above, are the injections visible without Lombok,
+  not recall of the apps' wiring.
 
 | Kind | Samples | Labels | TP | FP | FN | Precision | Recall |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Routes | PetClinic REST, RealWorld | 20 | 20 | 0 | 0 | 100% | 100% |
 | Calls | PetClinic REST, RealWorld, grpc-java examples, concurrency-limits | 451 | 451 | 0 | 0 | 100% | 100% |
-| Data access | PetClinic REST, RealWorld | 153 | 153 | 0 | 0 | 100% | 100% |
+| Data access | PetClinic REST, RealWorld | 215 | 215 | 0 | 0 | 100% | 100% |
 | Env reads | PetClinic REST (the other three have none) | 6 | 6 | 0 | 0 | 100% | 100% |
 | SQL tables | RealWorld | 7 | 7 | 0 | 0 | 100% | 100% |
 | Rpcs | grpc-java examples (10 rpcs in 4 protos, with the Java methods that implement them) | 10 | 10 | 0 | 0 | 100% | 100% |
 | Build targets | concurrency-limits (Gradle modules and their links) | 12 | 12 | 0 | 0 | 100% | 100% |
 | `import` resolution | all four | 369 | 369 | 0 | 0 | 100% | 100% |
-| Injections (`INJECTS`) | PetClinic REST, RealWorld (none in the other two) | 31 | 31 | 0 | 0 | 100% | 100% |
+| Injections (`INJECTS`), visible without Lombok | PetClinic REST, RealWorld (none in the other two) | 31 | 31 | 0 | 0 | 100% | 100% |
 
 Per sample, labels (all with 0 false positives and 0 false negatives):
 
 | Sample | Routes | Calls | Data access | Env | Imports | Injections | Other |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
-| internet-java-spring-petclinic-rest | 1 | 57 | 73 | 6 | 140 | 24 | |
+| internet-java-spring-petclinic-rest | 1 | 57 | 135 | 6 | 140 | 24 | |
 | internet-java-spring-realworld | 19 | 55 | 80 | 0 | 199 | 7 | 7 SQL tables |
-| internet-java-grpc-examples | | 75 | | 0 | 0 | | 10 rpcs |
+| internet-java-grpc-examples | | 75 | | 0 | 0 (guard only) | | 10 rpcs |
 | internet-java-gradle-multimodule | | 264 | | 0 | 30 | 0 | 12 build targets |
+
+- **grpc-java imports are a false-positive guard only.** Every import label of that sample is
+  null (none names a file of the repository), so it can only fail by inventing a target.
+  In-repository wildcard imports are covered by unit tests in `tests/java-*.test.ts`, not by a sample.
 
 Every row is 100% precision and 100% recall because the labels are scoped to what the
 graph can know (see the limits below): what lies outside that scope is a known limitation
@@ -914,7 +924,7 @@ kind as a false positive.
   `DgsConstants.*` name classes the DGS codegen generates; they are labeled null.
 - **MapStruct mapper parameters in PetClinic REST get no injection edge**: the implementations
   are generated at build time.
-- **RealWorld injections** are only the ones visible without Lombok.
+- **RealWorld injections** are only the ones visible without Lombok: 7 labeled of 54 real injection points.
 - **grpc-java**: the generated stubs and protobuf classes are not in the scan. A call through a
   stub (`blockingStub.sayHello`) is labeled with the service implementation it runs, as in the
   C++ sample.
@@ -928,3 +938,61 @@ kind as a false positive.
   `Optional` and lambda parameters get their types from the generic signature; profile-gated
   alternatives each get an `INJECTS` edge. Each is covered by a test in `tests/java-*.test.ts`.
 
+### Label conventions adapted to the scanner during the phase
+
+The labels were written from the sources, but two conventions were changed after the first run
+to match what the scanner reports, so the final 100% is not a blind score. Both changes are
+visible in the git history of the label files:
+
+- **Interface calls: implementer-only, then declaration plus implementers** (`06d4dd7` for
+  RealWorld, `90035ab` for the others). The first labels named only the implementing methods for
+  a call through an interface-typed receiver. The scan reports the interface method declaration
+  as well (javac binds the call to the declaration, which is a real node, so a caller of it is a
+  real caller), so the labels were changed to declaration plus every implementer, to say what
+  the scan reports. This is a label change made after seeing the scanner's output, not a blind
+  label. A mapper interface with no implementation in the repository keeps the declaration as its
+  only target. The 10 labeled call targets that tell same-name overloads apart carry a `line`
+  for the declaration they mean.
+- **`COUNT` over one table is an aggregate, not a read** (`fccf223`, together with a scanner
+  change). JDBC and JPQL already scored an aggregate-only `SELECT` over one table as an
+  aggregate; the scanner change made MyBatis XML and native `@Query` do the same, and the RealWorld
+  `select count(1) from t` labels were relabeled from read to aggregate in the same commit,
+  so the convention is one for every Java SQL source. A `COUNT` over a join stays a `read`
+  (see [known limitations](known-limitations.md#java-measurement-phase-43)).
+
+### First run, before fixes
+
+The hand labels of the first wave (RealWorld `8a913c6`, PetClinic REST `700bbb1`, grpc-java and
+concurrency-limits `3595012`) scored against the first scanner (`0308209`, before any fix of this
+phase), one sample at a time. Kinds with no label are left out (the Gradle build-target labels
+did not exist yet; the grpc-java `imports` are all null, so they score nothing). The
+labels grew afterwards (PetClinic REST data access 73 to 135, RealWorld calls 49 to 55, build targets
+added), so the label counts differ from the final table.
+
+| Sample | Kind | Labels | TP | FP | FN | Precision | Recall |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| internet-java-spring-petclinic-rest | Routes | 1 | 1 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-petclinic-rest | Calls | 57 | 57 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-petclinic-rest | Data access | 73 | 66 | 9 | 7 | 88.0% | 90.4% |
+| internet-java-spring-petclinic-rest | Env | 6 | 6 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-petclinic-rest | Imports | 140 | 140 | 2 | 0 | 98.6% | 100.0% |
+| internet-java-spring-petclinic-rest | Injections | 24 | 9 | 0 | 15 | 100.0% | 37.5% |
+| internet-java-spring-realworld | Routes | 19 | 19 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-realworld | Calls | 49 | 49 | 6 | 0 | 89.1% | 100.0% |
+| internet-java-spring-realworld | Data access | 80 | 80 | 19 | 0 | 80.8% | 100.0% |
+| internet-java-spring-realworld | SQL tables | 7 | 7 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-realworld | Imports | 199 | 199 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-spring-realworld | Injections | 7 | 1 | 0 | 6 | 100.0% | 14.3% |
+| internet-java-grpc-examples | Calls | 75 | 75 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-grpc-examples | Rpcs | 10 | 10 | 0 | 0 | 100.0% | 100.0% |
+| internet-java-gradle-multimodule | Calls | 264 | 169 | 0 | 95 | 100.0% | 64.0% |
+| internet-java-gradle-multimodule | Imports | 30 | 30 | 0 | 0 | 100.0% | 100.0% |
+
+Totals of the first run: calls 350 of 445 found (98.3% precision, 78.7% recall), data access 146
+TP, 28 FP and 7 FN of 153 labels (83.9% precision, 95.4% recall), imports 369 TP and 2 FP (99.5%
+precision, 100% recall), injections 10 of 31 (32.3% recall, no FP). The scanner and labeling
+changes between this run and the final table are the commits `0308209..HEAD`: overloads by argument
+types (`649538c`), wildcard imports (`e16a6cd`), `COUNT` aggregates (`eea8e10`, `fccf223`), JPA
+`merge` and `SimpleJdbcInsert` (`754b18a`, `31a07a7`), injection recall (`6f253c8`), and the
+review fixes (overloads by unscanned type names, `SimpleJdbcInsert` scoping, `@Profile`
+expressions, Spring Data `countQuery`), plus the label conventions above.
