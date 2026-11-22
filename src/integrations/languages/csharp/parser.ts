@@ -95,13 +95,45 @@ const kindOfDeclaration: Record<string, TypeKind> = {
 
 const qualify = (scope: string, name: string) => (scope === "" ? name : `${scope}.${name}`);
 
-export const csharpParser: LanguageParser = {
-  language: "csharp",
-  version: "1",
-  parse: parseCSharpFile,
-};
+// A method, constructor, accessor or operator of the file with the syntax it was built from (`syntax` is its
+// declaration; for a primary constructor the parameter list). The synthetic `<top-level>` function of a file with
+// top-level statements is listed with `syntax` the compilation unit.
+export type CSharpParsedFunction = { syntax: SyntaxNode; node: GraphNode };
+// A type declaration (class, struct, record, interface, enum, delegate) with its Class or Interface node. A `partial`
+// type has one node for every declaring file: each file lists it with its own syntax.
+export type CSharpParsedType = { syntax: SyntaxNode; node: GraphNode };
+// An invocation or object creation with its Call node and the Function whose body holds it.
+export type CSharpParsedCall = { syntax: SyntaxNode; node: GraphNode; function: GraphNode };
 
-async function parseCSharpFile(rootPath: string, filePath: string): Promise<ParsedSourceFile> {
+// Parse-time semantics a framework layer adds to a C# file once its structure is built (the way Java and Go
+// parse plugins do): it may add properties, nodes and relationships. It runs while the syntax tree is alive, so it
+// can read what the graph does not keep (lambda bodies, argument expressions, nesting of calls).
+export type CSharpParsePlugin = (file: {
+  fileNodeId: string;
+  root: SyntaxNode;
+  nodes: GraphNode[];
+  relationships: GraphRelationship[];
+  functions: readonly CSharpParsedFunction[];
+  types: readonly CSharpParsedType[];
+  calls: readonly CSharpParsedCall[];
+}) => void;
+
+// A plugin may carry a `version`: part of the parser's cache fingerprint, bumped when its output changes
+// (so each framework layer bumps its own, not the parser's).
+export type VersionedCSharpParsePlugin = CSharpParsePlugin & { version?: string };
+
+export function createCSharpParser(plugins: readonly VersionedCSharpParsePlugin[] = []): LanguageParser {
+  const versions = plugins.flatMap((plugin) => (plugin.version === undefined ? [] : [plugin.version]));
+  return {
+    language: "csharp",
+    version: versions.length === 0 ? "1" : `1+${versions.join("+")}`,
+    parse: (rootPath, filePath) => parseCSharpFile(rootPath, filePath, plugins),
+  };
+}
+
+export const csharpParser: LanguageParser = createCSharpParser();
+
+async function parseCSharpFile(rootPath: string, filePath: string, plugins: readonly CSharpParsePlugin[]): Promise<ParsedSourceFile> {
   const source = await readFile(filePath, "utf8");
   const relativePath = path.relative(rootPath, filePath);
   const fileNodeId = `file:${relativePath}`;
@@ -111,6 +143,9 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
   const usedIds = new Set<string>([fileNodeId]);
   const namespaces = new Set<string>();
   const partialFacts: PartialFact[] = [];
+  const parsedFunctions: CSharpParsedFunction[] = [];
+  const parsedTypes: CSharpParsedType[] = [];
+  const parsedCalls: CSharpParsedCall[] = [];
 
   const { tree, skippedLines } = await parseSyntaxTreeSkippingErrors("csharp", source, statementParents, 4);
   try {
@@ -245,6 +280,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
           if (call) {
             nodes.push(call);
             relationships.push({ from: fn.id, to: call.id, type: "CALLS", properties: {} });
+            if (plugins.length > 0) parsedCalls.push({ syntax: node, node: call, function: fn });
           }
         }
         const children = node.namedChildren;
@@ -315,6 +351,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
         owner.methodNames.push(spec.name);
         owner.fact.methods.push(spec.name);
       }
+      if (plugins.length > 0 && spec.kind !== "initializer") parsedFunctions.push({ syntax: spec.node, node: fn });
       walkCode(spec.roots, fn, locals);
       return fn;
     };
@@ -661,6 +698,7 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       if (!name || !kind) return null;
       const { words, attributeLists } = modifiersOf(node);
       const owner = createOwner(node, kind, name, outer, namespace, words);
+      if (plugins.length > 0) parsedTypes.push({ syntax: node, node: owner.node });
       addDecorators(owner.id, owner.isInterface ? "INTERFACE_HAS_DECORATOR" : "HAS_DECORATOR", attributesOf(attributeLists));
       if (kind === "delegate") {
         addDelegateSignature(node, owner);
@@ -842,7 +880,12 @@ async function parseCSharpFile(rootPath: string, filePath: string): Promise<Pars
       };
       add(fn, fileNodeId, "DEFINES_FUNCTION");
       usedIds.add(fn.id);
+      if (plugins.length > 0) parsedFunctions.push({ syntax: tree.rootNode, node: fn });
       walkCode(topLevel, fn, locals);
+    }
+
+    for (const plugin of plugins) {
+      plugin({ fileNodeId, root: tree.rootNode, nodes, relationships, functions: parsedFunctions, types: parsedTypes, calls: parsedCalls });
     }
 
     if (namespaces.size > 0) fileNode.properties.csharpNamespaces = JSON.stringify([...namespaces].sort());
