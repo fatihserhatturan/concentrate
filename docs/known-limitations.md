@@ -2678,8 +2678,9 @@ that scope.
 
 - The grammar is tree-sitter-c-sharp, vendored as `vendor/grammars/csharp.wasm`. The
   extensions are `.cs` and `.csx`. `*.g.cs`, `*.g.i.cs`, `*.Designer.cs` and every
-  file under an `obj/` directory are generated (the descriptor's
-  `generatedDirectories`). A file with a syntax error is kept as a partial graph
+  `.cs` or `.csx` file under an `obj/` directory are generated (the descriptor's
+  `generatedDirectories`, which applies to C# files only: `src/obj/model.py` stays
+  production). A file with a syntax error is kept as a partial graph
   and gets a scan warning.
 - Covered: block-scoped and file-scoped namespaces, `using`, `using static`,
   `using Alias = ...` and `global using`; classes, structs, records, enums, delegates
@@ -2688,6 +2689,18 @@ that scope.
   `Decorator` nodes; calls resolved through usings, extension methods and
   inheritance with interface and override dispatch; `static Main` and top-level
   statements as entrypoints; xUnit, NUnit and MSTest tests; unused-export rules.
+- **Entrypoints.** A static `Main` with a valid signature is an entrypoint, unless
+  the scan has top-level statements: a project with them ignores every `Main`
+  (CS7022), and the scan is one project, so the top-level statements are then the
+  only entrypoint. The unused-export rule does not see top-level statements and
+  still treats a valid static `Main` as an entrypoint (a type holding one is kept).
+- **Tests are detected per framework.** xUnit (`Fact`, `Theory`), NUnit (`Test`,
+  `TestCase`, `TestCaseSource`, `Theory`, `TestFixture`, `SetUp`, `TearDown`,
+  `OneTimeSetUp`, `OneTimeTearDown`) and MSTest (`TestMethod`, `DataTestMethod`,
+  `TestClass`, `TestInitialize`, ...) each have their own attribute set. A simple
+  attribute name counts only when that framework's namespace is imported in the
+  file (at any scope) or by a `global using`, or when it is written qualified.
+  `using F = Xunit.FactAttribute; [F]` works; `using Xunit; [Test]` is no test.
 - **The scan is one project.** The whole scan is treated as one assembly: `global
   using` and `internal` visibility apply scan-wide. `.csproj` files are not read
   (projects come in Phase 45), and the SDK implicit usings (`System`, `System.Linq`,
@@ -2712,9 +2725,21 @@ that scope.
   When candidates remain, each gets a `CALL_RESOLVES_TO` edge with `via: "overload"`.
 - A name in two used namespaces (CS0104) is not diagnosed: the first match wins.
 - Unused detection is based on name mentions in the scanned C# source, which is
-  conservative: a name in a string counts as a possible reflective use. Members with
-  attributes, overrides, virtual and abstract members, interface implementations
-  and members of types implementing an external interface are never reported.
+  conservative: a name in a string counts as a possible reflective use. Access
+  modifiers do not widen or narrow the judgement the way they do in Java: public,
+  internal and protected members are judged alike, by a mention anywhere in the
+  scan (tests included); only `private` and `private protected` members are judged
+  within the files of their type. Members with attributes, overrides, virtual and
+  abstract members, interface implementations and members of types implementing an
+  external interface are never reported. A record or record struct built only with
+  `new Rec(...)` is used; its primary constructor in the type header is no extra
+  mention. Public, internal and protected methods and properties the language binds
+  by name are never reported: `GetEnumerator`, `MoveNext`, `Current`, `Reset`,
+  `Deconstruct`, `GetAwaiter`, `GetResult`, `IsCompleted`, `OnCompleted`,
+  `UnsafeOnCompleted`, `Dispose`, `DisposeAsync`, `Add`, `GetPinnableReference`,
+  `Slice`, `Length`, `Count`, the LINQ query operators (`Select`, `SelectMany`,
+  `Where`, `OrderBy`, `OrderByDescending`, `ThenBy`, `ThenByDescending`, `GroupBy`,
+  `Join`, `GroupJoin`, `Cast`), `Equals`, `GetHashCode` and `ToString`.
 - An import counts as unresolved only when its root namespace is one of the scan's
   own roots (`Acme.Missing` when the scan declares `Acme.Orders`). `System.*`,
   `Microsoft.*` and any other root the scan does not declare are external.

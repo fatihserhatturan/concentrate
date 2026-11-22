@@ -60,8 +60,8 @@ export interface FileConventions {
   readonly generatedFile: (fileName: string) => boolean;
   readonly supportFile: (fileName: string) => boolean;
   readonly lockfiles: ReadonlySet<string>;
-  /** Directory names whose files are generated, from the languages' `generatedDirectories`. */
-  readonly generatedDirectories: readonly string[];
+  /** Directory names whose files are generated, per language id, from the languages' `generatedDirectories`: they apply to files of that language only. */
+  readonly generatedDirectories: ReadonlyMap<string, readonly string[]>;
   /** Exact file names a language claims (`fileNames`): never documentation because of their extension. */
   readonly claimedFileNames: ReadonlySet<string>;
   readonly ignoredPatterns: readonly string[];

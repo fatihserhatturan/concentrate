@@ -33,11 +33,13 @@ function entryPoint(graph: IGraphContributor, fileId: string, handler: GraphNode
 
 // A static `Main` (any visibility, non-generic, in a non-generic type) with a valid signature is run by the runtime,
 // and so are a file's top-level statements, whose synthetic `<top-level>` Function is the handler. An instance `Main`
-// or one with other parameters is an ordinary method.
+// or one with other parameters is an ordinary method. The scan is one project here (projects come in Phase 45), and a
+// project with top-level statements ignores every `Main` (CS7022), so they win: no `Main` is an entrypoint then.
 export const csharpEntrypointsContributor: ISemanticContributor = {
   id: "csharp.entrypoints",
   contribute(graph) {
-    for (const { node, owner, fileId } of csharpMethods(graph)) {
+    const hasTopLevel = graph.nodesWithLabel("File").some((file) => file.properties.language === "csharp" && file.properties.hasTopLevelStatements === true);
+    for (const { node, owner, fileId } of hasTopLevel ? [] : csharpMethods(graph)) {
       const properties = node.properties;
       if (properties.name !== "Main" || properties.kind !== "method" || properties.isStatic !== true) continue;
       if (!isMainReturn(properties.returnType) || isGeneric(properties.typeParameters) || isGeneric(owner.properties.typeParameters)) continue;

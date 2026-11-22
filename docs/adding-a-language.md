@@ -66,11 +66,11 @@ export const toyDescriptor: LanguageDescriptor = { id: "toy", code: true, extens
   language, as C++ does for `.h`), and file conventions: `testFile`,
   `generatedFile`, `generatedDirectories`, `supportFile`, `lockfiles`,
   `ignoredPatterns`, `ignoredInDirectory`. Conventions apply to every file in
-  the project, not only files of this language.
+  the project, not only files of this language, except `generatedDirectories`.
 - `generatedDirectories` lists directory names whose files are generated, at any
-  depth (C# sets `["obj"]`: MSBuild output). It is collected from every language
-  like the other conventions, so a file under such a directory is generated
-  whatever its language.
+  depth (C# sets `["obj"]`: MSBuild output). They are scoped to the language that
+  declares them: a `.cs` file under `obj/` is generated, a Python or TypeScript
+  file under `obj/` is not.
 - `displayName` is optional and defaults to `id`. The MCP unused-exports note
   uses it for the language name.
 
