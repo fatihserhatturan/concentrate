@@ -1,6 +1,6 @@
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import { projectOfFile, readCSharpProjectModel } from "../../languages/csharp/project/index.js";
-import { declaredCSharpProjects } from "../../languages/csharp/manifest.js";
+import { ownerProjects } from "../../languages/csharp/owner-projects.js";
 
 // What the project files tell about a project beyond what a manifest carries: the project's Package node (made by core
 // from `csharpManifestReader`) gets `projectFile`, `sdk`, `outputType`, `executable`, `rootNamespace`, `assemblyName`,
@@ -16,8 +16,9 @@ export const csharpProjectsContributor: ISemanticContributor = {
     for (const node of graph.nodesWithLabel("File")) {
       if (typeof node.properties.relativePath === "string") fileIds.set(node.properties.relativePath.replace(/\\/gu, "/"), node.id);
     }
-    const model = await readCSharpProjectModel(rootPath, fileIds.keys());
-    const projects = declaredCSharpProjects(model);
+    const fullModel = await readCSharpProjectModel(rootPath, fileIds.keys());
+    const projects = ownerProjects(fullModel);
+    const model = { ...fullModel, projects };
     if (projects.length === 0) return;
 
     // File node id -> the `main` entrypoints it declares (the store only allows RUNS from an EntryPoint to a File or

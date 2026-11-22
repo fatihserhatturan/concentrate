@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { describe, it } from "node:test";
 import { buildCodeGraph } from "../src/composition/orchestrator.js";
@@ -6,6 +8,7 @@ import { interpretMsbuild } from "../src/integrations/languages/csharp/project/m
 import { interpretSolutions } from "../src/integrations/languages/csharp/project/solution.js";
 import { isCSharpProjectFile, projectOfFile } from "../src/integrations/languages/csharp/project/index.js";
 import { emptyCSharpProjectModel } from "../src/integrations/languages/csharp/project/types.js";
+import { ownerProjects } from "../src/integrations/languages/csharp/owner-projects.js";
 import { declaredCSharpProjects } from "../src/integrations/languages/csharp/manifest.js";
 
 function run(texts: Record<string, string>, extra: string[] = []) {
@@ -151,5 +154,30 @@ describe("C# projects: fixture graph", () => {
     assert.ok(list("Shop.Data").length > 0);
     assert.ok(list("Shop.Tests").some((reference) => reference.version !== null));
     assert.ok(list("Shop.Data").every((reference) => typeof reference.name === "string"));
+  });
+});
+
+describe("C# projects: one owner rule", () => {
+  it("manifest Package, entrypoint owner and scoping owner agree for two projects in one directory", async () => {
+    const root = await mkdtemp(path.join(os.tmpdir(), "cs-owner-"));
+    try {
+      await mkdir(path.join(root, "x"));
+      const exe = `<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>`;
+      await writeFile(path.join(root, "x/a.csproj"), exe);
+      await writeFile(path.join(root, "x/B.csproj"), exe);
+      await writeFile(path.join(root, "x/Program.cs"), "System.Console.WriteLine(1);\n");
+      const graph = await buildCodeGraph(root, { continueOnError: false });
+      const packages = graph.nodes.filter((node) => node.label === "Package" && node.properties.manager === "dotnet");
+      // Code-unit order: "B" < "a", so B.csproj owns the directory.
+      assert.deepEqual(packages.map((node) => node.properties.projectFile), ["x/B.csproj"]);
+      const model = { ...emptyCSharpProjectModel(), projects: run({ "x/a.csproj": exe, "x/B.csproj": exe }).projects };
+      assert.deepEqual(ownerProjects(model).map((project) => project.file), ["x/B.csproj"]);
+      assert.deepEqual(declaredCSharpProjects(model).map((project) => project.file), ["x/B.csproj"]);
+      // The projects contributor attaches the entrypoint (found via the entrypoints contributor's CS7022 owner) to B.
+      const runsFrom = graph.relationships.filter((rel) => rel.type === "RUNS").map((rel) => rel.from);
+      assert.deepEqual(runsFrom, ["entrypoint:csharp:x/B.csproj"]);
+    } finally {
+      await rm(root, { recursive: true, force: true });
+    }
   });
 });

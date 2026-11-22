@@ -1,6 +1,7 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GraphNode } from "../../../core/graph/model.js";
+import { ownerProjects } from "../../languages/csharp/owner-projects.js";
 import { projectOfFile, readCSharpProjectModel } from "../../languages/csharp/project/index.js";
 import { csharpMethods } from "./shared.js";
 
@@ -44,7 +45,9 @@ export const csharpEntrypointsContributor: ISemanticContributor = {
     for (const node of graph.nodesWithLabel("File")) {
       if (typeof node.properties.relativePath === "string") relativeOf.set(node.id, node.properties.relativePath.replace(/\\/gu, "/"));
     }
-    const model = await readCSharpProjectModel(rootPath, relativeOf.values());
+    const fullModel = await readCSharpProjectModel(rootPath, relativeOf.values());
+    // Only directory owners own files (same rule as the manifest and namespace scoping).
+    const model = { ...fullModel, projects: ownerProjects(fullModel) };
     const projectOf = (fileId: string): string | undefined => {
       const relative = relativeOf.get(fileId);
       return relative === undefined || model.projects.length === 0 ? undefined : projectOfFile(model, relative)?.file;

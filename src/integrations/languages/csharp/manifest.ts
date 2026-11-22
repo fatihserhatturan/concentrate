@@ -1,29 +1,20 @@
 import path from "node:path";
 import type { DeclaredPackage, IProjectManifestReader, ProjectConfigValue, ProjectManifestContext } from "../../../core/contracts/project-manifest.js";
 import { discoverFiles } from "../../../core/scan/discover-files.js";
-import { readCSharpProjectModel, type CSharpProject, type CSharpProjectModel } from "./project/index.js";
+import { readCSharpProjectModel } from "./project/index.js";
+import { ownerProjects } from "./owner-projects.js";
 
 // The ignore rules of the scan that apply to project files (see the Java reader): the scan's defaults plus the
 // JS/TS descriptor's.
 const SCAN_CONVENTIONS = { ignoredPatterns: ["node_modules", ".next", ".turbo"], ignoredInDirectory: () => [] as string[] };
 
-// The projects that become Package nodes: of several projects in one directory the first by file path is kept (a Package
-// is keyed by its directory); the others are not declared.
-export function declaredCSharpProjects(model: CSharpProjectModel): CSharpProject[] {
-  const kept: CSharpProject[] = [];
-  const dirs = new Set<string>();
-  for (const project of [...model.projects].sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0))) {
-    if (dirs.has(project.dir)) continue;
-    dirs.add(project.dir);
-    kept.push(project);
-  }
-  return kept;
-}
+// The projects that become Package nodes are the directory owners (see owner-projects.ts), the single source of the rule.
+export { ownerProjects as declaredCSharpProjects };
 
 async function readPackages({ rootPath, filePaths }: ProjectManifestContext): Promise<DeclaredPackage[]> {
   const model = await readCSharpProjectModel(rootPath, filePaths);
   if (model.projects.length === 0) return [];
-  const declared = declaredCSharpProjects(model);
+  const declared = ownerProjects(model);
   // A ProjectReference becomes an edge only to a declared project whose name is unique among the declared ones (the
   // core matches dependencies by name, so a duplicated name would be a wrong edge). Package references are not manifest
   // dependencies: core drops them, and they are shown as `packageReferences` on the Package node.
@@ -52,7 +43,7 @@ async function readConfig({ rootPath, fileSystem }: ProjectManifestContext): Pro
   const files = (await discoverFiles(rootPath, fileSystem, { conventions: SCAN_CONVENTIONS })).map((file) => path.relative(rootPath, file).split(path.sep).join("/"));
   const model = await readCSharpProjectModel(rootPath, files);
   const values: ProjectConfigValue[] = [];
-  for (const project of declaredCSharpProjects(model)) {
+  for (const project of ownerProjects(model)) {
     if (project.dir !== ".") continue;
     for (const { key, value } of project.config) values.push({ source: project.file, key, value });
   }
