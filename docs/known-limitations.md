@@ -2822,7 +2822,100 @@ that scope.
 - `[assembly: ...]` attributes are not emitted.
 - The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
   was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
-- Not read yet: C# frameworks (later phases).
+- Frameworks (routes, entrypoints, dependency injection) are described in [C# frameworks](#c-frameworks).
+
+### C# frameworks
+
+HTTP routes, framework entrypoints and dependency injection are in `src/integrations/frameworks/csharp/`. Facts the
+graph does not keep (route strings, lambda bodies, `typeof` arguments, `MapGroup` chains) are read by parse plugins
+and stored on the `Call` node; the contributors turn them into `Route`, `EntryPoint` and `INJECTS`.
+
+- **Attributes are matched by simple name and namespace.** `[HttpGet]`, `[HttpGetAttribute]` and
+  `[Microsoft.AspNetCore.Mvc.HttpGet]` are the same attribute. One that resolves to a type of the scan is the user's
+  own and never counts. A dotted name must fit a framework namespace. An unqualified name counts when a `using` brings
+  the framework namespace, and is rejected when a `using` brings another known framework namespace and none of the
+  right one. **Implicit usings are not visible to this rule.** A file that gets a framework namespace from the SDK's
+  implicit usings or a `<Using>` item has no `using` for it, so an unqualified attribute in a file with no `using` of
+  a known framework namespace is accepted as the framework's. A file with a `using` of another known framework
+  namespace is rejected even if the SDK also brings the right one.
+- **Controller routes.** A controller is a concrete public class that derives from `ControllerBase` or `Controller`
+  (directly or through user base controllers) or has `[ApiController]` or `[Controller]`. Every public instance method
+  that is not `[NonAction]` is an action, one `Route` per verb attribute (`framework: aspnet-mvc`). The class
+  `[Route]` (the nearest one up the base classes) and the method template are joined; a method template that starts
+  with `/` or `~/` replaces the class one. `[controller]`, `[action]` and `[area]` are replaced; `Async` and
+  `[ActionName]` apply to `[action]`. Constraints are kept verbatim (`{id:int}`). An action with no verb attribute is
+  `ALL`, at the class route or at the conventional `/<controller>/<action>` when the class has no `[Route]`, whatever
+  custom pattern the app configures. A constant or interpolated template is never guessed: the route has
+  `path: null` and a `pathExpression`. **A controller found only by the `Controller` name suffix** (no base class
+  and no attribute, which ASP.NET also accepts) is not discovered. `MapControllerRoute`,
+  `IApplicationModelConvention` and `[ApiVersion]` prefixes are not read, and Razor Pages are no routes.
+- **Minimal APIs.** `MapGet`, `MapPost`, `MapPut`, `MapDelete`, `MapPatch`, `MapMethods` and `Map` (`framework:
+  aspnet-minimal`). A `MapGroup` prefix is applied from a chain (`app.MapGroup("/a").MapGet(...)`), from a local that
+  holds the group and from nested groups. A method group links to its `Function`. A lambda links to the enclosing
+  `Function` with `handlerName: "<lambda>"`, and its typed parameters are the route's `handlerParameters` (JSON,
+  shaped like a `Function`'s `parameters`; `[FromServices]` kept). A local function links to the enclosing
+  `Function` under its written name; **its parameters are not in `handlerParameters`**. `app.Map("/x", branch =>
+  ...)` (a middleware branch) is no route.
+- **A group passed into an extension method loses the caller's prefix.** In `app.MapGroup("/api").MapTodos()` the
+  routes inside `MapTodos` keep the paths relative to their own builder (`/todos`, not `/api/todos`): the prefix a
+  caller adds is not followed across the call. The routes are still found.
+- **Minimal-API handler parameters are injection points.** A parameter of a lambda or method-group handler whose type
+  has a registration gets `INJECTS` with `via: "handler-parameter"` from the handler `Function` (the enclosing
+  `Function` for a lambda), resolved like a constructor parameter. Parameters of a local-function handler are not read.
+- **gRPC .NET.** A concrete class deriving from the generated `X.XBase` is recognised by name (the last two segments
+  of the base are `X.XBase`), because the generated code is in `obj/`, not in the scan. Each `public override`
+  method with a gRPC signature (a `ServerCallContext` parameter) is an `EntryPoint` (kind `grpc`, library
+  `grpc-dotnet`, trigger `X/Method`). `MapGrpcService<T>()` is not required: it sets `registered` on the entrypoint.
+  Methods inherited from a scanned base class count. `X.XClient` calls (a field, property, parameter, primary
+  constructor parameter, local, or `new X.XClient(ch)` in place; `FooAsync` links to `Foo`) get `CALL_RESOLVES_TO`
+  with `via: "grpc"` to every implementation. A receiver of unknown type is never linked. **The `.proto` link
+  matches the service by its simple name:** `option csharp_namespace` is not read, so two protos with a service of
+  one name in different packages both link. A `.proto` rpc gets `RPC_IMPLEMENTED_BY`.
+- **SignalR.** A concrete class deriving from `Hub`, `Hub<T>` or `DynamicHub` (directly or through a user base hub) has
+  an `EntryPoint` per public non-static, non-override method (kind `signalr`, library `signalr`, trigger
+  `Hub/method`; `[HubMethodName]` renames it). Lifecycle overrides (`OnConnectedAsync`, `OnDisconnectedAsync`) are no
+  entrypoints. `MapHub<T>("/path")` gives `hubPath`, with the `MapGroup` prefix applied; a hub that is never mapped,
+  or mapped with a constant path, has `hubPath: null`.
+- **Hosted services.** A `BackgroundService` subclass is an `EntryPoint` (kind `hosted-service`, handler
+  `ExecuteAsync`, the nearest one up the scanned bases), and so is an `IHostedService` implementation (handler
+  `StartAsync`). `registered` is true when `AddHostedService<T>()` or `AddSingleton<IHostedService, T>()` names the
+  class. **`StopAsync` is not an entrypoint** (one entrypoint per service), nor are the extra
+  `IHostedLifecycleService` hooks. An abstract base has none.
+- **Azure Functions.** `[Function]` (isolated worker) and `[FunctionName]` (in-process) methods are entrypoints
+  (kind `function`, library `azure-functions`); the trigger comes from the attribute of a parameter (`http`,
+  `timer:<cron>`, `queue:<name>`, `blob:<path>`, `servicebus:`, `eventhub:`, `cosmosdb:`, `kafka:`, `rabbitmq:`; Event
+  Grid and Durable triggers by kind alone). An HTTP trigger also gets a `Route` (`framework: azure-functions`) under
+  the `routePrefix` of the nearest `host.json` (default `api`). **`host.json` is read from disk**, not from the
+  graph. A `%Setting%` placeholder or a constant is `resolved: false`. A method with a trigger attribute but no
+  `[Function]` is nothing.
+- **System.CommandLine.** Commands built with `new Command(...)` or `new RootCommand(...)`, nested with `AddCommand`,
+  `Add`, `Subcommands.Add` or an initializer, and run by `SetHandler`, `SetAction` or
+  `Handler = CommandHandler.Create(...)`: kind `cli`, library `system-commandline`, trigger the command path.
+  **A `RootCommand` takes its name from the executable, so its segment is left out** (the root alone is `<root>`).
+  Not read: a class that derives from `Command` and passes its name to `base("x")`, a command attached to its parent
+  in another file, and a handler that is a local function. An unresolved or overloaded method-group handler gives
+  no entrypoint. A command name that is a constant is written as is and `resolved: false`.
+- **Dependency injection** (`Microsoft.Extensions.DependencyInjection`). Providers: `AddScoped`, `AddTransient`,
+  `AddSingleton`, `TryAdd*` and `AddKeyed*`, with `<IFoo, Foo>`, `<Foo>`, `(typeof(IFoo), typeof(Foo))`, open
+  generics, a factory or an instance, plus `AddHttpClient<I, C>` (Transient), `AddDbContext<T>` (Scoped) and
+  `AddHostedService<T>`. A factory (`sp => new Foo()`) provides `Foo` only when its body is just that `new`; any other
+  factory is one candidate of unknown type, never linked. The implementation class gets `diStereotype` (the
+  lifetime) and `diBeanName` (its name); the first registration in source order wins. The shape of each registration
+  is kept on its `Call` as `diRegistration` (JSON). Injection points: the constructor Microsoft DI would pick (the
+  only public one, else the one with most parameters; a tie is not guessed), the primary constructor,
+  `[FromServices]` and `[FromKeyedServices("k")]` parameters of the methods of consumers, and minimal-API handler
+  parameters. `INJECTS` has `fieldName` and `via` (`constructor`, `primary-constructor`, `from-services`,
+  `handler-parameter`). One implementation links; two or more link nothing and add one to the consumer's
+  `ambiguousInjections`. A type with no registration or outside the scan (`ILogger<T>`, `IOptions<T>`,
+  `HttpClient`) is neither linked nor counted. `IEnumerable<IFoo>` injects every unkeyed provider. A keyed point
+  only sees registrations of the same literal key; a key that is not a literal is never guessed.
+- **Not handled in DI.** `RemoveAll` and `Replace`: the removed or replaced registration still counts, so the
+  interface can be linked to the old class or counted ambiguous. Assembly scanning (Scrutor `Scan`). `Lazy<T>` and
+  `Func<T>` injection: no edge to `T`. `[ActivatorUtilitiesConstructor]` and Autofac modules.
+  **The receiver of `Add*` is not type-checked:** a call with that method name and shape counts on `services`,
+  `builder.Services`, a `this IServiceCollection` parameter or a fluent chain, and so does an unrelated method
+  with the same name. **Conditional and environment-specific registrations** (`if (env.IsDevelopment())`, `#if`) are
+  all read as providers: two branches that register one interface are ambiguous.
 
 ## Non-code files
 
