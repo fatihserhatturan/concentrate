@@ -267,7 +267,8 @@
     "isConditional": "BOOLEAN",
     "typeArguments": "STRING",
     "typeArity": "INT64",
-    "receiverTruncated": "BOOLEAN"
+    "receiverTruncated": "BOOLEAN",
+    "diRegistration": "STRING"
    }
   },
   {
