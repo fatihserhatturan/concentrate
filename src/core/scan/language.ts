@@ -42,7 +42,7 @@ export class LanguageTable {
     return new Set([...this.byId.values()].filter((descriptor) => descriptor.code).map((descriptor) => descriptor.id));
   }
 
-  /** The file-name conventions of all languages together: a test, generated or support name of any language counts for every file. */
+  /** The file-name conventions of all languages together: a test, generated or support name of any language counts for every file. Generated directories are the exception: they stay with their language. */
   get conventions(): FileConventions {
     return combineConventions([...this.byId.values()]);
   }
@@ -119,7 +119,7 @@ export function combineConventions(descriptors: readonly LanguageDescriptor[]): 
     generatedFile: any((descriptor) => descriptor.generatedFile),
     supportFile: any((descriptor) => descriptor.supportFile),
     lockfiles: new Set(descriptors.flatMap((descriptor) => descriptor.lockfiles ?? [])),
-    generatedDirectories: descriptors.flatMap((descriptor) => descriptor.generatedDirectories ?? []),
+    generatedDirectories: new Map(descriptors.filter((descriptor) => descriptor.generatedDirectories?.length).map((descriptor) => [descriptor.id, descriptor.generatedDirectories!])),
     claimedFileNames: new Set(descriptors.flatMap((descriptor) => descriptor.fileNames ?? [])),
     ignoredPatterns: descriptors.flatMap((descriptor) => descriptor.ignoredPatterns ?? []),
     ignoredInDirectory: (entryNames) => scoped.flatMap((hook) => hook(entryNames)),

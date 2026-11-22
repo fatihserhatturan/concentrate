@@ -129,4 +129,93 @@ describe("C# unused exports (fixtures/csharp-unused)", () => {
   it("strips comments but keeps strings", () => {
     assert.equal(stripCSharpComments("a // b\nc /* d */ e \"//x\" @\"//y\" 'z'").replace(/\s+/gu, " "), "a c e \"//x\" @\"//y\" 'z'");
   });
+
+  it("keeps a record built only with new, whose primary constructor is no extra mention", async () => {
+    const project = path.join(root, "project-records");
+    await mkdir(project, { recursive: true });
+    await writeFile(path.join(project, "A.cs"), [
+      "namespace App;",
+      "public record Rec(int A);",
+      "public record struct Point(int X);",
+      "public sealed class Holder(int n) { public int N => n; }",
+      "public record Never(int A);",
+      "public class Caller { public static void Main() { _ = new Rec(1); _ = new Point(1); _ = new Holder(1); } }",
+      "",
+    ].join("\n"));
+    const target = await open(root, project, "records");
+    try {
+      assert.deepEqual((await run(target)).unusedExports.map(label).sort(), ["Holder.N", "Never"]);
+    } finally {
+      await target.close();
+    }
+  });
+
+  it("never reports the duck-typed members the language binds by name, unless private", async () => {
+    const project = path.join(root, "project-duck");
+    await mkdir(project, { recursive: true });
+    await writeFile(path.join(project, "A.cs"), [
+      "namespace App;",
+      "public class Bag",
+      "{",
+      "    public Bag GetEnumerator() => this;",
+      "    public bool MoveNext() => false;",
+      "    public int Current => 0;",
+      "    public void Deconstruct(out int a) { a = 0; }",
+      "    public Bag GetAwaiter() => this;",
+      "    public bool IsCompleted => true;",
+      "    public void GetResult() { }",
+      "    public void Dispose() { }",
+      "    public void Add(int x) { }",
+      "    public int Length => 0;",
+      "    public Bag Slice(int a, int b) => this;",
+      "    public Bag Select(System.Func<int, int> f) => this;",
+      "    public Bag Where(System.Func<int, bool> f) => this;",
+      "    internal Bag OrderBy(System.Func<int, int> f) => this;",
+      "    protected Bag Cast() => this;",
+      "    public override bool Equals(object? o) => false;",
+      "    public new string ToString() => \"\";",
+      "    private void Add(string x) { }",
+      "    private int Count => 0;",
+      "    public void Plain() { }",
+      "}",
+      "public class Caller { public static void Main() { _ = new Bag(); } }",
+      "",
+    ].join("\n"));
+    const target = await open(root, project, "duck");
+    try {
+      assert.deepEqual((await run(target)).unusedExports.map(label).sort(), ["Bag.Count", "Bag.Plain"]);
+    } finally {
+      await target.close();
+    }
+  });
+
+  it("holds a type only for an entrypoint Main: an instance Main or a generic type's Main keeps nothing", async () => {
+    const project = path.join(root, "project-main");
+    await mkdir(project, { recursive: true });
+    await writeFile(path.join(project, "A.cs"), [
+      "namespace App;",
+      "public class Real { static int Main(string[] args) => 0; }",
+      "public class Instance { public void Main() { } }",
+      "public class Generic<T> { public static void Main() { } }",
+      "public class BadArgs { public static void Main(int x) { } }",
+      "",
+    ].join("\n"));
+    const target = await open(root, project, "main");
+    try {
+      assert.deepEqual((await run(target)).unusedExports.map(label).sort(), ["BadArgs", "Generic", "Instance"]);
+    } finally {
+      await target.close();
+    }
+  });
+
+  it("skips non-verbatim interpolated strings whole, nested strings and escapes included", () => {
+    const code = "var s = $\"x {(b ? \"y\" : \"//\")} z {{ // }}\"; Baz(); // gone\nQux();";
+    const stripped = stripCSharpComments(code);
+    assert.ok(stripped.includes("Baz();"));
+    assert.ok(stripped.includes("Qux();"));
+    assert.ok(!stripped.includes("gone"));
+    assert.ok(stripped.includes("$\"x {(b ? \"y\" : \"//\")} z {{ // }}\""));
+    assert.ok(stripCSharpComments("$@\"a {x} // b\"; Q();").includes("Q();"));
+    assert.ok(stripCSharpComments("var t = $\"{Foo($\"{a}\")}\"; Z(); // c").includes("Z();"));
+  });
 });

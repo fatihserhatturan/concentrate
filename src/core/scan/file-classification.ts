@@ -17,8 +17,9 @@ export type FileClassificationCounts = Record<FileSourceType, number>;
 // `code` is false for the files no language parser reads (styles, JSON,
 // Markdown, assets, …): only those can be `docs`, so example code under
 // `docs/` stays production code.
+// `language` is the file's language id: a language's `generatedDirectories` mark only files of that language.
 // `conventions` carries the languages' file-name rules (test, generated, support, lockfiles).
-export function classifyFile(relativePath: string, conventions: FileConventions, generatedContent = false, code = true, testContent = false): FileClassification {
+export function classifyFile(relativePath: string, conventions: FileConventions, generatedContent = false, code = true, testContent = false, language?: string): FileClassification {
   const normalizedPath = relativePath.split(path.sep).join("/");
   const segments = normalizedPath.split("/");
   const fileName = segments.at(-1) ?? normalizedPath;
@@ -32,7 +33,7 @@ export function classifyFile(relativePath: string, conventions: FileConventions,
     "dist",
     "build",
     "coverage",
-  ]) || hasSegment(segments.slice(0, -1), conventions.generatedDirectories) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
+  ]) || hasSegment(segments.slice(0, -1), (language === undefined ? undefined : conventions.generatedDirectories.get(language)) ?? []) || conventions.generatedFile(fileName) || conventions.lockfiles.has(fileName);
 
   // Below a JVM source root (`src/main/java`, `src/test/kotlin`, …) directories
   // are package names (`org.springframework.samples.petclinic`), not layout

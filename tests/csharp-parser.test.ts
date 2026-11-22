@@ -53,11 +53,11 @@ describe("C# descriptor", () => {
     assert.equal(classifyFile("src/Model.g.cs", conventions).isGenerated, true);
     assert.equal(classifyFile("src/Model.g.i.cs", conventions).isGenerated, true);
     assert.equal(classifyFile("src/Form1.Designer.cs", conventions).isGenerated, true);
-    assert.equal(classifyFile("src/App/obj/Debug/net8.0/App.AssemblyInfo.cs", conventions).isGenerated, true);
+    assert.equal(classifyFile("src/App/obj/Debug/net8.0/App.AssemblyInfo.cs", conventions, false, true, false, "csharp").isGenerated, true);
     assert.equal(classifyFile("src/Program.cs", conventions).isGenerated, false);
-    assert.equal(classifyFile("src/objects/Program.cs", conventions).isGenerated, false);
-    // The directory rule is C#'s, but it is a project-wide convention like the others.
-    assert.equal(classifyFile("obj/x.ts", conventions).isGenerated, true);
+    assert.equal(classifyFile("src/objects/Program.cs", conventions, false, true, false, "csharp").isGenerated, false);
+    // The directory rule is C#'s and applies to C# files only (see generated-directories-language.test.ts).
+    assert.equal(classifyFile("obj/x.ts", conventions, false, true, false, "typescript").isGenerated, false);
   });
 });
 

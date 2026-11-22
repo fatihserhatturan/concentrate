@@ -8,7 +8,7 @@ export const isCSharpGeneratedFile = (fileName: string): boolean => /\.(?:g|g\.i
 // is marked by the C# contributor.
 export const isCSharpTestFile = (fileName: string): boolean => /^(?:\w*Tests?)\.cs$/u.test(fileName);
 
-// `.csx` is a C# script. Files under `obj/` are MSBuild output (generated attributes, `AssemblyInfo.cs`, source-generator output).
+// `.csx` is a C# script. C# files under `obj/` are MSBuild output (generated attributes, `AssemblyInfo.cs`, source-generator output).
 export const csharpLanguages: readonly LanguageDescriptor[] = [
   {
     id: "csharp",

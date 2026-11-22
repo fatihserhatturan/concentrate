@@ -33,7 +33,8 @@ function entryPoint(graph: IGraphContributor, fileId: string, handler: GraphNode
 
 // A static `Main` (any visibility, non-generic, in a non-generic type) with a valid signature is run by the runtime,
 // and so are a file's top-level statements, whose synthetic `<top-level>` Function is the handler. An instance `Main`
-// or one with other parameters is an ordinary method.
+// or one with other parameters is an ordinary method. CS7022 (top-level statements win over `Main` within a
+// project) is not applied until project boundaries are read (Phase 45): both kinds are entrypoints.
 export const csharpEntrypointsContributor: ISemanticContributor = {
   id: "csharp.entrypoints",
   contribute(graph) {
