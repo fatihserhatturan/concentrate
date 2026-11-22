@@ -1,6 +1,7 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import { projectOfFile, visibleProjects } from "./project/index.js";
 import type { CSharpProject } from "./project/types.js";
+import { hasUnresolvedReferences, ownerProjects } from "./owner-projects.js";
 import { csharpNamespaceIndexOf, csharpProjectModelOf, setCSharpNamespaceIndex, type CSharpNamespaceIndex } from "./project.js";
 
 // The namespace index of a C# scan plus everything the `using` directives add on top of it.
@@ -124,23 +125,39 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
   // Projects: the project of each file and what each project sees, computed once per scan.
   const model = csharpProjectModelOf(graph);
   const projectScoped = model.projects.length > 0;
+  // Ownership uses only the projects the manifest declares (one per directory), so scoping and Package nodes agree.
+  const owners = ownerProjects(model);
+  const ownerModel = { ...model, projects: owners };
+  const ownerByDir = new Map(owners.map((project) => [project.dir, project]));
   const projectByFileId = new Map<string, CSharpProject | undefined>();
   const projectKey = (fileId: string): string => {
     if (!projectScoped) return "";
     let project = projectByFileId.get(fileId);
     if (project === undefined && !projectByFileId.has(fileId)) {
       const relative = graph.node(fileId)?.properties.relativePath;
-      project = typeof relative === "string" ? projectOfFile(model, relative) : undefined;
+      project = typeof relative === "string" ? projectOfFile(ownerModel, relative) : undefined;
       projectByFileId.set(fileId, project);
     }
     return project?.file ?? "";
   };
+  // A reference may name a project that does not own its directory: it stands for the directory's owner.
   const visibleOf = new Map<string, Set<string>>();
-  for (const project of model.projects) visibleOf.set(project.file, visibleProjects(model, project.file));
+  for (const project of owners) {
+    const visible = new Set<string>();
+    for (const file of visibleProjects(model, project.file)) {
+      const named = model.projects.find((candidate) => candidate.file === file);
+      visible.add(named ? (ownerByDir.get(named.dir)?.file ?? file) : file);
+    }
+    visibleOf.set(project.file, visible);
+  }
+  // A project with a ProjectReference the reader could not expand or find (`$(SolutionDir)`, a missing target) may
+  // reference anything, so it sees everything (as without projects). Only the viewer's own flag matters: a flag deeper
+  // in its reference closure keeps the viewer scoped to what it could resolve.
+  const sawEverything = new Set(owners.filter(hasUnresolvedReferences).map((project) => project.file));
   const canSee = (viewerFileId: string, targetFileId: string): boolean => {
     if (!projectScoped) return true;
     const viewer = projectKey(viewerFileId);
-    if (viewer === "") return true;
+    if (viewer === "" || sawEverything.has(viewer)) return true;
     const target = projectKey(targetFileId);
     return target === "" || target === viewer || (visibleOf.get(viewer)?.has(target) ?? false);
   };
@@ -198,7 +215,7 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
   const fullView: View = { declared: declaredBy, known };
   const views = new Map<string, View>();
   const viewOfKey = (key: string): View => {
-    if (key === "") return fullView;
+    if (key === "" || sawEverything.has(key)) return fullView;
     let view = views.get(key);
     if (!view) {
       const visible = visibleOf.get(key);
@@ -285,7 +302,7 @@ export function buildCSharpNamespaceIndex(graph: IGraphContributor): CSharpNames
     const cached = globalsByKey.get(key);
     if (cached) return cached;
     const list = usings.filter((using) => using.isGlobal && projectKey(using.fileId) === key);
-    const project = key === "" ? undefined : model.projects.find((candidate) => candidate.file === key);
+    const project = key === "" ? undefined : owners.find((candidate) => candidate.file === key);
     (project?.usings ?? []).forEach((entry, position) => {
       const kind = entry.static ? "static" : entry.alias !== null ? "alias" : "normal";
       const resolution = resolveUsing({ source: entry.namespace, kind, scope: "" }, firstFileByKey.get(key));

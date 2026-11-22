@@ -151,7 +151,7 @@ const IDENTIFIER = /[\p{L}_][\p{L}\p{N}_]*/gu;
 // `class A<T> : Base, IFoo<T>, IBar where T : class` -> A: [Base, IFoo, IBar].
 const TYPE_HEADER = /\b(?:class|struct|record(?:\s+(?:class|struct))?)\s+([\p{L}_][\p{L}\p{N}_]*)\s*(?:<[^>{;]*>)?\s*(?:\([^)]*\))?\s*:\s*([^{;]*)/gu;
 
-// C#, one assembly (the scan; projects come in Phase 45): public, internal, protected and private types, methods,
+// C#, judged scan-wide by name (project boundaries are not used): public, internal, protected and private types, methods,
 // properties, fields, constants and events are judged. A member is used when its name is written anywhere beside its
 // declaration (private: in the files of its type; any other: in any scanned file, tests included). Names stand for the
 // graph's call edges here: overloads, same-named members and uses in strings keep a declaration from being reported,
