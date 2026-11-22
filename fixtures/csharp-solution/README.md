@@ -27,8 +27,8 @@ Effective usings: the SDK set for the project's SDK (Web adds the AspNetCore set
 - Solutions: 1 + 1. Model total: 4. Every other project: 0.
 
 ## Entrypoints
-- `Shop.Web`: EntryPoint for the project; it `RUNS` the top-level statements of `src/Shop.Web/Program.cs`. `Legacy/Launcher.cs` has a `static Main`, which is NOT an entrypoint (CS7022: the project has top-level statements).
-- `Orphan`: EntryPoint for the project; it `RUNS` `Orphan.Program.Main` (a project with no top-level statements).
+- `Shop.Web`: EntryPoint for the project; it `RUNS` the `main` EntryPoint of the top-level statements of `src/Shop.Web/Program.cs`. `Legacy/Launcher.cs` has a `static Main`, which is NOT an entrypoint (CS7022: the project has top-level statements).
+- `Orphan`: EntryPoint for the project; it `RUNS` the `main` EntryPoint of `Orphan.Program.Main` (a project with no top-level statements).
 - Libraries and the test project: no project EntryPoint.
 
 ## Per-project namespace scoping (usings)
