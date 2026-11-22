@@ -21,14 +21,17 @@ async function exists(target: string): Promise<boolean> {
   }
 }
 
-const MANIFESTS = ["package.json", "go.mod", "Cargo.toml", "pyproject.toml", "setup.py", "requirements.txt", "pom.xml", "build.gradle", "build.gradle.kts", "CMakeLists.txt", "Makefile", "composer.json", "Gemfile", "deno.json", "tsconfig.json", "concentrate.json"];
+const MANIFESTS = ["package.json", "go.mod", "Cargo.toml", "pyproject.toml", "setup.py", "requirements.txt", "pom.xml", "build.gradle", "build.gradle.kts", "CMakeLists.txt", "Makefile", "composer.json", "Gemfile", "deno.json", "tsconfig.json", "concentrate.json", "Directory.Build.props"];
+// .NET project and solution files are named after the project.
+const MANIFEST_EXTENSIONS = [".csproj", ".sln", ".slnx"];
 
 async function looksLikeProject(directory: string): Promise<boolean> {
   // The home folder and the filesystem root hold projects; they are not one, even with a stray .git or manifest.
   if (directory === os.homedir() || path.dirname(directory) === directory) return false;
   if (await exists(path.join(directory, ".git"))) return true;
   for (const name of MANIFESTS) if (await exists(path.join(directory, name))) return true;
-  return false;
+  const names = await readdir(directory).catch(() => [] as string[]);
+  return names.some((name) => MANIFEST_EXTENSIONS.some((extension) => name.endsWith(extension)));
 }
 
 /** Lists the sub-directories of a path, hidden ones excluded. */

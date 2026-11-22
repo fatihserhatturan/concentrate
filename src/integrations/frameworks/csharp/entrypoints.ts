@@ -1,6 +1,7 @@
 import type { IGraphContributor } from "../../../core/contracts/graph-contributor.js";
 import type { ISemanticContributor } from "../../../core/contracts/semantic-contributor.js";
 import type { GraphNode } from "../../../core/graph/model.js";
+import { projectOfFile, readCSharpProjectModel } from "../../languages/csharp/project/index.js";
 import { csharpMethods } from "./shared.js";
 
 type Parameter = { name?: string; type?: string | null; modifier?: string };
@@ -33,12 +34,30 @@ function entryPoint(graph: IGraphContributor, fileId: string, handler: GraphNode
 
 // A static `Main` (any visibility, non-generic, in a non-generic type) with a valid signature is run by the runtime,
 // and so are a file's top-level statements, whose synthetic `<top-level>` Function is the handler. An instance `Main`
-// or one with other parameters is an ordinary method. CS7022 (top-level statements win over `Main` within a
-// project) is not applied until project boundaries are read (Phase 45): both kinds are entrypoints.
+// or one with other parameters is an ordinary method. CS7022: within one project that has top-level statements, a
+// `Main` is not an entrypoint (the top-level statements win); files outside any project keep both kinds.
 export const csharpEntrypointsContributor: ISemanticContributor = {
   id: "csharp.entrypoints",
-  contribute(graph) {
+  async contribute(graph, rootPath) {
+    // Projects (by project file) that have top-level statements, and the project of each C# file.
+    const relativeOf = new Map<string, string>();
+    for (const node of graph.nodesWithLabel("File")) {
+      if (typeof node.properties.relativePath === "string") relativeOf.set(node.id, node.properties.relativePath.replace(/\\/gu, "/"));
+    }
+    const model = await readCSharpProjectModel(rootPath, relativeOf.values());
+    const projectOf = (fileId: string): string | undefined => {
+      const relative = relativeOf.get(fileId);
+      return relative === undefined || model.projects.length === 0 ? undefined : projectOfFile(model, relative)?.file;
+    };
+    const withTopLevel = new Set<string>();
+    for (const node of graph.nodesWithLabel("File")) {
+      if (node.properties.language !== "csharp" || node.properties.hasTopLevelStatements !== true) continue;
+      const project = projectOf(node.id);
+      if (project) withTopLevel.add(project);
+    }
     for (const { node, owner, fileId } of csharpMethods(graph)) {
+      const project = projectOf(fileId);
+      if (project && withTopLevel.has(project)) continue;
       const properties = node.properties;
       if (properties.name !== "Main" || properties.kind !== "method" || properties.isStatic !== true) continue;
       if (!isMainReturn(properties.returnType) || isGeneric(properties.typeParameters) || isGeneric(owner.properties.typeParameters)) continue;
