@@ -539,8 +539,7 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
     const tokens = argumentTypesOf(scope.call);
     if (candidates.length < 2 || !tokens) return candidates;
     const kinds = tokens.map((token) => argumentKind(token, scope));
-    if (kinds.every((kind) => kind === null)) return candidates;
-    const kept = candidates.filter(({ fn, owner }) => {
+    const kept = kinds.every((kind) => kind === null) ? candidates : candidates.filter(({ fn, owner }) => {
       const params = paramsOf(fn);
       return !kinds.some((argument, position) => {
         const param = params[position];
@@ -549,7 +548,26 @@ export function createJavaCallSession(graph: IGraphContributor, index: Resolutio
         return parameter !== null && incompatible(argument, parameter);
       });
     });
-    return kept.length > 0 ? kept : candidates;
+    const pool = kept.length > 0 ? kept : candidates;
+    if (pool.length < 2) return pool;
+    // An argument typed by a name the scan does not hold (a generated DTO) still tells overloads apart when exactly one
+    // candidate declares that very name at every such position; with no or several matches nothing is dropped.
+    const sameName = (written: string, other: string): boolean => written === other || written.endsWith(`.${other}`) || other.endsWith(`.${written}`);
+    const named = tokens.map((token, position) => {
+      if (kinds[position] !== null || token === null || token === "this" || token.startsWith("@") || primitiveTypes.has(token)) return null;
+      return normalizeJavaType(token);
+    });
+    if (named.every((name) => name === null)) return pool;
+    const exact = pool.filter(({ fn }) => {
+      const params = paramsOf(fn);
+      return named.every((name, position) => {
+        if (name === null) return true;
+        const param = params[position];
+        const written = param && !param.varargs ? normalizeJavaType(param.type) : null;
+        return written !== null && sameName(written, name);
+      });
+    });
+    return exact.length === 1 ? exact : pool;
   };
 
   const dispatchTargets = (candidate: Candidate, receiver: Value, add: (fn: GraphNode, via?: string) => void): void => {
