@@ -176,7 +176,7 @@ even for large repositories; read it first to decide which tools to call.
 - `list_routes`: lists detected HTTP route declarations and handlers, Go
   ones included (`framework` `gin`, `echo`, `chi`, `fiber`, `gorilla/mux`,
   `routegroup`, `kratos` or `net/http`), and Rust ones (`axum`, `actix-web`, `rocket`
-  or `warp`; each route also carries its `layers` and the handler's `extractors`), Java ones (`spring-mvc`, `jaxrs`, `micronaut` or `spring-webflux`; a path that is a constant has `path: null` and a `pathExpression`; a method inherits a mapping only through the same erased signature), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
+  or `warp`; each route also carries its `layers` and the handler's `extractors`), Java ones (`spring-mvc`, `jaxrs`, `micronaut` or `spring-webflux`; a path that is a constant has `path: null` and a `pathExpression`; a method inherits a mapping only through the same erased signature), C# ones (`aspnet-mvc`, `aspnet-minimal` or `azure-functions`; a constant path has `path: null` and a `pathExpression`; a minimal-API route with a lambda handler has `handlerName: "<lambda>"` and its typed parameters in `handlerParameters`), and Python ones (`flask`, `fastapi`, `starlette`, `django`, `django-rest-framework` or `flask-restful`; FastAPI routes carry their `Depends` as `layers`, Django ones their `MIDDLEWARE`).
   Registrations with a method or path computed at runtime
   (`app[method](url, fn)`, `this.get(path, …)` in an `app.resource = function`
   helper) are not routes; they come back in `dynamicRouteCalls` (`file`,
@@ -216,7 +216,7 @@ even for large repositories; read it first to decide which tools to call.
   service methods (kind `grpc`, library `grpc-java`), `@SpringBootApplication`
   classes (kind `spring-boot-application`), `@Scheduled` methods (kind
   `scheduler`), Kafka, Rabbit and JMS listeners (kind `queue`), event listeners
-  (kind `event`) and picocli commands (kind `cli`). A Java trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
+  (kind `event`) and picocli commands (kind `cli`); for C# gRPC service methods (kind `grpc`, library `grpc-dotnet`, `registered` says whether `MapGrpcService<T>` names the class), SignalR hub methods (kind `signalr`, trigger `Hub/method`, `hubPath`), hosted services (kind `hosted-service`, `registered`), Azure Functions (kind `function`, trigger `http`, `timer:<cron>`, `queue:<name>`, ...) and System.CommandLine commands (kind `cli`, library `system-commandline`). A Java or C# trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
   destination is `resolved: false`.
 - `list_env_config`: lists environment variable usage and config declarations
   or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys (also in a root `config/` directory, test resources for test readers only; secret values are stored as `<redacted>`) with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`). `unread: true` lists instead the variables the scanned env
