@@ -4,7 +4,8 @@ import type { GraphSchemaExtension } from "../../../core/graph/schema.js";
 import type { VersionedCSharpParsePlugin } from "../../languages/csharp/parser.js";
 import type { CSharpType } from "../../languages/csharp/types.js";
 import { addCSharpEntryPoint } from "./emit.js";
-import { csharpMethods, parametersOf, primaryParametersOf } from "./shared.js";
+import { usingsInScope } from "../../languages/csharp/namespaces.js";
+import { csharpFileOfId, csharpMethods, parametersOf, primaryParametersOf } from "./shared.js";
 import { csharpTypeResolver } from "./type-names.js";
 
 // gRPC .NET between services of the scan, as frameworks/java/grpc.ts does for Java.
@@ -23,6 +24,9 @@ import { csharpTypeResolver } from "./type-names.js";
 // `new X.XClient(channel)` in place; a `var` holding `new X.XClient(…)` or `….CreateClient<X.XClient>(…)`) resolves
 // (CALL_RESOLVES_TO, `via: "grpc"`) to the method of each class serving X with that name; several implementations
 // are all linked. A `.proto` rpc gets RPC_IMPLEMENTED_BY to those methods.
+//
+// A bare `XClient` (no `X.` qualifier) that resolves to no scanned type counts only when the file shows gRPC: a
+// `using Grpc.*`, a `using static` of the service class, or an alias of `X.XClient`; a REST `OrderClient` does not link.
 //
 // Never guessed: a receiver whose type is unknown, a client type that resolves to a scanned class other than a
 // generated one. The proto service is matched by its simple name (like Java); `option csharp_namespace` is not kept
@@ -146,6 +150,18 @@ export const csharpGrpcContributor: ISemanticContributor = {
       if (!fields) fieldsByOwner.set(rel.from, fields = new Map());
       fields.set(String(field.properties.name), field);
     }
+    // An unresolved bare `XClient` is the generated client only when the file shows gRPC: a `using Grpc.*`, a `using static`
+    // of the service class (`using static Ns.X`), or an alias of `X.XClient`. A REST `OrderClient` stays out.
+    const bareClientImported = (text: string, service: string, scope: GraphNode): boolean => {
+      const fileId = csharpFileOfId(scope.id);
+      const where = resolver.scopeOf(scope);
+      if (!fileId || !where) return false;
+      const usings = usingsInScope(graph, fileId, where.namespace ?? "", where.line);
+      if (usings.namespaces.some((namespace) => namespace === "Grpc" || namespace.startsWith("Grpc."))) return true;
+      if (usings.staticTypes.some((target) => target === service || target.endsWith(`.${service}`))) return true;
+      const alias = usings.aliases.get(text);
+      return alias !== undefined && CLIENT.test(alias.replace(/\s+/gu, ""));
+    };
     const clientServiceOfType = (written: string | null | undefined, scope: GraphNode): string | null => {
       if (!written) return null;
       const text = written.replace(/\s+/gu, "").replace(/\?$/u, "");
@@ -155,7 +171,8 @@ export const csharpGrpcContributor: ISemanticContributor = {
       if (!service || !served.has(service)) return null;
       const resolved = resolver.resolve(text, scope);
       if (resolved) return CLIENT.test(resolved.qualifiedName) ? service : null;
-      return service;
+      if (qualified && qualified[1] === qualified[2]) return service;
+      return bareClientImported(text, service, scope) ? service : null;
     };
     const typeOfInitializer = (initializer: string): string | null => /(?:CreateClient|GetRequiredService|GetService)<\s*([\w.]+)\s*>/u.exec(initializer)?.[1] ?? null;
     const localsOf = (fn: GraphNode): Record<string, Local> => {

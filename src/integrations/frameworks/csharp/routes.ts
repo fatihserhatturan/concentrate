@@ -19,15 +19,17 @@ import {
 } from "./attributes.js";
 import { addCSharpRoute, joinRoutePath } from "./emit.js";
 import { descendantsOfType, dottedText, invocationChain, invocationInfo, lambdaInfo, type ArgumentInfo, type InvocationInfo } from "./invocations.js";
-import { csharpFileOfId, csharpMethods, csharpTypeNodes, parametersOf } from "./shared.js";
+import { csharpFileOfId, csharpMethods, jsonList, csharpTypeNodes, parametersOf } from "./shared.js";
 import { csharpTypeResolver, type CSharpTypeResolver } from "./type-names.js";
 import type { CSharpType } from "../../languages/csharp/types.js";
 
 // HTTP routes of ASP.NET Core.
 //
-// Controllers (framework `aspnet-mvc`): a concrete public class that derives from `ControllerBase` / `Controller`
-// (directly or through user base controllers) or carries `[ApiController]` / `[Controller]`. Every public instance
-// method that is not `[NonAction]` is an action. `[Route]` on the class (own, else the nearest base class's: the
+// Controllers (framework `aspnet-mvc`), MVC's discovery rule: a public, concrete, non-generic class that is named
+// `...Controller`, or carries `[Controller]` (own or inherited), or derives from `ControllerBase` / `Controller`
+// (directly or through user base controllers); `[NonController]` excludes it. `[ApiController]` alone does not make a
+// controller. Every public instance method that is not `[NonAction]`, not `Dispose()` (0 parameters) and not generic
+// is an action. `[Route]` on the class (own, else the nearest base class's: the
 // attribute is inherited) joins with the verb attributes (`[HttpGet("x")]`, `[AcceptVerbs]`, `[Route]`) of the method;
 // a method template starting with `/` or `~/` replaces the class template; `[controller]`, `[action]` and `[area]`
 // tokens are replaced (the controller name without `Controller`, the method name without `Async` or `[ActionName]`,
@@ -45,6 +47,14 @@ import type { CSharpType } from "../../languages/csharp/types.js";
 // lambda or a local function links to the enclosing Function with `handlerName: "<lambda>"` (the written name for a
 // local function), and the typed lambda parameters are kept on the Route as `handlerParameters` (a JSON list shaped like
 // a Function's `parameters`) for dependency-injection analysis.
+//
+// `Map(path, handler)` (also a mapper's `Map(src, dst)`) needs a lambda / anonymous method / method group as handler and
+// a string, interpolation or constant expression as path; a plain local or parameter of a non-delegate type as handler
+// (or of a non-string type as path) is not a route.
+//
+// A route on a builder rooted at a `RouteGroupBuilder` parameter (`this RouteGroupBuilder g`) is relative: its prefix
+// comes from the caller, so `path` is null and `pathExpression` holds the written relative path (with the in-method
+// group prefix). `IEndpointRouteBuilder` / `WebApplication` parameters count as the root.
 //
 // Not handled (never guessed): a group prefix that an extension method receives from its caller
 // (`app.MapGroup("/api").MapTodos()`: the routes inside keep the paths relative to their own builder), custom
@@ -89,7 +99,7 @@ type HandlerRecord =
   | { kind: "lambda"; parameters: unknown[] }
   | { kind: "ref"; text: string; local: boolean }
   | { kind: "none" };
-type MinimalRecord = { methods: string[]; parts: Part[]; line: number; handler: HandlerRecord };
+type MinimalRecord = { methods: string[]; parts: Part[]; line: number; handler: HandlerRecord; relative?: boolean };
 
 const TYPE_BOUNDARIES = new Set([
   "class_declaration", "struct_declaration", "record_declaration", "record_struct_declaration", "interface_declaration", "enum_declaration",
@@ -161,10 +171,73 @@ export function createGroupPrefixResolver(functions: Parameters<VersionedCSharpP
   return (expression, fn, line) => prefixOf(expression, fn, line, 0);
 }
 
+// True when the endpoint builder expression is rooted at a `RouteGroupBuilder` parameter of the enclosing function
+// (`this RouteGroupBuilder g` of an extension method): the group's prefix comes from the caller, so a path written on
+// it is relative. `IEndpointRouteBuilder` / `WebApplication` parameters count as the root.
+export function createRelativeReceiverCheck(functions: Parameters<VersionedCSharpParsePlugin>[0]["functions"]): (expression: SyntaxNode | null, fn: GraphNode, line: number) => boolean {
+  const syntaxOf = new Map(functions.map((entry) => [entry.node.id, entry.syntax]));
+  const check = (expression: SyntaxNode | null, fn: GraphNode, line: number, depth: number): boolean => {
+    if (!expression || depth > MAX_GROUP_DEPTH) return false;
+    const node = unwrapParentheses(expression);
+    if (node.type === "identifier") {
+      const syntax = syntaxOf.get(fn.id);
+      const declared = (syntax ? declaratorsOf(syntax) : []).filter((candidate) => candidate.name === node.text && candidate.line <= line).at(-1);
+      if (declared) return declared.initializer ? check(declared.initializer, fn, declared.line, depth + 1) : false;
+      const parameter = parametersOf(fn).find((candidate) => candidate.name === node.text);
+      return parameter !== undefined && /(?:^|\.)RouteGroupBuilder$/u.test(parameter.type.replace(/\s+/gu, "").replace(/\?$/u, ""));
+    }
+    if (node.type !== "invocation_expression") return false;
+    return check(invocationChain(node).root, fn, line, depth + 1);
+  };
+  return (expression, fn, line) => check(expression, fn, line, 0);
+}
+
+// The written relative path of a route on a caller-given group: the joined literal path, else the parts as written.
+export function relativeExpression(parts: readonly Part[]): string {
+  const { path, expression } = describePath(parts);
+  return path ?? expression ?? "";
+}
+
 export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
   if (!root.text.includes("Map")) return;
   const syntaxOf = new Map(functions.map((entry) => [entry.node.id, entry.syntax]));
   const groupPrefix = createGroupPrefixResolver(functions);
+  const isRelative = createRelativeReceiverCheck(functions);
+
+  // The declared type text of a local or parameter `name` of the function: null when it is not one, "" when `var`.
+  const localOrParameter = (fn: GraphNode, name: string, line: number): { type: string; initializer: SyntaxNode | null } | null => {
+    const syntax = syntaxOf.get(fn.id);
+    let found: { type: string; initializer: SyntaxNode | null } | null = null;
+    if (syntax) {
+      for (const node of descendantsOfType(syntax, new Set(["variable_declarator"]))) {
+        if (node.startPosition.row + 1 > line) continue;
+        const id = node.childForFieldName("name") ?? node.namedChildren.find((child) => child.type === "identifier");
+        if (id?.text !== name) continue;
+        const type = node.parent?.childForFieldName("type")?.text ?? "";
+        const clause = node.namedChildren.find((child) => child.type === "equals_value_clause");
+        const rest = node.namedChildren.filter((child) => child.type !== "comment" && child.id !== id.id);
+        found = { type: type === "var" ? "" : type.replace(/\s+/gu, ""), initializer: clause ? clause.namedChildren.at(-1) ?? null : rest.at(-1) ?? null };
+      }
+    }
+    if (found) return found;
+    const parameter = parametersOf(fn).find((candidate) => candidate.name === name);
+    return parameter ? { type: parameter.type.replace(/\s+/gu, ""), initializer: null } : null;
+  };
+  const DELEGATE_TYPE = /(?:^|\.)(?:Func|Action|RequestDelegate|Delegate|MulticastDelegate)\b|Delegate\??$|Handler\??$/u;
+  const isCreation = (node: SyntaxNode): boolean => node.type === "object_creation_expression" || node.type === "implicit_object_creation_expression";
+  // `Map(src, dst)` of a mapper: the argument is a plain local / parameter that is not of the wanted kind.
+  const isDataVariable = (argument: ArgumentInfo, fn: GraphNode, line: number, wanted: "delegate" | "string"): boolean => {
+    if (argument.node.type !== "identifier") return false;
+    const local = localOrParameter(fn, argument.text, line);
+    if (!local) return false;
+    if (local.type === "") {
+      const init = local.initializer ? unwrapParentheses(local.initializer) : null;
+      if (!init) return false;
+      return isCreation(init) || (init.type.endsWith("_literal") && !(wanted === "string" && init.type.includes("string")));
+    }
+    const type = local.type.replace(/\?$/u, "");
+    return wanted === "delegate" ? !DELEGATE_TYPE.test(type) : type !== "string" && type !== "String" && type !== "System.String";
+  };
 
   const argumentAt = (info: InvocationInfo, name: string, index: number): ArgumentInfo | undefined =>
     info.arguments.find((argument) => argument.name === name) ?? info.arguments.filter((argument) => argument.name === null)[index];
@@ -179,6 +252,15 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     const handlerArgument = isMethods ? argumentAt(info, "handler", 2) : argumentAt(info, "handler", 1);
     if (!path || !handlerArgument || path.kind === "lambda" || path.kind === "typeof") continue;
     if (isMethods && !argumentAt(info, "httpMethods", 1)) continue;
+    const callLine = (syntax.childForFieldName("function")?.childForFieldName("name") ?? syntax).startPosition.row + 1;
+    // A mapper's `Map(src, dst)` / `Map(a, b, c)`: the handler must be a lambda or a method group, the path a string,
+    // an interpolation or a constant expression (not a data variable).
+    if (isMap) {
+      if (handlerArgument.kind !== "lambda" && handlerArgument.kind !== "method-group") continue;
+      if (path.kind !== "string" && !["interpolated_string_expression", "binary_expression", "identifier", "member_access_expression"].includes(path.node.type)) continue;
+    }
+    if (handlerArgument.kind === "method-group" && isDataVariable(handlerArgument, fn, callLine, "delegate")) continue;
+    if (path.kind !== "string" && isDataVariable(path, fn, callLine, "string")) continue;
     // `IApplicationBuilder.Map("/x", branch => ...)` branches the middleware pipeline: one untyped lambda parameter.
     const lambda = handlerArgument.kind === "lambda" ? lambdaInfo(handlerArgument.node) : null;
     if (isMap && lambda && lambda.parameters.length === 1 && lambda.parameters[0]!.type === "") continue;
@@ -197,10 +279,11 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     const methods = isMethods ? methodsOfList(argumentAt(info, "httpMethods", 1)!.text) : isMap ? [ANY_METHOD] : [MINIMAL_VERBS[info.name]!];
     const parts = [...groupPrefix(info.receiver, fn, line), partOfArgument(path)];
     const record: MinimalRecord = { methods, parts, line, handler };
+    if (isRelative(info.receiver, fn, line)) record.relative = true;
     node.properties.aspnetRoute = JSON.stringify(record);
   }
 };
-Object.assign(csharpRoutesPlugin, { version: "1" });
+Object.assign(csharpRoutesPlugin, { version: "2" });
 
 // ---------------------------------------------------------------- minimal APIs: the contributor half
 
@@ -215,7 +298,10 @@ function minimalRoutes(graph: IGraphContributor, resolver: CSharpTypeResolver | 
     const functionId = call.id.slice(0, call.id.indexOf(":call:"));
     const enclosing = graph.node(functionId);
     if (!fileId || !enclosing) continue;
-    const { path, expression } = describePath(record.parts);
+    const described = describePath(record.parts);
+    // A route on a group the caller gives (`this RouteGroupBuilder g`): the path is relative, never a guess.
+    const path = record.relative ? null : described.path;
+    const expression = record.relative ? relativeExpression(record.parts) : described.expression;
     let handler: GraphNode | null = null;
     let handlerName: string | null = null;
     let lambdaParameters: unknown[] | null = null;
@@ -333,7 +419,12 @@ function controllerRoutes(graph: IGraphContributor, resolver: CSharpTypeResolver
     if (!type) continue;
     const chain = chainOf(type);
     const isApi = chain.some((member) => hasAttribute(attrs(member.node), "ApiController", MVC));
-    const isController = isApi || resolver.derivesFromExternal(type, ["ControllerBase", "Controller"]) || chain.some((member) => hasAttribute(attrs(member.node), "Controller", MVC));
+    // MVC's rule: public, concrete, non-generic, and (named `...Controller`, or `[Controller]`, or a ControllerBase ancestor).
+    // `[ApiController]` alone does not make a controller.
+    const isController =
+      String(typeNode.properties.name).endsWith("Controller") ||
+      resolver.derivesFromExternal(type, ["ControllerBase", "Controller"]) ||
+      chain.some((member) => hasAttribute(attrs(member.node), "Controller", MVC));
     if (!isController || hasAttribute(attrs(typeNode), "NonController", MVC)) continue;
 
     const classRoutesOf = chain.find((member) => findAttributes(attrs(member.node), "Route", MVC).length > 0);
@@ -350,6 +441,9 @@ function controllerRoutes(graph: IGraphContributor, resolver: CSharpTypeResolver
       for (const fn of resolver.methodsOf(member)) {
         const props = fn.properties;
         if (props.kind !== "method" || props.visibility !== "public" || props.isStatic === true || props.isAbstract === true) continue;
+        // Not actions in MVC: `IDisposable.Dispose()` and generic methods.
+        if (props.name === "Dispose" && Number(props.parameterCount ?? 0) === 0) continue;
+        if (jsonList(props.typeParameters).length > 0) continue;
         const key = `${String(props.name)}/${String(props.parameterCount ?? 0)}`;
         const list = bySignature.get(key);
         if (list) list.push(fn);
