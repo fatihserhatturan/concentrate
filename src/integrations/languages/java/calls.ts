@@ -110,6 +110,14 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly Ja
         if (name) merge(locals, name, declared(node.childForFieldName("right"), null, null));
         break;
       }
+      case "type_pattern":
+      case "record_pattern_component": {
+        // `case Dog pet ->`, `instanceof Box(Dog pet)`: the last identifier is the binding, the first other node its type.
+        const parts = node.namedChildren.filter((child) => !isComment(child) && child.type !== "modifiers");
+        const name = parts.length >= 2 && parts[parts.length - 1]!.type === "identifier" ? parts[parts.length - 1]!.text : null;
+        if (name) merge(locals, name, declared(parts[0]!, null, null));
+        break;
+      }
       case "lambda_expression": {
         const list = node.childForFieldName("parameters");
         const lambdaParameters = list?.type === "identifier" ? [list] : (list?.namedChildren ?? []).filter((child) => !isComment(child));

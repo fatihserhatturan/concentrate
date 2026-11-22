@@ -141,7 +141,8 @@
         "target": {
           "file": "src/main/java/io/spring/core/article/Article.java",
           "name": "Article",
-          "className": "Article"
+          "className": "Article",
+          "line": 28
         }
       },
       {
@@ -289,7 +290,8 @@
         "target": {
           "file": "src/main/java/io/spring/core/article/Article.java",
           "name": "Article",
-          "className": "Article"
+          "className": "Article",
+          "line": 33
         }
       },
       {
