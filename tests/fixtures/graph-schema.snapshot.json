@@ -334,6 +334,7 @@
     "framework": "STRING",
     "handlerName": "STRING",
     "handlerParameters": "STRING",
+    "handlerEndLine": "INT64",
     "pendingHandlerRefs": "STRING",
     "scopeFunctionId": "STRING",
     "layers": "STRING",

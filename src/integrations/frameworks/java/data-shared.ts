@@ -206,14 +206,32 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
       else handlers.set(relationship.to, [relationship.from]);
     }
   }
-  const callersOf = new Map<string, string[]>();
+  const callersOf = new Map<string, Array<{ caller: string; line: number | undefined }>>();
   for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
     const caller = callerByCall.get(relationship.from);
     if (!caller || caller === relationship.to) continue;
+    const callLine = graph.node(relationship.from)?.properties.line;
+    const entry = { caller, line: typeof callLine === "number" ? callLine : undefined };
     const list = callersOf.get(relationship.to);
-    if (list) list.push(caller);
-    else callersOf.set(relationship.to, [caller]);
+    if (list) list.push(entry);
+    else callersOf.set(relationship.to, [entry]);
   }
+  // A minimal-API lambda handler is part of its enclosing function (`<top-level>`): a Route with `handlerEndLine` only
+  // reaches what is called between its own line and that end; an entrypoint of the function does not run the lambdas.
+  const lambdaRange = (source: string): { start: number; end: number } | null => {
+    const properties = graph.node(source)?.properties;
+    return properties && typeof properties.handlerEndLine === "number" && typeof properties.line === "number" ? { start: properties.line, end: properties.handlerEndLine } : null;
+  };
+  const reaches = (source: string, host: string, line: number | undefined): boolean => {
+    if (line === undefined) return true;
+    const own = lambdaRange(source);
+    if (own) return line >= own.start && line <= own.end;
+    if (graph.node(source)?.label === "Route") return true;
+    return !(handlers.get(host) ?? []).some((other) => {
+      const range = lambdaRange(other);
+      return range !== null && line >= range.start && line <= range.end;
+    });
+  };
   const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
 
   const added: GraphRelationship[] = [];
@@ -243,18 +261,19 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
     const functionId = access.functionId ?? (access.callId ? callerByCall.get(access.callId) : undefined);
     if (!site || !functionId) continue;
     if (record(functionId, access, site, true)) push(functionId, { access, site });
-    for (const source of handlers.get(functionId) ?? []) record(source, access, site, false);
+    const accessLine = typeof access.line === "number" ? access.line : undefined;
+    for (const source of handlers.get(functionId) ?? []) if (reaches(source, functionId, accessLine)) record(source, access, site, false);
   }
   const queue = [...byFunction.keys()];
   for (let head = 0; head < queue.length; head += 1) {
     const functionId = queue[head]!;
-    for (const caller of callersOf.get(functionId) ?? []) {
+    for (const { caller, line } of callersOf.get(functionId) ?? []) {
       let changed = false;
       for (const { access, site } of byFunction.get(functionId) ?? []) {
-        if (!record(caller, access, site, false)) continue;
-        push(caller, { access, site });
-        for (const source of handlers.get(caller) ?? []) record(source, access, site, false);
-        changed = true;
+        const isNew = record(caller, access, site, false);
+        if (isNew) push(caller, { access, site });
+        for (const source of handlers.get(caller) ?? []) if (reaches(source, caller, line)) record(source, access, site, false);
+        if (isNew) changed = true;
       }
       if (changed) queue.push(caller);
     }

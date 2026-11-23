@@ -1754,62 +1754,6 @@
           },
           {
             "sourceKind": "Route",
-            "sourceName": "/customers",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers/inactive",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/reports/revenue",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "Route",
             "sourceName": "/customers/inactive",
             "file": "Program.cs",
             "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
@@ -1824,37 +1768,9 @@
           },
           {
             "sourceKind": "Route",
-            "sourceName": "/reports/revenue",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          },
-          {
-            "sourceKind": "Route",
             "sourceName": "/customers",
             "file": "Program.cs",
             "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers/inactive",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
             "direct": false,
             "accessFile": "Program.cs",
             "line": 15,
@@ -1897,50 +1813,7 @@
       {
         "method": "query",
         "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
-        "rows": [
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          }
-        ]
+        "rows": []
       }
     ],
     "output": {
@@ -2302,58 +2175,6 @@
         },
         {
           "sourceKind": "Route",
-          "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers/inactive",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/reports/revenue",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "Route",
           "sourceName": "/customers/inactive",
           "file": "Program.cs",
           "direct": false,
@@ -2367,33 +2188,7 @@
         },
         {
           "sourceKind": "Route",
-          "sourceName": "/reports/revenue",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
-        },
-        {
-          "sourceKind": "Route",
           "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers/inactive",
           "file": "Program.cs",
           "direct": false,
           "accessFile": "Program.cs",
@@ -2429,50 +2224,11 @@
           "table": "Orders",
           "operation": "create",
           "expression": "_db.Orders.AddAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 40
+        "returned": 31
       }
     }
   },
@@ -3027,62 +2783,6 @@
           },
           {
             "sourceKind": "Route",
-            "sourceName": "/customers",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers/inactive",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/reports/revenue",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "Route",
             "sourceName": "/customers/inactive",
             "file": "Program.cs",
             "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
@@ -3097,37 +2797,9 @@
           },
           {
             "sourceKind": "Route",
-            "sourceName": "/reports/revenue",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          },
-          {
-            "sourceKind": "Route",
             "sourceName": "/customers",
             "file": "Program.cs",
             "sourceId": "file:Program.cs:route:15:0:GET:/customers",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          },
-          {
-            "sourceKind": "Route",
-            "sourceName": "/customers/inactive",
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
             "direct": false,
             "accessFile": "Program.cs",
             "line": 15,
@@ -3170,50 +2842,7 @@
       {
         "method": "query",
         "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"efcore\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
-        "rows": [
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 10,
-            "model": "Order",
-            "library": "efcore",
-            "table": "Orders",
-            "operation": "aggregate",
-            "expression": "shop.Orders.SumAsync"
-          },
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Services/ReportService.cs",
-            "line": 14,
-            "model": "Customers",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "delete",
-            "expression": "shop.Database.ExecuteSqlRawAsync"
-          },
-          {
-            "sourceKind": "EntryPoint",
-            "sourceName": null,
-            "file": "Program.cs",
-            "sourceId": "file:Program.cs:entrypoint:6:0:main:<none>",
-            "direct": false,
-            "accessFile": "Program.cs",
-            "line": 15,
-            "model": "Customer",
-            "library": "efcore",
-            "table": "Customers",
-            "operation": "read",
-            "expression": "db.Customers.Where"
-          }
-        ]
+        "rows": []
       }
     ],
     "output": {
@@ -3576,58 +3205,6 @@
         },
         {
           "sourceKind": "Route",
-          "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers/inactive",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/reports/revenue",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "Route",
           "sourceName": "/customers/inactive",
           "file": "Program.cs",
           "direct": false,
@@ -3641,33 +3218,7 @@
         },
         {
           "sourceKind": "Route",
-          "sourceName": "/reports/revenue",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
-        },
-        {
-          "sourceKind": "Route",
           "sourceName": "/customers",
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
-        },
-        {
-          "sourceKind": "Route",
-          "sourceName": "/customers/inactive",
           "file": "Program.cs",
           "direct": false,
           "accessFile": "Program.cs",
@@ -3703,50 +3254,11 @@
           "table": "Orders",
           "operation": "create",
           "expression": "_db.Orders.AddAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 10,
-          "model": "Order",
-          "library": "efcore",
-          "table": "Orders",
-          "operation": "aggregate",
-          "expression": "shop.Orders.SumAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Services/ReportService.cs",
-          "line": 14,
-          "model": "Customers",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "delete",
-          "expression": "shop.Database.ExecuteSqlRawAsync"
-        },
-        {
-          "sourceKind": "EntryPoint",
-          "sourceName": null,
-          "file": "Program.cs",
-          "direct": false,
-          "accessFile": "Program.cs",
-          "line": 15,
-          "model": "Customer",
-          "library": "efcore",
-          "table": "Customers",
-          "operation": "read",
-          "expression": "db.Customers.Where"
         }
       ],
       "page": {
         "offset": 0,
-        "returned": 40
+        "returned": 31
       }
     }
   },
