@@ -9,7 +9,7 @@ import { buildCodeGraph } from "../src/composition/orchestrator.js";
 import { ROOT_PLACEHOLDER } from "../src/core/graph/normalize.js";
 import { callMcpTool } from "../src/adapters/mcp/tools.js";
 import { readSampleManifest, samplesDirectory } from "../src/adapters/cli/smoke.js";
-import { assertGolden, goldenRoot } from "./helpers/golden.js";
+import { assertGolden, goldenRoot, isPlaceholderFixture } from "./helpers/golden.js";
 import { cypherTemplate, RecordingQueryEngine } from "./helpers/recording-engine.js";
 
 type QueryCase = { tool: string; args: Record<string, unknown> };
@@ -47,7 +47,8 @@ async function recordCases(name: string, projectPath: string, projectCases: Quer
 
 describe("golden MCP query recordings", () => {
   for (const [name, extra] of Object.entries(cases.fixtures)) {
-    it(name, async () => {
+    // A placeholder fixture (README only: a Phase 47 track has not filled it yet) has no recording.
+    it(name, { skip: isPlaceholderFixture(path.join(fixturesRoot, name)) ? "placeholder fixture" : false }, async () => {
       const actual = await recordCases(name, path.join(fixturesRoot, name), [...cases.common, ...extra]);
       await assertGolden(path.join(goldenRoot, "queries", `${name}.json`), actual);
     });

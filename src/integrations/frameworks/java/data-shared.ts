@@ -37,7 +37,8 @@ export type JavaTableExtra = {
 };
 
 const TABLE_PREFIX = "table:java:-:";
-const tablesByGraph = new WeakMap<object, Map<string, string>>();
+// Per graph, per language prefix: lower-cased name -> Table id.
+const tablesByGraph = new WeakMap<object, Map<string, Map<string, string>>>();
 
 export const javaTableId = (name: string): string => `${TABLE_PREFIX}${name.toLowerCase()}`;
 
@@ -47,15 +48,17 @@ export function normalizeTableName(raw: string): string {
   return parts.at(-1) ?? "";
 }
 
-// Lower-cased name → Table id of the Java tables the graph already has (another contributor made them).
-function knownTables(graph: IGraphContributor): Map<string, string> {
-  let known = tablesByGraph.get(graph);
+// Lower-cased name → Table id of the tables of one language (`prefix`) the graph already has (another contributor made them).
+function knownTables(graph: IGraphContributor, prefix: string): Map<string, string> {
+  let byPrefix = tablesByGraph.get(graph);
+  if (!byPrefix) tablesByGraph.set(graph, (byPrefix = new Map()));
+  let known = byPrefix.get(prefix);
   if (!known) {
     known = new Map();
     for (const node of graph.nodesWithLabel("Table")) {
-      if (node.id.startsWith(TABLE_PREFIX)) known.set(node.id.slice(TABLE_PREFIX.length), node.id);
+      if (node.id.startsWith(prefix)) known.set(node.id.slice(prefix.length), node.id);
     }
-    tablesByGraph.set(graph, known);
+    byPrefix.set(prefix, known);
   }
   return known;
 }
@@ -66,8 +69,13 @@ function knownTables(graph: IGraphContributor): Map<string, string> {
  * `columns`. A mention (a query) fills in `schemaName` when the table has none.
  */
 export function javaTable(graph: IGraphContributor, name: string, extra: JavaTableExtra = {}): string {
+  return tableWithPrefix(graph, TABLE_PREFIX, name, extra);
+}
+
+/** `javaTable` for another language: its Table ids are `<prefix><lower-cased name>` (C#: `table:csharp:-:`). */
+export function tableWithPrefix(graph: IGraphContributor, prefix: string, name: string, extra: JavaTableExtra = {}): string {
   const clean = normalizeTableName(name);
-  const known = knownTables(graph);
+  const known = knownTables(graph, prefix);
   const key = clean.toLowerCase();
   const existing = known.get(key);
   if (existing) {
@@ -81,7 +89,7 @@ export function javaTable(graph: IGraphContributor, name: string, extra: JavaTab
     if (node && extra.schemaName && (node.properties.schemaName === null || node.properties.schemaName === undefined)) node.properties.schemaName = extra.schemaName;
     return existing;
   }
-  const id = javaTableId(clean);
+  const id = `${prefix}${key}`;
   known.set(key, id);
   graph.addNode({
     id,
@@ -129,7 +137,12 @@ export function javaDataModel(graph: IGraphContributor, input: JavaDataModelInpu
 
 /** The stand-in DataModel of a library for a table (`datamodel:<library>:<lower-cased name>`), created on first use. */
 export function javaTableModel(graph: IGraphContributor, table: string, library: string): string {
-  const name = String(graph.node(table)?.properties.name ?? table.slice(TABLE_PREFIX.length));
+  return tableModelWithPrefix(graph, table, library, TABLE_PREFIX);
+}
+
+/** `javaTableModel` for a table made with `tableWithPrefix(…, prefix, …)`. */
+export function tableModelWithPrefix(graph: IGraphContributor, table: string, library: string, prefix: string): string {
+  const name = String(graph.node(table)?.properties.name ?? table.slice(prefix.length));
   return javaDataModel(graph, { name, library, id: javaDataModelId(library, name.toLowerCase()), table });
 }
 

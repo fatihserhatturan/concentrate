@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readdirSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { gunzipSync, gzipSync } from "node:zlib";
@@ -10,6 +11,9 @@ export const goldenRoot = path.join(import.meta.dirname, "../golden");
 export const updateGolden = process.env.UPDATE_GOLDEN === "1";
 
 const MAX_DIFF_LINES = 50;
+
+/** A fixture directory holding nothing but a README.md is a pending placeholder (Phase 46/47 wave 0): no golden until it has sources. */
+export const isPlaceholderFixture = (directory: string): boolean => !readdirSync(directory).some((file) => file !== "README.md");
 
 /** Scan a project and render it as golden text: one report line, then the normalized graph. */
 export async function scanToGoldenText(
