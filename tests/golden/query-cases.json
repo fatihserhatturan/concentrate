@@ -1607,7 +1607,33 @@
         }
       }
     ],
-    "csharp-http-clients": [],
+    "csharp-http-clients": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/orders/{id}"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "refit"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "httpclient-factory"
+        }
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "aspnet-core"
+        }
+      }
+    ],
     "java-feign": [
       {
         "tool": "api_consumers",
