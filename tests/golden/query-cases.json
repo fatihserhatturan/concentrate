@@ -1585,7 +1585,32 @@
         }
       }
     ],
-    "csharp-config": [],
+    "csharp-config": [
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "Jwt"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "Status__Banner"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "file": "EnvSettings.cs"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true
+        }
+      }
+    ],
     "java-http-clients": [
       {
         "tool": "api_consumers",
