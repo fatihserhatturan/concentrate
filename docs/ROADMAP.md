@@ -33,7 +33,7 @@ the only runtime dependency left is `web-tree-sitter`.
   `tests/grammars.test.ts` checks the vendored grammars against their manifest.
 - **Focus.** The Node.js/TypeScript backend niche first, then the whole JS/TS ecosystem including the
   frontend (M8), then the Go ecosystem (M9), the non-code files of a project (M10), the Rust
-  ecosystem (M11), the Python ecosystem (M12), the C/C++ ecosystem (M13) and the Java ecosystem (M14).
+  ecosystem (M11), the Python ecosystem (M12), the C/C++ ecosystem (M13), the Java ecosystem (M14) and the C# ecosystem (M15).
 
 ### Dependency replacement map
 
@@ -63,6 +63,7 @@ the only runtime dependency left is `web-tree-sitter`.
 | M12 – Python ecosystem | 30–33 | Python packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer entrypoints; SQLAlchemy, Django ORM, env, HTTP clients and DI; measured on pinned samples. |
 | M13 – C/C++ ecosystem | 34–37 | C and C++ includes, headers, namespaces, classes and virtual calls; CMake, Make and `compile_commands.json` targets; Drogon, Crow, Pistache, cpp-httplib, gRPC and Qt; SQL, env and libcurl; measured on pinned samples. |
 | M14 – Java ecosystem | 38–43 | Java packages, classes, interfaces and calls resolved through inheritance; Maven and Gradle builds; Spring MVC, WebFlux, JAX-RS and Micronaut routes, gRPC, Spring DI, JPA, Spring Data, JDBC and MyBatis, config and env, and outbound HTTP; measured on pinned samples. |
+| M15 – C# ecosystem | 44–46 | C# namespaces, usings, projects and solutions, and calls resolved through inheritance; ASP.NET Core controllers and minimal APIs, gRPC .NET, SignalR, hosted services, Azure Functions, System.CommandLine and `Microsoft.Extensions.DependencyInjection`. |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
@@ -1668,6 +1669,46 @@ MapStruct, openapi-generator): what they write is not in the graph. The decision
 
 - [x] Accuracy, performance and agent results for Java are reproducible from scripts (accuracy and performance results committed; the agent run is scripted but its results are deferred)
 - [x] README shows the Java coverage
+
+## M15: C# ecosystem
+
+Phases 44–46 add C#: the vendored grammar, namespaces, `using` resolution and calls resolved through inheritance
+(44), `.csproj` and solution files (45), then the framework layer (46). MSBuild is read, not run, and source
+generators are not run: what they write is not in the graph. The decisions of M9 apply.
+
+## Phase 46: C# HTTP routes, entrypoints and DI ([#286](https://github.com/fatihserhatturan/concentrate/issues/286))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 45
+
+**Goal:** Find the routes, entrypoints and dependency injection of .NET services, reusing the nodes and relationships of M9.
+
+### HTTP routes
+
+- [x] Controllers: `[ApiController]` / `ControllerBase` with `[Route]` and `[HttpGet]`, `[HttpPost]`, ...; `[controller]` / `[action]` tokens resolved; class and method templates joined
+- [x] Minimal APIs: `app.MapGet/MapPost/MapPut/MapDelete/MapMethods` with `MapGroup` prefixes and handlers linked to methods or lambdas
+
+### RPC and other entrypoints
+
+- [x] gRPC .NET: a subclass of `X.XBase` is an `EntryPoint` per method (registered with `MapGrpcService<T>`); `XClient` calls link to the implementations (`via: "grpc"`)
+- [x] SignalR `Hub` methods (`MapHub<T>`)
+- [x] `BackgroundService` / `IHostedService` registered with `AddHostedService<T>`
+- [x] Azure Functions `[Function]` triggers (HTTP, timer, queue)
+- [x] `System.CommandLine` commands
+
+### Dependency injection
+
+- [x] `services.AddScoped/AddTransient/AddSingleton<IFoo, Foo>()` and factory registrations as providers
+- [x] Constructor and primary-constructor injection, `[FromServices]` parameters and minimal-API handler parameters
+  - Caveat: a handler-parameter `INJECTS` goes from the class declaring the handler method (INJECTS is Class to Class); top-level-statement lambdas get no edge and no ambiguity count, and lambda routes link to the enclosing function, so `impact_of` over-reports sibling lambda routes (e.g. `GET /health`)
+- [x] An interface with one registration resolves to it; anything else counted as ambiguous
+
+### Acceptance criteria
+
+- [x] Fixtures for controllers, minimal APIs, gRPC .NET, SignalR, a hosted service and Azure Functions have golden graphs
+- [x] `list_routes` and impact queries through injected dependencies answer for .NET services
+
+What is not handled is listed in [known-limitations.md](known-limitations.md#c-frameworks).
 
 ## Verification (every milestone)
 

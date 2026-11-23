@@ -267,7 +267,8 @@
     "isConditional": "BOOLEAN",
     "typeArguments": "STRING",
     "typeArity": "INT64",
-    "receiverTruncated": "BOOLEAN"
+    "receiverTruncated": "BOOLEAN",
+    "diRegistration": "STRING"
    }
   },
   {
@@ -332,6 +333,7 @@
     "line": "INT64",
     "framework": "STRING",
     "handlerName": "STRING",
+    "handlerParameters": "STRING",
     "pendingHandlerRefs": "STRING",
     "scopeFunctionId": "STRING",
     "layers": "STRING",
@@ -348,7 +350,9 @@
     "line": "INT64",
     "handlerName": "STRING",
     "source": "STRING",
-    "resolved": "BOOLEAN"
+    "resolved": "BOOLEAN",
+    "registered": "BOOLEAN",
+    "hubPath": "STRING"
    }
   },
   {

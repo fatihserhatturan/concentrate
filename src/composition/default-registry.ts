@@ -75,11 +75,10 @@ import { javaGraphSchema } from "../integrations/languages/java/schema.js";
 import { javaLanguages } from "../integrations/languages/java/descriptor.js";
 import { csharpGraphSchema } from "../integrations/languages/csharp/schema.js";
 import { csharpLanguages } from "../integrations/languages/csharp/descriptor.js";
-import { csharpParser } from "../integrations/languages/csharp/parser.js";
 import { csharpCallResolver, csharpInheritanceResolver } from "../integrations/languages/csharp/resolvers.js";
 import { csharpManifestReader } from "../integrations/languages/csharp/manifest.js";
 import { csharpImportResolver } from "../integrations/languages/csharp/import-resolver.js";
-import { csharpEntrypointsContributor, csharpProjectsContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
+import { csharpDiContributor, csharpEntrypointsContributor, csharpFrameworkEntrypointsContributor, csharpFrameworkParser, csharpFrameworkSchemas, csharpGrpcContributor, csharpHandlerInjectionContributor, csharpProjectsContributor, csharpRoutesContributor, csharpSignalrContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -95,11 +94,11 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
 
   // Graph properties each integration adds to the core tables. Rust before C/C++: both add Import
   // properties after `isModule`, and the merged order must stay what the closed schema had.
-  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema, javaGraphSchema, csharpGraphSchema]) {
+  for (const extension of [jsTsGraphSchema, goGraphSchema, rustGraphSchema, cppGraphSchema, cppBuildGraphSchema, javaGraphSchema, csharpGraphSchema, ...csharpFrameworkSchemas]) {
     registry.registerGraphSchema(extension);
   }
 
-  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaFrameworkParser, csharpParser, ...plainFileParsers]) {
+  for (const parser of [javascriptParser, typescriptParser, htmlParser, vueParser, svelteParser, astroParser, pythonFrameworkParser, goFrameworkParser, rustFrameworkParser, cFrameworkParser, cppFrameworkParser, javaFrameworkParser, csharpFrameworkParser, ...plainFileParsers]) {
     registry.registerLanguageParser(parser);
   }
 
@@ -169,7 +168,13 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     javaConfigEnvContributor,
     javaHttpClientsContributor,
     csharpEntrypointsContributor,
+    csharpFrameworkEntrypointsContributor,
+    csharpRoutesContributor,
+    csharpGrpcContributor,
+    csharpSignalrContributor,
     csharpTestsContributor,
+    csharpDiContributor,
+    csharpHandlerInjectionContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,
