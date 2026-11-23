@@ -1506,7 +1506,33 @@
         }
       }
     ],
-    "csharp-efcore": [],
+    "csharp-efcore": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "catalog_products"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "efcore"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "Order",
+          "operation": "create"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "OpenAsync"
+        }
+      }
+    ],
     "java-jdbc": [
       {
         "tool": "list_tables",
