@@ -322,7 +322,11 @@ const IDENTIFIER = /^@?[A-Za-z_][\w]*$/u;
 const DOTTED = /^(?:global::)?@?[A-Za-z_]\w*(?:\.@?[A-Za-z_]\w*)+$/u;
 const PASS_THROUGH = /^([\s\S]+)\.(?:ToString|Trim|TrimStart|TrimEnd)\(\)$/u;
 
-function operandParts(raw: string, scope: CSharpStringScope, depth: number): CSharpStringTemplate {
+// Scalar literals that print as themselves in a concatenation: `"LIMIT " + 10`, `"x" + 'c'`, `"a" + true` (`True`).
+const INTEGER_LITERAL = /^\d[\d_]*(?:[uU]?[lL]?|[lL][uU])$/u;
+const CHAR_LITERAL = /^'(?:[^'\\]|\\.)'$/u;
+
+function operandParts(raw: string, scope: CSharpStringScope, depth: number, fold = depth > 0): CSharpStringTemplate {
   let operand = raw.trim();
   if (operand.endsWith("!") && !operand.endsWith("!=")) operand = operand.slice(0, -1).trim();
   if (operand === "") return [];
@@ -333,6 +337,14 @@ function operandParts(raw: string, scope: CSharpStringScope, depth: number): CSh
   if (wholeParenthesized(operand)) {
     const inner = operand.slice(1, -1);
     return depth > MAX_DEPTH ? [{ expr: operand }] : tidy(splitTopLevel(inner, "+").flatMap((part) => operandParts(part, scope, depth + 1)));
+  }
+  if (fold) {
+    if (INTEGER_LITERAL.test(operand)) return [{ text: operand.replace(/[uUlL_]/gu, "") }];
+    if (CHAR_LITERAL.test(operand)) {
+      const value = csharpStringLiteralValue(`"${operand.slice(1, -1).replace(/"/gu, '\\"')}"`);
+      if (value !== null) return [{ text: value }];
+    }
+    if (operand === "true" || operand === "false") return [{ text: operand === "true" ? "True" : "False" }];
   }
   const cast = /^\(\s*(?:string|object)\s*\)\s*([\s\S]+)$/u.exec(operand);
   if (cast) return operandParts(cast[1]!, scope, depth + 1);
@@ -395,7 +407,8 @@ function callParts(name: string, args: string[], scope: CSharpStringScope, depth
  * argument's text); null when it holds no literal text and no name that could be a constant.
  */
 export function csharpStringFromText(expression: string, scope: CSharpStringScope = {}): CSharpStringTemplate | null {
-  const template = tidy(splitTopLevel(expression.trim(), "+").flatMap((part) => operandParts(part, scope, 0)));
+  const operands = splitTopLevel(expression.trim(), "+");
+  const template = tidy(operands.flatMap((part) => operandParts(part, scope, 0, operands.length > 1)));
   // A plain name (a parameter, a local) still counts as a name: `id + n` is `${id}${n}`.
   return template.some((part) => "text" in part || "ref" in part || IDENTIFIER.test(part.expr)) ? template : null;
 }

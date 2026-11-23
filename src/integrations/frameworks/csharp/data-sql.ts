@@ -31,8 +31,9 @@ import { createCSharpStringResolver, parseCSharpString, readCSharpString, serial
 // receiver typed as a command (or `IDbCommand`), and on a local initialised by `conn.CreateCommand()` where `conn` is
 // typed as a connection. The access is made by the function that constructs / assigns. `SqlBulkCopy.DestinationTableName
 // = "t"` is a `create` of `t`.
-// A stored procedure names no table: `CommandType.StoredProcedure` in the call's arguments (Dapper) or anywhere in the
-// same function (ADO.NET) skips the site.
+// A stored procedure names no table: `CommandType.StoredProcedure` in the call's arguments (Dapper), in the
+// command's own constructor arguments or initializer, or `cmd.CommandType = CommandType.StoredProcedure` on the variable
+// the command is created into / assigned `CommandText` skips that command only (not the other commands of the member).
 //
 // Dynamic parts of a statement are unknown (`"... FROM " + table` names no table; the tables the literal text names
 // still count); a SQL string that is wholly dynamic (a parameter, a method result) is skipped, never guessed.
@@ -75,14 +76,14 @@ const SKIPPED = new Set([
 
 // What a member's own syntax holds: assignments `x.CommandText = ...` / `x.DestinationTableName = ...`, and whether it
 // names `CommandType.StoredProcedure`. Nested type and member declarations are other members' business.
-function readMember(root: SyntaxNode): { assigns: Array<{ line: number; member: string; receiver: string; value: SyntaxNode }>; storedProcedure: boolean } {
+function readMember(root: SyntaxNode): { assigns: Array<{ line: number; member: string; receiver: string; value: SyntaxNode }>; storedProcedures: Set<string> } {
   const assigns: Array<{ line: number; member: string; receiver: string; value: SyntaxNode }> = [];
-  let storedProcedure = false;
+  // Receivers (`cmd`) of `cmd.CommandType = CommandType.StoredProcedure`: only their commands are stored procedures.
+  const storedProcedures = new Set<string>();
   const stack: SyntaxNode[] = [root];
   while (stack.length > 0) {
     const node = stack.pop()!;
     if (node.id !== root.id && SKIPPED.has(node.type)) continue;
-    if (node.type === "member_access_expression" && STORED_PROCEDURE.test(node.text) && /CommandType\s*\.\s*StoredProcedure$/u.test(node.text)) storedProcedure = true;
     if (node.type === "assignment_expression") {
       const left = node.childForFieldName("left");
       const right = node.childForFieldName("right");
@@ -91,16 +92,17 @@ function readMember(root: SyntaxNode): { assigns: Array<{ line: number; member: 
         const member = left.childForFieldName("name")?.text;
         const receiver = left.childForFieldName("expression")?.text;
         if ((member === "CommandText" || member === "DestinationTableName") && receiver) assigns.push({ line: node.startPosition.row + 1, member, receiver, value: right });
+        if (member === "CommandType" && receiver && /StoredProcedure$/u.test(right.text)) storedProcedures.add(receiver.replace(/\s+/gu, ""));
       }
     }
     for (const child of node.namedChildren) stack.push(child);
   }
-  return { assigns, storedProcedure };
+  return { assigns, storedProcedures };
 }
 
 const readSites: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
   if (!FILE_GATE.test(root.text)) return;
-  const members = new Map<string, { syntax: SyntaxNode; node: GraphNode; storedProcedure: boolean }>();
+  const members = new Map<string, { syntax: SyntaxNode; node: GraphNode; storedProcedures: Set<string> }>();
   const scopes = new Map<string, Required<CSharpStringScope>>();
   const scopeOf = (id: string): Required<CSharpStringScope> => {
     let scope = scopes.get(id);
@@ -108,12 +110,12 @@ const readSites: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
     return scope;
   };
   for (const member of functions) {
-    const { assigns, storedProcedure } = readMember(member.syntax);
-    members.set(member.node.id, { ...member, storedProcedure });
+    const { assigns, storedProcedures } = readMember(member.syntax);
+    members.set(member.node.id, { ...member, storedProcedures });
     if (assigns.length === 0) continue;
     const kept: Assign[] = [];
     for (const assign of assigns) {
-      if (assign.member === "CommandText" && storedProcedure) continue;
+      if (assign.member === "CommandText" && storedProcedures.has(assign.receiver.replace(/\s+/gu, ""))) continue;
       const template = readCSharpString(assign.value, scopeOf(member.node.id));
       if (template) kept.push([assign.line, assign.member, assign.receiver.replace(/\s+/gu, ""), serializeCSharpString(template)]);
     }
@@ -140,7 +142,17 @@ const readSites: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
     const list = call.syntax.childForFieldName("arguments") ?? call.syntax.namedChildren.find((child) => child.type === "argument_list") ?? null;
     const args = (list?.namedChildren ?? []).filter((child) => child.type === "argument");
     const argText = args.map((arg) => arg.text).join(",");
-    if (STORED_PROCEDURE.test(argText) || (ty !== "CommandDefinition" && member.storedProcedure)) continue;
+    if (STORED_PROCEDURE.test(argText)) continue;
+    // The command's own `CommandType = StoredProcedure` (initializer, or `cmd.CommandType = ...` on the variable it is assigned to).
+    if (ty !== "CommandDefinition") {
+      const initialized = call.syntax.namedChildren.find((child) => child.type === "initializer_expression");
+      if (initialized && /\bCommandType\s*=\s*[\w.]*StoredProcedure\b/u.test(initialized.text)) continue;
+      const holder = call.syntax.parent;
+      let variable: string | null = null;
+      if (holder?.type === "equals_value_clause") variable = holder.parent?.childForFieldName("name")?.text ?? null;
+      else if (holder?.type === "assignment_expression" && holder.childForFieldName("right")?.id === call.syntax.id) variable = holder.childForFieldName("left")?.text ?? null;
+      if (variable && member.storedProcedures.has(variable.replace(/\s+/gu, ""))) continue;
+    }
     let expression: SyntaxNode | null = null;
     const named = args.find((arg) => /^(?:cmdText|commandText|selectCommandText|selectCommand)\s*:/u.test(arg.text));
     const target = named ?? args.find((arg) => !arg.namedChildren.some((child) => child.type === "name_colon"));
@@ -157,7 +169,7 @@ const readSites: VersionedCSharpParsePlugin = ({ root, functions, calls }) => {
   }
 };
 
-export const csharpDataSqlPlugin: VersionedCSharpParsePlugin = Object.assign(readSites, { version: "1" });
+export const csharpDataSqlPlugin: VersionedCSharpParsePlugin = Object.assign(readSites, { version: "2" });
 
 function isConnection(text: string, fn: GraphNode, receivers: CSharpReceiverResolver): boolean {
   if (receiverMatches(receivers.typeOf(text, fn), CONNECTION_TYPES, receivers)) return true;

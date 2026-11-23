@@ -9,7 +9,7 @@ import type { SyntaxNode } from "../../languages/syntax/tree-sitter.js";
 import { csharpAttributeReader, findAttributes, namedArgument, positionalArguments, type CSharpAttributeInfo } from "./attributes.js";
 import { csharpDataModel, csharpSqlModelAccesses, csharpTable, recordCSharpDataAccesses, type CSharpDataAccess, type CSharpDataOperation } from "./data-shared.js";
 import { descendantsOfType, dottedText, invocationChain, invocationInfo, lambdaInfo, type InvocationInfo } from "./invocations.js";
-import { createCSharpReceiverResolver, receiverMatches, type CSharpReceiverType } from "./receivers.js";
+import { createCSharpReceiverResolver, receiverMatches, type CSharpPosition, type CSharpReceiverType } from "./receivers.js";
 import { parametersOf } from "./shared.js";
 import {
   createCSharpStringResolver,
@@ -62,6 +62,13 @@ import {
 // A `FromSql*` on a DbSet whose SQL names no table (a stored procedure) reads the DbSet's entity; a dynamic string or
 // `Execute*` without a table gives nothing.
 //
+// Review fixes: a navigation link before `ToTable` (`OwnsOne(..).ToTable("x")`, `HasOne`, `Navigation`) does not rename the
+// owner; only public properties (or `[Column]` / `HasColumnName` ones) are columns, never expression-bodied, computed or
+// get-only-without-initializer ones; `IsRequired(false)` makes a column optional; an interface that declares `DbSet<T>` and
+// is implemented by a scanned context is that context; `_context.Add(x)` / `Update` / `Remove` / `Attach` (+ `Range`) and
+// `Find<T>` on the context map by the argument's static type (or the type argument) and give nothing when it is not an
+// entity; the chain is read up to its materialization (`ToList()`, `First*`, ...): `db.Orders.ToList().Add(x)` is a read.
+//
 // Not handled: compiled models, owned types, TPH / TPT / TPC inheritance beyond the base entity's own table, many-to-many
 // join tables (`UsingEntity`), `ToView`, value converters, a DbContext known only through DI (the receiver type must be
 // visible), `Set(typeof(T))`, `Entry(x)` (ignored), a DbSet stored in a variable (`var set = db.Orders; set.Add(x)`) or
@@ -93,6 +100,13 @@ const WRITES = new Map<string, CSharpDataOperation>([
   ["Remove", "delete"], ["RemoveRange", "delete"], ["ExecuteDelete", "delete"], ["BulkDelete", "delete"],
   ["AddOrUpdate", "upsert"], ["Upsert", "upsert"], ["BulkInsertOrUpdate", "upsert"], ["BulkMerge", "upsert"],
 ]);
+// Methods of the DbContext itself that name their entity by an argument (`_context.Add(order)`) or a type argument (`Find<Order>(id)`).
+const CONTEXT_METHODS = new Set(["Add", "AddRange", "Update", "UpdateRange", "Remove", "RemoveRange", "Attach", "AttachRange", "Find"]);
+// A step that ends the query: what follows works on the materialized result (`db.Orders.ToList().Add(x)` is a read).
+const MATERIALIZERS = new Set([
+  "ToList", "ToArray", "ToDictionary", "ToHashSet", "ToLookup", "AsEnumerable", "AsAsyncEnumerable", "First", "FirstOrDefault", "Last", "LastOrDefault", "Single",
+  "SingleOrDefault", "ElementAt", "ElementAtOrDefault", "Find", "Any", "All", "Contains", "ToQueryString", "Load", "ForEach",
+]);
 const SET_SQL = new Set(["FromSqlRaw", "FromSqlInterpolated", "FromSql"]);
 const DATABASE_SQL = new Set(["ExecuteSqlRaw", "ExecuteSqlInterpolated", "ExecuteSql", "SqlQuery", "SqlQueryRaw"]);
 const TRIGGERS = new Set([...READS, ...AGGREGATES, ...WRITES.keys(), ...SET_SQL, ...DATABASE_SQL]);
@@ -123,7 +137,14 @@ function walk(root: SyntaxNode, visit: (node: SyntaxNode) => void): void {
 // ---------------------------------------------------------------- parse time
 
 /** One DbSet-or-context access site as the plugin keeps it: `r` receiver text, `m` member (the DbSet property, `Database`), `t` the T of `Set<T>()`, `c` method chain, `l` line, `e` expression, `s` serialized SQL. */
-type AccessRecord = { r: string; m: string | null; t: string | null; c: string[]; l: number; e: string; s?: string };
+type AccessRecord = {
+  r: string; m: string | null; t: string | null; c: string[]; l: number; e: string; s?: string;
+  /** Column of the access (0-based), to tell lambdas of one line apart. */
+  k?: number;
+  /** `ctx`: a method of the context itself (`_context.Add(x)`, `Find<T>(..)`); `x`: the text of its first argument. */
+  ctx?: true;
+  x?: string;
+};
 type TableRecord = { e: string; n: string; s?: string; l: number };
 type PropertyRecord = { e: string; p: string; c?: string; required?: boolean; key?: true };
 type ConfigRecord = { entities: string[]; ignored: string[]; tables: TableRecord[]; props: PropertyRecord[] };
@@ -185,9 +206,9 @@ const sourceOfClause = (clause: SyntaxNode): SyntaxNode | null => {
 function readAccesses(member: { syntax: SyntaxNode; node: GraphNode }): AccessRecord[] {
   const records: AccessRecord[] = [];
   let scope: ReturnType<typeof stringScopeOf> | undefined;
-  const push = (candidate: Candidate, chain: string[], expression: string, line: number, sql?: InvocationInfo): void => {
-    if (candidate.m === null && candidate.t === null) return;
-    const record: AccessRecord = { r: candidate.r, m: candidate.m, t: candidate.t, c: chain, l: line, e: expression };
+  const push = (candidate: Candidate, chain: string[], expression: string, line: number, column: number, sql?: InvocationInfo, extra?: Partial<AccessRecord>): void => {
+    if (candidate.m === null && candidate.t === null && !extra?.ctx) return;
+    const record: AccessRecord = { r: candidate.r, m: candidate.m, t: candidate.t, c: chain, l: line, e: expression, k: column, ...extra };
     if (sql) {
       const argument = sql.arguments.find((item) => item.name?.toLowerCase() === "sql") ?? sql.arguments.find((item) => item.name === null);
       scope ??= stringScopeOf(member);
@@ -200,22 +221,38 @@ function readAccesses(member: { syntax: SyntaxNode; node: GraphNode }): AccessRe
     if (node.type === "invocation_expression") {
       const info = invocationInfo(node);
       if (!info?.receiver || !TRIGGERS.has(stripAsync(info.name))) return;
-      const candidate = candidateOf(info.receiver);
-      if (!candidate) return;
       const chain = [info.name];
       for (let next = continuation(node); next; next = continuation(next.call)) chain.push(next.name);
+      const line = node.startPosition.row + 1;
+      const column = node.startPosition.column;
+      // `_context.Add(order)` / `_context.Find<Order>(id)`: the context itself, the entity is named by the argument.
+      if (CONTEXT_METHODS.has(stripAsync(info.name))) {
+        const receiverText = dottedText(unwrap(info.receiver));
+        if (receiverText !== null) {
+          const first = info.arguments.find((argument) => argument.name === null) ?? info.arguments[0];
+          const generic = info.typeArguments.length === 1 ? compactNoSpace(info.typeArguments[0]!) : null;
+          push({ r: receiverText, m: null, t: generic, text: receiverText }, chain, `${receiverText}.${info.name}`, line, column, undefined, {
+            ctx: true,
+            ...(first ? { x: compactNoSpace(first.text).slice(0, 200) } : {}),
+          });
+        }
+      }
+      const candidate = candidateOf(info.receiver);
+      if (!candidate) return;
       const raw = SET_SQL.has(info.name) || DATABASE_SQL.has(stripAsync(info.name)) ? info : undefined;
-      push(candidate, chain, `${candidate.text}.${info.name}`, node.startPosition.row + 1, raw);
+      push(candidate, chain, `${candidate.text}.${info.name}`, line, column, raw);
     } else if (node.type === "from_clause" || node.type === "join_clause") {
       const candidate = candidateOf(sourceOfClause(node));
-      if (candidate) push(candidate, ["__query"], candidate.text, node.startPosition.row + 1);
+      if (candidate) push(candidate, ["__query"], candidate.text, node.startPosition.row + 1, node.startPosition.column);
     } else if (node.type === "for_each_statement") {
       const candidate = candidateOf(node.childForFieldName("right"));
-      if (candidate) push(candidate, ["__foreach"], candidate.text, node.startPosition.row + 1);
+      if (candidate) push(candidate, ["__foreach"], candidate.text, node.startPosition.row + 1, node.startPosition.column);
     }
   });
   return records;
 }
+
+const NAVIGATIONS = new Set(["OwnsOne", "OwnsMany", "HasOne", "HasMany", "Navigation", "WithOne", "WithMany", "UsingEntity"]);
 
 const propertyOfLambda = (text: string): string | null => /=>\s*(?:[\w.?!]*\.)?(\w+)\s*$/u.exec(text)?.[1] ?? null;
 
@@ -235,6 +272,8 @@ function readConfig(member: { syntax: SyntaxNode; node: GraphNode }): ConfigReco
   };
   const entityOf = (call: SyntaxNode): string | null => {
     const { root, chain } = invocationChain(call);
+    // `Entity<T>().OwnsOne(o => o.Addr).ToTable("x")`: what follows a navigation link configures the related / owned type.
+    for (const link of chain.slice(0, -1)) if (NAVIGATIONS.has(link.name)) return null;
     for (const link of chain) if (link.name === "Entity" && link.typeArguments.length === 1) return compactNoSpace(link.typeArguments[0]!);
     const rootText = dottedText(root);
     if (!rootText) return null;
@@ -294,7 +333,37 @@ function readConfig(member: { syntax: SyntaxNode; node: GraphNode }): ConfigReco
   return config.entities.length + config.ignored.length + config.tables.length + config.props.length === 0 ? null : config;
 }
 
-const readEfCore: VersionedCSharpParsePlugin = ({ functions }) => {
+// A property EF Core does not map: expression-bodied or computed (a getter body and no setter), or get-only without initializer.
+const UNMAPPED = "csharpEfUnmapped";
+const TYPE_DECLARATIONS = new Set(["class_declaration", "struct_declaration", "record_declaration", "record_struct_declaration"]);
+
+function markUnmappedProperties(types: readonly { syntax: SyntaxNode }[], nodes: readonly GraphNode[]): void {
+  let fields: Map<string, GraphNode> | undefined;
+  for (const { syntax } of types) {
+    if (!TYPE_DECLARATIONS.has(syntax.type)) continue;
+    const body = syntax.childForFieldName("body") ?? syntax.namedChildren.find((child) => child.type === "declaration_list");
+    for (const member of body?.namedChildren ?? []) {
+      if (member.type !== "property_declaration") continue;
+      const name = plainName(member.childForFieldName("name")?.text ?? "");
+      const value = member.childForFieldName("value");
+      const accessors = (member.childForFieldName("accessors")?.namedChildren ?? []).filter((accessor) => accessor.type === "accessor_declaration");
+      const names = accessors.map((accessor) => accessor.childForFieldName("name")?.text);
+      const writable = names.includes("set") || names.includes("init");
+      const hasBody = accessors.some((accessor) => accessor.childForFieldName("body") !== null);
+      const arrow = value?.type === "arrow_expression_clause";
+      const computed = !writable && (arrow || hasBody);
+      const getOnlyWithoutInitializer = !writable && !arrow && !hasBody && value === null;
+      if (!name || !(computed || getOnlyWithoutInitializer)) continue;
+      const line = member.startPosition.row + 1;
+      fields ??= new Map(nodes.filter((node) => node.label === "Field").map((node) => [`${String(node.properties.line)}:${String(node.properties.name)}`, node]));
+      const field = fields.get(`${line}:${name}`);
+      if (field) field.properties[UNMAPPED] = true;
+    }
+  }
+}
+
+const readEfCore: VersionedCSharpParsePlugin = ({ functions, types, nodes }) => {
+  markUnmappedProperties(types, nodes);
   for (const member of functions) {
     if (functionReturnsDbSet(member.node)) continue;
     const accesses = readAccesses(member);
@@ -304,7 +373,7 @@ const readEfCore: VersionedCSharpParsePlugin = ({ functions }) => {
   }
 };
 
-export const csharpDataEfcorePlugin: VersionedCSharpParsePlugin = Object.assign(readEfCore, { version: "1" });
+export const csharpDataEfcorePlugin: VersionedCSharpParsePlugin = Object.assign(readEfCore, { version: "2" });
 
 // ---------------------------------------------------------------- graph time
 
@@ -335,14 +404,14 @@ export const csharpDataEfcoreContributor: ISemanticContributor = {
   contribute(graph) {
     const functions = graph.nodesWithLabel("Function");
     const withFacts = functions.filter((node) => node.properties[ACCESSES] !== undefined || node.properties[CONFIG] !== undefined);
-    if (withFacts.length === 0) return;
     try {
-      contributeEfCore(graph, withFacts);
+      if (withFacts.length > 0) contributeEfCore(graph, withFacts);
     } finally {
       for (const node of functions) {
         delete node.properties[ACCESSES];
         delete node.properties[CONFIG];
       }
+      for (const node of graph.nodesWithLabel("Field")) delete node.properties[UNMAPPED];
     }
   },
 };
@@ -363,6 +432,15 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
     else fieldsOf.set(rel.from, [field]);
   }
 
+  const interfaceFieldsOf = new Map<string, GraphNode[]>();
+  for (const rel of graph.relationshipsOfType("DEFINES_INTERFACE_FIELD" as GraphRelationship["type"])) {
+    const field = graph.node(rel.to);
+    if (!field) continue;
+    const list = interfaceFieldsOf.get(rel.from);
+    if (list) list.push(field);
+    else interfaceFieldsOf.set(rel.from, [field]);
+  }
+
   const relativeOf = (fileId: string | undefined): string | null => {
     const node = fileId ? graph.node(fileId) : undefined;
     return typeof node?.properties.relativePath === "string" ? node.properties.relativePath : null;
@@ -380,12 +458,33 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
   // DbContexts of the scan.
   const contexts = ordered(resolver.index.types.filter((type) => type.node.label === "Class" && type.kind === "class" && resolver.derivesFromExternal(type, CONTEXT_NAMES)).map((type) => type.node)).map((node) => resolver.typeOf(node)!);
   const contextIds = new Set(contexts.map((type) => type.id));
+  // An interface that declares `DbSet<T>` properties and is implemented by a scanned DbContext (`IAppDbContext`) stands for that context.
+  const implementedByContext = new Set<string>();
+  for (const context of contexts) {
+    const stack = [context];
+    while (stack.length > 0) {
+      const current = stack.pop()!;
+      for (const parent of resolver.index.supertypes(current)) {
+        if (implementedByContext.has(parent.id)) continue;
+        implementedByContext.add(parent.id);
+        stack.push(parent);
+      }
+    }
+  }
+  const interfaceContexts = ordered(
+    resolver.index.types.filter((type) => type.node.label === "Interface" && implementedByContext.has(type.id) && (interfaceFieldsOf.get(type.id) ?? []).some((field) => isDbSetProperty(field))).map((type) => type.node),
+  ).map((node) => resolver.typeOf(node)!);
+  for (const type of interfaceContexts) contextIds.add(type.id);
 
   const entityKeyOf = (written: string, scopeNode: GraphNode): { key: string; type: CSharpType | null } => {
     const type = resolver.resolve(written, scopeNode);
     return type ? { key: type.id, type } : { key: `?${normalizeCSharpType(written) ?? written}`, type: null };
   };
   const simpleName = (written: string): string => (normalizeCSharpType(written) ?? written).split(".").at(-1)!;
+
+  function isDbSetProperty(field: GraphNode): boolean {
+    return field.properties.fieldKind === "property" && field.properties.isStatic !== true && normalizeCSharpType(String(field.properties.declaredType ?? ""))?.split(".").at(-1) === "DbSet";
+  }
 
   // Entities: the T of every DbSet<T> property, then the T of `Entity<T>()`.
   const entities = new Map<string, Entity>();
@@ -401,6 +500,15 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
       const { key, type } = entityKeyOf(generic[0]!, field);
       own.set(String(field.properties.name), key);
       if (!entities.has(key)) entities.set(key, { key, name: type?.name ?? simpleName(generic[0]!), type, dbSet: { field, property: String(field.properties.name) }, scopeNode: field });
+    }
+    dbSetsOf.set(context.id, own);
+  }
+  for (const context of interfaceContexts) {
+    const own = new Map<string, string>();
+    for (const field of interfaceFieldsOf.get(context.id) ?? []) {
+      if (!isDbSetProperty(field)) continue;
+      const generic = trailingGenericArguments(String(field.properties.declaredType ?? ""));
+      if (generic?.length === 1) own.set(String(field.properties.name), entityKeyOf(generic[0]!, field).key);
     }
     dbSetsOf.set(context.id, own);
   }
@@ -461,8 +569,10 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
     const candidates: Candidate[] = [];
     for (const owner of classChain(entity.type)) {
       for (const field of fieldsOf.get(owner.id) ?? []) {
-        if (field.properties.fieldKind !== "property" || field.properties.isStatic === true || field.properties.visibility === "private" && String(field.properties.accessors ?? "").split(",").length < 2) continue;
+        if (field.properties.fieldKind !== "property" || field.properties.isStatic === true || field.properties[UNMAPPED] === true) continue;
         const list = attributes.attributesOf(field);
+        // Only public properties are mapped by convention; a non-public one needs `[Column]` or `HasColumnName`.
+        if (field.properties.visibility !== "public" && findAttributes(list, "Column", ["System.ComponentModel.DataAnnotations"]).length === 0 && propertyConfig.get(`${entity.key}\0${String(field.properties.name)}`)?.column === undefined) continue;
         if (findAttributes(list, "NotMapped", ["System.ComponentModel.DataAnnotations"]).length > 0) continue;
         const declared = String(field.properties.declaredType ?? "");
         const normalized = normalizeCSharpType(declared);
@@ -483,12 +593,12 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
       const attributeName = columnAttribute ? stringArgument(positionalArguments(columnAttribute)[0] ?? null, candidate.field) : null;
       const lower = name.toLowerCase();
       const isId = explicitKey ? keyed(candidate) : lower === "id" || lower === `${entity.name.toLowerCase()}id`;
-      const required = configured?.required === true || findAttributes(candidate.list, "Required", ["System.ComponentModel.DataAnnotations"]).length > 0;
+      const required = configured?.required !== undefined ? configured.required : findAttributes(candidate.list, "Required", ["System.ComponentModel.DataAnnotations"]).length > 0;
       return {
         name,
         column: configured?.column ?? attributeName ?? name,
         type: normalizeCSharpType(declared) ?? declared,
-        optional: !isId && !required && configured?.required !== false ? declared.trim().endsWith("?") : false,
+        optional: isId ? false : configured?.required === false ? true : required ? false : declared.trim().endsWith("?"),
         list: false,
         isId,
         isUnique: isId,
@@ -532,25 +642,30 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
     return type && contextIds.has(type.id) ? type : null;
   };
   type Through = { context: CSharpType | null; external: boolean };
-  const contextOf = (receiver: string, fn: GraphNode): Through | null => {
+  const contextOf = (receiver: string, fn: GraphNode, at?: CSharpPosition): Through | null => {
     if (receiver === "" || receiver === "this") {
       const owner = resolver.ownerOf(fn);
       const type = owner ? resolver.typeOf(owner) : undefined;
       return type && contextIds.has(type.id) ? { context: type, external: false } : null;
     }
-    const type: CSharpReceiverType | null = receivers.typeOf(receiver, fn);
+    const type: CSharpReceiverType | null = receivers.typeOf(receiver, fn, at);
     if (type?.type && contextIds.has(type.type.id)) return { context: type.type, external: false };
     if (type && type.type === null && receiverMatches(type, CONTEXT_NAMES)) return { context: null, external: true };
     const made = factoryContext(receiver, fn);
     return made ? { context: made, external: false } : null;
   };
 
+  // The chain is read up to the step that materializes the query: `db.Orders.ToList().Add(x)` adds to a list.
   const operationOf = (chain: readonly string[]): CSharpDataOperation => {
+    let aggregate = false;
     for (const name of chain) {
-      const write = WRITES.get(stripAsync(name));
+      const plain = stripAsync(name);
+      const write = WRITES.get(plain);
       if (write) return write;
+      if (AGGREGATES.has(plain)) aggregate = true;
+      if (aggregate || MATERIALIZERS.has(plain)) break;
     }
-    return chain.some((name) => AGGREGATES.has(stripAsync(name))) ? "aggregate" : "read";
+    return aggregate ? "aggregate" : "read";
   };
 
   const accesses: CSharpDataAccess[] = [];
@@ -558,11 +673,21 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
     const records = parseJson<AccessRecord[]>(fn.properties[ACCESSES]);
     if (!records) continue;
     for (const record of records) {
-      const through = contextOf(record.r, fn);
+      const at: CSharpPosition = { line: record.l, ...(record.k !== undefined ? { column: record.k } : {}) };
+      const through = contextOf(record.r, fn, at);
       if (!through) continue;
       let entityKey: string | null = null;
       let viaDatabase = false;
-      if (record.t !== null) entityKey = entityKeyOf(record.t, fn).key;
+      if (record.ctx) {
+        // `_context.Add(order)` / `Find<Order>(id)`: the entity of the argument's static type (or the type argument); else nothing.
+        if (!through.context) continue;
+        if (record.t !== null) entityKey = entityKeyOf(record.t, fn).key;
+        else {
+          const argument = record.x ? receivers.typeOf(record.x, fn, at) : null;
+          const element = argument?.typeArguments.length === 1 ? resolver.resolve(argument.typeArguments[0]!, fn) : null;
+          entityKey = argument?.type && entities.has(argument.type.id) ? argument.type.id : element && entities.has(element.id) ? element.id : null;
+        }
+      } else if (record.t !== null) entityKey = entityKeyOf(record.t, fn).key;
       else if (record.m === "Database") viaDatabase = true;
       else if (through.context && record.m !== null) entityKey = allDbSets(through.context).get(record.m) ?? null;
       if (!viaDatabase && (entityKey === null || !entities.has(entityKey))) continue;
@@ -572,13 +697,13 @@ function contributeEfCore(graph: IGraphContributor,withFacts: GraphNode[]): void
         const parts = template ? strings.resolvePartsAt(template, fn) : null;
         const sql = parts && hasLiteralText(parts) ? renderCSharpString(parts) : null;
         const found = sql ? csharpSqlModelAccesses(graph, sql, LIBRARY) : [];
-        for (const access of found) accesses.push({ functionId: fn.id, modelId: access.modelId, operation: access.operation, library: LIBRARY, line: record.l, expression: record.e });
+        for (const access of found) accesses.push({ functionId: fn.id, modelId: access.modelId, operation: access.operation, library: LIBRARY, line: record.l, ...(record.k !== undefined ? { column: record.k } : {}), expression: record.e });
         if (found.length > 0 || viaDatabase) continue;
         // `FromSql*` naming no table (a stored procedure): the DbSet's entity is read.
       }
       const modelId = entityKey ? modelOf.get(entityKey) : undefined;
       if (!modelId) continue;
-      accesses.push({ functionId: fn.id, modelId, operation: record.s !== undefined ? "read" : operationOf(record.c), library: LIBRARY, line: record.l, expression: record.e });
+      accesses.push({ functionId: fn.id, modelId, operation: record.s !== undefined ? "read" : operationOf(record.c), library: LIBRARY, line: record.l, ...(record.k !== undefined ? { column: record.k } : {}), expression: record.e });
     }
   }
   recordCSharpDataAccesses(graph, accesses);
