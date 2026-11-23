@@ -96,12 +96,12 @@ export function hasJavaProject(files: readonly string[]): boolean {
   return files.some((file) => /\.java$/u.test(file) || /(?:^|[\\/])(?:pom\.xml|build\.gradle(?:\.kts)?|settings\.gradle(?:\.kts)?)$/u.test(file));
 }
 
-const SECRET_WORDS = new Set(["password", "passwd", "pwd", "secret", "secrets", "credential", "credentials", "token", "apikey", "privatekey", "accesskey", "secretkey", "encryptionkey", "signingkey"]);
-const SECRET_PAIRS = new Set(["private key", "api key", "access key", "secret key", "encryption key", "signing key", "client secret"]);
+const SECRET_WORDS = new Set(["password", "passwd", "pwd", "secret", "secrets", "credential", "credentials", "passwords", "token", "apikey", "privatekey", "accesskey", "secretkey", "encryptionkey", "signingkey"]);
+const SECRET_PAIRS = new Set(["private key", "api key", "access key", "secret key", "encryption key", "signing key", "client secret", "private keys", "api keys", "access keys", "secret keys", "encryption keys", "signing keys", "client secrets"]);
 
 /**
  * Whether a config key names a secret: some segment of it (split on `.`) has, among its whole parts (kebab,
- * snake and camel case, lower-cased), password, passwd, pwd, secret(s), credential(s) or a singular token, or
+ * snake and camel case, lower-cased), password, passwd, pwd, secret(s), credential(s), password(s), a singular token or a segment that is only `tokens` (`max-tokens` stays plain), or
  * two parts that make private-key, api-key, access-key, secret-key, encryption-key, signing-key or
  * client-secret. A plain `key` is no secret (`cache.key-prefix`), nor are `max-tokens` or `passage`.
  */
@@ -109,7 +109,7 @@ export function isSecretKey(key: string): boolean {
   return key.split(".").some((segment) => {
     const name = segment.replace(/\[[^\]]*\]/gu, "");
     const parts = name.replace(/([a-z\d])([A-Z])/gu, "$1-$2").replace(/([A-Z]+)([A-Z][a-z])/gu, "$1-$2").toLowerCase().split(/[-_\s]+/u).filter((part) => part !== "");
-    return parts.some((part, index) => SECRET_WORDS.has(part) || (index > 0 && SECRET_PAIRS.has(`${parts[index - 1]} ${part}`)));
+    return parts.some((part, index) => SECRET_WORDS.has(part) || (part === "tokens" && parts.length === 1) || (index > 0 && SECRET_PAIRS.has(`${parts[index - 1]} ${part}`)));
   });
 }
 

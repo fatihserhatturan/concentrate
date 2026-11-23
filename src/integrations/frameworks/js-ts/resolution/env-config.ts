@@ -23,6 +23,10 @@ function addRouteEnvRelationships(graph: IGraphContributor): void {
   }
 
   for (const [routeId, functionIds] of handledFunctionIdsByRouteId) {
+    // A minimal-API lambda / local-function handler is the enclosing Function (often `<top-level>`): copying all of its
+    // env reads would put every startup variable on every route. `csharp.config-env` copies the ones of the lambda itself.
+    const route = graph.node(routeId);
+    if (route?.properties.framework === "aspnet-minimal" && typeof route.properties.handlerName === "string") continue;
     for (const functionId of functionIds) {
       for (const envRel of envRelationshipsByFunctionId.get(functionId) ?? []) {
         graph.addRelationship({

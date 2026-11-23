@@ -96,7 +96,7 @@ function methodsOfList(expression: string | null): string[] {
 // ---------------------------------------------------------------- minimal APIs: the parse plugin
 
 type HandlerRecord =
-  | { kind: "lambda"; parameters: unknown[] }
+  | { kind: "lambda"; parameters: unknown[]; endLine: number }
   | { kind: "ref"; text: string; local: boolean }
   | { kind: "none" };
 type MinimalRecord = { methods: string[]; parts: Part[]; line: number; handler: HandlerRecord; relative?: boolean };
@@ -265,7 +265,7 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     const lambda = handlerArgument.kind === "lambda" ? lambdaInfo(handlerArgument.node) : null;
     if (isMap && lambda && lambda.parameters.length === 1 && lambda.parameters[0]!.type === "") continue;
     let handler: HandlerRecord = { kind: "none" };
-    if (lambda) handler = { kind: "lambda", parameters: lambda.parameters };
+    if (lambda) handler = { kind: "lambda", parameters: lambda.parameters, endLine: handlerArgument.node.endPosition.row + 1 };
     else if (handlerArgument.kind === "method-group") {
       const text = dottedText(handlerArgument.node);
       if (text) {
@@ -283,7 +283,7 @@ export const csharpRoutesPlugin: VersionedCSharpParsePlugin = ({ root, functions
     node.properties.aspnetRoute = JSON.stringify(record);
   }
 };
-Object.assign(csharpRoutesPlugin, { version: "2" });
+Object.assign(csharpRoutesPlugin, { version: "3" });
 
 // ---------------------------------------------------------------- minimal APIs: the contributor half
 
@@ -305,10 +305,12 @@ function minimalRoutes(graph: IGraphContributor, resolver: CSharpTypeResolver | 
     let handler: GraphNode | null = null;
     let handlerName: string | null = null;
     let lambdaParameters: unknown[] | null = null;
+    let lambdaEndLine: number | null = null;
     if (record.handler.kind === "lambda") {
       handler = enclosing;
       handlerName = "<lambda>";
       lambdaParameters = record.handler.parameters;
+      lambdaEndLine = record.handler.endLine;
     } else if (record.handler.kind === "ref") {
       if (record.handler.local) {
         handler = enclosing;
@@ -321,6 +323,7 @@ function minimalRoutes(graph: IGraphContributor, resolver: CSharpTypeResolver | 
     for (const method of record.methods) {
       const route = addCSharpRoute(graph, { fileId, method, path, pathExpression: expression, framework: FRAMEWORK_MINIMAL, line: record.line, handler, handlerName });
       if (handlerName !== null) route.properties.handlerName = handlerName;
+      if (lambdaEndLine !== null) route.properties.handlerEndLine = lambdaEndLine;
       if (lambdaParameters && lambdaParameters.length > 0) route.properties.handlerParameters = JSON.stringify(lambdaParameters);
     }
   }
@@ -520,8 +523,10 @@ export const csharpRoutesContributor: ISemanticContributor = {
   },
 };
 
-// `handlerParameters`: the typed parameters of a lambda handler of a minimal API route (JSON, like a Function's `parameters`).
+// `handlerParameters`: the typed parameters of a lambda handler of a minimal API route (JSON, like a Function's `parameters`);
+// `handlerEndLine`: the last line of that lambda (the route's `line` is its first), so a reader of the enclosing Function
+// (`<top-level>`) can tell which route a call inside it belongs to.
 export const csharpRoutesSchema: GraphSchemaExtension = {
   id: "csharp-routes",
-  nodeProperties: [{ label: "Route", after: "handlerName", properties: { handlerParameters: "STRING" } }],
+  nodeProperties: [{ label: "Route", after: "handlerName", properties: { handlerParameters: "STRING", handlerEndLine: "INT64" } }],
 };

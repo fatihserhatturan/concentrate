@@ -539,8 +539,17 @@ class Builder {
     return id;
   }
 
-  private useEnv(fnId: string | null, fileId: string, name: string, line: number, access: string): void {
+  // Function -> handler line (`*` for the Function as a whole) -> env reads, for the routes of a minimal-API lambda.
+  private readonly envReads = new Map<string, Map<string, Array<{ to: string; line: number; access: string }>>>();
+
+  private useEnv(fnId: string | null, fileId: string, name: string, line: number, access: string, handlerLine?: number): void {
     const to = this.envVar(name);
+    if (fnId) {
+      const byLine = this.envReads.get(fnId) ?? new Map<string, Array<{ to: string; line: number; access: string }>>();
+      const slot = String(handlerLine ?? "*");
+      byLine.set(slot, [...(byLine.get(slot) ?? []), { to, line, access }]);
+      this.envReads.set(fnId, byLine);
+    }
     for (const from of fnId ? [fnId, fileId] : [fileId]) this.relationship({ from, to, type: "USES_ENV", properties: { line, access } });
   }
 
@@ -610,7 +619,7 @@ class Builder {
         if (name === null) continue;
         const access = fact.api === "get" ? "Environment.GetEnvironmentVariable" : fact.api === "map" ? "Environment.GetEnvironmentVariables" : "Environment.ExpandEnvironmentVariables";
         const names = fact.api === "expand" ? [...name.matchAll(/%([^%\s]+)%/gu)].map((match) => match[1]!) : [name];
-        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access);
+        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access, fact.hl);
       }
     }
   }
@@ -642,7 +651,7 @@ class Builder {
         }
         if (fact.whole) continue;
         if (entries.length > 0) {
-          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override");
+          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override", fact.hl);
           continue;
         }
         // No file defines the key: the read itself is the record (its default, or `unset`).
@@ -817,6 +826,16 @@ class Builder {
         for (const [slot, cvs] of byLine) {
           if (slot === "*" ? topLevel : slot !== line) continue;
           for (const [cvId, localName] of cvs) this.relationship({ from: routeId, to: cvId, type: "CONSUMES_CONFIG", properties: { localName } });
+        }
+      }
+    }
+    // Env reads: only the lambda's own reads go to its route (`js-ts.env-config` skips minimal-API lambda handlers).
+    for (const [fnId, byLine] of this.envReads) {
+      for (const routeId of handled.get(fnId) ?? []) {
+        const route = this.graph.node(routeId);
+        if (route?.properties.framework !== "aspnet-minimal" || typeof route.properties.handlerName !== "string") continue;
+        for (const read of byLine.get(String(route.properties.line ?? "")) ?? []) {
+          this.relationship({ from: routeId, to: read.to, type: "USES_ENV", properties: { line: read.line, access: read.access } });
         }
       }
     }

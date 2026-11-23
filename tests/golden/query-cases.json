@@ -1533,6 +1533,17 @@
         }
       }
     ],
+    "csharp-dotnet-data-service": [
+      { "tool": "list_tables", "args": {} },
+      { "tool": "list_data_access", "args": { "library": "efcore" } },
+      { "tool": "list_data_access", "args": { "model": "shipments", "operation": "create" } },
+      { "tool": "list_env_config", "args": { "name": "ConnectionStrings" } },
+      { "tool": "list_env_config", "args": { "name": "FULFILMENT_REGION" } },
+      { "tool": "api_consumers", "args": { "client": "refit" } },
+      { "tool": "api_consumers", "args": { "method": "POST", "path": "/api/stock/{sku}/reserve" } },
+      { "tool": "impact_of", "args": { "symbol": "RecordAsync", "file": "ShipmentRepository.cs" } },
+      { "tool": "impact_of", "args": { "symbol": "ReserveAsync", "file": "InventoryClient.cs" } }
+    ],
     "java-jdbc": [
       {
         "tool": "list_tables",
