@@ -63,7 +63,7 @@ the only runtime dependency left is `web-tree-sitter`.
 | M12 – Python ecosystem | 30–33 | Python packages, classes, decorators and typed calls; Django, Flask, FastAPI, Celery and click/typer entrypoints; SQLAlchemy, Django ORM, env, HTTP clients and DI; measured on pinned samples. |
 | M13 – C/C++ ecosystem | 34–37 | C and C++ includes, headers, namespaces, classes and virtual calls; CMake, Make and `compile_commands.json` targets; Drogon, Crow, Pistache, cpp-httplib, gRPC and Qt; SQL, env and libcurl; measured on pinned samples. |
 | M14 – Java ecosystem | 38–43 | Java packages, classes, interfaces and calls resolved through inheritance; Maven and Gradle builds; Spring MVC, WebFlux, JAX-RS and Micronaut routes, gRPC, Spring DI, JPA, Spring Data, JDBC and MyBatis, config and env, and outbound HTTP; measured on pinned samples. |
-| M15 – C# ecosystem | 44–46 | C# namespaces, usings, projects and solutions, and calls resolved through inheritance; ASP.NET Core controllers and minimal APIs, gRPC .NET, SignalR, hosted services, Azure Functions, System.CommandLine and `Microsoft.Extensions.DependencyInjection`. |
+| M15 – C# ecosystem | 44–47 | C# namespaces, usings, projects and solutions, and calls resolved through inheritance; ASP.NET Core controllers and minimal APIs, gRPC .NET, SignalR, hosted services, Azure Functions, System.CommandLine and `Microsoft.Extensions.DependencyInjection`; EF Core, Dapper and ADO.NET, `IConfiguration` / `IOptions` and env, and outbound HTTP (`HttpClient`, `IHttpClientFactory`, Refit). |
 
 M8 and the agent benchmark v2 ([#73](https://github.com/fatihserhatturan/concentrate/issues/73), two models,
 per-category results) are done. The M6 release (Phase 9) is not planned for now. Order from here:
@@ -1672,8 +1672,8 @@ MapStruct, openapi-generator): what they write is not in the graph. The decision
 
 ## M15: C# ecosystem
 
-Phases 44–46 add C#: the vendored grammar, namespaces, `using` resolution and calls resolved through inheritance
-(44), `.csproj` and solution files (45), then the framework layer (46). MSBuild is read, not run, and source
+Phases 44–47 add C#: the vendored grammar, namespaces, `using` resolution and calls resolved through inheritance
+(44), `.csproj` and solution files (45), the framework layer (46), then data access, configuration and outbound HTTP (47). MSBuild is read, not run, and source
 generators are not run: what they write is not in the graph. The decisions of M9 apply.
 
 ## Phase 46: C# HTTP routes, entrypoints and DI ([#286](https://github.com/fatihserhatturan/concentrate/issues/286))
@@ -1709,6 +1709,37 @@ generators are not run: what they write is not in the graph. The decisions of M9
 - [x] `list_routes` and impact queries through injected dependencies answer for .NET services
 
 What is not handled is listed in [known-limitations.md](known-limitations.md#c-frameworks).
+
+## Phase 47: C# data access, config and outbound HTTP ([#287](https://github.com/fatihserhatturan/concentrate/issues/287))
+
+**Milestone:** M15 – C# ecosystem
+**Depends on:** Phase 46
+
+**Goal:** Find the tables, configuration, env and outbound HTTP of .NET services, reusing the nodes and relationships of M9.
+
+### Data access
+
+- [x] EF Core `DbContext` with `DbSet<T>` as `DataModel` linked to `Table` (`[Table]`, `ToTable()` in `OnModelCreating` and `IEntityTypeConfiguration<T>`, conventions)
+- [x] Access through `DbSet<T>` (LINQ queries, `Add`, `Remove`) as `ACCESSES_DATA`; `FromSqlRaw` / `ExecuteSqlRaw` SQL mapped to tables
+- [x] Dapper (`Query<T>`, `QueryAsync`, `Execute`) and ADO.NET (`SqlCommand`, `NpgsqlCommand`, `MySqlCommand`) SQL strings
+
+### Config and env
+
+- [x] `Environment.GetEnvironmentVariable` as `USES_ENV`
+- [x] `IConfiguration["A:B"]`, `GetSection`, `GetValue<T>`, `GetConnectionString` and `IOptions<T>` + `Configure<T>(GetSection(...))` linked to keys in `appsettings*.json` as `ConfigValue`; `A__B` env overrides noted
+
+### Outbound HTTP
+
+- [x] `HttpClient` calls (`GetAsync`, `PostAsJsonAsync`, `SendAsync`, ...) as `REQUESTS`
+- [x] `IHttpClientFactory` named and typed clients with their `BaseAddress`
+- [x] Refit interfaces: each method a request with base URL and path
+
+### Acceptance criteria
+
+- [x] Fixtures for EF Core, Dapper, ADO.NET, configuration/options and HttpClient/Refit (`csharp-efcore`, `csharp-dapper-adonet`, `csharp-config`, `csharp-http-clients`) have golden graphs, and the `csharp-dotnet-data-service` fixture covers them together
+- [x] `list_tables`, `list_data_access`, `list_env_config`, `api_consumers` and `impact_of` answer for .NET services (the issue's `find_table_usage` and `find_env_usage` are these tools)
+
+What is not handled is listed in [known-limitations.md](known-limitations.md#c-data-access-configuration-and-outbound-http).
 
 ## Verification (every milestone)
 

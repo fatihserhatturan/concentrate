@@ -219,7 +219,7 @@ even for large repositories; read it first to decide which tools to call.
   (kind `event`) and picocli commands (kind `cli`); for C# gRPC service methods (kind `grpc`, library `grpc-dotnet`, `registered` says whether `MapGrpcService<T>` names the class), SignalR hub methods (kind `signalr`, trigger `Hub/method`, `hubPath`), hosted services (kind `hosted-service`, `registered`), Azure Functions (kind `function`, trigger `http`, `timer:<cron>`, `queue:<name>`, ...) and System.CommandLine commands (kind `cli`, library `system-commandline`). A Java or C# trigger that is a constant, a `${...}` or `#{...}` placeholder or an unknown
   destination is `resolved: false`.
 - `list_env_config`: lists environment variable usage and config declarations
-  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys (also in a root `config/` directory, test resources for test readers only; secret values are stored as `<redacted>`) with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`). `unread: true` lists instead the variables the scanned env
+  or consumers (Go reads too: `os.Getenv`, viper, env struct tags; and Rust: `std::env::var`, `env!`, clap `env`, envy, the config crate; and C and C++: `getenv`, `secure_getenv`, `qgetenv`; and Java: `System.getenv`, Spring `application*.properties|yml` keys (also in a root `config/` directory, test resources for test readers only; secret values are stored as `<redacted>`) with `@Value`, `@ConfigurationProperties` and `Environment.getProperty`; and C#: `Environment.GetEnvironmentVariable`, `appsettings*.json` keys (secret values are stored as `<redacted>`) with `IConfiguration`, `GetValue<T>`, `GetConnectionString` and `IOptions<T>` readers, each key also marked as overridden by the env variable `A__B`). `unread: true` lists instead the variables the scanned env
   files (`.env`, `.env.*`) declare that no code reads (`kind: "unread"`, with
   the env file and line) and the ones code reads that no env file declares
   (`kind: "undeclared"`, with the reading file and line; not `NODE_ENV`, and
@@ -228,7 +228,7 @@ even for large repositories; read it first to decide which tools to call.
   lists data-access operations by source, model, library, and operation. Each
   row has the model's `table` when one is known. Go gorm, ent, sqlc,
   `database/sql` and sqlx accesses are included, and Rust sqlx, diesel and
-  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one), and Java JPA (and Spring Data repository), JDBC and MyBatis ones (`library: jpa`, `jdbc`, `mybatis`; Spring Data accesses are `jpa` rows on the entity's model, and the `spring-data` models of the repositories carry no access rows). Rows with `direct: true`
+  SeaORM ones (`library: sqlx`, `diesel`, `sea-orm`), and C and C++ ones (`library: sqlite3`, `libpq`, `mysql`, `odbc`, `sqlitecpp`, `pqxx`, `soci`, `qtsql`, `drogon`: the tables of the SQL strings), and Python SQLAlchemy, SQLModel and Django ORM ones (`library: sqlalchemy`, `sqlmodel`, `django`) with the literal SQL of DB-API cursors and drivers (`library: dbapi`, the model is the one mapped to the table when there is one), and Java JPA (and Spring Data repository), JDBC and MyBatis ones (`library: jpa`, `jdbc`, `mybatis`; Spring Data accesses are `jpa` rows on the entity's model, and the `spring-data` models of the repositories carry no access rows), and C# EF Core, Dapper and ADO.NET ones (`library: efcore`, `dapper`, `ado.net`; EF Core models are `datamodel:efcore:...` and map to their table). Rows with `direct: true`
   (the file or function that makes the call) come first; the others are the
   callers, routes and entrypoints that reach it. `line` is in `accessFile`,
   the file of the call, which differs from the source's `file` on a
@@ -238,7 +238,7 @@ even for large repositories; read it first to decide which tools to call.
   collections from Prisma schema files, TypeORM entities, Mongoose schemas,
   Drizzle table definitions and Knex calls, Go gorm models, ent schemas and
   sqlc queries, Rust diesel `table!` tables, SeaORM entities and sqlx query
-  tables, Python SQLAlchemy / SQLModel / Django models and `Table(...)`s (their
+  tables, C# EF Core entities (`DbSet<T>`, `[Table]`, `ToTable`), Python SQLAlchemy / SQLModel / Django models and `Table(...)`s (their
   Alembic and Django migrations are in `migrations`), and SQL migrations and schema files (`library: sql` when no
   code declares the table; otherwise the SQL is merged into the code's table
   by name). Each table has its `indexes`, its `migrations` (`file`, `line`,
