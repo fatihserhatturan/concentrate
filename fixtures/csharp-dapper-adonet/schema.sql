@@ -1,0 +1,17 @@
+CREATE TABLE Customers (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    Email NVARCHAR(200) NOT NULL
+);
+
+CREATE TABLE Orders (
+    Id INT PRIMARY KEY,
+    CustomerId INT NOT NULL,
+    Total DECIMAL(18, 2) NOT NULL,
+    Status NVARCHAR(20) NOT NULL
+);
+
+CREATE TABLE AuditLog (
+    Id INT PRIMARY KEY,
+    Message NVARCHAR(400) NOT NULL
+);
