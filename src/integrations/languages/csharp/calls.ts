@@ -39,6 +39,19 @@ const MAX_INITIALIZER_TEXT = 300;
 
 export type CSharpLocals = Map<string, CSharpLocal | null>;
 
+/** The parameters of one lambda / anonymous method / local function and the range of its syntax (1-based rows, 0-based columns). */
+export type CSharpLambdaScope = { r: [number, number, number, number]; l: Record<string, CSharpLocal | null> };
+
+/**
+ * `csharpLambdaLocals` (a JSON property of a Function node, only when it differs from `csharpLocals`): the typed
+ * parameters of each lambda by range, so a receiver inside `(AppCtx db) => ...` is typed even when another lambda of the
+ * same member names a parameter `db` of another type (the member-wide `csharpLocals` entry is then null).
+ */
+export function lambdaScopesProperty(scopes: readonly CSharpLambdaScope[], locals: CSharpLocals): string | undefined {
+  const differs = scopes.some((scope) => Object.entries(scope.l).some(([name, local]) => local !== null && JSON.stringify(locals.get(name) ?? null) !== JSON.stringify(local)));
+  return differs ? JSON.stringify(scopes) : undefined;
+}
+
 export type CSharpCallKind = "method" | "constructor" | "explicitConstructor";
 
 function merge(locals: CSharpLocals, name: string, next: CSharpLocal | null): void {
@@ -117,8 +130,14 @@ function designationNames(root: SyntaxNode): string[] {
 
 // The parameters and the declarations of a body: `T x`, `var x = new T()`, for-each variables, using
 // declarations, catch parameters, `is T x` patterns, `out T x`, lambda and local function parameters.
-export function readLocals(roots: readonly SyntaxNode[], parameters: readonly CSharpParameter[]): CSharpLocals {
+export function readLocals(roots: readonly SyntaxNode[], parameters: readonly CSharpParameter[], scopes?: CSharpLambdaScope[]): CSharpLocals {
   const locals: CSharpLocals = new Map();
+  const scopeOf = (owner: SyntaxNode): CSharpLambdaScope => {
+    const range: CSharpLambdaScope["r"] = [owner.startPosition.row + 1, owner.startPosition.column, owner.endPosition.row + 1, owner.endPosition.column];
+    let scope = scopes!.find((item) => item.r[0] === range[0] && item.r[1] === range[1] && item.r[2] === range[2] && item.r[3] === range[3]);
+    if (!scope) scopes!.push((scope = { r: range, l: {} }));
+    return scope;
+  };
   for (const parameter of parameters) {
     const type = normalizeCSharpType(parameter.type);
     const fullType = genericTypeText(parameter.type);
@@ -164,12 +183,18 @@ export function readLocals(roots: readonly SyntaxNode[], parameters: readonly CS
         // A lambda or local function parameter (the member's own parameters are not in its body).
         const name = nameText(node.childForFieldName("name"));
         const typeNode = node.childForFieldName("type");
-        if (name) merge(locals, name, typeNode ? declared(typeNode, null) : null);
+        const local = typeNode ? declared(typeNode, null) : null;
+        if (name) merge(locals, name, local);
+        const owner = node.parent?.parent;
+        if (name && scopes && owner && (owner.type === "lambda_expression" || owner.type === "local_function_statement" || owner.type === "anonymous_method_expression")) scopeOf(owner).l[name] = local;
         break;
       }
       case "lambda_expression": {
         const list = node.childForFieldName("parameters");
-        if (list?.type === "identifier") merge(locals, plainName(list.text), null);
+        if (list?.type === "identifier") {
+          merge(locals, plainName(list.text), null);
+          if (scopes) scopeOf(node).l[plainName(list.text)] = null;
+        }
         break;
       }
       default:

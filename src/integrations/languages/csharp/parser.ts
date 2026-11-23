@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import { parseSyntaxTreeSkippingErrors, type SyntaxNode } from "../syntax/tree-sitter.js";
 import type { GraphNode, GraphRelationship, ParsedSourceFile } from "../../../core/graph/model.js";
 import type { LanguageParser } from "../../../core/contracts/language-parser.js";
-import { callLikeTypes, createCallNode, declaratorValue, hasCallSite, readLocals, type CSharpLocals } from "./calls.js";
+import { callLikeTypes, createCallNode, declaratorValue, hasCallSite, lambdaScopesProperty, readLocals, type CSharpLambdaScope, type CSharpLocals } from "./calls.js";
 import {
   attributesOf,
   compact,
@@ -310,7 +310,9 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
     const addFunction = (owner: Owner, spec: FunctionSpec): GraphNode => {
       const line = spec.node.startPosition.row + 1;
       const qualifiedName = `${owner.qualifiedName}.${spec.name}`;
-      const locals = readLocals(spec.roots, spec.parameters);
+      const lambdaScopes: CSharpLambdaScope[] = [];
+      const locals = readLocals(spec.roots, spec.parameters, lambdaScopes);
+      const lambdaLocals = lambdaScopesProperty(lambdaScopes, locals);
       const first = spec.parameters[0];
       const isExtension = spec.kind === "method" && spec.isStatic && first?.modifier !== undefined && first.modifier.split(" ").includes("this");
       const hasParams = spec.parameters.some((parameter) => parameter.params === true);
@@ -343,6 +345,7 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
         ...(spec.explicitInterface ? { explicitInterface: spec.explicitInterface } : {}),
         ...(spec.constraints && spec.constraints.length > 0 ? { constraints: JSON.stringify(spec.constraints) } : {}),
         csharpLocals: JSON.stringify(Object.fromEntries(locals)),
+        ...(lambdaLocals ? { csharpLambdaLocals: lambdaLocals } : {}),
       };
       const fn: GraphNode = { id: uniqueId(`${fileNodeId}:function:${line}:${qualifiedName}`, spec.node), label: "Function", properties };
       add(fn, owner.id, owner.isInterface ? "DEFINES_INTERFACE_METHOD" : "DEFINES_METHOD");
@@ -739,7 +742,9 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
       const name = isStatic ? "<clinit>" : "<init-block>";
       const node = items[0]!;
       const line = node.startPosition.row + 1;
-      const locals = readLocals(items, []);
+      const lambdaScopes: CSharpLambdaScope[] = [];
+      const locals = readLocals(items, [], lambdaScopes);
+      const lambdaLocals = lambdaScopesProperty(lambdaScopes, locals);
       const fn: GraphNode = {
         id: uniqueId(`${fileNodeId}:function:${line}:${owner.qualifiedName}.${name}`, node),
         label: "Function",
@@ -762,6 +767,7 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
           parameterCount: 0,
           requiredParameterCount: 0,
           csharpLocals: JSON.stringify(Object.fromEntries(locals)),
+        ...(lambdaLocals ? { csharpLambdaLocals: lambdaLocals } : {}),
         },
       };
       add(fn, owner.id, owner.isInterface ? "DEFINES_INTERFACE_METHOD" : "DEFINES_METHOD");
@@ -852,7 +858,9 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
     // Top-level statements are the body of a synthetic function; their calls belong to it.
     if (topLevel.length > 0) {
       fileNode.properties.hasTopLevelStatements = true;
-      const locals = readLocals(topLevel, []);
+      const lambdaScopes: CSharpLambdaScope[] = [];
+      const locals = readLocals(topLevel, [], lambdaScopes);
+      const lambdaLocals = lambdaScopesProperty(lambdaScopes, locals);
       const first = topLevel[0]!;
       const fn: GraphNode = {
         id: `${fileNodeId}:function:${first.startPosition.row + 1}:<top-level>`,
@@ -876,6 +884,7 @@ async function parseCSharpFile(rootPath: string, filePath: string, plugins: read
           parameterCount: 0,
           requiredParameterCount: 0,
           csharpLocals: JSON.stringify(Object.fromEntries(locals)),
+        ...(lambdaLocals ? { csharpLambdaLocals: lambdaLocals } : {}),
         },
       };
       add(fn, fileNodeId, "DEFINES_FUNCTION");

@@ -42,7 +42,7 @@ export const csharpGraphSchema: GraphSchemaExtension = {
       properties: {
         isStatic: "BOOLEAN", parameterCount: "INT64", isVirtual: "BOOLEAN", isOverride: "BOOLEAN", isSealed: "BOOLEAN", isPartial: "BOOLEAN",
         requiredParameterCount: "INT64", hasParams: "BOOLEAN", isExtension: "BOOLEAN", extensionReceiver: "STRING", explicitInterface: "STRING",
-        constraints: "STRING", csharpLocals: "STRING", hasBody: "BOOLEAN",
+        constraints: "STRING", csharpLocals: "STRING", csharpLambdaLocals: "STRING", hasBody: "BOOLEAN",
       },
     },
     {

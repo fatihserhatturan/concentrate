@@ -182,6 +182,8 @@ const aggregateSelect = new RegExp(String.raw`^\s*select\s+${aggregateFunction}(
 export type JavaDataAccess = {
   callId?: string;
   functionId?: string;
+  /** Column (0-based) of the access, when the line alone cannot tell two lambdas of one line apart. */
+  column?: number;
   modelId: string;
   operation: JavaDataOperation;
   library: string;
@@ -206,31 +208,54 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
       else handlers.set(relationship.to, [relationship.from]);
     }
   }
-  const callersOf = new Map<string, Array<{ caller: string; line: number | undefined }>>();
+  const callersOf = new Map<string, Array<{ caller: string; line: number | undefined; column: number | undefined }>>();
   for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
     const caller = callerByCall.get(relationship.from);
     if (!caller || caller === relationship.to) continue;
     const callLine = graph.node(relationship.from)?.properties.line;
-    const entry = { caller, line: typeof callLine === "number" ? callLine : undefined };
+    const callColumn = graph.node(relationship.from)?.properties.columnNumber;
+    const entry = { caller, line: typeof callLine === "number" ? callLine : undefined, column: typeof callColumn === "number" ? callColumn : undefined };
     const list = callersOf.get(relationship.to);
     if (list) list.push(entry);
     else callersOf.set(relationship.to, [entry]);
   }
   // A minimal-API lambda handler is part of its enclosing function (`<top-level>`): a Route with `handlerEndLine` only
   // reaches what is called between its own line and that end; an entrypoint of the function does not run the lambdas.
-  const lambdaRange = (source: string): { start: number; end: number } | null => {
+  // `handlerStartLine` / `handlerStartColumn` / `handlerEndColumn` (C# Routes) narrow the range to the handler's own syntax:
+  // a local function handler, or two lambdas on one line. Without them the range is the Route's `line` to `handlerEndLine`.
+  type Range = { start: number; end: number; startColumn?: number; endColumn?: number };
+  const lambdaRange = (source: string): Range | null => {
     const properties = graph.node(source)?.properties;
-    return properties && typeof properties.handlerEndLine === "number" && typeof properties.line === "number" ? { start: properties.line, end: properties.handlerEndLine } : null;
+    if (!properties || typeof properties.handlerEndLine !== "number") return null;
+    const start = typeof properties.handlerStartLine === "number" ? properties.handlerStartLine : properties.line;
+    if (typeof start !== "number") return null;
+    return {
+      start,
+      end: properties.handlerEndLine,
+      ...(typeof properties.handlerStartColumn === "number" ? { startColumn: properties.handlerStartColumn } : {}),
+      ...(typeof properties.handlerEndColumn === "number" ? { endColumn: properties.handlerEndColumn } : {}),
+    };
   };
-  const reaches = (source: string, host: string, line: number | undefined): boolean => {
+  const inside = (range: Range, line: number, column: number | undefined): boolean => {
+    if (line < range.start || line > range.end) return false;
+    if (column === undefined) return true;
+    if (line === range.start && range.startColumn !== undefined && column < range.startColumn) return false;
+    if (line === range.end && range.endColumn !== undefined && column > range.endColumn) return false;
+    return true;
+  };
+  const reaches = (source: string, host: string, line: number | undefined, column?: number): boolean => {
     if (line === undefined) return true;
     const own = lambdaRange(source);
-    if (own) return line >= own.start && line <= own.end;
+    if (own) return inside(own, line, column);
     if (graph.node(source)?.label === "Route") return true;
     return !(handlers.get(host) ?? []).some((other) => {
       const range = lambdaRange(other);
-      return range !== null && line >= range.start && line <= range.end;
+      return range !== null && inside(range, line, column);
     });
+  };
+  const columnOfCall = (callId: string): number | undefined => {
+    const column = graph.node(callId)?.properties.columnNumber;
+    return typeof column === "number" ? column : undefined;
   };
   const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
 
@@ -262,17 +287,18 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
     if (!site || !functionId) continue;
     if (record(functionId, access, site, true)) push(functionId, { access, site });
     const accessLine = typeof access.line === "number" ? access.line : undefined;
-    for (const source of handlers.get(functionId) ?? []) if (reaches(source, functionId, accessLine)) record(source, access, site, false);
+    const accessColumn = access.column ?? (access.callId ? columnOfCall(access.callId) : undefined);
+    for (const source of handlers.get(functionId) ?? []) if (reaches(source, functionId, accessLine, accessColumn)) record(source, access, site, false);
   }
   const queue = [...byFunction.keys()];
   for (let head = 0; head < queue.length; head += 1) {
     const functionId = queue[head]!;
-    for (const { caller, line } of callersOf.get(functionId) ?? []) {
+    for (const { caller, line, column } of callersOf.get(functionId) ?? []) {
       let changed = false;
       for (const { access, site } of byFunction.get(functionId) ?? []) {
         const isNew = record(caller, access, site, false);
         if (isNew) push(caller, { access, site });
-        for (const source of handlers.get(caller) ?? []) if (reaches(source, caller, line)) record(source, access, site, false);
+        for (const source of handlers.get(caller) ?? []) if (reaches(source, caller, line, column)) record(source, access, site, false);
         if (isNew) changed = true;
       }
       if (changed) queue.push(caller);

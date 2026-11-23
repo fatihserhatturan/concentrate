@@ -39,8 +39,12 @@ export type CSharpReceiverType = {
 };
 
 export type CSharpReceiverResolver = {
-  /** The type of the receiver expression `text` (a Call node's `receiver`) used inside `fn`. */
-  typeOf(text: string | null | undefined, fn: GraphNode): CSharpReceiverType | null;
+  /**
+   * The type of the receiver expression `text` (a Call node's `receiver`) used inside `fn`. With `at` (the position of
+   * the use: `line` 1-based, `column` 0-based) a typed lambda / local function parameter of the lambda holding that
+   * position wins over the member-wide local of the same name (`csharpLambdaLocals`).
+   */
+  typeOf(text: string | null | undefined, fn: GraphNode, at?: CSharpPosition): CSharpReceiverType | null;
   /** The receiver type of a Call node (null for an unqualified call). */
   typeOfCall(call: GraphNode): CSharpReceiverType | null;
   /** The initializer text of a local the receiver names when its type is unknown (`var c = factory.CreateClient("x")`), else null. */
@@ -50,6 +54,8 @@ export type CSharpReceiverResolver = {
   /** The type resolver the receiver types are read with. */
   types: CSharpTypeResolver;
 };
+
+export type CSharpPosition = { line: number; column?: number };
 
 type Local = { type?: string; fullType?: string; initializer?: string } | null;
 
@@ -112,6 +118,32 @@ function build(graph: IGraphContributor): CSharpReceiverResolver {
     return locals;
   };
 
+  const scopesCache = new Map<string, Array<{ r: [number, number, number, number]; l: Record<string, Local> }>>();
+  const scopesOf = (fn: GraphNode) => {
+    let scopes = scopesCache.get(fn.id);
+    if (!scopes) {
+      scopes = [];
+      if (typeof fn.properties.csharpLambdaLocals === "string") {
+        try {
+          scopes = JSON.parse(fn.properties.csharpLambdaLocals) as typeof scopes;
+        } catch {
+          scopes = [];
+        }
+      }
+      scopesCache.set(fn.id, scopes);
+    }
+    return scopes;
+  };
+  // The parameter `name` of the innermost lambda holding `at`: `undefined` when no lambda there declares it.
+  const scopedLocal = (name: string, fn: GraphNode, at: CSharpPosition | undefined): { local: Local } | undefined => {
+    if (!at) return undefined;
+    const column = at.column ?? 0;
+    const holding = scopesOf(fn)
+      .filter((scope) => name in scope.l && (at.line > scope.r[0] || (at.line === scope.r[0] && column >= scope.r[1])) && (at.line < scope.r[2] || (at.line === scope.r[2] && column <= scope.r[3])))
+      .sort((a, b) => b.r[0] - a.r[0] || b.r[1] - a.r[1]);
+    return holding[0] ? { local: holding[0].l[name]! } : undefined;
+  };
+
   const describe = (written: string | null | undefined, scopeNode: GraphNode, via: CSharpReceiverType["via"]): CSharpReceiverType | null => {
     const typeName = normalizeCSharpType(written);
     if (!typeName || typeName.endsWith("[]")) return null;
@@ -139,10 +171,11 @@ function build(graph: IGraphContributor): CSharpReceiverResolver {
     return undefined;
   };
 
-  const typeOfName = (name: string, fn: GraphNode, depth: number): CSharpReceiverType | null => {
+  const typeOfName = (name: string, fn: GraphNode, depth: number, at?: CSharpPosition): CSharpReceiverType | null => {
     const locals = localsOf(fn);
-    if (locals.has(name)) {
-      const local = locals.get(name);
+    const scoped = scopedLocal(name, fn, at);
+    if (scoped || locals.has(name)) {
+      const local = scoped ? scoped.local : locals.get(name);
       if (!local) return null;
       if (typeof local.type === "string") return describe(local.fullType ?? local.type, fn, "local");
       if (typeof local.initializer === "string") return typeOfInitializer(local.initializer, fn, depth);
@@ -165,7 +198,7 @@ function build(graph: IGraphContributor): CSharpReceiverResolver {
     return null;
   };
 
-  const typeOf = (rawText: string | null | undefined, fn: GraphNode): CSharpReceiverType | null => {
+  const typeOf = (rawText: string | null | undefined, fn: GraphNode, at?: CSharpPosition): CSharpReceiverType | null => {
     if (!rawText) return null;
     let text = rawText.replace(/\s+/gu, "").replace(/\?\./gu, ".").replace(/!(?=\.|$)/gu, "");
     const castMatch = /^\(([\w.<>,?]+)\)\w+$/u.exec(text);
@@ -188,8 +221,8 @@ function build(graph: IGraphContributor): CSharpReceiverResolver {
     const segments = text.split(".");
     if (!segments.every((segment) => IDENTIFIER.test(segment))) return null;
     const first = segments[0]!.replace(/^@/u, "");
-    if (segments.length === 1) return typeOfName(first, fn, 0) ?? (localsOf(fn).has(first) ? null : staticType(text, fn));
-    const head = typeOfName(first, fn, 0);
+    if (segments.length === 1) return typeOfName(first, fn, 0, at) ?? (localsOf(fn).has(first) ? null : staticType(text, fn));
+    const head = typeOfName(first, fn, 0, at);
     if (head) return chainFrom(head, segments.slice(1), fn);
     if (localsOf(fn).has(first)) return null;
     // `Holder.Db`: a type's static member; `System.Environment` / `Outer.Inner`: the type itself.
@@ -240,7 +273,9 @@ function build(graph: IGraphContributor): CSharpReceiverResolver {
       if (!fn) return null;
       // `((T)x).M()` and `(x as T).M()`: the parser keeps the cast type; a typed local is read from the Function's locals.
       if (typeof call.properties.receiverType === "string" && call.properties.receiverKind === "cast") return describe(call.properties.receiverType, fn, "cast");
-      return typeOf(receiver, fn);
+      const line = call.properties.line;
+      const column = call.properties.columnNumber;
+      return typeOf(receiver, fn, typeof line === "number" ? { line, ...(typeof column === "number" ? { column } : {}) } : undefined);
     },
     initializerOf(text, fn) {
       const name = (text ?? "").trim().replace(/^this\./u, "");
