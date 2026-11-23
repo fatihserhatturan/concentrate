@@ -2979,17 +2979,33 @@ requests use the nodes and relationships of the other ecosystems, so `list_table
   does not declare a type of that name; one the scan declares is the user's own and never counts. A look-alike
   type from another library is accepted.
 - **Configuration.** Every leaf of `appsettings*.json` is a `ConfigValue` (`DECLARES_CONFIG`; a secret key's value is
-  stored as `<redacted>`). `Environment.GetEnvironmentVariable` (also the target overload),
+  stored as `<redacted>`: a key with a password, secret, token, credential or api/access/signing key word, and a lone
+  `Key` under a jwt, auth, encryption, signing, crypto or hmac section; a number or boolean that matched only by a
+  password or token word, such as `Password:RequiredLength: 8`, is kept. In a connection string the `Password`, `Pwd`,
+  `AccountKey`, `SharedAccessKey`, `SharedAccessSignature`, `AccessToken`, `ApiKey`, `Secret` and `Token` parameters
+  are redacted, quoted values included, and so is the password of a URL's user info; the value of any other key is
+  shown as written). `Environment.GetEnvironmentVariable` (also the target overload),
   `GetEnvironmentVariables()["X"]` and `ExpandEnvironmentVariables("%X%")` are `USES_ENV`. `IConfiguration`,
-  `IConfigurationRoot`, `ConfigurationManager` and `x.Configuration` reads are `CONSUMES_CONFIG`: the indexer,
+  `IConfigurationRoot`, `ConfigurationManager` and `x.Configuration` reads (the last only when `x` has no type the scan knows: a scanned type
+  without a `Configuration` member is not the host builder) are `CONSUMES_CONFIG`: the indexer,
   `GetValue<T>`, `GetConnectionString`, `GetSection` / `GetRequiredSection` chains, and `Get<T>`, `Bind` and
   `GetChildren` (which read every key below the section). `Configure<T>(section)`,
   `AddOptions<T>().Bind(section)` and `BindConfiguration` tie a section to `T`, and a consumer of `IOptions<T>`,
-  `IOptionsSnapshot<T>` or `IOptionsMonitor<T>` reads the section's keys, narrowed to the properties of `T` when
-  `T` is scanned. A key that no `appsettings*.json` sets is a `ConfigValue` with `valueType` `default` or `unset`,
+  `IOptionsSnapshot<T>` or `IOptionsMonitor<T>` reads the section's keys, narrowed to the public properties of `T` when
+  `T` is scanned (`[ConfigurationKeyName("x")]` renames a property's key). A key that no `appsettings*.json` sets is a `ConfigValue` with `valueType` `default` or `unset`,
   declared by the reading file. Each exact key with an `appsettings` entry also gets a `USES_ENV` access
-  (`config override`) to `env:A__B`, the variable that overrides it. Reads are copied to the routes whose handler
-  makes them.
+  (`config override`) to `env:A__B`, the variable that overrides it. A read is copied to the `Route` whose handler
+  makes it: the routes of a controller action or a method-group handler get the reads of that method; a minimal-API
+  lambda's route gets only the reads written inside that lambda (found by the lambda's own range, so two routes on one
+  line stay apart), never the startup code around it; a local-function handler's route gets the reads of that local
+  function. Local functions resolve to the enclosing function (`<top-level>` for top-level statements), so
+  `impact_of` and `route_details` still link a minimal-API lambda to that enclosing `<top-level>` function: a change
+  under one lambda lists the sibling minimal routes too. A local-function handler has no `handlerEndLine` (a lambda
+  has).
+- **Config file limits.** The `appsettings` value a URL reads is looked up without the environment: the base file
+  (`appsettings.json`) wins over `appsettings.Production.json`, as the closest file does for a monorepo. The items of a
+  JSON array share the array's line (a `ConfigValue` per item, one `line`). A JSON object with duplicate keys keeps
+  every occurrence as its own `ConfigValue` (`dup` and `DUP` are one .NET key; two on the same line share one node); a read takes the first by file order and line.
 - **Not handled in configuration.** An `IConfigurationSection` root taken from a parameter or field; `Get<T>()` on the
   whole configuration; `AddJsonFile` with a custom file name and user secrets (only `appsettings*.json` are read);
   `AddEnvironmentVariables("PREFIX_")` (the override name is not prefixed); named options;
@@ -2999,18 +3015,28 @@ requests use the nodes and relationships of the other ecosystems, so `list_table
   `Delete*` (`Async`, including `GetFromJsonAsync`, `PostAsJsonAsync`, `PutAsJsonAsync`, `PatchAsJsonAsync` and
   `DeleteFromJsonAsync`) and `SendAsync` / `Send` with an `HttpRequestMessage` (method and URL from its constructor,
   initializer or a later assignment); subclasses of `HttpClient` count. URLs fold string concatenation and
-  interpolation, `new Uri(base, relative)` and `QueryHelpers.AddQueryString`; an unknown part is a `${expr}` hole, and
-  the query, fragment and user info are dropped. The base comes from `new HttpClient { BaseAddress = ... }`,
+  interpolation, `new Uri(base, relative)` (and a local holding one) and `QueryHelpers.AddQueryString`; an unknown part
+  is a `${expr}` hole, and the query, fragment and user info are dropped. A request is joined to the base address the
+  .NET way (RFC 3986): a relative URL starting with `/` replaces the base's path (`http://h/api` + `/x` is
+  `http://h/x`), any other drops the base's last segment unless the base ends with `/` (`http://h/api` + `v1/x` is
+  `http://h/v1/x`, `http://h/api/` + `v1/x` is `http://h/api/v1/x`), an absolute URL ignores the base, and `""` is the
+  base itself. Refit differs: its method path is appended after the base path. The base comes from `new HttpClient { BaseAddress = ... }`,
   `x.BaseAddress =`, `AddHttpClient("name")`, `AddHttpClient<T>()`, `AddHttpClient<I, C>()` or the default
   `AddHttpClient()` with `ConfigureHttpClient`, and `factory.CreateClient("name")`. A base that is a configuration
-  read is resolved with `appsettings*.json` (an unknown key is `${config:KEY}`); a secret key never ends up in a URL.
+  read (`c["A:B"]`, `GetValue<T>`, `GetSection("A")["B"]`, `GetSection("A").GetValue<T>("B")`, `.Value`) is resolved
+  with `appsettings*.json` (an unknown key is `${config:KEY}`, a key that is not a literal `${expr}`; written
+  expressions and quotes never reach `httpUrl`). A secret key is never looked up, but the value of a non-secret key is
+  used as written, so a webhook URL with a token in its path can appear in `httpUrl`.
   Refit interfaces (`[Get]`, `[Post]`, `[Put]`, `[Patch]`, `[Delete]`, `[Head]`, `[Options]`, inherited interfaces
   included) give one request per method, with the base from `RestService.For<T>(url | new HttpClient { BaseAddress })`
-  or `AddRefitClient<T>().ConfigureHttpClient`.
+  (used for the calls through the local or field it is assigned to) or `AddRefitClient<T>().ConfigureHttpClient`
+  (the fallback). Named clients compare ordinally, as `IHttpClientFactory` does: `"Lit"` and `"LIT"` are two clients.
 - **Not handled in outbound HTTP.** `WebClient`, `WebRequest`, RestSharp and Flurl; a `DelegatingHandler` that rewrites
   the URL; a message built in one method and sent in another; a `BaseAddress` from `IOptions<T>` or from a
   configuration value held in a variable; `CreateClient<T>()` and a client name that is not a literal; a
-  field-initializer `HttpClient` outside a function. **The route linker turns `localhost:PORT` into a path whatever
+  field-initializer `HttpClient` outside a function. **Cost:** the owner lookups of
+  the config and HTTP readers scan a file's functions per expression, so a generated file of many thousand members is
+  slow. **The route linker turns `localhost:PORT` into a path whatever
   the port**, so a call to another local service can link to a route of the wrong one.
 
 ## Non-code files

@@ -11,7 +11,7 @@ import { isSecretKey, redactValue } from "../java/config-files.js";
 //   - A key is the colon path the `IConfiguration` API uses: `{"Logging": {"LogLevel": {"Default": "Info"}}}` is
 //     `Logging:LogLevel:Default`; an array item is its index (`Servers:0:Host`); an object or array itself is no entry,
 //     only its leaves are (an empty object / array is a leaf with the value `{}` / `[]`; `null` is the value `null`).
-//     `entry.line` is the line of the leaf's key in the file (1-based), the id of the ConfigValue is
+//     `entry.line` is the line of the leaf's key in the file (1-based; an array's items take the array's line, so they share it; duplicate keys of one object collapse, the last wins), the id of the ConfigValue is
 //     `<file id>:config:<line>:<key>` as Java's.
 //   - The file's environment is the middle part of its name: `appsettings.Production.json` is `Production`,
 //     `appsettings.json` is null. The files are read for a scan with C# files or a `.csproj`; any `.json` file named so,
@@ -21,9 +21,12 @@ import { isSecretKey, redactValue } from "../java/config-files.js";
 //   - Keys are compared as .NET does: case-insensitively (`canonicalKey`), `:` and `__` are the same separator, so the
 //     environment variable `Services__Orders__BaseUrl` overrides `Services:Orders:BaseUrl` (`keyToEnvName`,
 //     `envNameToKey`). The value of a key with a secret-named segment (password, secret, token, credential, api/access/
-//     private/secret/signing key; `isSecretKey` of Java, applied to the dotted form) is shown as `<redacted>`, and the
-//     password of a URL's userinfo or a `Password=` connection-string parameter (`redactValue`; `Server=a;Password=x`
-//     too) is too: `shownValue(entry)` is the one rule for what may be shown.
+//     private/secret/signing key; `isSecretKey` of Java, applied to the dotted form, plus a lone `Key` under a jwt / auth /
+//     authentication / encryption / signing / crypto / hmac segment) is shown as `<redacted>`, except a number or boolean
+//     that matched only by a password / token word (`Password:RequiredLength: 8`). The password of a URL's userinfo and the
+//     credential parameters of a connection string (Password, Pwd, AccountKey, SharedAccessKey, SharedAccessSignature,
+//     AccessToken, ApiKey, Secret, Token; quoted values included) are too: `shownValue(entry)` is the one rule for what
+//     may be shown. Values of non-secret keys are shown as written (a webhook URL with a token in its path).
 //   - `lookup(key, { environment, near })` is the best entry of a key: of the wanted environment first, then the
 //     environment-less ones, then the others by path; among files the closest to `near` (a source file's relative
 //     path: same directory or an ancestor). `entriesFor(key, { below })` lists every entry of the key (and, with
@@ -96,13 +99,48 @@ export const isHierarchicalEnvName = (name: string): boolean => /[A-Za-z0-9]__[A
 export const joinKey = (...parts: ReadonlyArray<string | null | undefined>): string => parts.filter((part): part is string => part !== null && part !== undefined && part !== "").join(":");
 
 /** The value to show for an entry: redacted for a secret key and for credentials in a URL or connection string. */
-export const shownValue = (entry: Pick<AppSettingEntry, "key" | "value">): string => shownConfigValue(entry.key, entry.value);
+export const shownValue = (entry: Pick<AppSettingEntry, "key" | "value"> & { valueType?: AppSettingEntry["valueType"] }): string => shownConfigValue(entry.key, entry.value, entry.valueType);
 
-export function shownConfigValue(key: string, value: string): string {
-  const dotted = key.replace(/:/gu, ".");
-  if (isSecretKey(dotted)) return value === "" ? value : "<redacted>";
-  // Connection strings: `Password=x;` / `Pwd=x` (case-insensitive) after `;` or at the start.
-  return redactValue(dotted, value).replace(/((?:^|;)\s*(?:password|pwd)\s*=)([^;]*)/giu, (_match, head: string, secret: string) => `${head}${secret === "" ? "" : "<redacted>"}`);
+// Segments whose lone `Key` child is a secret (`Jwt:Key`, `Encryption:Key`), unlike a cache or lookup `Key`.
+const KEY_PARENTS = new Set(["jwt", "auth", "authentication", "encryption", "signing", "crypto", "hmac"]);
+// Words that make a key secret on their own, whatever the value; `password` / `token` words alone are not enough for a
+// number or a boolean (`Password:RequiredLength: 8`, `Auth:TokenLifetime: 3`).
+const STRONG_WORDS = new Set(["secret", "secrets", "credential", "credentials", "apikey", "privatekey", "accesskey", "secretkey", "encryptionkey", "signingkey"]);
+const STRONG_PAIRS = new Set(["private key", "api key", "access key", "secret key", "encryption key", "signing key", "client secret", "private keys", "api keys", "access keys", "secret keys", "encryption keys", "signing keys", "client secrets"]);
+
+const partsOfSegment = (segment: string): string[] =>
+  segment.replace(/\[[^\]]*\]/gu, "").replace(/([a-z\d])([A-Z])/gu, "$1-$2").replace(/([A-Z]+)([A-Z][a-z])/gu, "$1-$2").toLowerCase().split(/[-_\s]+/u).filter((part) => part !== "");
+
+/** A lone `Key` segment under a jwt / auth / encryption / signing / crypto / hmac segment. */
+function isLoneSecretKey(segments: readonly string[]): boolean {
+  const last = segments.at(-1);
+  const parent = segments.at(-2);
+  if (last === undefined || parent === undefined || last.toLowerCase() !== "key") return false;
+  return partsOfSegment(parent).some((part) => KEY_PARENTS.has(part));
+}
+
+function isStrongSecretKey(segments: readonly string[]): boolean {
+  if (isLoneSecretKey(segments)) return true;
+  return segments.some((segment) => {
+    const parts = partsOfSegment(segment);
+    return parts.some((part, index) => STRONG_WORDS.has(part) || (index > 0 && STRONG_PAIRS.has(`${parts[index - 1]} ${part}`)));
+  });
+}
+
+// Connection-string parameters whose value is a credential, plain or quoted (`Pwd='a;b'`).
+const CREDENTIAL_PARAMETER = /((?:^|;)\s*(?:password|pwd|account[ _-]?key|shared[ _-]?access[ _-]?key|shared[ _-]?access[ _-]?signature|access[ _-]?token|api[ _-]?key|secret|token)\s*=\s*)('(?:[^']|'')*'|"(?:[^"]|"")*"|[^;]*)/giu;
+
+/** Whether a key names a secret whose value must not be copied anywhere (the Java rule, and a lone `Key` of a jwt / encryption section). */
+export const isSecretConfigKey = (key: string): boolean => isSecretKey(key.replace(/:/gu, ".")) || isLoneSecretKey(key.split(":"));
+
+export function shownConfigValue(key: string, value: string, valueType?: AppSettingEntry["valueType"]): string {
+  const segments = key.split(":");
+  const dotted = segments.join(".");
+  const secret = isSecretKey(dotted) || isLoneSecretKey(segments);
+  if (secret && !((valueType === "number" || valueType === "boolean") && !isStrongSecretKey(segments))) return value === "" ? value : "<redacted>";
+  // Connection strings first, on the raw value: a quoted credential may hold `;`.
+  const masked = value.replace(CREDENTIAL_PARAMETER, (_match, head: string, secret: string) => `${head}${secret.trim() === "" ? secret : "<redacted>"}`);
+  return redactValue(secret ? "" : dotted, masked);
 }
 
 // ---------------------------------------------------------------- reading JSON with lines
