@@ -679,6 +679,11 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
     };
     const nearOf = (node: GraphNode): string => String(fileNode(csharpFileOfId(node.id))?.properties.relativePath ?? "").replaceAll("\\", "/");
     const functionOf = (node: GraphNode): GraphNode | undefined => (node.label === "Call" ? receivers.functionOf(node) : node);
+    // The position of a Call, to type a lambda parameter of the lambda that holds it.
+    const positionOf = (node: GraphNode): { line: number; column: number } | undefined => {
+      const { line, columnNumber } = node.properties;
+      return node.label === "Call" && typeof line === "number" && typeof columnNumber === "number" ? { line, column: columnNumber } : undefined;
+    };
 
     // A configuration read written as an expression: its value in the closest appsettings file; an unknown key keeps its
     // name (`${config:A:B}`), and a read whose key is not literal is `${expr}`: never the written text.
@@ -695,7 +700,7 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
       const read = parseConfigRead(body);
       if (!read) return null;
       const fn = functionOf(node);
-      const typed = fn ? receivers.typeOf(read.receiver.replace(/\?$/u, ""), fn) : null;
+      const typed = fn ? receivers.typeOf(read.receiver.replace(/\?$/u, ""), fn, positionOf(node)) : null;
       if (typed ? !receiverMatches(typed, CONFIGURATION_TYPES, receivers) : !CONFIG_NAME.test(read.receiver)) return null;
       if (read.key === null) return { expr: "expr" };
       fallback ??= read.fallback;
@@ -763,19 +768,19 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
     }
 
     type Client = { base: string | null; factory: boolean };
-    const factoryOk = (text: string, fn: GraphNode): boolean => {
-      const typed = receivers.typeOf(text, fn);
+    const factoryOk = (text: string, fn: GraphNode, at?: { line: number; column: number }): boolean => {
+      const typed = receivers.typeOf(text, fn, at);
       return typed ? receiverMatches(typed, FACTORY_TYPES, receivers) : FACTORY_TYPES.some((name) => text.includes(name));
     };
-    const namedClient = (factory: { factory: string; name: string | null }, fn: GraphNode, node: GraphNode): Client | null => {
-      if (!factoryOk(factory.factory, fn)) return null;
+    const namedClient = (factory: { factory: string; name: string | null }, fn: GraphNode, node: GraphNode, at?: { line: number; column: number }): Client | null => {
+      if (!factoryOk(factory.factory, fn, at)) return null;
       const name = factory.name === "" ? "" : literal(factory.name, node);
       if (name === null) return { base: null, factory: true };
       return { base: namedBases.get(name) ?? null, factory: true };
     };
     // The client a receiver is, with its base: null when it is not an HttpClient.
     const clientOf = (rootText: string | null, direct: Raw["factory"], fn: GraphNode, node: GraphNode, typed: CSharpReceiverType | null): Client | null => {
-      if (direct) return namedClient(direct, fn, node);
+      if (direct) return namedClient(direct, fn, node, positionOf(node));
       const name = rootText?.replace(/^this\./u, "") ?? "";
       const isName = /^[\p{L}_][\p{L}\p{N}_]*$/u.test(name);
       const owner = types.ownerOf(fn);
@@ -829,7 +834,7 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
       if (!fn || isTest(csharpFileOfId(call.id))) continue;
       const template = parseCSharpString(raw.url);
       if (!template) continue;
-      const typed = raw.root ? receivers.typeOf(raw.root, fn) : null;
+      const typed = raw.root ? receivers.typeOf(raw.root, fn, positionOf(call)) : null;
       const client = clientOf(raw.root, raw.factory, fn, call, typed);
       if (!client) continue;
       let url = render(template, call);

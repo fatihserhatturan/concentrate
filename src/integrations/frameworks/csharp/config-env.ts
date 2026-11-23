@@ -50,8 +50,9 @@ import { createCSharpStringResolver, literalText, readCSharpString, stringScopeO
 //     else all keys below. `localName` is the parameter / field name.
 //
 // Routes: a read of a function is copied (CONSUMES_CONFIG, USES_ENV) to the Routes that function handles, by where it sits
-// (`Slot`): inside a minimal-API lambda, to that lambda's route only (the lambda's own line range, and the route pattern
-// when several start on one line), inside a local function, to the routes naming it as handler, else to the routes of a
+// (`Slot`): inside a minimal-API lambda, to that lambda's route only (the lambda's own range, lines and columns, as the
+// Route's `handlerStart*` / `handlerEnd*`), inside a local function, to the routes whose handler range is that function's,
+// else to the routes of a
 // controller action or a method-group handler (their env reads: `js-ts.env-config`); the startup code of `<top-level>`
 // belongs to no route.
 //
@@ -82,6 +83,8 @@ type ChainFact = {
   segs: Template[];
 };
 
+type Range = [number, number, number, number];
+
 type Place = {
   /** Line of the expression. */
   l: number;
@@ -89,14 +92,12 @@ type Place = {
   f: string | null;
   /** Id of the innermost type around it, for resolving constants outside a Function. */
   t: string | null;
-  /** Line of the `MapGet(...)`-style call whose lambda handler holds it: that route (not the whole Function) reads it. */
-  hl?: number;
-  /** Last line of that lambda: with `hl` the lambda's own range, as the route's `line` and `handlerEndLine`. */
-  he?: number;
-  /** The route pattern argument of that call: tells apart routes that start on the same line. */
-  hp?: Template;
-  /** Name of the local function around it (a minimal-API handler written as a local function). */
-  hn?: string;
+  /** Column (0-based) of the expression: picks the typed lambda parameter of the lambda holding it. */
+  c?: number;
+  /** Range [startLine, startColumn, endLine, endColumn] of the minimal-API lambda handler (of a `Map*` call) that holds it: that route (not the whole Function) reads it. */
+  hr?: Range;
+  /** Ranges of the local functions around it (a minimal-API handler written as a local function; a route names one by its range). */
+  hf?: Range[];
 };
 
 type EnvFact = Place & {
@@ -128,8 +129,8 @@ type BindFact = Place & {
 
 type Fact = EnvFact | ReadFact | BindFact;
 
-/** Where a read sits: in a minimal-API lambda (its own range, and the route pattern), in a local function, or in the Function's body. */
-type Slot = { hl?: number; he?: number; path?: string | null; hn?: string };
+/** Where a read sits: in a minimal-API lambda (its own range), in local functions (their ranges), or in the Function's body. */
+type Slot = { hr?: Range; hf?: Range[] };
 
 const FACTS = "csharpConfigEnv";
 const ENV_NAME = /^[A-Za-z_][A-Za-z0-9_.-]*$/u;
@@ -182,29 +183,22 @@ const readConfigEnv: VersionedCSharpParsePlugin = ({ fileNodeId, root, nodes, fu
   const typeSyntaxes = [...types].sort((a, b) => a.syntax.endIndex - a.syntax.startIndex - (b.syntax.endIndex - b.syntax.startIndex));
   const ownerOf = (node: SyntaxNode): Owner | undefined => owners.find((owner) => contains(owner.fn.syntax, node));
   const typeOf = (node: SyntaxNode): string | null => typeSyntaxes.find((type) => contains(type.syntax, node))?.node.id ?? null;
-  const handlerOf = (node: SyntaxNode, owner: Owner | undefined): Pick<Place, "hl" | "he" | "hp" | "hn"> => {
+  const rangeOf = (node: SyntaxNode): Range => [node.startPosition.row + 1, node.startPosition.column, node.endPosition.row + 1, node.endPosition.column];
+  const handlerOf = (node: SyntaxNode, owner: Owner | undefined): Pick<Place, "hr" | "hf"> => {
     let lambda: SyntaxNode | null = null;
-    let local: string | undefined;
+    const locals: Range[] = [];
     for (let parent = node.parent; parent && (!owner || parent.id !== owner.fn.syntax.id); parent = parent.parent) {
       if (lambdaInfo(parent)) lambda = parent;
-      else if (parent.type === "local_function_statement" && local === undefined) local = parent.childForFieldName("name")?.text;
+      else if (parent.type === "local_function_statement") locals.push(rangeOf(parent));
       else if (lambda && parent.type === "invocation_expression") {
         const info = invocationInfo(parent);
-        if (info && /^Map[A-Z]?\w*$/u.test(info.name)) {
-          const pattern = info.arguments.find((argument) => argument.name === null || argument.name === "pattern");
-          const path = pattern ? template(pattern.node, owner) : null;
-          return {
-            hl: (parent.childForFieldName("function")?.childForFieldName("name") ?? parent).startPosition.row + 1,
-            he: lambda.endPosition.row + 1,
-            ...(path ? { hp: path } : {}),
-          };
-        }
+        if (info && /^Map[A-Z]?\w*$/u.test(info.name)) return { hr: rangeOf(lambda) };
         lambda = null;
       }
     }
-    return local === undefined ? {} : { hn: local };
+    return locals.length === 0 ? {} : { hf: locals };
   };
-  const placeOf = (node: SyntaxNode, owner: Owner | undefined): Place => ({ l: node.startPosition.row + 1, f: owner?.fn.node.id ?? null, t: typeOf(node), ...handlerOf(node, owner) });
+  const placeOf = (node: SyntaxNode, owner: Owner | undefined): Place => ({ l: node.startPosition.row + 1, c: node.startPosition.column, f: owner?.fn.node.id ?? null, t: typeOf(node), ...handlerOf(node, owner) });
 
   const scopeOf = (owner: Owner | undefined) => {
     if (!owner) return {};
@@ -587,9 +581,9 @@ class Builder {
   }
 
   // The handler a read sits in, with the route pattern resolved (a read of a Function body has none).
-  private slotOf(fact: Place, scope: GraphNode): Slot {
-    if (fact.hl !== undefined && fact.he !== undefined) return { hl: fact.hl, he: fact.he, ...(fact.hp ? { path: this.literal(fact.hp, scope) } : {}) };
-    return fact.hn === undefined ? {} : { hn: fact.hn };
+  private slotOf(fact: Place): Slot {
+    if (fact.hr) return { hr: fact.hr };
+    return fact.hf ? { hf: fact.hf } : {};
   }
 
   // ---- config files
@@ -610,6 +604,10 @@ class Builder {
 
   // ---- scopes and types
 
+  private at(fact: Place): { line: number; column: number } | undefined {
+    return fact.c === undefined ? undefined : { line: fact.l, column: fact.c };
+  }
+
   private scopeNode(fact: Place, fileId: string): GraphNode {
     return (fact.f ? this.graph.node(fact.f) : undefined) ?? (fact.t ? this.graph.node(fact.t) : undefined) ?? this.graph.node(fileId)!;
   }
@@ -626,14 +624,14 @@ class Builder {
   }
 
   // A receiver that is the host configuration (`IConfiguration` typed, or `x.Configuration` of an untyped host builder).
-  private isConfiguration(root: string, rt: string | undefined, scope: GraphNode): boolean {
+  private isConfiguration(root: string, rt: string | undefined, scope: GraphNode, at?: { line: number; column: number }): boolean {
     if (rt) return this.typeMatches(rt, scope, CONFIG_TYPES);
-    const type = this.receivers.typeOf(root, scope);
+    const type = this.receivers.typeOf(root, scope, at);
     if (type && type.via !== "static") return receiverMatches(type, CONFIG_TYPES, this.receivers);
     // `x.Configuration` of an untyped receiver only: a scanned type without a `Configuration` member is not the host builder.
     if (lastSegment(root) !== "Configuration" || type !== null) return false;
     const dot = root.lastIndexOf(".");
-    const owner = dot === -1 ? null : this.receivers.typeOf(root.slice(0, dot), scope);
+    const owner = dot === -1 ? null : this.receivers.typeOf(root.slice(0, dot), scope, at);
     return owner === null || owner.type === null;
   }
 
@@ -645,12 +643,12 @@ class Builder {
         if (fact.kind !== "env") continue;
         const scope = this.scopeNode(fact, fileId);
         // A scanned type named `Environment` is not System's.
-        if (fact.recv !== null && !receiverMatches(this.receivers.typeOf(fact.recv, scope), ["Environment"], this.receivers)) continue;
+        if (fact.recv !== null && !receiverMatches(this.receivers.typeOf(fact.recv, scope, this.at(fact)), ["Environment"], this.receivers)) continue;
         const name = this.literal(fact.name, scope);
         if (name === null) continue;
         const access = fact.api === "get" ? "Environment.GetEnvironmentVariable" : fact.api === "map" ? "Environment.GetEnvironmentVariables" : "Environment.ExpandEnvironmentVariables";
         const names = fact.api === "expand" ? [...name.matchAll(/%([^%\s]+)%/gu)].map((match) => match[1]!) : [name];
-        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access, this.slotOf(fact, scope));
+        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access, this.slotOf(fact));
       }
     }
   }
@@ -672,17 +670,17 @@ class Builder {
       for (const fact of list) {
         if (fact.kind !== "read") continue;
         const scope = this.scopeNode(fact, fileId);
-        if (!this.isConfiguration(fact.root, fact.rt, scope)) continue;
+        if (!this.isConfiguration(fact.root, fact.rt, scope, this.at(fact))) continue;
         const key = this.keyOf(fact.segs, scope);
         if (key === null) continue;
         const entries = this.settings.entriesFor(key, { below: fact.whole });
         for (const entry of entries) {
           const id = this.cvByEntry.get(entry);
-          if (id) this.consume(fact.f, fileId, id, key, this.slotOf(fact, scope));
+          if (id) this.consume(fact.f, fileId, id, key, this.slotOf(fact));
         }
         if (fact.whole) continue;
         if (entries.length > 0) {
-          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override", this.slotOf(fact, scope));
+          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override", this.slotOf(fact));
           continue;
         }
         // No file defines the key: the read itself is the record (its default, or `unset`).
@@ -691,7 +689,7 @@ class Builder {
           this.graph.addNode({ id, label: "ConfigValue", properties: { name: key, value: fact.def === undefined ? "" : shownConfigValue(key, fact.def), valueType: fact.def === undefined ? "unset" : "default", line: fact.l } });
           this.relationship({ from: fileId, to: id, type: "DECLARES_CONFIG", properties: {} });
         }
-        this.consume(fact.f, fileId, id, key, this.slotOf(fact, scope));
+        this.consume(fact.f, fileId, id, key, this.slotOf(fact));
       }
     }
   }
@@ -782,7 +780,7 @@ class Builder {
       for (const fact of list) {
         if (fact.kind !== "bind") continue;
         const scope = this.scopeNode(fact, fileId);
-        if (fact.root !== null && !this.isConfiguration(fact.root, fact.rt, scope)) continue;
+        if (fact.root !== null && !this.isConfiguration(fact.root, fact.rt, scope, this.at(fact))) continue;
         const key = this.keyOf(fact.segs, scope);
         if (key === null) continue;
         const resolved = this.receivers.types.resolve(fact.type, scope);
@@ -880,32 +878,24 @@ class Builder {
       list.push(rel.from);
       handled.set(rel.to, list);
     }
-    const normalize = (path: string): string => path.replace(/^\/+|\/+$/gu, "").toLowerCase();
-    // Routes of a Function by the lambda they start in (line and last line): more than one means a tie the pattern settles.
-    const rangeCount = new Map<string, number>();
-    for (const [fnId, routes] of handled) {
-      for (const routeId of routes) {
-        const route = this.graph.node(routeId);
-        if (route?.properties.handlerName === "<lambda>") {
-          const key = `${fnId}\0${String(route.properties.line)}\0${String(route.properties.handlerEndLine)}`;
-          rangeCount.set(key, (rangeCount.get(key) ?? 0) + 1);
-        }
-      }
-    }
+    // The handler range a Route carries (its lambda, or the local function it names), null for a method group.
+    const rangeOfRoute = (route: GraphNode): Range | null => {
+      const p = route.properties;
+      return typeof p.handlerStartLine === "number" && typeof p.handlerStartColumn === "number" && typeof p.handlerEndLine === "number" && typeof p.handlerEndColumn === "number"
+        ? [p.handlerStartLine, p.handlerStartColumn, p.handlerEndLine, p.handlerEndColumn]
+        : null;
+    };
+    const same = (a: Range, b: Range): boolean => a.every((value, index) => value === b[index]);
     // Whether a read of `fnId` (placed by `slot`) belongs to the route.
     const belongs = (fnId: string, route: GraphNode, slot: Slot): boolean => {
       const topLevel = this.graph.node(fnId)?.properties.qualifiedName === "<top-level>";
-      const handlerName = route.properties.handlerName;
-      if (slot.hl !== undefined) {
-        // Inside a lambda: that lambda's route, told apart by its own range (and pattern when several start together).
-        if (handlerName !== "<lambda>" || route.properties.line !== slot.hl || route.properties.handlerEndLine !== slot.he) return false;
-        if ((rangeCount.get(`${fnId}\0${String(slot.hl)}\0${String(slot.he)}`) ?? 0) < 2 || !slot.path) return true;
-        const written = typeof route.properties.fullPath === "string" ? route.properties.fullPath : typeof route.properties.path === "string" ? route.properties.path : null;
-        return written === null || normalize(written).endsWith(normalize(slot.path));
-      }
-      if (slot.hn !== undefined) return typeof handlerName === "string" && handlerName === slot.hn;
-      // The Function's own body: the startup code of `<top-level>` belongs to no route, nor does a lambda route read it.
-      return !topLevel && handlerName !== "<lambda>";
+      const range = rangeOfRoute(route);
+      // Inside a lambda: the route of that lambda, by its own range.
+      if (slot.hr) return range !== null && route.properties.handlerName === "<lambda>" && same(range, slot.hr);
+      // Inside local functions: the route naming one of them as its handler.
+      if (slot.hf) return range !== null && route.properties.handlerName !== "<lambda>" && slot.hf.some((candidate) => same(candidate, range));
+      // The Function's own body: the startup code of `<top-level>` belongs to no route, nor does a lambda or local-function route read it.
+      return !topLevel && range === null;
     };
     for (const [fnId, reads] of this.consumed) {
       for (const routeId of handled.get(fnId) ?? []) {
@@ -925,7 +915,7 @@ class Builder {
         const route = this.graph.node(routeId);
         if (route?.properties.framework !== "aspnet-minimal" || typeof route.properties.handlerName !== "string") continue;
         for (const read of reads) {
-          if (read.hl === undefined && read.hn === undefined) continue;
+          if (!read.hr && !read.hf) continue;
           if (belongs(fnId, route, read)) this.relationship({ from: routeId, to: read.to, type: "USES_ENV", properties: { line: read.line, access: read.access } });
         }
       }

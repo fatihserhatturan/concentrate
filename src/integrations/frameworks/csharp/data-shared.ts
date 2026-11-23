@@ -20,8 +20,8 @@ import {
 //
 //   - A Table is `table:csharp:-:<lower-cased name>` (`kind: "table"`, `library`, `schemaName`, `provider`, `declaredIn`,
 //     `line`, `columns`). One per table name whatever the case: `[Table("Users")]` and `SELECT ... FROM users` are one
-//     node. Quotes, brackets and a schema prefix are not part of the name (`[dbo].[Users]` is `Users`; the schema is the
-//     Table's `schemaName`). A declaration (an entity, `[Table]`, `ToTable`) gives the display name and `declaredIn`;
+//     node. Quotes, brackets and a schema prefix are not part of the name (`[dbo].[Users]` is `Users`). The schema is the
+//     Table's `schemaName` of its first declaration, never of a SQL mention: two schemas with one name are one Table. A declaration (an entity, `[Table]`, `ToTable`) gives the display name and `declaredIn`;
 //     a mention (a query) only creates the table when it is the first.
 //   - A DataModel (`name`, `library`, `declaredIn`, `line`) is the entity (`efcore`), or the table-named stand-in of a
 //     library (`dapper`, `ado.net`, `efcore` for raw SQL) for tables named only by literal SQL

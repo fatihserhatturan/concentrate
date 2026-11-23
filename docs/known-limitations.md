@@ -2855,7 +2855,12 @@ and stored on the `Call` node; the contributors turn them into `Route`, `EntryPo
   holds the group and from nested groups. A method group links to its `Function`. A lambda links to the enclosing
   `Function` with `handlerName: "<lambda>"`, and its typed parameters are the route's `handlerParameters` (JSON,
   shaped like a `Function`'s `parameters`; `[FromServices]` kept). A local function links to the enclosing
-  `Function` under its written name; **its parameters are not in `handlerParameters`**. `app.Map("/x", branch =>
+  `Function` under its written name; **its parameters are not in `handlerParameters`**. A minimal-API Route carries
+  the range of its handler's own syntax in `handlerStartLine`, `handlerStartColumn`, `handlerEndLine` and
+  `handlerEndColumn` (1-based lines, 0-based columns): the lambda, or the local function a method group names. The start
+  is the handler's start, not the line of the `Map*` call; reaching data accesses, calls and config / env reads is
+  limited to that range. A column-less fact (an ADO.NET `CommandText` assignment, `DestinationTableName`) is placed by
+  line only, so on a line shared by two route lambdas it reaches both. `app.Map("/x", branch =>
   ...)` (a middleware branch) is no route.
 - **Routes declared in an extension method on a `RouteGroupBuilder` parameter are relative.** In
   `app.MapGroup("/api").MapTodos()` the routes (and `MapHub` paths) inside `MapTodos(this RouteGroupBuilder g)` depend
@@ -2944,22 +2949,43 @@ requests use the nodes and relationships of the other ecosystems, so `list_table
   (directly or through a scanned base). Each `DbSet<T>` entity is a `DataModel` (`datamodel:efcore:<ns>:<Entity>`)
   with `MAPS_TO_TABLE` to the table. The table name is, in order: `ToTable("x"[, schema])`, `[Table("x", Schema = ...)]`,
   the `DbSet` property name, the entity class name. `ToTable` is read in `OnModelCreating` (also inside
-  `Entity<T>(e => ...)`) and in `IEntityTypeConfiguration<T>.Configure`. `[NotMapped]` and `Ignore<T>()` exclude an
+  `Entity<T>(e => ...)`; a `ToTable` after a navigation link such as `OwnsOne`, `OwnsMany`, `HasOne`, `HasMany`,
+  `WithOne`, `WithMany`, `Navigation` or `UsingEntity` does not rename the owner) and in `IEntityTypeConfiguration<T>.Configure`. `[NotMapped]` and `Ignore<T>()` exclude an
   entity. Columns come from `[Column]`, `HasColumnName`, `[Key]`, `HasKey`, the `Id` / `<Entity>Id` convention,
-  `[Required]`, `IsRequired` and nullable types. Accesses (`ACCESSES_DATA`, library `efcore`) come from calls on a
+  `[Required]`, `IsRequired` and nullable types. Only public properties are columns (a non-public one needs `[Column]` or
+  `HasColumnName`); a property with an expression body, or a getter body and no setter, or a get-only one without an
+  initializer, is not (`{ get; set; }`, `{ get; init; }`, `{ get; private set; }` and `{ get; } = init` are).
+  `IsRequired(false)` makes a column `optional` even for a non-nullable type; `IsRequired()` / `[Required]` make a
+  nullable one not optional. Accesses (`ACCESSES_DATA`, library `efcore`) come from calls on a
   context or `DbSet<T>` reached through a field, property, parameter, primary-constructor parameter, `this.x`,
   `new Ctx()`, `IDbContextFactory<T>.CreateDbContext[Async]`, a minimal-API lambda parameter or the context's own
-  members. Operations: `Add*` is `create`; `Update*`, `ExecuteUpdate*` and `Attach*` are `update`; `Remove*` and
-  `ExecuteDelete*` are `delete`; `Count`, `Sum`, `Min`, `Max` and `Average` are `aggregate`; the rest is `read`;
-  EFCore.BulkExtensions methods are mapped too. Raw SQL (`Database.ExecuteSqlRaw`, `ExecuteSqlInterpolated`,
+  members, or an interface that declares `DbSet<T>` properties and is implemented by a scanned context
+  (`IAppDbContext`, inherited interfaces included; an interface no scanned context implements is not a context). Calls
+  on the context itself map by the argument's static type: `Add`, `AddAsync`, `AddRange`, `Update(Range)`,
+  `Remove(Range)` and `Attach(Range)` take the entity of a parameter, field, local with a known type or `new T(..)` (for
+  a `Range` call the collection's type argument), and `Find<T>` / `FindAsync<T>` take `T`; nothing is recorded when
+  the type is unknown or not an entity. Operations: `Add*` is `create`; `Update*`, `ExecuteUpdate*` and `Attach*` are `update`; `Remove*` and
+  `ExecuteDelete*` are `delete`; `Count`, `Sum`, `Min`, `Max` and `Average` are `aggregate`; the rest is `read`; the chain after a `DbSet` counts up to the step that
+  materializes it (`ToList`, `ToArray`, `ToDictionary`, `ToHashSet`, `ToLookup`, `AsEnumerable`, `First*`, `Single*`,
+  `Last*`, `ElementAt*`, `Find`, `Any`, `All`, `Contains`, `Load`) or aggregates it, so `db.Orders.ToList().Add(x)` is a
+  `read` and `db.Orders.ToList().Count()` too. EFCore.BulkExtensions methods are mapped too. Raw SQL (`Database.ExecuteSqlRaw`, `ExecuteSqlInterpolated`,
   `ExecuteSql[Async]`, `SqlQuery<T>`, `SqlQueryRaw<T>`, `FromSqlRaw`, `FromSqlInterpolated`, `FromSql`) is mapped to
   tables by the SQL layer and takes its operation from the SQL; a `FromSql` with no table (`EXEC proc`) reads the entity.
   The `Function` that makes the call holds the facts (an external call has no `Call` node); routes and callers reach
   them with `direct: false`.
-- **Not handled in EF Core.** Compiled models, owned types, TPH / TPT / TPC inheritance mapping, join tables made by
-  `UsingEntity`, `ToView`, value converters, `Set(typeof(T))` and `ApplyConfigurationsFromAssembly` (a configuration
-  class is read wherever it is scanned, not by assembly). A `DbContext` known only through DI registration is missed.
-  A `DbSet` held in a variable is not followed. `optional` comes only from `?` on the property type. **`Attach*` is an
+- **Not handled in EF Core.** Compiled models, owned types, TPH / TPT / TPC inheritance mapping (a derived entity with
+  its own `DbSet<Derived>` gets a table named after the `DbSet`, a derived entity without one is not mapped), join
+  tables made by `UsingEntity`, `ToView` (a keyless view entity gets its `DbSet` or class name as table), value
+  converters, `Set(typeof(T))`, `Find(typeof(T), id)` and `ApplyConfigurationsFromAssembly` (a configuration class is read
+  wherever it is scanned, not by assembly). A `DbContext` known only through DI registration is missed. A `DbSet` held
+  in a variable (`var set = db.Orders`) or returned from a method is not followed, and a custom extension method on
+  `DbSet<T>` / `IQueryable<T>` (`db.Orders.Active()`) counts only through the standard method after it. Generic
+  repositories (`_ctx.Set<T>()` in `Repo<T>`) name no entity: nothing is recorded, and the calls of a closed subclass
+  are not substituted. `HasDefaultSchema(..)` is not read (a table without an explicit schema has `schemaName: null`);
+  `[Keyless]` / `HasNoKey()` are not read (a keyless entity may get an `Id`-by-convention key column). Positional
+  records used as entities get a table with no columns, and strongly-typed ID structs (`OrderId`) are dropped as
+  navigations, so the key column is missing. `_context.Add(x)` where `x` is known only from a call, a property chain of
+  unknown type or `object` gives nothing. `optional` comes only from `?` on the property type. **`Attach*` is an
   `update`**, although it may only track the entity.
 - **Dapper and ADO.NET** (libraries `dapper`, `ado.net`). Dapper `Query`, `QueryFirst[OrDefault]`,
   `QuerySingle[OrDefault]`, `QueryMultiple`, `Execute`, `ExecuteScalar` and `ExecuteReader` (and the `Async` forms) read the SQL from
@@ -2968,12 +2994,32 @@ requests use the nodes and relationships of the other ecosystems, so `list_table
   `Odbc`, `Fb` or `DB2` connection) or be a local assigned from `Create…`, `Open…` or `Get…Connection`. ADO.NET reads
   `new XCommand(sql, conn)`, `XDataAdapter`, a `CommandText` initializer and `cmd.CommandText =` on a typed command or
   a `conn.CreateCommand()` local; `SqlBulkCopy` and `MySqlBulkCopy` with `DestinationTableName` are `create`. A stored
-  procedure is skipped. A dynamic SQL string is skipped; a partly dynamic one counts the tables its literal part names.
+  procedure skips its own command only: `CommandType.StoredProcedure` in the command's constructor arguments or object
+  initializer, `cmd.CommandType = CommandType.StoredProcedure` on the variable the command is created into (or whose
+  `CommandText` is assigned) and, for Dapper, `commandType: CommandType.StoredProcedure` in that call. Other commands
+  of the same method are read. The receiver is matched by variable name within the member, so a name reused for a
+  stored procedure and a text command in one method skips both. A dynamic SQL string is skipped; a partly dynamic one counts the tables its literal part names.
 - **Not handled in Dapper and ADO.NET.** SQL read from files or resources, built with `StringBuilder` or
   `string.Create`, or made by `DbCommandBuilder`; Dapper.Contrib; a receiver of unknown type
-  (`(await GetConnection()).Query(...)`); a command created in one method and executed in another (the
-  stored-procedure check is per function too). **`MERGE INTO` is not mapped:** the shared SQL layer returns no table for
-  it, in C# as in every other language.
+  (`(await GetConnection()).Query(...)`, `tx.Connection.Query(..)`, `factory.Create().Query(..)`,
+  `_factory.CreateDbContext().Orders`: use a local); a command created in one method and executed in another (the
+  stored-procedure check is per command variable within a member). **`MERGE`, `TRUNCATE TABLE` and `DROP TABLE` are not
+  mapped:** the shared SQL layer returns no table for them, in C# as in every other language. Interpolated SQL with a
+  dynamic schema or table (`$"FROM {schema}.Orders"`) names the table only through its literal part, so
+  `{schema}.Orders` gives nothing. Integer, char and `true` / `false` literals fold to their text inside a
+  concatenation, interpolation hole or `string.Format` / `Concat` / `Join` argument (`"LIMIT " + 10` is `LIMIT 10`); a
+  bare literal alone and floating-point literals (culture) are not folded.
+- **Tables are keyed by name only.** `Table` ids are `table:csharp:-:<lower-cased name>`, so the same name in two
+  schemas (`billing.Invoices`, `dbo.Invoices`) is one node. The schema of a SQL mention (`FROM dbo.Orders`) is ignored;
+  only a declaration (`[Table(.., Schema=..)]`, `ToTable(name, schema)`) sets `schemaName`, and it is the schema of the
+  first declaration.
+- **Lambda parameters are typed per lambda.** Typed lambda, anonymous-method and local-function parameters are scoped
+  to their lambda: when two lambdas of one member name a parameter alike with different types (`(AppCtx db) =>` and
+  `(AuditCtx db) =>`), the member-wide `csharpLocals` entry is `null` and the Function property `csharpLambdaLocals`
+  (JSON list of `{r: [startLine, startColumn, endLine, endColumn], l: {name: local}}`, present only when a lambda's
+  parameter differs from `csharpLocals`) types the receiver inside each lambda. EF Core, configuration and HTTP reads
+  pass their position to `receivers.typeOf`; the other readers (Dapper and ADO.NET, DI) still read the member-wide
+  local.
 - **Types outside the scan match by simple name.** Implicit usings and the SDK bring namespaces that no `using`
   names, so a type such as `DbContext`, `IConfiguration` or `HttpClient` is matched by its simple name when the scan
   does not declare a type of that name; one the scan declares is the user's own and never counts. A look-alike
@@ -2996,12 +3042,11 @@ requests use the nodes and relationships of the other ecosystems, so `list_table
   declared by the reading file. Each exact key with an `appsettings` entry also gets a `USES_ENV` access
   (`config override`) to `env:A__B`, the variable that overrides it. A read is copied to the `Route` whose handler
   makes it: the routes of a controller action or a method-group handler get the reads of that method; a minimal-API
-  lambda's route gets only the reads written inside that lambda (found by the lambda's own range, so two routes on one
-  line stay apart), never the startup code around it; a local-function handler's route gets the reads of that local
-  function. Local functions resolve to the enclosing function (`<top-level>` for top-level statements), so
-  `impact_of` and `route_details` still link a minimal-API lambda to that enclosing `<top-level>` function: a change
-  under one lambda lists the sibling minimal routes too. A local-function handler has no `handlerEndLine` (a lambda
-  has).
+  route gets only the reads written inside its handler's own range (the Route's `handlerStartLine`, `handlerStartColumn`,
+  `handlerEndLine` and `handlerEndColumn`: the lambda, or the local function a method group names), so two routes on one
+  line stay apart and the startup code around them belongs to no route. Local functions and lambdas resolve to the
+  enclosing function (`<top-level>` for top-level statements), so `impact_of` and `route_details` still link a
+  minimal-API route to that enclosing function: a change under one lambda lists the sibling minimal routes too.
 - **Config file limits.** The `appsettings` value a URL reads is looked up without the environment: the base file
   (`appsettings.json`) wins over `appsettings.Production.json`, as the closest file does for a monorepo. The items of a
   JSON array share the array's line (a `ConfigValue` per item, one `line`). A JSON object with duplicate keys keeps

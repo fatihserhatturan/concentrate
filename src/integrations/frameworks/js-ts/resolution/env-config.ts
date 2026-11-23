@@ -23,11 +23,12 @@ function addRouteEnvRelationships(graph: IGraphContributor): void {
   }
 
   for (const [routeId, functionIds] of handledFunctionIdsByRouteId) {
-    // A minimal-API lambda handler is the enclosing Function (often `<top-level>`): copying all of its env reads would
-    // put every startup variable on every route. `csharp.config-env` copies the ones of the lambda itself (and of a
-    // local function; a local function of `<top-level>` is the same case). A method-group handler is a Function of its own.
+    // A minimal-API handler with its own range (`handlerStartLine`: a lambda, or a local function) is part of the
+    // enclosing Function (often `<top-level>`): copying all of its env reads would put every startup variable on every
+    // route. `csharp.config-env` copies the reads inside that range. A method-group handler is a Function of its own and
+    // gets all of its reads here (a method group that resolves to `<top-level>` has no handler to read).
     const route = graph.node(routeId);
-    const lambda = route?.properties.framework === "aspnet-minimal" && route.properties.handlerName === "<lambda>";
+    const lambda = route?.properties.framework === "aspnet-minimal" && (route.properties.handlerName === "<lambda>" || typeof route.properties.handlerStartLine === "number");
     for (const functionId of functionIds) {
       if (lambda || (route?.properties.framework === "aspnet-minimal" && graph.node(functionId)?.properties.qualifiedName === "<top-level>")) continue;
       for (const envRel of envRelationshipsByFunctionId.get(functionId) ?? []) {

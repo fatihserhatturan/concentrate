@@ -259,3 +259,37 @@ public class Names { IHttpClientFactory f; public Names(IHttpClientFactory f){th
     assert.ok(urls.includes("GET /case"), urls.join("\n"));
   });
 });
+
+describe("handler ranges in config and env (review F3)", () => {
+  it("a local-function handler reads only its own body, never the enclosing method's", async () => {
+    const graph = await scan({
+      "appsettings.json": `{"A":"1","B":"2","C":"3"}`,
+      "Routes.cs": `using Microsoft.AspNetCore.Builder; using Microsoft.Extensions.Configuration;
+public static class Routes {
+  public static void Map(WebApplication app, IConfiguration cfg) {
+    var startup = Environment.GetEnvironmentVariable("BODY") + cfg["C"];
+    app.MapGet("/one", One); app.MapGet("/two", Two);
+    string One() { return Environment.GetEnvironmentVariable("ONE") + cfg["A"]; }
+    string Two() { return Environment.GetEnvironmentVariable("TWO") + cfg["B"]; }
+  }
+}
+`,
+    });
+    // A and B: the config override of a key the handler reads.
+    assert.deepEqual(routeLinks(graph, "USES_ENV"), ["/one -> A", "/one -> ONE", "/two -> B", "/two -> TWO"]);
+    assert.deepEqual(routeLinks(graph, "CONSUMES_CONFIG"), ["/one -> A", "/two -> B"]);
+  });
+
+  it("two lambdas that name a parameter alike with different types are typed per lambda", async () => {
+    const graph = await scan({
+      "appsettings.json": `{"A":"1","B":"2"}`,
+      "Program.cs": `using Microsoft.AspNetCore.Builder; using Microsoft.Extensions.Configuration;
+var app = WebApplication.CreateBuilder(args).Build();
+app.MapGet("/cfg", (IConfiguration c) => c["A"]); app.MapGet("/bag", (Bag c) => c["B"]);
+app.Run();
+public class Bag { public string this[string key] => key; }
+`,
+    });
+    assert.deepEqual(routeLinks(graph, "CONSUMES_CONFIG"), ["/cfg -> A"]);
+  });
+});
