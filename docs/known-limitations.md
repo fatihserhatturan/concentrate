@@ -2822,7 +2822,7 @@ that scope.
 - `[assembly: ...]` attributes are not emitted.
 - The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
   was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
-- Frameworks (routes, entrypoints, dependency injection) are described in [C# frameworks](#c-frameworks).
+- Frameworks (routes, entrypoints, dependency injection) are described in [C# frameworks](#c-frameworks); data access, configuration and outbound HTTP in [C# data access, configuration and outbound HTTP](#c-data-access-configuration-and-outbound-http).
 
 ### C# frameworks
 
@@ -2932,6 +2932,86 @@ and stored on the `Call` node; the contributors turn them into `Route`, `EntryPo
   `builder.Services`, a `this IServiceCollection` parameter or a fluent chain, and so does an unrelated method
   with the same name. **Conditional and environment-specific registrations** (`if (env.IsDevelopment())`, `#if`) are
   all read as providers: two branches that register one interface are ambiguous.
+
+### C# data access, configuration and outbound HTTP
+
+Data access, configuration, env reads and outbound HTTP are in `src/integrations/frameworks/csharp/` (`data-efcore.ts`,
+`data-sql.ts`, `config-env.ts`, `config-files.ts`, `http-clients.ts`). Tables, accesses, config keys, env variables and
+requests use the nodes and relationships of the other ecosystems, so `list_tables`, `list_data_access`,
+`list_env_config`, `api_consumers` and `impact_of` answer for .NET services. Test files are not read for outbound HTTP.
+
+- **EF Core.** A `DbContext` is a scanned class deriving from `DbContext`, `IdentityDbContext` or `IdentityUserContext`
+  (directly or through a scanned base). Each `DbSet<T>` entity is a `DataModel` (`datamodel:efcore:<ns>:<Entity>`)
+  with `MAPS_TO_TABLE` to the table. The table name is, in order: `ToTable("x"[, schema])`, `[Table("x", Schema = ...)]`,
+  the `DbSet` property name, the entity class name. `ToTable` is read in `OnModelCreating` (also inside
+  `Entity<T>(e => ...)`) and in `IEntityTypeConfiguration<T>.Configure`. `[NotMapped]` and `Ignore<T>()` exclude an
+  entity. Columns come from `[Column]`, `HasColumnName`, `[Key]`, `HasKey`, the `Id` / `<Entity>Id` convention,
+  `[Required]`, `IsRequired` and nullable types. Accesses (`ACCESSES_DATA`, library `efcore`) come from calls on a
+  context or `DbSet<T>` reached through a field, property, parameter, primary-constructor parameter, `this.x`,
+  `new Ctx()`, `IDbContextFactory<T>.CreateDbContext[Async]`, a minimal-API lambda parameter or the context's own
+  members. Operations: `Add*` is `create`; `Update*`, `ExecuteUpdate*` and `Attach*` are `update`; `Remove*` and
+  `ExecuteDelete*` are `delete`; `Count`, `Sum`, `Min`, `Max` and `Average` are `aggregate`; the rest is `read`;
+  EFCore.BulkExtensions methods are mapped too. Raw SQL (`Database.ExecuteSqlRaw`, `ExecuteSqlInterpolated`,
+  `ExecuteSql[Async]`, `SqlQuery<T>`, `SqlQueryRaw<T>`, `FromSqlRaw`, `FromSqlInterpolated`, `FromSql`) is mapped to
+  tables by the SQL layer and takes its operation from the SQL; a `FromSql` with no table (`EXEC proc`) reads the entity.
+  The `Function` that makes the call holds the facts (an external call has no `Call` node); routes and callers reach
+  them with `direct: false`.
+- **Not handled in EF Core.** Compiled models, owned types, TPH / TPT / TPC inheritance mapping, join tables made by
+  `UsingEntity`, `ToView`, value converters, `Set(typeof(T))` and `ApplyConfigurationsFromAssembly` (a configuration
+  class is read wherever it is scanned, not by assembly). A `DbContext` known only through DI registration is missed.
+  A `DbSet` held in a variable is not followed. `optional` comes only from `?` on the property type. **`Attach*` is an
+  `update`**, although it may only track the entity.
+- **Dapper and ADO.NET** (libraries `dapper`, `ado.net`). Dapper `Query`, `QueryFirst[OrDefault]`,
+  `QuerySingle[OrDefault]`, `QueryMultiple`, `Execute`, `ExecuteScalar` and `ExecuteReader` (and the `Async` forms) read the SQL from
+  the first argument or `sql:` / `commandText:`, or from a `CommandDefinition`. **The receiver must be typed as a
+  connection** (`IDbConnection`, `DbConnection`, or a `Sql`, `Npgsql`, `MySql`, `Sqlite`, `SQLite`, `Oracle`, `OleDb`,
+  `Odbc`, `Fb` or `DB2` connection) or be a local assigned from `Create…`, `Open…` or `Get…Connection`. ADO.NET reads
+  `new XCommand(sql, conn)`, `XDataAdapter`, a `CommandText` initializer and `cmd.CommandText =` on a typed command or
+  a `conn.CreateCommand()` local; `SqlBulkCopy` and `MySqlBulkCopy` with `DestinationTableName` are `create`. A stored
+  procedure is skipped. A dynamic SQL string is skipped; a partly dynamic one counts the tables its literal part names.
+- **Not handled in Dapper and ADO.NET.** SQL read from files or resources, built with `StringBuilder` or
+  `string.Create`, or made by `DbCommandBuilder`; Dapper.Contrib; a receiver of unknown type
+  (`(await GetConnection()).Query(...)`); a command created in one method and executed in another (the
+  stored-procedure check is per function too). **`MERGE INTO` is not mapped:** the shared SQL layer returns no table for
+  it, in C# as in every other language.
+- **Types outside the scan match by simple name.** Implicit usings and the SDK bring namespaces that no `using`
+  names, so a type such as `DbContext`, `IConfiguration` or `HttpClient` is matched by its simple name when the scan
+  does not declare a type of that name; one the scan declares is the user's own and never counts. A look-alike
+  type from another library is accepted.
+- **Configuration.** Every leaf of `appsettings*.json` is a `ConfigValue` (`DECLARES_CONFIG`; a secret key's value is
+  stored as `<redacted>`). `Environment.GetEnvironmentVariable` (also the target overload),
+  `GetEnvironmentVariables()["X"]` and `ExpandEnvironmentVariables("%X%")` are `USES_ENV`. `IConfiguration`,
+  `IConfigurationRoot`, `ConfigurationManager` and `x.Configuration` reads are `CONSUMES_CONFIG`: the indexer,
+  `GetValue<T>`, `GetConnectionString`, `GetSection` / `GetRequiredSection` chains, and `Get<T>`, `Bind` and
+  `GetChildren` (which read every key below the section). `Configure<T>(section)`,
+  `AddOptions<T>().Bind(section)` and `BindConfiguration` tie a section to `T`, and a consumer of `IOptions<T>`,
+  `IOptionsSnapshot<T>` or `IOptionsMonitor<T>` reads the section's keys, narrowed to the properties of `T` when
+  `T` is scanned. A key that no `appsettings*.json` sets is a `ConfigValue` with `valueType` `default` or `unset`,
+  declared by the reading file. Each exact key with an `appsettings` entry also gets a `USES_ENV` access
+  (`config override`) to `env:A__B`, the variable that overrides it. Reads are copied to the routes whose handler
+  makes them.
+- **Not handled in configuration.** An `IConfigurationSection` root taken from a parameter or field; `Get<T>()` on the
+  whole configuration; `AddJsonFile` with a custom file name and user secrets (only `appsettings*.json` are read);
+  `AddEnvironmentVariables("PREFIX_")` (the override name is not prefixed); named options;
+  `GetRequiredService<IOptions<T>>()`; `IOptions<T>` parameters of a minimal-API lambda; dynamic keys.
+- **Outbound HTTP** (labels `httpclient-factory`, `httpclient`, `refit`; request edges `REQUESTS`, as for the other
+  clients, so `api_consumers` links them to the route they reach). `HttpClient` `Get*`, `Post*`, `Put*`, `Patch*` and
+  `Delete*` (`Async`, including `GetFromJsonAsync`, `PostAsJsonAsync`, `PutAsJsonAsync`, `PatchAsJsonAsync` and
+  `DeleteFromJsonAsync`) and `SendAsync` / `Send` with an `HttpRequestMessage` (method and URL from its constructor,
+  initializer or a later assignment); subclasses of `HttpClient` count. URLs fold string concatenation and
+  interpolation, `new Uri(base, relative)` and `QueryHelpers.AddQueryString`; an unknown part is a `${expr}` hole, and
+  the query, fragment and user info are dropped. The base comes from `new HttpClient { BaseAddress = ... }`,
+  `x.BaseAddress =`, `AddHttpClient("name")`, `AddHttpClient<T>()`, `AddHttpClient<I, C>()` or the default
+  `AddHttpClient()` with `ConfigureHttpClient`, and `factory.CreateClient("name")`. A base that is a configuration
+  read is resolved with `appsettings*.json` (an unknown key is `${config:KEY}`); a secret key never ends up in a URL.
+  Refit interfaces (`[Get]`, `[Post]`, `[Put]`, `[Patch]`, `[Delete]`, `[Head]`, `[Options]`, inherited interfaces
+  included) give one request per method, with the base from `RestService.For<T>(url | new HttpClient { BaseAddress })`
+  or `AddRefitClient<T>().ConfigureHttpClient`.
+- **Not handled in outbound HTTP.** `WebClient`, `WebRequest`, RestSharp and Flurl; a `DelegatingHandler` that rewrites
+  the URL; a message built in one method and sent in another; a `BaseAddress` from `IOptions<T>` or from a
+  configuration value held in a variable; `CreateClient<T>()` and a client name that is not a literal; a
+  field-initializer `HttpClient` outside a function. **The route linker turns `localhost:PORT` into a path whatever
+  the port**, so a call to another local service can link to a route of the wrong one.
 
 ## Non-code files
 
