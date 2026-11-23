@@ -35,7 +35,8 @@ import { createCSharpStringResolver, literalText, readCSharpString, stringScopeO
 //     `GetConnectionString("X")` (= `ConnectionStrings:X`), also `configuration?["A"]`, on a receiver typed
 //     `IConfiguration` / `IConfigurationRoot` / `ConfigurationManager` (field, property, parameter, typed lambda parameter,
 //     local, primary-constructor parameter) or written `x.Configuration` (`builder.Configuration`, `app.Configuration`,
-//     `context.Configuration`: the untyped host builder objects);
+//     `context.Configuration`: the untyped host builder objects, so only when `x` and the member have no type the scan
+//     knows: a scanned type without a `Configuration` member is not the host builder);
 //   - sections: `GetSection("A").GetSection("B")["C"]`, `GetSection("A:B")["C"]`, `GetRequiredSection`, a section held in
 //     a single-assignment local (`var s = config.GetSection("A");` then `s["B"]`, `s.GetSection("C").Get<T>()`); the
 //     section's `.Value` reads that key; `.Get<T>()`, `.Bind(x)`, `.Bind("A", x)` and `.GetChildren()` read every key
@@ -45,7 +46,14 @@ import { createCSharpStringResolver, literalText, readCSharpString, stringScopeO
 //     so does every function with a parameter (constructor, primary constructor, method, `[FromServices]`) of
 //     `IOptions<T>` / `IOptionsSnapshot<T>` / `IOptionsMonitor<T>` (a class with such a field and no such parameter, the
 //     class's file only). When `T` is a scanned class the keys narrow to the first segments that match a property it (or a
-//     scanned base) declares, case-insensitively; else all keys below. `localName` is the parameter / field name.
+//     scanned base) declares as public properties or fields (`[ConfigurationKeyName("x")]` renames one), case-insensitively;
+//     else all keys below. `localName` is the parameter / field name.
+//
+// Routes: a read of a function is copied (CONSUMES_CONFIG, USES_ENV) to the Routes that function handles, by where it sits
+// (`Slot`): inside a minimal-API lambda, to that lambda's route only (the lambda's own line range, and the route pattern
+// when several start on one line), inside a local function, to the routes naming it as handler, else to the routes of a
+// controller action or a method-group handler (their env reads: `js-ts.env-config`); the startup code of `<top-level>`
+// belongs to no route.
 //
 // A key read that no appsettings file defines still gets a ConfigValue declared by the reading file: valueType `default`
 // with the literal default of `GetValue<T>("k", default)` (redacted for a secret key) or `unset` with an empty value
@@ -83,6 +91,12 @@ type Place = {
   t: string | null;
   /** Line of the `MapGet(...)`-style call whose lambda handler holds it: that route (not the whole Function) reads it. */
   hl?: number;
+  /** Last line of that lambda: with `hl` the lambda's own range, as the route's `line` and `handlerEndLine`. */
+  he?: number;
+  /** The route pattern argument of that call: tells apart routes that start on the same line. */
+  hp?: Template;
+  /** Name of the local function around it (a minimal-API handler written as a local function). */
+  hn?: string;
 };
 
 type EnvFact = Place & {
@@ -113,6 +127,9 @@ type BindFact = Place & {
 };
 
 type Fact = EnvFact | ReadFact | BindFact;
+
+/** Where a read sits: in a minimal-API lambda (its own range, and the route pattern), in a local function, or in the Function's body. */
+type Slot = { hl?: number; he?: number; path?: string | null; hn?: string };
 
 const FACTS = "csharpConfigEnv";
 const ENV_NAME = /^[A-Za-z_][A-Za-z0-9_.-]*$/u;
@@ -165,21 +182,29 @@ const readConfigEnv: VersionedCSharpParsePlugin = ({ fileNodeId, root, nodes, fu
   const typeSyntaxes = [...types].sort((a, b) => a.syntax.endIndex - a.syntax.startIndex - (b.syntax.endIndex - b.syntax.startIndex));
   const ownerOf = (node: SyntaxNode): Owner | undefined => owners.find((owner) => contains(owner.fn.syntax, node));
   const typeOf = (node: SyntaxNode): string | null => typeSyntaxes.find((type) => contains(type.syntax, node))?.node.id ?? null;
-  const handlerLineOf = (node: SyntaxNode, owner: Owner | undefined): number | undefined => {
-    let inLambda = false;
+  const handlerOf = (node: SyntaxNode, owner: Owner | undefined): Pick<Place, "hl" | "he" | "hp" | "hn"> => {
+    let lambda: SyntaxNode | null = null;
+    let local: string | undefined;
     for (let parent = node.parent; parent && (!owner || parent.id !== owner.fn.syntax.id); parent = parent.parent) {
-      if (lambdaInfo(parent)) inLambda = true;
-      else if (inLambda && parent.type === "invocation_expression") {
+      if (lambdaInfo(parent)) lambda = parent;
+      else if (parent.type === "local_function_statement" && local === undefined) local = parent.childForFieldName("name")?.text;
+      else if (lambda && parent.type === "invocation_expression") {
         const info = invocationInfo(parent);
-        if (info && /^Map[A-Z]?\w*$/u.test(info.name)) return (parent.childForFieldName("function")?.childForFieldName("name") ?? parent).startPosition.row + 1;
+        if (info && /^Map[A-Z]?\w*$/u.test(info.name)) {
+          const pattern = info.arguments.find((argument) => argument.name === null || argument.name === "pattern");
+          const path = pattern ? template(pattern.node, owner) : null;
+          return {
+            hl: (parent.childForFieldName("function")?.childForFieldName("name") ?? parent).startPosition.row + 1,
+            he: lambda.endPosition.row + 1,
+            ...(path ? { hp: path } : {}),
+          };
+        }
+        lambda = null;
       }
     }
-    return undefined;
+    return local === undefined ? {} : { hn: local };
   };
-  const placeOf = (node: SyntaxNode, owner: Owner | undefined): Place => {
-    const hl = handlerLineOf(node, owner);
-    return { l: node.startPosition.row + 1, f: owner?.fn.node.id ?? null, t: typeOf(node), ...(hl === undefined ? {} : { hl }) };
-  };
+  const placeOf = (node: SyntaxNode, owner: Owner | undefined): Place => ({ l: node.startPosition.row + 1, f: owner?.fn.node.id ?? null, t: typeOf(node), ...handlerOf(node, owner) });
 
   const scopeOf = (owner: Owner | undefined) => {
     if (!owner) return {};
@@ -450,7 +475,7 @@ const readConfigEnv: VersionedCSharpParsePlugin = ({ fileNodeId, root, nodes, fu
   file.properties[FACTS] = JSON.stringify(facts);
 };
 
-export const csharpConfigEnvPlugin: VersionedCSharpParsePlugin = Object.assign(readConfigEnv, { version: "1" });
+export const csharpConfigEnvPlugin: VersionedCSharpParsePlugin = Object.assign(readConfigEnv, { version: "2" });
 
 // ---------------------------------------------------------------- contributor
 
@@ -501,8 +526,8 @@ class Builder {
   private readonly fileByPath = new Map<string, string>();
   private readonly relationshipKeys = new Set<string>();
   private readonly cvByEntry = new Map<AppSettingEntry, string>();
-  // Function -> handler line (`*` for the Function as a whole) -> ConfigValue -> localName, for the routes the Function handles.
-  private readonly consumed = new Map<string, Map<string, Map<string, string>>>();
+  // Function -> reads with the handler they sit in, for the routes the Function handles.
+  private readonly consumed = new Map<string, Array<Slot & { cv: string; localName: string }>>();
 
   constructor(
     private readonly graph: IGraphContributor,
@@ -539,30 +564,32 @@ class Builder {
     return id;
   }
 
-  // Function -> handler line (`*` for the Function as a whole) -> env reads, for the routes of a minimal-API lambda.
-  private readonly envReads = new Map<string, Map<string, Array<{ to: string; line: number; access: string }>>>();
+  // Function -> env reads with the handler they sit in, for the routes of a minimal-API handler.
+  private readonly envReads = new Map<string, Array<Slot & { to: string; line: number; access: string }>>();
 
-  private useEnv(fnId: string | null, fileId: string, name: string, line: number, access: string, handlerLine?: number): void {
+  private useEnv(fnId: string | null, fileId: string, name: string, line: number, access: string, slot: Slot = {}): void {
     const to = this.envVar(name);
     if (fnId) {
-      const byLine = this.envReads.get(fnId) ?? new Map<string, Array<{ to: string; line: number; access: string }>>();
-      const slot = String(handlerLine ?? "*");
-      byLine.set(slot, [...(byLine.get(slot) ?? []), { to, line, access }]);
-      this.envReads.set(fnId, byLine);
+      const list = this.envReads.get(fnId) ?? [];
+      list.push({ ...slot, to, line, access });
+      this.envReads.set(fnId, list);
     }
     for (const from of fnId ? [fnId, fileId] : [fileId]) this.relationship({ from, to, type: "USES_ENV", properties: { line, access } });
   }
 
-  private consume(fnId: string | null, fileId: string, cvId: string, localName: string, handlerLine?: number): void {
+  private consume(fnId: string | null, fileId: string, cvId: string, localName: string, slot: Slot = {}): void {
     for (const from of fnId ? [fnId, fileId] : [fileId]) this.relationship({ from, to: cvId, type: "CONSUMES_CONFIG", properties: { localName } });
     if (fnId) {
-      const byLine = this.consumed.get(fnId) ?? new Map<string, Map<string, string>>();
-      const slot = String(handlerLine ?? "*");
-      const own = byLine.get(slot) ?? new Map<string, string>();
-      if (!own.has(cvId)) own.set(cvId, localName);
-      byLine.set(slot, own);
-      this.consumed.set(fnId, byLine);
+      const list = this.consumed.get(fnId) ?? [];
+      list.push({ ...slot, cv: cvId, localName });
+      this.consumed.set(fnId, list);
     }
+  }
+
+  // The handler a read sits in, with the route pattern resolved (a read of a Function body has none).
+  private slotOf(fact: Place, scope: GraphNode): Slot {
+    if (fact.hl !== undefined && fact.he !== undefined) return { hl: fact.hl, he: fact.he, ...(fact.hp ? { path: this.literal(fact.hp, scope) } : {}) };
+    return fact.hn === undefined ? {} : { hn: fact.hn };
   }
 
   // ---- config files
@@ -603,7 +630,11 @@ class Builder {
     if (rt) return this.typeMatches(rt, scope, CONFIG_TYPES);
     const type = this.receivers.typeOf(root, scope);
     if (type && type.via !== "static") return receiverMatches(type, CONFIG_TYPES, this.receivers);
-    return lastSegment(root) === "Configuration" && (type === null || type.type === null);
+    // `x.Configuration` of an untyped receiver only: a scanned type without a `Configuration` member is not the host builder.
+    if (lastSegment(root) !== "Configuration" || type !== null) return false;
+    const dot = root.lastIndexOf(".");
+    const owner = dot === -1 ? null : this.receivers.typeOf(root.slice(0, dot), scope);
+    return owner === null || owner.type === null;
   }
 
   // ---- env reads
@@ -619,7 +650,7 @@ class Builder {
         if (name === null) continue;
         const access = fact.api === "get" ? "Environment.GetEnvironmentVariable" : fact.api === "map" ? "Environment.GetEnvironmentVariables" : "Environment.ExpandEnvironmentVariables";
         const names = fact.api === "expand" ? [...name.matchAll(/%([^%\s]+)%/gu)].map((match) => match[1]!) : [name];
-        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access, fact.hl);
+        for (const variable of names) if (ENV_NAME.test(variable)) this.useEnv(fact.f, fileId, variable, fact.l, access, this.slotOf(fact, scope));
       }
     }
   }
@@ -647,11 +678,11 @@ class Builder {
         const entries = this.settings.entriesFor(key, { below: fact.whole });
         for (const entry of entries) {
           const id = this.cvByEntry.get(entry);
-          if (id) this.consume(fact.f, fileId, id, key, fact.hl);
+          if (id) this.consume(fact.f, fileId, id, key, this.slotOf(fact, scope));
         }
         if (fact.whole) continue;
         if (entries.length > 0) {
-          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override", fact.hl);
+          this.useEnv(fact.f, fileId, keyToEnvName(key), fact.l, "config override", this.slotOf(fact, scope));
           continue;
         }
         // No file defines the key: the read itself is the record (its default, or `unset`).
@@ -660,14 +691,15 @@ class Builder {
           this.graph.addNode({ id, label: "ConfigValue", properties: { name: key, value: fact.def === undefined ? "" : shownConfigValue(key, fact.def), valueType: fact.def === undefined ? "unset" : "default", line: fact.l } });
           this.relationship({ from: fileId, to: id, type: "DECLARES_CONFIG", properties: {} });
         }
-        this.consume(fact.f, fileId, id, key, fact.hl);
+        this.consume(fact.f, fileId, id, key, this.slotOf(fact, scope));
       }
     }
   }
 
   // ---- options
 
-  // Lower-cased names of the properties and fields `type` and its scanned bases declare.
+  // Lower-cased configuration key names of the public properties and fields `type` and its scanned bases declare
+  // (`[ConfigurationKeyName("x")]` renames a property's key).
   private memberNames(type: GraphNode): Set<string> {
     const names = new Set<string>();
     const scanned = this.receivers.types.typeOf(type);
@@ -677,13 +709,43 @@ class Builder {
       for (const rel of ["DEFINES_FIELD", "DEFINES_INTERFACE_FIELD"] as const) {
         for (const edge of this.fieldEdges(rel, current.id)) {
           const field = this.graph.node(edge.to);
-          if (field && field.properties.isStatic !== true && field.properties.fieldKind !== "constant") names.add(String(field.properties.name).toLowerCase());
+          if (!field || field.properties.isStatic === true || field.properties.fieldKind === "constant") continue;
+          if (rel === "DEFINES_FIELD" && field.properties.visibility !== "public") continue;
+          names.add((this.configurationKeyName(field.id) ?? String(field.properties.name)).toLowerCase());
         }
       }
       for (const parent of this.receivers.types.index.supertypes(current)) visit(parent, seen);
     };
     if (scanned) visit(scanned, new Set());
     return names;
+  }
+
+  private decoratorsByField: Map<string, GraphNode[]> | undefined;
+  // The key a `[ConfigurationKeyName("x")]` attribute of a member gives it.
+  private configurationKeyName(fieldId: string): string | null {
+    if (!this.decoratorsByField) {
+      this.decoratorsByField = new Map();
+      for (const rel of this.graph.relationshipsOfType("FIELD_HAS_DECORATOR" as GraphRelationship["type"])) {
+        const decorator = this.graph.node(rel.to);
+        if (!decorator) continue;
+        const list = this.decoratorsByField.get(rel.from);
+        if (list) list.push(decorator);
+        else this.decoratorsByField.set(rel.from, [decorator]);
+      }
+    }
+    for (const decorator of this.decoratorsByField.get(fieldId) ?? []) {
+      const name = String(decorator.properties.name).split(".").at(-1)?.replace(/Attribute$/u, "");
+      if (name !== "ConfigurationKeyName") continue;
+      try {
+        const args: unknown = JSON.parse(String(decorator.properties.args));
+        const first = Array.isArray(args) ? String(args[0] ?? "") : "";
+        const match = /^@?"(.*)"$/su.exec(first);
+        if (match && match[1]) return match[1];
+      } catch {
+        // no usable argument
+      }
+    }
+    return null;
   }
 
   private fieldEdgesCache = new Map<string, Map<string, GraphRelationship[]>>();
@@ -811,31 +873,60 @@ class Builder {
   // ---- routes
 
   private copyToRoutes(): void {
-    // The routes of a reading handler read the same config (the env reads follow in `js-ts.env-config`).
+    // The routes of a reading handler read the same config (the env reads of a method-group handler follow in `js-ts.env-config`).
     const handled = new Map<string, string[]>();
     for (const rel of this.graph.relationshipsOfType("ROUTE_HANDLED_BY")) {
       const list = handled.get(rel.to) ?? [];
       list.push(rel.from);
       handled.set(rel.to, list);
     }
-    for (const [fnId, byLine] of this.consumed) {
-      // The synthetic top-level function runs at startup: its own reads belong to no route, only a handler lambda's do.
-      const topLevel = this.graph.node(fnId)?.properties.qualifiedName === "<top-level>";
-      for (const routeId of handled.get(fnId) ?? []) {
-        const line = String(this.graph.node(routeId)?.properties.line ?? "");
-        for (const [slot, cvs] of byLine) {
-          if (slot === "*" ? topLevel : slot !== line) continue;
-          for (const [cvId, localName] of cvs) this.relationship({ from: routeId, to: cvId, type: "CONSUMES_CONFIG", properties: { localName } });
+    const normalize = (path: string): string => path.replace(/^\/+|\/+$/gu, "").toLowerCase();
+    // Routes of a Function by the lambda they start in (line and last line): more than one means a tie the pattern settles.
+    const rangeCount = new Map<string, number>();
+    for (const [fnId, routes] of handled) {
+      for (const routeId of routes) {
+        const route = this.graph.node(routeId);
+        if (route?.properties.handlerName === "<lambda>") {
+          const key = `${fnId}\0${String(route.properties.line)}\0${String(route.properties.handlerEndLine)}`;
+          rangeCount.set(key, (rangeCount.get(key) ?? 0) + 1);
         }
       }
     }
-    // Env reads: only the lambda's own reads go to its route (`js-ts.env-config` skips minimal-API lambda handlers).
-    for (const [fnId, byLine] of this.envReads) {
+    // Whether a read of `fnId` (placed by `slot`) belongs to the route.
+    const belongs = (fnId: string, route: GraphNode, slot: Slot): boolean => {
+      const topLevel = this.graph.node(fnId)?.properties.qualifiedName === "<top-level>";
+      const handlerName = route.properties.handlerName;
+      if (slot.hl !== undefined) {
+        // Inside a lambda: that lambda's route, told apart by its own range (and pattern when several start together).
+        if (handlerName !== "<lambda>" || route.properties.line !== slot.hl || route.properties.handlerEndLine !== slot.he) return false;
+        if ((rangeCount.get(`${fnId}\0${String(slot.hl)}\0${String(slot.he)}`) ?? 0) < 2 || !slot.path) return true;
+        const written = typeof route.properties.fullPath === "string" ? route.properties.fullPath : typeof route.properties.path === "string" ? route.properties.path : null;
+        return written === null || normalize(written).endsWith(normalize(slot.path));
+      }
+      if (slot.hn !== undefined) return typeof handlerName === "string" && handlerName === slot.hn;
+      // The Function's own body: the startup code of `<top-level>` belongs to no route, nor does a lambda route read it.
+      return !topLevel && handlerName !== "<lambda>";
+    };
+    for (const [fnId, reads] of this.consumed) {
+      for (const routeId of handled.get(fnId) ?? []) {
+        const route = this.graph.node(routeId);
+        if (!route) continue;
+        const seen = new Set<string>();
+        for (const read of reads) {
+          if (seen.has(read.cv) || !belongs(fnId, route, read)) continue;
+          seen.add(read.cv);
+          this.relationship({ from: routeId, to: read.cv, type: "CONSUMES_CONFIG", properties: { localName: read.localName } });
+        }
+      }
+    }
+    // Env reads: a lambda's own reads and a local function's go to its route here; `js-ts.env-config` copies the other handlers'.
+    for (const [fnId, reads] of this.envReads) {
       for (const routeId of handled.get(fnId) ?? []) {
         const route = this.graph.node(routeId);
         if (route?.properties.framework !== "aspnet-minimal" || typeof route.properties.handlerName !== "string") continue;
-        for (const read of byLine.get(String(route.properties.line ?? "")) ?? []) {
-          this.relationship({ from: routeId, to: read.to, type: "USES_ENV", properties: { line: read.line, access: read.access } });
+        for (const read of reads) {
+          if (read.hl === undefined && read.hn === undefined) continue;
+          if (belongs(fnId, route, read)) this.relationship({ from: routeId, to: read.to, type: "USES_ENV", properties: { line: read.line, access: read.access } });
         }
       }
     }

@@ -6,9 +6,8 @@ import { createResolutionRelationshipIndex } from "../../../core/scan/resolution
 import type { CSharpParsedCall, VersionedCSharpParsePlugin } from "../../languages/csharp/parser.js";
 import { compactExpression, compactNoSpace, normalizeCSharpType, typeText } from "../../languages/csharp/syntax.js";
 import type { CSharpType } from "../../languages/csharp/types.js";
-import { isSecretKey } from "../java/config-files.js";
 import { attributeValue, csharpAttributeReader, findAttributes, positionalArguments } from "./attributes.js";
-import { readAppSettings, joinKey } from "./config-files.js";
+import { isSecretConfigKey, readAppSettings, joinKey } from "./config-files.js";
 import { invocationInfo, type ArgumentInfo } from "./invocations.js";
 import { createCSharpReceiverResolver, receiverMatches, type CSharpReceiverType } from "./receivers.js";
 import { csharpFileOfId, jsonList } from "./shared.js";
@@ -21,6 +20,7 @@ import {
   renderCSharpString,
   serializeCSharpString,
   stringScopeOf,
+  type CSharpStringPart,
   type CSharpStringScope,
   type CSharpStringTemplate,
 } from "./strings.js";
@@ -52,15 +52,19 @@ import {
 //     (`CreateClient()` is the default client, name ""). A base is a literal, a constant or a configuration read
 //     (`config["A:B"]`, `GetValue<string>("A:B")`, `GetSection("A")["B"]`, optionally `?? "default"`) looked up in
 //     `appsettings*.json` (the closest file to the use, `config-files.ts`); an unknown key is `${config:A:B}`, never
-//     a guess. A relative request gets the base in front; an absolute one ignores it; a URL starting with an
-//     unknown part gets no base. Without a known base the path stays relative. `httpClient` is `httpclient-factory`
+//     a guess; a key that is not a literal, or an expression that is no config read, is `${expr}`, never its text.
+//     A request is resolved against the base as .NET does (RFC 3986, `resolveReference`): `/x` replaces the base's path,
+//     `x` is relative to the base's last `/` (`http://h/api` + `v1/x` is `http://h/v1/x`), an absolute URL ignores the
+//     base, `""` is the base. Refit appends its path after the base's path. A URL starting with an unknown part gets
+//     no base. Without a known base the path stays relative. Named clients compare ordinally. `httpClient` is `httpclient-factory`
 //     for a typed or named client of `AddHttpClient` / `CreateClient`, else `httpclient`.
 //   - Refit: an interface whose methods carry `[Get("/x/{id}")]`, `[Post]`, `[Put]`, `[Patch]`, `[Delete]`, `[Head]`,
 //     `[Options]` (namespace Refit; `[Headers]` and other attributes ignored; also on a base interface) has no Call of
 //     its own, so the request (`httpClient: "refit"`) is recorded on each Call of the scan that invokes one of its
 //     methods (receiver typed as the interface, or CALL_RESOLVES_TO its method): the attribute's method and base + path
 //     (`{id}` becomes `${id}`). The base comes from `RestService.For<IApi>("url")`, `RestService.For<IApi>(new HttpClient {
-//     BaseAddress = ... })`, or `services.AddRefitClient<IApi>().ConfigureHttpClient(c => c.BaseAddress = ...)`. An
+//     BaseAddress = ... })` (the base of the calls through the local or field it is assigned to), or
+//     `services.AddRefitClient<IApi>().ConfigureHttpClient(c => c.BaseAddress = ...)` (the fallback). An
 //     overload is linked only when exactly one has the call's argument count.
 // Test files (`File.isTest`) are skipped.
 //
@@ -83,6 +87,8 @@ type Raw = {
   factory?: { factory: string; name: string | null };
   /** `restFor`: the interface of `RestService.For<T>(...)`. */
   target?: string;
+  /** `restFor`: the local or field the result is assigned to. */
+  bound?: string | null;
 };
 
 type Reg = {
@@ -155,23 +161,109 @@ function initializerOf(node: SyntaxNode): Map<string, SyntaxNode> {
 
 const concat = (...parts: CSharpStringTemplate[]): CSharpStringTemplate => parts.flat();
 
-// The slash between two joined paths is one when both sides of the join are literal text.
+// RFC 3986 relative resolution, as .NET's `new Uri(base, relative)` and `HttpClient.BaseAddress` do. Unknown parts
+// (`${config:A:B}`, `${expr}`) are masked as one opaque character run each, so they never hold a `/` or `:`.
+const MARK_OPEN = "\uE000";
+const MARK_CLOSE = "\uE001";
+const ABSOLUTE_MASKED = /^[a-z][a-z0-9+.-]*:\/\//iu;
+
+function removeDotSegments(path: string): string {
+  const output: string[] = [];
+  const segments = path.split("/");
+  segments.forEach((segment, index) => {
+    const last = index === segments.length - 1;
+    if (segment === "..") {
+      if (output.length > 1) output.pop();
+      if (last) output.push("");
+    } else if (segment === ".") {
+      if (last) output.push("");
+    } else output.push(segment);
+  });
+  return output.join("/");
+}
+
+/** The relative reference `relative` resolved against `base` (both masked); an absolute one ignores the base. */
+function resolveReference(base: string, relative: string): string {
+  if (relative === "") return base;
+  if (ABSOLUTE_MASKED.test(relative)) return relative;
+  if (relative.startsWith("?") || relative.startsWith("#")) return `${base.replace(/[?#].*$/su, "")}${relative}`;
+  const authority = /^((?:[a-z][a-z0-9+.-]*:)?\/\/[^/?#]*)([^?#]*)/iu.exec(base);
+  let origin = "";
+  let path: string;
+  if (authority) {
+    origin = authority[1]!;
+    path = authority[2]!;
+  } else {
+    const bare = base.replace(/[?#].*$/su, "");
+    // A base that starts with an unknown part: that part is its origin (the part up to the first `/`).
+    if (bare.startsWith(MARK_OPEN)) {
+      const slash = bare.indexOf("/");
+      origin = slash === -1 ? bare : bare.slice(0, slash);
+      path = slash === -1 ? "" : bare.slice(slash);
+    } else path = bare;
+  }
+  if (relative.startsWith("//")) return `${/^[a-z][a-z0-9+.-]*:/iu.exec(base)?.[0] ?? ""}${relative}`;
+  if (relative.startsWith("/")) return `${origin}${removeDotSegments(relative)}`;
+  const directory = path.slice(0, path.lastIndexOf("/") + 1);
+  return `${origin}${removeDotSegments(origin !== "" && directory === "" ? `/${relative}` : `${directory}${relative}`)}`;
+}
+
+// `new Uri(base, relative)` on templates: the relative part resolved against the base text; an unknown start of the
+// relative part (it may be absolute) or a base without literal text just concatenates.
 function joinTemplates(left: CSharpStringTemplate, right: CSharpStringTemplate): CSharpStringTemplate {
-  const last = left.at(-1);
   const first = right[0];
-  if (!last || !first || !("text" in last) || !("text" in first) || first.text === "") return concat(left, right);
-  const head = last.text;
-  const tail = first.text.replace(/^\/+/u, "");
-  return [...left.slice(0, -1), { text: `${head}${head.endsWith("/") ? "" : "/"}${tail}` }, ...right.slice(1)];
+  if (left.length === 0 || !first || !("text" in first) || first.text === "") return concat(left, right);
+  const holes: CSharpStringPart[] = [];
+  const mask = (template: CSharpStringTemplate): string => template.map((part) => {
+    if ("text" in part) return part.text;
+    holes.push(part);
+    return `${MARK_OPEN}${holes.length - 1}${MARK_CLOSE}`;
+  }).join("");
+  const resolved = resolveReference(mask(left), mask(right));
+  const result: CSharpStringTemplate = [];
+  resolved.split(new RegExp(`${MARK_OPEN}(\\d+)${MARK_CLOSE}`, "u")).forEach((piece, index) => {
+    if (index % 2 === 1) result.push(holes[Number(piece)]!);
+    else if (piece !== "") result.push({ text: piece });
+  });
+  return result;
 }
 
 const URI_TYPE = /^(?:System\.)?Uri$/u;
+
+// Single-assignment locals of a member initialized by `new Uri(...)`, by scope: `var u = new Uri(base, "v1/x"); GetAsync(u)`.
+const uriLocals = new WeakMap<CSharpStringScope, Map<string, SyntaxNode>>();
+
+function readUriLocals(root: SyntaxNode): Map<string, SyntaxNode> {
+  const declarations = new Map<string, SyntaxNode[]>();
+  const assigned = new Set<string>();
+  const stack: SyntaxNode[] = [root];
+  while (stack.length > 0) {
+    const node = stack.pop()!;
+    if (node.type === "variable_declarator") {
+      const name = node.childForFieldName("name")?.text ?? node.namedChildren[0]?.text;
+      const value = node.namedChildren.length === 2 ? node.namedChildren[1] : undefined;
+      if (name) declarations.set(name, [...(declarations.get(name) ?? []), ...(value ? [value] : [node])]);
+    } else if (node.type === "assignment_expression") {
+      const left = node.childForFieldName("left");
+      if (left?.type === "identifier") assigned.add(left.text);
+    }
+    for (const child of node.namedChildren) stack.push(child);
+  }
+  const found = new Map<string, SyntaxNode>();
+  for (const [name, values] of declarations) {
+    const value = values.length === 1 && !assigned.has(name) ? unwrap(values[0]) : null;
+    if (value && isCreation(value) && URI_TYPE.test(creationType(value) ?? "")) found.set(name, value);
+  }
+  return found;
+}
 
 // The template of a URL expression: a string expression, `new Uri(s)`, `new Uri(base, rel)`, `a + b`,
 // `QueryHelpers.AddQueryString(url, ...)`; a call, an element read or a member the string reader does not know is `{ expr }`.
 function urlOf(node: SyntaxNode, scope: CSharpStringScope, depth = 0): CSharpStringTemplate {
   const inner = unwrap(node) ?? node;
   if (depth < 8) {
+    const held = inner.type === "identifier" ? uriLocals.get(scope)?.get(inner.text) : undefined;
+    if (held) return urlOf(held, scope, depth + 1);
     if (isCreation(inner)) {
       const type = creationType(inner);
       const args = creationArguments(inner);
@@ -189,6 +281,8 @@ function urlOf(node: SyntaxNode, scope: CSharpStringScope, depth = 0): CSharpStr
       if (info && info.name === "AddQueryString" && info.arguments[0]) return urlOf(info.arguments[0].node, scope, depth + 1);
     }
   }
+  // The empty string (`GetAsync("")`) is the base address itself.
+  if (/^(?:@?""|(?:System\.)?[sS]tring\.Empty)$/u.test(compactNoSpace(inner.text))) return [{ text: "" }];
   return readCSharpString(inner, scope) ?? [{ expr: written(inner) }];
 }
 
@@ -252,7 +346,10 @@ export const csharpHttpClientsPlugin: VersionedCSharpParsePlugin = Object.assign
   const scopeOf = (fn: (typeof functions)[number] | undefined): CSharpStringScope => {
     if (!fn) return {};
     let scope = scopes.get(fn.node.id);
-    if (!scope) scopes.set(fn.node.id, (scope = stringScopeOf(fn)));
+    if (!scope) {
+      scopes.set(fn.node.id, (scope = stringScopeOf(fn)));
+      uriLocals.set(scope, readUriLocals(fn.syntax));
+    }
     return scope;
   };
   const callBySyntax = new Map<number, CSharpParsedCall>();
@@ -404,7 +501,9 @@ export const csharpHttpClientsPlugin: VersionedCSharpParsePlugin = Object.assign
         url = baseAddress ? urlOf(baseAddress, scope) : null;
       } else if (arg?.type === "identifier" && (arg.text === "client" || arg.text === "http" || /[cC]lient$|^_?http/u.test(arg.text))) rootName = arg.text;
       else if (arg) url = urlOf(arg, scope);
-      record(call.node, { k: "restFor", method: null, url: serialized(url), root: rootName, target: info.typeArguments[0]! });
+      const parent = call.syntax.parent;
+      const bound = parent?.type === "variable_declarator" ? parent.namedChildren[0]?.text ?? null : parent?.type === "assignment_expression" ? targetName(parent.childForFieldName("left")) : null;
+      record(call.node, { k: "restFor", method: null, url: serialized(url), root: rootName, target: info.typeArguments[0]!, bound });
     } else if (info.name === "AddHttpClient" || info.name === "AddRefitClient" || info.name === "ConfigureHttpClient") {
       const lambda = info.arguments.find((argument) => argument.kind === "lambda");
       let source = info;
@@ -438,7 +537,7 @@ export const csharpHttpClientsPlugin: VersionedCSharpParsePlugin = Object.assign
   }
 
   for (const [fn, list] of binds) fn.properties[BINDS] = JSON.stringify(list);
-}, { version: "1" });
+}, { version: "2" });
 
 // ---------------------------------------------------------------- contributor
 
@@ -458,7 +557,17 @@ function withoutQuery(url: string): string {
 // `http://user:pw@host/x` is `http://host/x`: credentials never reach the graph.
 const withoutUserInfo = (url: string): string => url.replace(/^([a-z][a-z0-9+.-]*:\/\/)[^/?#]*@/iu, "$1");
 
-const joinUrl = (base: string, url: string): string => (ABSOLUTE.test(url) ? url : url === "" ? base : `${base.replace(/\/+$/u, "")}/${url.replace(/^\/+/u, "")}`);
+// A request URL against the base address, as .NET resolves it (`resolveReference`): `/x` replaces the base's path, `x` is
+// relative to the base's last `/`, an absolute URL ignores the base.
+// A Refit method's path goes after the base address's path (Refit concatenates them: `For<IApi>("http://h/v3")` with
+// `[Get("/users")]` is `/v3/users`), unlike `HttpClient`.
+const refitUrl = (base: string, url: string): string => (ABSOLUTE.test(url) ? url : url === "" ? base : `${base.replace(/\/+$/u, "")}/${url.replace(/^\/+/u, "")}`);
+
+function joinUrl(base: string, url: string): string {
+  const holes: string[] = [];
+  const mask = (text: string): string => text.replace(/\$\{[^}]*\}/gu, (hole) => `${MARK_OPEN}${holes.push(hole) - 1}${MARK_CLOSE}`);
+  return resolveReference(mask(base), mask(url)).replace(new RegExp(`${MARK_OPEN}(\\d+)${MARK_CLOSE}`, "gu"), (_all, index: string) => holes[Number(index)]!);
+}
 
 function parse<T>(value: unknown): T | null {
   if (typeof value !== "string") return null;
@@ -470,10 +579,51 @@ function parse<T>(value: unknown): T | null {
 }
 
 const CONFIG_NAME = /(?:^|\.)_?(?:config|configuration|cfg|configurationRoot|appSettings|settings)\w*$/iu;
-const ELEMENT = /^([\w.?]+)\["([^"]+)"\]$/u;
-const GET_VALUE = /^([\w.?]+)\.GetValue(?:<[\w.?]+>)?\("([^"]+)"(?:,"([^"]*)")?\)$/u;
-const SECTION_ELEMENT = /^([\w.?]+)\.GetSection\("([^"]+)"\)\["([^"]+)"\]$/u;
-const SECTION_VALUE = /^([\w.?]+)\.GetSection\("([^"]+)"\)\.Value$/u;
+const CONFIG_STEP = /^(?:\??\[|\.(?:GetSection|GetRequiredSection|GetValue|GetConnectionString)\b|\.Value$)/u;
+
+/**
+ * `c["A:B"]`, `c?["A"]`, `c.GetValue<T>("A:B"[, "d"])`, `c.GetConnectionString("X")`, `c.GetSection("A")["B"]`,
+ * `c.GetSection("A").GetSection("B").Value`, `c.GetSection("A").GetValue<T>("B")` (compact text): the receiver and the
+ * colon key (null when a key is not a string literal or the chain is another shape); null for text that is no such read.
+ */
+function parseConfigRead(body: string): { receiver: string; key: string | null; fallback: string | null } | null {
+  let split = -1;
+  for (let index = 1; index < body.length; index += 1) {
+    if (/^[\w.?]+$/u.test(body.slice(0, index)) && CONFIG_STEP.test(body.slice(index))) {
+      split = index;
+      break;
+    }
+  }
+  if (split === -1) return null;
+  const receiver = body.slice(0, split);
+  let rest = body.slice(split);
+  const keys: string[] = [];
+  let fallback: string | null = null;
+  let connection = false;
+  let key: string | null = "";
+  for (;;) {
+    let match: RegExpExecArray | null;
+    if (rest === "") break;
+    if ((match = /^\.(?:GetSection|GetRequiredSection)\("([^"]+)"\)/u.exec(rest))) keys.push(match[1]!);
+    else if ((match = /^\??\["([^"]+)"\]$/u.exec(rest))) keys.push(match[1]!);
+    else if ((match = /^\.GetValue(?:<[\w.?]+>)?\("([^"]+)"(?:,"([^"]*)")?\)$/u.exec(rest))) {
+      keys.push(match[1]!);
+      fallback = match[2] ?? null;
+    } else if ((match = /^\.GetConnectionString\("([^"]+)"\)$/u.exec(rest))) {
+      keys.push(match[1]!);
+      connection = true;
+    } else if (rest === ".Value") {
+      rest = "";
+      continue;
+    } else {
+      key = null;
+      break;
+    }
+    rest = rest.slice(match[0].length);
+  }
+  if (key === null || keys.length === 0 || (connection && keys.length > 1)) return { receiver, key: null, fallback: null };
+  return { receiver, key: joinKey(...(connection ? ["ConnectionStrings", ...keys] : keys)), fallback };
+}
 const CONFIGURATION_TYPES = ["IConfiguration", "IConfigurationRoot", "IConfigurationSection", "ConfigurationManager", "ConfigurationRoot", "ConfigurationSection"];
 const FACTORY_TYPES = ["IHttpClientFactory", "HttpClientFactory", "DefaultHttpClientFactory"];
 
@@ -530,8 +680,9 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
     const nearOf = (node: GraphNode): string => String(fileNode(csharpFileOfId(node.id))?.properties.relativePath ?? "").replaceAll("\\", "/");
     const functionOf = (node: GraphNode): GraphNode | undefined => (node.label === "Call" ? receivers.functionOf(node) : node);
 
-    // A configuration read written as an expression: its value in the closest appsettings file; unknown keys keep their name.
-    const configText = (expression: string, node: GraphNode, near: string): string | null => {
+    // A configuration read written as an expression: its value in the closest appsettings file; an unknown key keeps its
+    // name (`${config:A:B}`), and a read whose key is not literal is `${expr}`: never the written text.
+    const configText = (expression: string, node: GraphNode, near: string): CSharpStringPart | null => {
       const compact = expression.replace(/\s+/gu, "");
       let fallback: string | null = null;
       let body = compact;
@@ -541,30 +692,24 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
         fallback = defaulted[2]!;
       }
       body = body.replace(/!$/u, "");
-      let receiver: string | undefined;
-      let key: string | undefined;
-      let match: RegExpExecArray | null;
-      if ((match = ELEMENT.exec(body))) [, receiver, key] = match;
-      else if ((match = GET_VALUE.exec(body))) {
-        [, receiver, key] = match;
-        fallback ??= match[3] ?? null;
-      } else if ((match = SECTION_ELEMENT.exec(body))) {
-        receiver = match[1];
-        key = joinKey(match[2], match[3]);
-      } else if ((match = SECTION_VALUE.exec(body))) [, receiver, key] = match;
-      if (!receiver || !key) return null;
+      const read = parseConfigRead(body);
+      if (!read) return null;
       const fn = functionOf(node);
-      const typed = fn ? receivers.typeOf(receiver.replace(/\?$/u, ""), fn) : null;
-      if (typed ? !receiverMatches(typed, CONFIGURATION_TYPES, receivers) : !CONFIG_NAME.test(receiver)) return null;
-      const entry = isSecretKey(key.replace(/:/gu, ".")) ? null : settings.lookup(key, { near });
-      return entry ? entry.value : fallback ?? `\${config:${key}}`;
+      const typed = fn ? receivers.typeOf(read.receiver.replace(/\?$/u, ""), fn) : null;
+      if (typed ? !receiverMatches(typed, CONFIGURATION_TYPES, receivers) : !CONFIG_NAME.test(read.receiver)) return null;
+      if (read.key === null) return { expr: "expr" };
+      fallback ??= read.fallback;
+      const entry = isSecretConfigKey(read.key) ? null : settings.lookup(read.key, { near });
+      return { text: entry ? entry.value : fallback ?? `\${config:${read.key}}` };
     };
     const render = (template: CSharpStringTemplate, node: GraphNode): string => {
       const near = nearOf(node);
-      const parts = strings.resolvePartsAt(template, node).map((part) => {
+      const parts = strings.resolvePartsAt(template, node).map((part): CSharpStringPart => {
         if ("expr" in part) {
           const value = configText(part.expr, node, near);
-          if (value !== null) return { text: value };
+          if (value !== null) return value;
+          // Written text with quotes, a call or a lambda is no placeholder name.
+          if (/["'\\]/u.test(part.expr)) return { expr: "expr" };
         }
         return part;
       });
@@ -582,6 +727,8 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
     const typedBases = new Map<string, string>();
     const typedRegistered = new Set<string>();
     const refitBases = new Map<string, string>();
+    // `RestService.For<T>(url)` results: `<function or class>#<name>#<interface>` -> base.
+    const restForBases = new Map<string, string>();
     const keep = <K>(map: Map<K, string>, key: K, value: string | null): void => {
       if (value !== null && !map.has(key)) map.set(key, value);
     };
@@ -595,7 +742,7 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
         continue;
       }
       const name = reg.name !== null ? literal(reg.name, call) : null;
-      if (name !== null) keep(namedBases, name.toLowerCase(), base);
+      if (name !== null) keep(namedBases, name, base);
       else if (reg.name === null && reg.typeArguments.length === 0) keep(namedBases, "", base);
       const type = resolve(reg.typeArguments.at(-1));
       if (type) {
@@ -624,7 +771,7 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
       if (!factoryOk(factory.factory, fn)) return null;
       const name = factory.name === "" ? "" : literal(factory.name, node);
       if (name === null) return { base: null, factory: true };
-      return { base: namedBases.get(name.toLowerCase()) ?? null, factory: true };
+      return { base: namedBases.get(name) ?? null, factory: true };
     };
     // The client a receiver is, with its base: null when it is not an HttpClient.
     const clientOf = (rootText: string | null, direct: Raw["factory"], fn: GraphNode, node: GraphNode, typed: CSharpReceiverType | null): Client | null => {
@@ -668,6 +815,11 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
         if (bind?.base) base = render(parseCSharpString(bind.base) ?? [], call);
       }
       keep(refitBases, type.id, base);
+      // The result's own base, for the calls through the local or field it is assigned to.
+      if (base !== null && raw.bound) {
+        const scopeId = localNamesOf(fn).has(raw.bound) ? fn.id : types.ownerOf(fn)?.id;
+        if (scopeId) restForBases.set(`${scopeId}#${raw.bound}#${type.id}`, base);
+      }
     }
 
     // ---- HttpClient requests
@@ -732,9 +884,13 @@ export const csharpHttpClientsContributor: ISemanticContributor = {
       const sameCount = matches.filter((method) => method.parameterCount === Number(call.properties.argumentCount ?? -1));
       const chosen = matches.length === 1 ? matches[0] : sameCount.length === 1 ? sameCount[0] : undefined;
       if (!chosen) continue;
-      const base = refitBases.get(owner) ?? null;
+      // The base of the receiver's own `RestService.For<T>(url)`, else the registration's (or the first `For`'s).
+      const receiver = typeof call.properties.receiver === "string" ? call.properties.receiver.replace(/^this\./u, "") : "";
+      const callerFn = graph.node(fnId);
+      const ownBase = receiver !== "" && callerFn ? restForBases.get(`${callerFn.id}#${receiver}#${owner}`) ?? restForBases.get(`${types.ownerOf(callerFn)?.id}#${receiver}#${owner}`) : undefined;
+      const base = ownBase ?? refitBases.get(owner) ?? null;
       const url = placeholders(render(chosen.template, chosen.node));
-      apply(call, "refit", chosen.httpMethod, base !== null && !url.startsWith("${") ? joinUrl(base, url) : url);
+      apply(call, "refit", chosen.httpMethod, base !== null && !url.startsWith("${") ? refitUrl(base, url) : url);
     }
   },
 };
