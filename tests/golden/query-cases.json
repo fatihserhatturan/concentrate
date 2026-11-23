@@ -1534,7 +1534,33 @@
         }
       }
     ],
-    "csharp-dapper-adonet": [],
+    "csharp-dapper-adonet": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "orders"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "dapper"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "customers",
+          "operation": "update"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "CloseAsync"
+        }
+      }
+    ],
     "java-mybatis": [
       {
         "tool": "list_tables",
