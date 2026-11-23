@@ -1,0 +1,3294 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 4
+          },
+          {
+            "table": "File",
+            "count": 9
+          },
+          {
+            "table": "Import",
+            "count": 14
+          },
+          {
+            "table": "Function",
+            "count": 33
+          },
+          {
+            "table": "Class",
+            "count": 9
+          },
+          {
+            "table": "Field",
+            "count": 17
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 5
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 6
+          },
+          {
+            "table": "Route",
+            "count": 3
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 8
+          },
+          {
+            "table": "DataModel",
+            "count": 4
+          },
+          {
+            "table": "Table",
+            "count": 3
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 4
+        },
+        {
+          "table": "File",
+          "count": 9
+        },
+        {
+          "table": "Import",
+          "count": 14
+        },
+        {
+          "table": "Function",
+          "count": 33
+        },
+        {
+          "table": "Class",
+          "count": 9
+        },
+        {
+          "table": "Field",
+          "count": 17
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 5
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 6
+        },
+        {
+          "table": "Route",
+          "count": 3
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 8
+        },
+        {
+          "table": "DataModel",
+          "count": 4
+        },
+        {
+          "table": "Table",
+          "count": 3
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<top-level>",
+            "kind": "Function",
+            "file": "Program.cs",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "OrdersController",
+            "kind": "Class",
+            "file": "Controllers/OrdersController.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CustomerRepository",
+            "kind": "Class",
+            "file": "Data/CustomerRepository.cs",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderRow",
+            "kind": "Class",
+            "file": "Data/OrderRepository.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Class",
+            "file": "Data/OrderRepository.cs",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Tables",
+            "kind": "Class",
+            "file": "Data/Tables.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "SearchIndex",
+            "kind": "Class",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Reports",
+            "kind": "Class",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Wrapper",
+            "kind": "Class",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 36,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "OrdersController",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "Get",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "Close",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "Rename",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "CustomerRepository",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "EmailOf",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "RenameAsync",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 31,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "Remove",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 50,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "Everything",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 57,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "Reset",
+            "kind": "Method",
+            "file": "Data/CustomerRepository.cs",
+            "line": 75,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CustomerRepository"
+          },
+          {
+            "name": "OrderRow",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRow"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "ListByCustomerAsync",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 23,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "Insert",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 31,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "CloseAsync",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 39,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "PurgeAsync",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 46,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "Revenue",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 49,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "CountCustomers",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 58,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "SearchBy",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 60,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "Recent",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 65,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "Overview",
+            "kind": "Method",
+            "file": "Data/OrderRepository.cs",
+            "line": 67,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<top-level>",
+          "kind": "Function",
+          "file": "Program.cs",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "OrdersController",
+          "kind": "Class",
+          "file": "Controllers/OrdersController.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CustomerRepository",
+          "kind": "Class",
+          "file": "Data/CustomerRepository.cs",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderRow",
+          "kind": "Class",
+          "file": "Data/OrderRepository.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderRepository",
+          "kind": "Class",
+          "file": "Data/OrderRepository.cs",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Tables",
+          "kind": "Class",
+          "file": "Data/Tables.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "SearchIndex",
+          "kind": "Class",
+          "file": "Legacy/Lookalikes.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Reports",
+          "kind": "Class",
+          "file": "Legacy/Lookalikes.cs",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Wrapper",
+          "kind": "Class",
+          "file": "Legacy/Lookalikes.cs",
+          "line": 36,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrdersController",
+          "kind": "Method",
+          "file": "Controllers/OrdersController.cs",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersController"
+        },
+        {
+          "name": "Get",
+          "kind": "Method",
+          "file": "Controllers/OrdersController.cs",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersController"
+        },
+        {
+          "name": "Close",
+          "kind": "Method",
+          "file": "Controllers/OrdersController.cs",
+          "line": 22,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersController"
+        },
+        {
+          "name": "Rename",
+          "kind": "Method",
+          "file": "Controllers/OrdersController.cs",
+          "line": 25,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersController"
+        },
+        {
+          "name": "CustomerRepository",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "EmailOf",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 22,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "RenameAsync",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 31,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "Remove",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 50,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "Everything",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 57,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "Reset",
+          "kind": "Method",
+          "file": "Data/CustomerRepository.cs",
+          "line": 75,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "CustomerRepository"
+        },
+        {
+          "name": "OrderRow",
+          "kind": "Method",
+          "file": "Data/OrderRepository.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrderRow"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Controllers/OrdersController.cs",
+            "name": "OrdersController",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/CustomerRepository.cs",
+            "name": "CustomerRepository",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/OrderRepository.cs",
+            "name": "OrderRow",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/OrderRepository.cs",
+            "name": "OrderRepository",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/Tables.cs",
+            "name": "Tables",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookalikes.cs",
+            "name": "SearchIndex",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookalikes.cs",
+            "name": "Reports",
+            "kind": "Class",
+            "line": 13,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookalikes.cs",
+            "name": "SqlCommand",
+            "kind": "Class",
+            "line": 30,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookalikes.cs",
+            "name": "Wrapper",
+            "kind": "Class",
+            "line": 36,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "Controllers/OrdersController.cs",
+          "name": "OrdersController",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/CustomerRepository.cs",
+          "name": "CustomerRepository",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/OrderRepository.cs",
+          "name": "OrderRow",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/OrderRepository.cs",
+          "name": "OrderRepository",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/Tables.cs",
+          "name": "Tables",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookalikes.cs",
+          "name": "SearchIndex",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookalikes.cs",
+          "name": "Reports",
+          "kind": "Class",
+          "line": 13,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookalikes.cs",
+          "name": "SqlCommand",
+          "kind": "Class",
+          "line": 30,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookalikes.cs",
+          "name": "Wrapper",
+          "kind": "Class",
+          "line": 36,
+          "relationship": "DEFINES_CLASS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 9
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 19,
+            "method": "GET",
+            "path": "/api/orders/{id}",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "handlerName": "Get",
+            "handler": "Get"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "method": "POST",
+            "path": "/api/orders/{id}/close",
+            "fullPath": "/api/orders/{id}/close",
+            "framework": "aspnet-mvc",
+            "handlerName": "Close",
+            "handler": "Close"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 25,
+            "method": "PUT",
+            "path": "/api/orders/customers/{id}",
+            "fullPath": "/api/orders/customers/{id}",
+            "framework": "aspnet-mvc",
+            "handlerName": "Rename",
+            "handler": "Rename"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 19,
+          "method": "GET",
+          "path": "/api/orders/{id}",
+          "fullPath": "/api/orders/{id}",
+          "framework": "aspnet-mvc",
+          "handlerName": "Get",
+          "handler": "Get"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 22,
+          "method": "POST",
+          "path": "/api/orders/{id}/close",
+          "fullPath": "/api/orders/{id}/close",
+          "framework": "aspnet-mvc",
+          "handlerName": "Close",
+          "handler": "Close"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 25,
+          "method": "PUT",
+          "path": "/api/orders/customers/{id}",
+          "fullPath": "/api/orders/customers/{id}",
+          "framework": "aspnet-mvc",
+          "handlerName": "Rename",
+          "handler": "Rename"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "id": "entrypoint:csharp:Ledger.csproj",
+            "file": "Ledger.csproj",
+            "line": 1,
+            "kind": "csharp-project",
+            "trigger": "Ledger",
+            "library": "dotnet",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "id": "file:Program.cs:entrypoint:5:0:main:<none>",
+            "file": "Program.cs",
+            "line": 5,
+            "kind": "main",
+            "trigger": null,
+            "library": "csharp",
+            "handlerName": "<top-level>",
+            "handler": "<top-level>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:Ledger.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:Ledger.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": [
+          {
+            "id": "entrypoint:csharp:Ledger.csproj",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 5,
+            "command": "dotnet run"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "Ledger.csproj",
+          "line": 1,
+          "kind": "csharp-project",
+          "trigger": "Ledger",
+          "library": "dotnet",
+          "handlerName": null,
+          "handler": null,
+          "runs": [
+            {
+              "file": "Program.cs",
+              "entrypoint": "main:null",
+              "command": "dotnet run"
+            }
+          ]
+        },
+        {
+          "file": "Program.cs",
+          "line": 5,
+          "kind": "main",
+          "trigger": null,
+          "library": "csharp",
+          "handlerName": "<top-level>",
+          "handler": "<top-level>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "Find",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:21:Ledger.Data.OrderRepository.Find",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Get",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:19:Ledger.Controllers.OrdersController.Get",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "EmailOf",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:22:Ledger.Data.CustomerRepository.EmailOf",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 26,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "read",
+            "expression": "new SqlCommand"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ListByCustomerAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 26,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "connection.QueryAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ListByCustomerAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 26,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "read",
+            "expression": "connection.QueryAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Insert",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:31:Ledger.Data.OrderRepository.Insert",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 33,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "create",
+            "expression": "_db.Execute"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "RenameAsync",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:31:Ledger.Data.CustomerRepository.RenameAsync",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Rename",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:25:Ledger.Controllers.OrdersController.Rename",
+            "direct": false,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CloseAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Close",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Audit",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:40:Ledger.Data.CustomerRepository.Audit",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 45,
+            "model": "auditlog",
+            "library": "ado.net",
+            "table": "auditlog",
+            "operation": "create",
+            "expression": "command.CommandText"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PurgeAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:46:Ledger.Data.OrderRepository.PurgeAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 47,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "new CommandDefinition"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Remove",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:50:Ledger.Data.CustomerRepository.Remove",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 53,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "delete",
+            "expression": "command.CommandText"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Revenue",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:49:Ledger.Data.OrderRepository.Revenue",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 55,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.ExecuteScalar"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountCustomers",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:58:Ledger.Data.OrderRepository.CountCustomers",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 58,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "aggregate",
+            "expression": "_db.ExecuteScalar"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Everything",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:57:Ledger.Data.CustomerRepository.Everything",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 60,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "read",
+            "expression": "new SqlDataAdapter"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "SearchBy",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:60:Ledger.Data.OrderRepository.SearchBy",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 61,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.Query"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Overview",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 69,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryMultipleAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Overview",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 69,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "read",
+            "expression": "_db.QueryMultipleAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Import",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:66:Ledger.Data.CustomerRepository.Import",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 71,
+            "model": "auditlog",
+            "library": "ado.net",
+            "table": "auditlog",
+            "operation": "create",
+            "expression": "bulk.DestinationTableName"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/{id}",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:19:0:GET:/api/orders/{id}",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/customers/{id}",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:25:0:PUT:/api/orders/customers/{id}",
+            "direct": false,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/{id}/close",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:22:0:POST:/api/orders/{id}/close",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "Find",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "EmailOf",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 26,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "read",
+          "expression": "new SqlCommand"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ListByCustomerAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 26,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "connection.QueryAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ListByCustomerAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 26,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "read",
+          "expression": "connection.QueryAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Insert",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 33,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "create",
+          "expression": "_db.Execute"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "RenameAsync",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CloseAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Audit",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 45,
+          "model": "auditlog",
+          "library": "ado.net",
+          "table": "auditlog",
+          "operation": "create",
+          "expression": "command.CommandText"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PurgeAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 47,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "new CommandDefinition"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Remove",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 53,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "delete",
+          "expression": "command.CommandText"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Revenue",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 55,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.ExecuteScalar"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountCustomers",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 58,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "aggregate",
+          "expression": "_db.ExecuteScalar"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Everything",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 60,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "read",
+          "expression": "new SqlDataAdapter"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "SearchBy",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 61,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.Query"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Overview",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 69,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryMultipleAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Overview",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 69,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "read",
+          "expression": "_db.QueryMultipleAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Import",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 71,
+          "model": "auditlog",
+          "library": "ado.net",
+          "table": "auditlog",
+          "operation": "create",
+          "expression": "bulk.DestinationTableName"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Get",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Rename",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Close",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/{id}",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/customers/{id}",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/{id}/close",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 23
+      }
+    }
+  },
+  {
+    "tool": "list_tables",
+    "args": {
+      "name": "orders"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
+        "params": {
+          "name": "orders",
+          "library": ""
+        },
+        "rows": [
+          {
+            "id": "table:csharp:-:orders",
+            "name": "orders",
+            "kind": "table",
+            "library": "dapper",
+            "schemaName": null,
+            "provider": null,
+            "declaredIn": "schema.sql",
+            "line": 7,
+            "columns": "[{\"name\":\"Id\",\"column\":\"Id\",\"type\":\"INT\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":false},{\"name\":\"CustomerId\",\"column\":\"CustomerId\",\"type\":\"INT\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"Total\",\"column\":\"Total\",\"type\":\"DECIMAL(18, 2)\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"Status\",\"column\":\"Status\",\"type\":\"NVARCHAR(20)\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": "[{\"file\":\"schema.sql\",\"line\":7,\"order\":0,\"change\":\"create\"}]",
+            "indexes": "[]"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(model) AS modelId, model.name AS model",
+        "params": {
+          "name": "orders",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:csharp:-:orders",
+            "modelId": "datamodel:dapper:orders",
+            "model": "orders"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[rel:RELATES_TO]->(target:DataModel) RETURN id(model) AS modelId, rel.field AS field, rel.kind AS kind, target.name AS target, rel.relationName AS relationName, rel.onDelete AS onDelete",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(route) RETURN id(table) AS table, id(route) AS id, route.method AS method, route.fullPath AS fullPath, route.path AS path, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "orders",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Controllers/OrdersController.cs:route:19:0:GET:/api/orders/{id}",
+            "method": "GET",
+            "fullPath": "/api/orders/{id}",
+            "path": "/api/orders/{id}",
+            "file": "Controllers/OrdersController.cs",
+            "line": 19,
+            "relType": "READS_ROUTE",
+            "operation": "read"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Controllers/OrdersController.cs:route:22:0:POST:/api/orders/{id}/close",
+            "method": "POST",
+            "fullPath": "/api/orders/{id}/close",
+            "path": "/api/orders/{id}/close",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "relType": "WRITES_ROUTE",
+            "operation": "update"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "orders",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(fn) AS id, label(rel) AS relType",
+        "params": {
+          "name": "orders",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:21:Ledger.Data.OrderRepository.Find",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:31:Ledger.Data.OrderRepository.Insert",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:46:Ledger.Data.OrderRepository.PurgeAsync",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:49:Ledger.Data.OrderRepository.Revenue",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:60:Ledger.Data.OrderRepository.SearchBy",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Controllers/OrdersController.cs:function:19:Ledger.Controllers.OrdersController.Get",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:orders",
+            "id": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close",
+            "relType": "WRITES_FUNCTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "orders"
+      },
+      "totalTables": 1,
+      "tables": [
+        {
+          "name": "orders",
+          "kind": "table",
+          "library": "dapper",
+          "declaredIn": "schema.sql",
+          "line": 7,
+          "columns": [
+            {
+              "name": "Id",
+              "type": "INT",
+              "isId": true
+            },
+            {
+              "name": "CustomerId",
+              "type": "INT"
+            },
+            {
+              "name": "Total",
+              "type": "DECIMAL(18, 2)"
+            },
+            {
+              "name": "Status",
+              "type": "NVARCHAR(20)"
+            }
+          ],
+          "migrations": [
+            {
+              "file": "schema.sql",
+              "line": 7,
+              "order": 0,
+              "change": "create"
+            }
+          ],
+          "models": [
+            {
+              "name": "orders",
+              "relations": []
+            }
+          ],
+          "readBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 6
+          },
+          "writtenBy": {
+            "routes": 1,
+            "entrypoints": 0,
+            "functions": 4
+          },
+          "routes": [
+            {
+              "method": "GET",
+              "path": "/api/orders/{id}",
+              "file": "Controllers/OrdersController.cs",
+              "line": 19,
+              "reads": [
+                "read"
+              ]
+            },
+            {
+              "method": "POST",
+              "path": "/api/orders/{id}/close",
+              "file": "Controllers/OrdersController.cs",
+              "line": 22,
+              "writes": [
+                "update"
+              ]
+            }
+          ],
+          "entrypoints": []
+        }
+      ],
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "dapper"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"dapper\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"dapper\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "Find",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:21:Ledger.Data.OrderRepository.Find",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Get",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:19:Ledger.Controllers.OrdersController.Get",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ListByCustomerAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 26,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "connection.QueryAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ListByCustomerAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 26,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "read",
+            "expression": "connection.QueryAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Insert",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:31:Ledger.Data.OrderRepository.Insert",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 33,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "create",
+            "expression": "_db.Execute"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CloseAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Close",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PurgeAsync",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:46:Ledger.Data.OrderRepository.PurgeAsync",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 47,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "delete",
+            "expression": "new CommandDefinition"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Revenue",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:49:Ledger.Data.OrderRepository.Revenue",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 55,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.ExecuteScalar"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountCustomers",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:58:Ledger.Data.OrderRepository.CountCustomers",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 58,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "aggregate",
+            "expression": "_db.ExecuteScalar"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "SearchBy",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:60:Ledger.Data.OrderRepository.SearchBy",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 61,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.Query"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Overview",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 69,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryMultipleAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Overview",
+            "file": null,
+            "sourceId": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "direct": true,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 69,
+            "model": "customers",
+            "library": "dapper",
+            "table": "customers",
+            "operation": "read",
+            "expression": "_db.QueryMultipleAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"dapper\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/{id}",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:19:0:GET:/api/orders/{id}",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 21,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "read",
+            "expression": "_db.QueryFirstOrDefault"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/{id}/close",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:22:0:POST:/api/orders/{id}/close",
+            "direct": false,
+            "accessFile": "Data/OrderRepository.cs",
+            "line": 43,
+            "model": "orders",
+            "library": "dapper",
+            "table": "orders",
+            "operation": "update",
+            "expression": "connection.ExecuteAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"dapper\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "dapper",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "Find",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ListByCustomerAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 26,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "connection.QueryAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ListByCustomerAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 26,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "read",
+          "expression": "connection.QueryAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Insert",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 33,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "create",
+          "expression": "_db.Execute"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CloseAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PurgeAsync",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 47,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "delete",
+          "expression": "new CommandDefinition"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Revenue",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 55,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.ExecuteScalar"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountCustomers",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 58,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "aggregate",
+          "expression": "_db.ExecuteScalar"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "SearchBy",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 61,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.Query"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Overview",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 69,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryMultipleAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Overview",
+          "file": "Data/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 69,
+          "model": "customers",
+          "library": "dapper",
+          "table": "customers",
+          "operation": "read",
+          "expression": "_db.QueryMultipleAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Get",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Close",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/{id}",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 21,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "read",
+          "expression": "_db.QueryFirstOrDefault"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/{id}/close",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/OrderRepository.cs",
+          "line": 43,
+          "model": "orders",
+          "library": "dapper",
+          "table": "orders",
+          "operation": "update",
+          "expression": "connection.ExecuteAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 15
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "model": "customers",
+      "operation": "update"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"customers\")) AND rel.operation = \"update\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"customers\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "RenameAsync",
+            "file": null,
+            "sourceId": "file:Data/CustomerRepository.cs:function:31:Ledger.Data.CustomerRepository.RenameAsync",
+            "direct": true,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Rename",
+            "file": null,
+            "sourceId": "file:Controllers/OrdersController.cs:function:25:Ledger.Controllers.OrdersController.Rename",
+            "direct": false,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"customers\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders/customers/{id}",
+            "file": "Controllers/OrdersController.cs",
+            "sourceId": "file:Controllers/OrdersController.cs:route:25:0:PUT:/api/orders/customers/{id}",
+            "direct": false,
+            "accessFile": "Data/CustomerRepository.cs",
+            "line": 35,
+            "model": "customers",
+            "library": "ado.net",
+            "table": "customers",
+            "operation": "update",
+            "expression": "new NpgsqlCommand"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"customers\")) AND rel.operation = \"update\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "model": "customers",
+        "operation": "update",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "RenameAsync",
+          "file": "Data/CustomerRepository.cs",
+          "direct": true,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Rename",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders/customers/{id}",
+          "file": "Controllers/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Data/CustomerRepository.cs",
+          "line": 35,
+          "model": "customers",
+          "library": "ado.net",
+          "table": "customers",
+          "operation": "update",
+          "expression": "new NpgsqlCommand"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "CloseAsync"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Program.cs:function:5:<top-level>",
+            "name": "<top-level>",
+            "className": null,
+            "file": "Program.cs",
+            "line": 5,
+            "endLine": 13
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Controllers/OrdersController.cs:function:13:Ledger.Controllers.OrdersController.OrdersController",
+            "name": "OrdersController",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "endLine": 17
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:19:Ledger.Controllers.OrdersController.Get",
+            "name": "Get",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 19,
+            "endLine": 20
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close",
+            "name": "Close",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "endLine": 23
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:25:Ledger.Controllers.OrdersController.Rename",
+            "name": "Rename",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 25,
+            "endLine": 30
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:15:Ledger.Data.CustomerRepository.CustomerRepository",
+            "name": "CustomerRepository",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 15,
+            "endLine": 20
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:22:Ledger.Data.CustomerRepository.EmailOf",
+            "name": "EmailOf",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 22,
+            "endLine": 29
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:31:Ledger.Data.CustomerRepository.RenameAsync",
+            "name": "RenameAsync",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 31,
+            "endLine": 38
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:40:Ledger.Data.CustomerRepository.Audit",
+            "name": "Audit",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 40,
+            "endLine": 48
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:50:Ledger.Data.CustomerRepository.Remove",
+            "name": "Remove",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 50,
+            "endLine": 55
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:57:Ledger.Data.CustomerRepository.Everything",
+            "name": "Everything",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 57,
+            "endLine": 64
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:66:Ledger.Data.CustomerRepository.Import",
+            "name": "Import",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 66,
+            "endLine": 73
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:75:Ledger.Data.CustomerRepository.Reset",
+            "name": "Reset",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 75,
+            "endLine": 81
+          },
+          {
+            "id": "file:Data/CustomerRepository.cs:function:83:Ledger.Data.CustomerRepository.Dynamic",
+            "name": "Dynamic",
+            "className": "CustomerRepository",
+            "file": "Data/CustomerRepository.cs",
+            "line": 83,
+            "endLine": 88
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:7:Ledger.Data.OrderRow.OrderRow",
+            "name": "OrderRow",
+            "className": "OrderRow",
+            "file": "Data/OrderRepository.cs",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:15:Ledger.Data.OrderRepository.OrderRepository",
+            "name": "OrderRepository",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 15,
+            "endLine": 19
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:21:Ledger.Data.OrderRepository.Find",
+            "name": "Find",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:23:Ledger.Data.OrderRepository.ListByCustomerAsync",
+            "name": "ListByCustomerAsync",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 23,
+            "endLine": 29
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:31:Ledger.Data.OrderRepository.Insert",
+            "name": "Insert",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 31,
+            "endLine": 37
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "name": "CloseAsync",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 39,
+            "endLine": 44
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:46:Ledger.Data.OrderRepository.PurgeAsync",
+            "name": "PurgeAsync",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 46,
+            "endLine": 47
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:49:Ledger.Data.OrderRepository.Revenue",
+            "name": "Revenue",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 49,
+            "endLine": 56
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:58:Ledger.Data.OrderRepository.CountCustomers",
+            "name": "CountCustomers",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 58,
+            "endLine": 58
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:60:Ledger.Data.OrderRepository.SearchBy",
+            "name": "SearchBy",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 60,
+            "endLine": 61
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:63:Ledger.Data.OrderRepository.Run",
+            "name": "Run",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 63,
+            "endLine": 63
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:65:Ledger.Data.OrderRepository.Recent",
+            "name": "Recent",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 65,
+            "endLine": 65
+          },
+          {
+            "id": "file:Data/OrderRepository.cs:function:67:Ledger.Data.OrderRepository.Overview",
+            "name": "Overview",
+            "className": "OrderRepository",
+            "file": "Data/OrderRepository.cs",
+            "line": 67,
+            "endLine": 71
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:8:Ledger.Legacy.SearchIndex.Query",
+            "name": "Query",
+            "className": "SearchIndex",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:10:Ledger.Legacy.SearchIndex.Execute",
+            "name": "Execute",
+            "className": "SearchIndex",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:20:Ledger.Legacy.Reports.Find",
+            "name": "Find",
+            "className": "Reports",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 20,
+            "endLine": 26
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:15:Ledger.Legacy.Reports.<init-block>",
+            "name": "<init-block>",
+            "className": "Reports",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 15,
+            "endLine": 15
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:32:Ledger.Legacy.SqlCommand.SqlCommand",
+            "name": "SqlCommand",
+            "className": "SqlCommand",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 32,
+            "endLine": 32
+          },
+          {
+            "id": "file:Legacy/Lookalikes.cs:function:38:Ledger.Legacy.Wrapper.Make",
+            "name": "Make",
+            "className": "Wrapper",
+            "file": "Legacy/Lookalikes.cs",
+            "line": 38,
+            "endLine": 38
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "CloseAsync"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": [
+          {
+            "id": "file:Program.cs:entrypoint:5:0:main:<none>",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 5
+          },
+          {
+            "id": "entrypoint:csharp:Ledger.csproj",
+            "file": "Ledger.csproj",
+            "kind": "csharp-project",
+            "trigger": "Ledger",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": [
+          {
+            "runner": "entrypoint:csharp:Ledger.csproj",
+            "target": "file:Program.cs:entrypoint:5:0:main:<none>",
+            "command": "dotnet run"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:Controllers/OrdersController.cs:function:19:Ledger.Controllers.OrdersController.Get",
+            "callee": "file:Data/OrderRepository.cs:function:21:Ledger.Data.OrderRepository.Find",
+            "line": 20
+          },
+          {
+            "caller": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close",
+            "callee": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "line": 23
+          },
+          {
+            "caller": "file:Controllers/OrdersController.cs:function:25:Ledger.Controllers.OrdersController.Rename",
+            "callee": "file:Data/CustomerRepository.cs:function:31:Ledger.Data.CustomerRepository.RenameAsync",
+            "line": 28
+          },
+          {
+            "caller": "file:Legacy/Lookalikes.cs:function:20:Ledger.Legacy.Reports.Find",
+            "callee": "file:Legacy/Lookalikes.cs:function:10:Ledger.Legacy.SearchIndex.Execute",
+            "line": 24
+          },
+          {
+            "caller": "file:Legacy/Lookalikes.cs:function:20:Ledger.Legacy.Reports.Find",
+            "callee": "file:Legacy/Lookalikes.cs:function:8:Ledger.Legacy.SearchIndex.Query",
+            "line": 25
+          },
+          {
+            "caller": "file:Legacy/Lookalikes.cs:function:38:Ledger.Legacy.Wrapper.Make",
+            "callee": "file:Legacy/Lookalikes.cs:function:32:Ledger.Legacy.SqlCommand.SqlCommand",
+            "line": 38
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:Controllers/OrdersController.cs:route:22:0:POST:/api/orders/{id}/close",
+            "method": "POST",
+            "path": "/api/orders/{id}/close",
+            "fullPath": "/api/orders/{id}/close",
+            "framework": "aspnet-mvc",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          ]
+        },
+        "rows": [
+          {
+            "model": "orders",
+            "library": "dapper",
+            "operation": "update",
+            "file": "Data/OrderRepository.cs",
+            "line": 43,
+            "expression": "connection.ExecuteAsync",
+            "fn": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          ]
+        },
+        "rows": [
+          {
+            "tableId": "table:csharp:-:orders",
+            "table": "orders",
+            "kind": "table",
+            "library": "dapper",
+            "tableAccess": "WRITES_FUNCTION",
+            "operation": "update",
+            "fn": "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Controllers/OrdersController.cs:route:22:0:POST:/api/orders/{id}/close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:Data/OrderRepository.cs:function:39:Ledger.Data.OrderRepository.CloseAsync",
+            "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"CloseAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"CloseAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"CloseAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "CloseAsync"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:Controllers/OrdersController.cs:function:22:Ledger.Controllers.OrdersController.Close:call:23:63:_orders.CloseAsync",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "CloseAsync",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "CloseAsync",
+          "className": "OrderRepository",
+          "file": "Data/OrderRepository.cs",
+          "line": 39,
+          "endLine": 44
+        }
+      ],
+      "callers": [
+        {
+          "name": "Close",
+          "className": "OrdersController",
+          "file": "Controllers/OrdersController.cs",
+          "line": 22,
+          "endLine": 23,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "POST",
+          "path": "/api/orders/{id}/close",
+          "fullPath": "/api/orders/{id}/close",
+          "framework": "aspnet-mvc",
+          "file": "Controllers/OrdersController.cs",
+          "line": 22,
+          "reachedThrough": [
+            {
+              "function": "Close",
+              "functionFile": "Controllers/OrdersController.cs",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
+      "dataAccess": [
+        {
+          "model": "orders",
+          "library": "dapper",
+          "operation": "update",
+          "file": "Data/OrderRepository.cs",
+          "line": 43,
+          "expression": "connection.ExecuteAsync",
+          "usedBy": [
+            {
+              "function": "CloseAsync",
+              "functionFile": "Data/OrderRepository.cs"
+            }
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "table": "orders",
+          "kind": "table",
+          "library": "dapper",
+          "reads": [],
+          "writes": [
+            "update"
+          ],
+          "usedBy": [
+            {
+              "function": "CloseAsync",
+              "functionFile": "Data/OrderRepository.cs"
+            }
+          ]
+        }
+      ],
+      "envVars": [],
+      "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named CloseAsync in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]

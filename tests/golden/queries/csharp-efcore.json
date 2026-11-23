@@ -1,0 +1,4082 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 7
+          },
+          {
+            "table": "File",
+            "count": 16
+          },
+          {
+            "table": "Import",
+            "count": 25
+          },
+          {
+            "table": "Function",
+            "count": 35
+          },
+          {
+            "table": "Class",
+            "count": 18
+          },
+          {
+            "table": "Field",
+            "count": 36
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 10
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 5
+          },
+          {
+            "table": "Route",
+            "count": 5
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 0
+          },
+          {
+            "table": "ConfigValue",
+            "count": 6
+          },
+          {
+            "table": "DataModel",
+            "count": 9
+          },
+          {
+            "table": "Table",
+            "count": 7
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 7
+        },
+        {
+          "table": "File",
+          "count": 16
+        },
+        {
+          "table": "Import",
+          "count": 25
+        },
+        {
+          "table": "Function",
+          "count": 35
+        },
+        {
+          "table": "Class",
+          "count": 18
+        },
+        {
+          "table": "Field",
+          "count": 36
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 10
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 5
+        },
+        {
+          "table": "Route",
+          "count": 5
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 0
+        },
+        {
+          "table": "ConfigValue",
+          "count": 6
+        },
+        {
+          "table": "DataModel",
+          "count": 9
+        },
+        {
+          "table": "Table",
+          "count": 7
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<top-level>",
+            "kind": "Function",
+            "file": "Program.cs",
+            "line": 6,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "BillingContext",
+            "kind": "Class",
+            "file": "Data/BillingContext.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "InvoiceLineConfiguration",
+            "kind": "Class",
+            "file": "Data/BillingContext.cs",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ShopContext",
+            "kind": "Class",
+            "file": "Data/ShopContext.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "AuditView",
+            "kind": "Class",
+            "file": "Models/Audit.cs",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Invoice",
+            "kind": "Class",
+            "file": "Models/Billing.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Payment",
+            "kind": "Class",
+            "file": "Models/Billing.cs",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "InvoiceLine",
+            "kind": "Class",
+            "file": "Models/Billing.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Customer",
+            "kind": "Class",
+            "file": "Models/Customer.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Order",
+            "kind": "Class",
+            "file": "Models/Order.cs",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "FakeSet",
+            "kind": "Class",
+            "file": "Repositories/LocalCatalog.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Class",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ArchiveService",
+            "kind": "Class",
+            "file": "Services/ArchiveService.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ReportService",
+            "kind": "Class",
+            "file": "Services/ReportService.cs",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "BillingService",
+            "kind": "Class",
+            "file": "Services/ReportService.cs",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrdersController",
+            "kind": "Class",
+            "file": "Web/OrdersController.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "OnModelCreating",
+            "kind": "Method",
+            "file": "Data/BillingContext.cs",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BillingContext"
+          },
+          {
+            "name": "Configure",
+            "kind": "Method",
+            "file": "Data/BillingContext.cs",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InvoiceLineConfiguration"
+          },
+          {
+            "name": "ShopContext",
+            "kind": "Method",
+            "file": "Data/ShopContext.cs",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ShopContext"
+          },
+          {
+            "name": "get_Products",
+            "kind": "Method",
+            "file": "Data/ShopContext.cs",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ShopContext"
+          },
+          {
+            "name": "CountActiveCustomersAsync",
+            "kind": "Method",
+            "file": "Data/ShopContext.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ShopContext"
+          },
+          {
+            "name": "Archive",
+            "kind": "Method",
+            "file": "Data/ShopContext.cs",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ShopContext"
+          },
+          {
+            "name": "OrderRepository",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "OpenAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "GetAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "Cancel",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 27,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "CustomerNamesAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 35,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "RepriceAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 41,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "MarkModified",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 44,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "ShippedAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 46,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "PurgeAsync",
+            "kind": "Method",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 48,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrderRepository"
+          },
+          {
+            "name": "ArchiveService",
+            "kind": "Method",
+            "file": "Services/ArchiveService.cs",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArchiveService"
+          },
+          {
+            "name": "PaymentCountAsync",
+            "kind": "Method",
+            "file": "Services/ArchiveService.cs",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ArchiveService"
+          },
+          {
+            "name": "ReportService",
+            "kind": "Method",
+            "file": "Services/ReportService.cs",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ReportService"
+          },
+          {
+            "name": "RevenueAsync",
+            "kind": "Method",
+            "file": "Services/ReportService.cs",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ReportService"
+          },
+          {
+            "name": "CleanupAsync",
+            "kind": "Method",
+            "file": "Services/ReportService.cs",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ReportService"
+          },
+          {
+            "name": "InvoicesOfAsync",
+            "kind": "Method",
+            "file": "Services/ReportService.cs",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BillingService"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<top-level>",
+          "kind": "Function",
+          "file": "Program.cs",
+          "line": 6,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "BillingContext",
+          "kind": "Class",
+          "file": "Data/BillingContext.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "InvoiceLineConfiguration",
+          "kind": "Class",
+          "file": "Data/BillingContext.cs",
+          "line": 27,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ShopContext",
+          "kind": "Class",
+          "file": "Data/ShopContext.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "AuditView",
+          "kind": "Class",
+          "file": "Models/Audit.cs",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Invoice",
+          "kind": "Class",
+          "file": "Models/Billing.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Payment",
+          "kind": "Class",
+          "file": "Models/Billing.cs",
+          "line": 10,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "InvoiceLine",
+          "kind": "Class",
+          "file": "Models/Billing.cs",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Customer",
+          "kind": "Class",
+          "file": "Models/Customer.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Order",
+          "kind": "Class",
+          "file": "Models/Order.cs",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "FakeSet",
+          "kind": "Class",
+          "file": "Repositories/LocalCatalog.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrderRepository",
+          "kind": "Class",
+          "file": "Repositories/OrderRepository.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ArchiveService",
+          "kind": "Class",
+          "file": "Services/ArchiveService.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ReportService",
+          "kind": "Class",
+          "file": "Services/ReportService.cs",
+          "line": 8,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "BillingService",
+          "kind": "Class",
+          "file": "Services/ReportService.cs",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrdersController",
+          "kind": "Class",
+          "file": "Web/OrdersController.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OnModelCreating",
+          "kind": "Method",
+          "file": "Data/BillingContext.cs",
+          "line": 14,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "BillingContext"
+        },
+        {
+          "name": "Configure",
+          "kind": "Method",
+          "file": "Data/BillingContext.cs",
+          "line": 29,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InvoiceLineConfiguration"
+        },
+        {
+          "name": "ShopContext",
+          "kind": "Method",
+          "file": "Data/ShopContext.cs",
+          "line": 9,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ShopContext"
+        },
+        {
+          "name": "get_Products",
+          "kind": "Method",
+          "file": "Data/ShopContext.cs",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "ShopContext"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Data/BillingContext.cs",
+            "name": "BillingContext",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/BillingContext.cs",
+            "name": "InvoiceLineConfiguration",
+            "kind": "Class",
+            "line": 27,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Data/ShopContext.cs",
+            "name": "ShopContext",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Audit.cs",
+            "name": "AuditView",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Billing.cs",
+            "name": "Invoice",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Billing.cs",
+            "name": "Payment",
+            "kind": "Class",
+            "line": 10,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Billing.cs",
+            "name": "InvoiceLine",
+            "kind": "Class",
+            "line": 17,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Billing.cs",
+            "name": "Draft",
+            "kind": "Class",
+            "line": 24,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Customer.cs",
+            "name": "Customer",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Order.cs",
+            "name": "Order",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Models/Product.cs",
+            "name": "Product",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Repositories/LocalCatalog.cs",
+            "name": "FakeSet",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Repositories/LocalCatalog.cs",
+            "name": "LocalCatalog",
+            "kind": "Class",
+            "line": 11,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Repositories/OrderRepository.cs",
+            "name": "OrderRepository",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/ArchiveService.cs",
+            "name": "ArchiveService",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/ReportService.cs",
+            "name": "ReportService",
+            "kind": "Class",
+            "line": 8,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/ReportService.cs",
+            "name": "BillingService",
+            "kind": "Class",
+            "line": 18,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Web/OrdersController.cs",
+            "name": "OrdersController",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "Data/BillingContext.cs",
+          "name": "BillingContext",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/BillingContext.cs",
+          "name": "InvoiceLineConfiguration",
+          "kind": "Class",
+          "line": 27,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Data/ShopContext.cs",
+          "name": "ShopContext",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Audit.cs",
+          "name": "AuditView",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Billing.cs",
+          "name": "Invoice",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Billing.cs",
+          "name": "Payment",
+          "kind": "Class",
+          "line": 10,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Billing.cs",
+          "name": "InvoiceLine",
+          "kind": "Class",
+          "line": 17,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Billing.cs",
+          "name": "Draft",
+          "kind": "Class",
+          "line": 24,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Customer.cs",
+          "name": "Customer",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Order.cs",
+          "name": "Order",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Models/Product.cs",
+          "name": "Product",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Repositories/LocalCatalog.cs",
+          "name": "FakeSet",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Repositories/LocalCatalog.cs",
+          "name": "LocalCatalog",
+          "kind": "Class",
+          "line": 11,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Repositories/OrderRepository.cs",
+          "name": "OrderRepository",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/ArchiveService.cs",
+          "name": "ArchiveService",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/ReportService.cs",
+          "name": "ReportService",
+          "kind": "Class",
+          "line": 8,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/ReportService.cs",
+          "name": "BillingService",
+          "kind": "Class",
+          "line": 18,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Web/OrdersController.cs",
+          "name": "OrdersController",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 18
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Program.cs",
+            "line": 14,
+            "method": "GET",
+            "path": "/reports/revenue",
+            "fullPath": "/reports/revenue",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 15,
+            "method": "GET",
+            "path": "/customers",
+            "fullPath": "/customers",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 16,
+            "method": "DELETE",
+            "path": "/customers/inactive",
+            "fullPath": "/customers/inactive",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Web/OrdersController.cs",
+            "line": 18,
+            "method": "GET",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "aspnet-mvc",
+            "handlerName": "Open",
+            "handler": "Open"
+          },
+          {
+            "file": "Web/OrdersController.cs",
+            "line": 21,
+            "method": "POST",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "aspnet-mvc",
+            "handlerName": "Create",
+            "handler": "Create"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "Program.cs",
+          "line": 14,
+          "method": "GET",
+          "path": "/reports/revenue",
+          "fullPath": "/reports/revenue",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 15,
+          "method": "GET",
+          "path": "/customers",
+          "fullPath": "/customers",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 16,
+          "method": "DELETE",
+          "path": "/customers/inactive",
+          "fullPath": "/customers/inactive",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Web/OrdersController.cs",
+          "line": 18,
+          "method": "GET",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "aspnet-mvc",
+          "handlerName": "Open",
+          "handler": "Open"
+        },
+        {
+          "file": "Web/OrdersController.cs",
+          "line": 21,
+          "method": "POST",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "aspnet-mvc",
+          "handlerName": "Create",
+          "handler": "Create"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 5
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "id": "file:Program.cs:entrypoint:6:0:main:<none>",
+            "file": "Program.cs",
+            "line": 6,
+            "kind": "main",
+            "trigger": null,
+            "library": "csharp",
+            "handlerName": "<top-level>",
+            "handler": "<top-level>"
+          },
+          {
+            "id": "entrypoint:csharp:Shop.csproj",
+            "file": "Shop.csproj",
+            "line": 1,
+            "kind": "csharp-project",
+            "trigger": "Shop",
+            "library": "dotnet",
+            "handlerName": null,
+            "handler": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "file:Program.cs:entrypoint:6:0:main:<none>",
+            "entrypoint:csharp:Shop.csproj"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "file:Program.cs:entrypoint:6:0:main:<none>",
+            "entrypoint:csharp:Shop.csproj"
+          ]
+        },
+        "rows": [
+          {
+            "id": "entrypoint:csharp:Shop.csproj",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 6,
+            "command": "dotnet run"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "Program.cs",
+          "line": 6,
+          "kind": "main",
+          "trigger": null,
+          "library": "csharp",
+          "handlerName": "<top-level>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Shop.csproj",
+          "line": 1,
+          "kind": "csharp-project",
+          "trigger": "Shop",
+          "library": "dotnet",
+          "handlerName": null,
+          "handler": null,
+          "runs": [
+            {
+              "file": "Program.cs",
+              "entrypoint": "main:null",
+              "command": "dotnet run"
+            }
+          ]
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": true,
+            "accessFile": "Program.cs",
+            "line": 15,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "db.Customers.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "RevenueAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:10:Shop.Services.ReportService.RevenueAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "HasProductAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:12:Shop.Services.ReportService.HasProductAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 12,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "read",
+            "expression": "shop.Products.AnyAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CleanupAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:14:Shop.Services.ReportService.CleanupAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountActiveCustomersAsync",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:17:Shop.Data.ShopContext.CountActiveCustomersAsync",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 17,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "aggregate",
+            "expression": "Customers.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "OpenAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Open",
+            "file": null,
+            "sourceId": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PaymentCountAsync",
+            "file": null,
+            "sourceId": "file:Services/ArchiveService.cs:function:16:Shop.Services.ArchiveService.PaymentCountAsync",
+            "direct": true,
+            "accessFile": "Services/ArchiveService.cs",
+            "line": 19,
+            "model": "Payment",
+            "library": "efcore",
+            "table": "payments",
+            "operation": "aggregate",
+            "expression": "ctx.Payments.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "GetAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:19:Shop.Repositories.OrderRepository.GetAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 19,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.FindAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Archive",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:19:Shop.Data.ShopContext.Archive",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 21,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "delete",
+            "expression": "this.Orders.Remove"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Archive",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:19:Shop.Data.ShopContext.Archive",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 22,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "update",
+            "expression": "Set<Customer>().Update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "InvoicesOfAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:20:Shop.Services.BillingService.InvoicesOfAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 23,
+            "model": "Invoice",
+            "library": "efcore",
+            "table": "invoices",
+            "operation": "read",
+            "expression": "ctx.Invoices.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "AddAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:21:Shop.Repositories.OrderRepository.AddAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Create",
+            "file": null,
+            "sourceId": "file:Web/OrdersController.cs:function:21:Shop.Web.OrdersController.Create",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PayAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:26:Shop.Services.BillingService.PayAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 29,
+            "model": "Payment",
+            "library": "efcore",
+            "table": "payments",
+            "operation": "create",
+            "expression": "ctx.Payments.Add"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Cancel",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:27:Shop.Repositories.OrderRepository.Cancel",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 29,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "delete",
+            "expression": "_db.Orders.Remove"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PayAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:26:Shop.Services.BillingService.PayAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 30,
+            "model": "InvoiceLine",
+            "library": "efcore",
+            "table": "invoice_lines",
+            "operation": "create",
+            "expression": "ctx.Lines.AddRange"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:33:Shop.Repositories.OrderRepository.CountAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 33,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "_db.Orders.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CustomerNamesAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:35:Shop.Repositories.OrderRepository.CustomerNamesAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 37,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "_db.Customers"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "RepriceAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:41:Shop.Repositories.OrderRepository.RepriceAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 42,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "update",
+            "expression": "_db.Set<Product>().ExecuteUpdateAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ShippedAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:46:Shop.Repositories.OrderRepository.ShippedAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 46,
+            "model": "Orders",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.FromSqlRaw"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PurgeAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:48:Shop.Repositories.OrderRepository.PurgeAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 49,
+            "model": "order_archive",
+            "library": "efcore",
+            "table": "order_archive",
+            "operation": "delete",
+            "expression": "_db.Database.ExecuteSqlInterpolatedAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ByDomainAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:51:Shop.Repositories.OrderRepository.ByDomainAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 52,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "_db.Customers.FromSql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "AllProductsRawAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:54:Shop.Repositories.OrderRepository.AllProductsRawAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 54,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "read",
+            "expression": "_db.Products.FromSqlRaw"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/reports/revenue",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers/inactive",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
+            "direct": false,
+            "accessFile": "Program.cs",
+            "line": 15,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "db.Customers.Where"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "Web/OrdersController.cs",
+            "sourceId": "file:Web/OrdersController.cs:route:18:0:GET:/api/orders",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "Web/OrdersController.cs",
+            "sourceId": "file:Web/OrdersController.cs:route:21:0:POST:/api/orders",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": true,
+          "accessFile": "Program.cs",
+          "line": 15,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "db.Customers.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "RevenueAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "HasProductAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 12,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "read",
+          "expression": "shop.Products.AnyAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CleanupAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountActiveCustomersAsync",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 17,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "aggregate",
+          "expression": "Customers.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "OpenAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PaymentCountAsync",
+          "file": "Services/ArchiveService.cs",
+          "direct": true,
+          "accessFile": "Services/ArchiveService.cs",
+          "line": 19,
+          "model": "Payment",
+          "library": "efcore",
+          "table": "payments",
+          "operation": "aggregate",
+          "expression": "ctx.Payments.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "GetAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 19,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.FindAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Archive",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 21,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "delete",
+          "expression": "this.Orders.Remove"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Archive",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 22,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "update",
+          "expression": "Set<Customer>().Update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "InvoicesOfAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 23,
+          "model": "Invoice",
+          "library": "efcore",
+          "table": "invoices",
+          "operation": "read",
+          "expression": "ctx.Invoices.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "AddAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PayAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 29,
+          "model": "Payment",
+          "library": "efcore",
+          "table": "payments",
+          "operation": "create",
+          "expression": "ctx.Payments.Add"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Cancel",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 29,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "delete",
+          "expression": "_db.Orders.Remove"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PayAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 30,
+          "model": "InvoiceLine",
+          "library": "efcore",
+          "table": "invoice_lines",
+          "operation": "create",
+          "expression": "ctx.Lines.AddRange"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 33,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "_db.Orders.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CustomerNamesAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 37,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "_db.Customers"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "RepriceAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 42,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "update",
+          "expression": "_db.Set<Product>().ExecuteUpdateAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ShippedAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 46,
+          "model": "Orders",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.FromSqlRaw"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PurgeAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 49,
+          "model": "order_archive",
+          "library": "efcore",
+          "table": "order_archive",
+          "operation": "delete",
+          "expression": "_db.Database.ExecuteSqlInterpolatedAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ByDomainAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 52,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "_db.Customers.FromSql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "AllProductsRawAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 54,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "read",
+          "expression": "_db.Products.FromSqlRaw"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Open",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Create",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/reports/revenue",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers/inactive",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Program.cs",
+          "line": 15,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "db.Customers.Where"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 31
+      }
+    }
+  },
+  {
+    "tool": "list_tables",
+    "args": {
+      "name": "catalog_products"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS id, table.name AS name, table.kind AS kind, table.library AS library, table.schemaName AS schemaName, table.provider AS provider, table.declaredIn AS declaredIn, table.line AS line, table.columns AS columns, table.migrations AS migrations, table.indexes AS indexes",
+        "params": {
+          "name": "catalog_products",
+          "library": ""
+        },
+        "rows": [
+          {
+            "id": "table:csharp:-:catalog_products",
+            "name": "catalog_products",
+            "kind": "table",
+            "library": "efcore",
+            "schemaName": "shop",
+            "provider": null,
+            "declaredIn": "Models/Product.cs",
+            "line": 6,
+            "columns": "[{\"name\":\"ProductKey\",\"column\":\"ProductKey\",\"type\":\"int\",\"optional\":false,\"list\":false,\"isId\":true,\"isUnique\":true},{\"name\":\"Sku\",\"column\":\"sku_code\",\"type\":\"string\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false},{\"name\":\"Price\",\"column\":\"Price\",\"type\":\"decimal\",\"optional\":false,\"list\":false,\"isId\":false,\"isUnique\":false}]",
+            "migrations": null,
+            "indexes": null
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[:MAPS_TO_TABLE]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(model) AS modelId, model.name AS model",
+        "params": {
+          "name": "catalog_products",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:csharp:-:catalog_products",
+            "modelId": "datamodel:efcore:Shop.Models:Product",
+            "model": "Product"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (model:DataModel)-[rel:RELATES_TO]->(target:DataModel) RETURN id(model) AS modelId, rel.field AS field, rel.kind AS kind, target.name AS target, rel.relationName AS relationName, rel.onDelete AS onDelete",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (route:Route)-[rel:READS_ROUTE|WRITES_ROUTE]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(route) RETURN id(table) AS table, id(route) AS id, route.method AS method, route.fullPath AS fullPath, route.path AS path, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "catalog_products",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[rel:READS_ENTRYPOINT|WRITES_ENTRYPOINT]->(table:Table) WHERE contains(lower(table.name), lower($name)) OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint) RETURN id(table) AS table, id(entrypoint) AS id, entrypoint.kind AS kind, entrypoint.trigger AS trigger, file.relativePath AS file, entrypoint.line AS line, label(rel) AS relType, rel.operation AS operation",
+        "params": {
+          "name": "catalog_products",
+          "library": ""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE contains(lower(table.name), lower($name)) RETURN id(table) AS table, id(fn) AS id, label(rel) AS relType",
+        "params": {
+          "name": "catalog_products",
+          "library": ""
+        },
+        "rows": [
+          {
+            "table": "table:csharp:-:catalog_products",
+            "id": "file:Repositories/OrderRepository.cs:function:41:Shop.Repositories.OrderRepository.RepriceAsync",
+            "relType": "WRITES_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:catalog_products",
+            "id": "file:Repositories/OrderRepository.cs:function:54:Shop.Repositories.OrderRepository.AllProductsRawAsync",
+            "relType": "READS_FUNCTION"
+          },
+          {
+            "table": "table:csharp:-:catalog_products",
+            "id": "file:Services/ReportService.cs:function:12:Shop.Services.ReportService.HasProductAsync",
+            "relType": "READS_FUNCTION"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "catalog_products"
+      },
+      "totalTables": 1,
+      "tables": [
+        {
+          "name": "catalog_products",
+          "kind": "table",
+          "library": "efcore",
+          "schemaName": "shop",
+          "declaredIn": "Models/Product.cs",
+          "line": 6,
+          "columns": [
+            {
+              "name": "ProductKey",
+              "type": "int",
+              "isId": true,
+              "isUnique": true
+            },
+            {
+              "name": "Sku",
+              "type": "string",
+              "column": "sku_code"
+            },
+            {
+              "name": "Price",
+              "type": "decimal"
+            }
+          ],
+          "models": [
+            {
+              "name": "Product",
+              "relations": []
+            }
+          ],
+          "readBy": {
+            "routes": 0,
+            "entrypoints": 0,
+            "functions": 2
+          },
+          "writtenBy": {
+            "routes": 0,
+            "entrypoints": 0,
+            "functions": 1
+          },
+          "routes": [],
+          "entrypoints": []
+        }
+      ],
+      "note": "Tables come from Prisma schema files, TypeORM entities, Mongoose schemas, Drizzle table definitions, Knex calls and SQL files (library sql when no code declares the table; migrations lists each file, line and change in run order, 0 for a schema file). readBy / writtenBy count distinct routes, entrypoints and functions; each table lists up to 20 routes and entrypoints.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "library": "efcore"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND model.library = \"efcore\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND model.library = \"efcore\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "<top-level>",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:function:6:<top-level>",
+            "direct": true,
+            "accessFile": "Program.cs",
+            "line": 15,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "db.Customers.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "RevenueAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:10:Shop.Services.ReportService.RevenueAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "HasProductAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:12:Shop.Services.ReportService.HasProductAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 12,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "read",
+            "expression": "shop.Products.AnyAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CleanupAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:14:Shop.Services.ReportService.CleanupAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountActiveCustomersAsync",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:17:Shop.Data.ShopContext.CountActiveCustomersAsync",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 17,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "aggregate",
+            "expression": "Customers.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "OpenAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Open",
+            "file": null,
+            "sourceId": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PaymentCountAsync",
+            "file": null,
+            "sourceId": "file:Services/ArchiveService.cs:function:16:Shop.Services.ArchiveService.PaymentCountAsync",
+            "direct": true,
+            "accessFile": "Services/ArchiveService.cs",
+            "line": 19,
+            "model": "Payment",
+            "library": "efcore",
+            "table": "payments",
+            "operation": "aggregate",
+            "expression": "ctx.Payments.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "GetAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:19:Shop.Repositories.OrderRepository.GetAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 19,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.FindAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Archive",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:19:Shop.Data.ShopContext.Archive",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 21,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "delete",
+            "expression": "this.Orders.Remove"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Archive",
+            "file": null,
+            "sourceId": "file:Data/ShopContext.cs:function:19:Shop.Data.ShopContext.Archive",
+            "direct": true,
+            "accessFile": "Data/ShopContext.cs",
+            "line": 22,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "update",
+            "expression": "Set<Customer>().Update"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "InvoicesOfAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:20:Shop.Services.BillingService.InvoicesOfAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 23,
+            "model": "Invoice",
+            "library": "efcore",
+            "table": "invoices",
+            "operation": "read",
+            "expression": "ctx.Invoices.Where"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "AddAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:21:Shop.Repositories.OrderRepository.AddAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Create",
+            "file": null,
+            "sourceId": "file:Web/OrdersController.cs:function:21:Shop.Web.OrdersController.Create",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PayAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:26:Shop.Services.BillingService.PayAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 29,
+            "model": "Payment",
+            "library": "efcore",
+            "table": "payments",
+            "operation": "create",
+            "expression": "ctx.Payments.Add"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Cancel",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:27:Shop.Repositories.OrderRepository.Cancel",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 29,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "delete",
+            "expression": "_db.Orders.Remove"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PayAsync",
+            "file": null,
+            "sourceId": "file:Services/ReportService.cs:function:26:Shop.Services.BillingService.PayAsync",
+            "direct": true,
+            "accessFile": "Services/ReportService.cs",
+            "line": 30,
+            "model": "InvoiceLine",
+            "library": "efcore",
+            "table": "invoice_lines",
+            "operation": "create",
+            "expression": "ctx.Lines.AddRange"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CountAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:33:Shop.Repositories.OrderRepository.CountAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 33,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "_db.Orders.CountAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "CustomerNamesAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:35:Shop.Repositories.OrderRepository.CustomerNamesAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 37,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "_db.Customers"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "RepriceAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:41:Shop.Repositories.OrderRepository.RepriceAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 42,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "update",
+            "expression": "_db.Set<Product>().ExecuteUpdateAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ShippedAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:46:Shop.Repositories.OrderRepository.ShippedAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 46,
+            "model": "Orders",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.FromSqlRaw"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "PurgeAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:48:Shop.Repositories.OrderRepository.PurgeAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 49,
+            "model": "order_archive",
+            "library": "efcore",
+            "table": "order_archive",
+            "operation": "delete",
+            "expression": "_db.Database.ExecuteSqlInterpolatedAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "ByDomainAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:51:Shop.Repositories.OrderRepository.ByDomainAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 52,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "_db.Customers.FromSql"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "AllProductsRawAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:54:Shop.Repositories.OrderRepository.AllProductsRawAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 54,
+            "model": "Product",
+            "library": "efcore",
+            "table": "catalog_products",
+            "operation": "read",
+            "expression": "_db.Products.FromSqlRaw"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND model.library = \"efcore\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/reports/revenue",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:14:0:GET:/reports/revenue",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 10,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "aggregate",
+            "expression": "shop.Orders.SumAsync"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers/inactive",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:16:0:DELETE:/customers/inactive",
+            "direct": false,
+            "accessFile": "Services/ReportService.cs",
+            "line": 14,
+            "model": "Customers",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "delete",
+            "expression": "shop.Database.ExecuteSqlRawAsync"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/customers",
+            "file": "Program.cs",
+            "sourceId": "file:Program.cs:route:15:0:GET:/customers",
+            "direct": false,
+            "accessFile": "Program.cs",
+            "line": 15,
+            "model": "Customer",
+            "library": "efcore",
+            "table": "Customers",
+            "operation": "read",
+            "expression": "db.Customers.Where"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "Web/OrdersController.cs",
+            "sourceId": "file:Web/OrdersController.cs:route:18:0:GET:/api/orders",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "read",
+            "expression": "_db.Orders.Where"
+          },
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "Web/OrdersController.cs",
+            "sourceId": "file:Web/OrdersController.cs:route:21:0:POST:/api/orders",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND model.library = \"efcore\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "library": "efcore",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": true,
+          "accessFile": "Program.cs",
+          "line": 15,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "db.Customers.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "RevenueAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "HasProductAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 12,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "read",
+          "expression": "shop.Products.AnyAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CleanupAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountActiveCustomersAsync",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 17,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "aggregate",
+          "expression": "Customers.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "OpenAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PaymentCountAsync",
+          "file": "Services/ArchiveService.cs",
+          "direct": true,
+          "accessFile": "Services/ArchiveService.cs",
+          "line": 19,
+          "model": "Payment",
+          "library": "efcore",
+          "table": "payments",
+          "operation": "aggregate",
+          "expression": "ctx.Payments.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "GetAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 19,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.FindAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Archive",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 21,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "delete",
+          "expression": "this.Orders.Remove"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Archive",
+          "file": "Data/ShopContext.cs",
+          "direct": true,
+          "accessFile": "Data/ShopContext.cs",
+          "line": 22,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "update",
+          "expression": "Set<Customer>().Update"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "InvoicesOfAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 23,
+          "model": "Invoice",
+          "library": "efcore",
+          "table": "invoices",
+          "operation": "read",
+          "expression": "ctx.Invoices.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "AddAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PayAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 29,
+          "model": "Payment",
+          "library": "efcore",
+          "table": "payments",
+          "operation": "create",
+          "expression": "ctx.Payments.Add"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Cancel",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 29,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "delete",
+          "expression": "_db.Orders.Remove"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PayAsync",
+          "file": "Services/ReportService.cs",
+          "direct": true,
+          "accessFile": "Services/ReportService.cs",
+          "line": 30,
+          "model": "InvoiceLine",
+          "library": "efcore",
+          "table": "invoice_lines",
+          "operation": "create",
+          "expression": "ctx.Lines.AddRange"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CountAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 33,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "_db.Orders.CountAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "CustomerNamesAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 37,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "_db.Customers"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "RepriceAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 42,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "update",
+          "expression": "_db.Set<Product>().ExecuteUpdateAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ShippedAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 46,
+          "model": "Orders",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.FromSqlRaw"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "PurgeAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 49,
+          "model": "order_archive",
+          "library": "efcore",
+          "table": "order_archive",
+          "operation": "delete",
+          "expression": "_db.Database.ExecuteSqlInterpolatedAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "ByDomainAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 52,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "_db.Customers.FromSql"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "AllProductsRawAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 54,
+          "model": "Product",
+          "library": "efcore",
+          "table": "catalog_products",
+          "operation": "read",
+          "expression": "_db.Products.FromSqlRaw"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "<top-level>",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Open",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Create",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/reports/revenue",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 10,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "aggregate",
+          "expression": "shop.Orders.SumAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers/inactive",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Services/ReportService.cs",
+          "line": 14,
+          "model": "Customers",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "delete",
+          "expression": "shop.Database.ExecuteSqlRawAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/customers",
+          "file": "Program.cs",
+          "direct": false,
+          "accessFile": "Program.cs",
+          "line": 15,
+          "model": "Customer",
+          "library": "efcore",
+          "table": "Customers",
+          "operation": "read",
+          "expression": "db.Customers.Where"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "read",
+          "expression": "_db.Orders.Where"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 31
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {
+      "model": "Order",
+      "operation": "create"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.operation = \"create\" WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.operation = \"create\" OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Function",
+            "sourceName": "AddAsync",
+            "file": null,
+            "sourceId": "file:Repositories/OrderRepository.cs:function:21:Shop.Repositories.OrderRepository.AddAsync",
+            "direct": true,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          },
+          {
+            "sourceKind": "Function",
+            "sourceName": "Create",
+            "file": null,
+            "sourceId": "file:Web/OrdersController.cs:function:21:Shop.Web.OrdersController.Create",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.operation = \"create\" OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "sourceKind": "Route",
+            "sourceName": "/api/orders",
+            "file": "Web/OrdersController.cs",
+            "sourceId": "file:Web/OrdersController.cs:route:21:0:POST:/api/orders",
+            "direct": false,
+            "accessFile": "Repositories/OrderRepository.cs",
+            "line": 23,
+            "model": "Order",
+            "library": "efcore",
+            "table": "Orders",
+            "operation": "create",
+            "expression": "_db.Orders.AddAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true AND contains(lower(model.name), lower(\"Order\")) AND rel.operation = \"create\" OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "model": "Order",
+        "operation": "create",
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [
+        {
+          "sourceKind": "Function",
+          "sourceName": "AddAsync",
+          "file": "Repositories/OrderRepository.cs",
+          "direct": true,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Function",
+          "sourceName": "Create",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        },
+        {
+          "sourceKind": "Route",
+          "sourceName": "/api/orders",
+          "file": "Web/OrdersController.cs",
+          "direct": false,
+          "accessFile": "Repositories/OrderRepository.cs",
+          "line": 23,
+          "model": "Order",
+          "library": "efcore",
+          "table": "Orders",
+          "operation": "create",
+          "expression": "_db.Orders.AddAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 3
+      }
+    }
+  },
+  {
+    "tool": "impact_of",
+    "args": {
+      "symbol": "OpenAsync"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Program.cs:function:6:<top-level>",
+            "name": "<top-level>",
+            "className": null,
+            "file": "Program.cs",
+            "line": 6,
+            "endLine": 17
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Data/BillingContext.cs:function:14:Shop.Data.BillingContext.OnModelCreating",
+            "name": "OnModelCreating",
+            "className": "BillingContext",
+            "file": "Data/BillingContext.cs",
+            "line": 14,
+            "endLine": 24
+          },
+          {
+            "id": "file:Data/BillingContext.cs:function:29:Shop.Data.InvoiceLineConfiguration.Configure",
+            "name": "Configure",
+            "className": "InvoiceLineConfiguration",
+            "file": "Data/BillingContext.cs",
+            "line": 29,
+            "endLine": 33
+          },
+          {
+            "id": "file:Data/ShopContext.cs:function:9:Shop.Data.ShopContext.ShopContext",
+            "name": "ShopContext",
+            "className": "ShopContext",
+            "file": "Data/ShopContext.cs",
+            "line": 9,
+            "endLine": 9
+          },
+          {
+            "id": "file:Data/ShopContext.cs:function:12:Shop.Data.ShopContext.get_Products",
+            "name": "get_Products",
+            "className": "ShopContext",
+            "file": "Data/ShopContext.cs",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:Data/ShopContext.cs:function:17:Shop.Data.ShopContext.CountActiveCustomersAsync",
+            "name": "CountActiveCustomersAsync",
+            "className": "ShopContext",
+            "file": "Data/ShopContext.cs",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:Data/ShopContext.cs:function:19:Shop.Data.ShopContext.Archive",
+            "name": "Archive",
+            "className": "ShopContext",
+            "file": "Data/ShopContext.cs",
+            "line": 19,
+            "endLine": 23
+          },
+          {
+            "id": "file:Repositories/LocalCatalog.cs:function:8:Shop.Repositories.FakeSet.Add",
+            "name": "Add",
+            "className": "FakeSet",
+            "file": "Repositories/LocalCatalog.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Repositories/LocalCatalog.cs:function:16:Shop.Repositories.LocalCatalog.Put",
+            "name": "Put",
+            "className": "LocalCatalog",
+            "file": "Repositories/LocalCatalog.cs",
+            "line": 16,
+            "endLine": 22
+          },
+          {
+            "id": "file:Repositories/LocalCatalog.cs:function:13:Shop.Repositories.LocalCatalog.<init-block>",
+            "name": "<init-block>",
+            "className": "LocalCatalog",
+            "file": "Repositories/LocalCatalog.cs",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:12:Shop.Repositories.OrderRepository.OrderRepository",
+            "name": "OrderRepository",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 12,
+            "endLine": 15
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "name": "OpenAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "endLine": 17
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:19:Shop.Repositories.OrderRepository.GetAsync",
+            "name": "GetAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:21:Shop.Repositories.OrderRepository.AddAsync",
+            "name": "AddAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 21,
+            "endLine": 25
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:27:Shop.Repositories.OrderRepository.Cancel",
+            "name": "Cancel",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 27,
+            "endLine": 31
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:33:Shop.Repositories.OrderRepository.CountAsync",
+            "name": "CountAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 33,
+            "endLine": 33
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:35:Shop.Repositories.OrderRepository.CustomerNamesAsync",
+            "name": "CustomerNamesAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 35,
+            "endLine": 39
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:41:Shop.Repositories.OrderRepository.RepriceAsync",
+            "name": "RepriceAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 41,
+            "endLine": 42
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:44:Shop.Repositories.OrderRepository.MarkModified",
+            "name": "MarkModified",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 44,
+            "endLine": 44
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:46:Shop.Repositories.OrderRepository.ShippedAsync",
+            "name": "ShippedAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 46,
+            "endLine": 46
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:48:Shop.Repositories.OrderRepository.PurgeAsync",
+            "name": "PurgeAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 48,
+            "endLine": 49
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:51:Shop.Repositories.OrderRepository.ByDomainAsync",
+            "name": "ByDomainAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 51,
+            "endLine": 52
+          },
+          {
+            "id": "file:Repositories/OrderRepository.cs:function:54:Shop.Repositories.OrderRepository.AllProductsRawAsync",
+            "name": "AllProductsRawAsync",
+            "className": "OrderRepository",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 54,
+            "endLine": 54
+          },
+          {
+            "id": "file:Services/ArchiveService.cs:function:11:Shop.Services.ArchiveService.ArchiveService",
+            "name": "ArchiveService",
+            "className": "ArchiveService",
+            "file": "Services/ArchiveService.cs",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/ArchiveService.cs:function:16:Shop.Services.ArchiveService.PaymentCountAsync",
+            "name": "PaymentCountAsync",
+            "className": "ArchiveService",
+            "file": "Services/ArchiveService.cs",
+            "line": 16,
+            "endLine": 20
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:8:Shop.Services.ReportService.ReportService",
+            "name": "ReportService",
+            "className": "ReportService",
+            "file": "Services/ReportService.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:10:Shop.Services.ReportService.RevenueAsync",
+            "name": "RevenueAsync",
+            "className": "ReportService",
+            "file": "Services/ReportService.cs",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:12:Shop.Services.ReportService.HasProductAsync",
+            "name": "HasProductAsync",
+            "className": "ReportService",
+            "file": "Services/ReportService.cs",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:14:Shop.Services.ReportService.CleanupAsync",
+            "name": "CleanupAsync",
+            "className": "ReportService",
+            "file": "Services/ReportService.cs",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:20:Shop.Services.BillingService.InvoicesOfAsync",
+            "name": "InvoicesOfAsync",
+            "className": "BillingService",
+            "file": "Services/ReportService.cs",
+            "line": 20,
+            "endLine": 24
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:26:Shop.Services.BillingService.PayAsync",
+            "name": "PayAsync",
+            "className": "BillingService",
+            "file": "Services/ReportService.cs",
+            "line": 26,
+            "endLine": 32
+          },
+          {
+            "id": "file:Services/ReportService.cs:function:34:Shop.Services.BillingService.DraftsAsync",
+            "name": "DraftsAsync",
+            "className": "BillingService",
+            "file": "Services/ReportService.cs",
+            "line": 34,
+            "endLine": 38
+          },
+          {
+            "id": "file:Web/OrdersController.cs:function:13:Shop.Web.OrdersController.OrdersController",
+            "name": "OrdersController",
+            "className": "OrdersController",
+            "file": "Web/OrdersController.cs",
+            "line": 13,
+            "endLine": 16
+          },
+          {
+            "id": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open",
+            "name": "Open",
+            "className": "OrdersController",
+            "file": "Web/OrdersController.cs",
+            "line": 18,
+            "endLine": 19
+          },
+          {
+            "id": "file:Web/OrdersController.cs:function:21:Shop.Web.OrdersController.Create",
+            "name": "Create",
+            "className": "OrdersController",
+            "file": "Web/OrdersController.cs",
+            "line": 21,
+            "endLine": 26
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(type:Interface)-[:DEFINES_INTERFACE_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, type.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) WHERE store.name = $symbol OR store.hook = $symbol RETURN id(store) AS id, file.relativePath AS file",
+        "params": {
+          "symbol": "OpenAsync"
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entry:EntryPoint) RETURN id(entry) AS id, file.relativePath AS file, entry.kind AS kind, entry.trigger AS trigger, entry.line AS line",
+        "rows": [
+          {
+            "id": "file:Program.cs:entrypoint:6:0:main:<none>",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 6
+          },
+          {
+            "id": "entrypoint:csharp:Shop.csproj",
+            "file": "Shop.csproj",
+            "kind": "csharp-project",
+            "trigger": "Shop",
+            "line": 1
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) RETURN id(runner) AS runner, id(target) AS target, run.command AS command",
+        "rows": [
+          {
+            "runner": "entrypoint:csharp:Shop.csproj",
+            "target": "file:Program.cs:entrypoint:6:0:main:<none>",
+            "command": "dotnet run"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (runner:EntryPoint)-[run:RUNS_FILE]->(target:File) RETURN id(runner) AS runner, target.relativePath AS file, run.command AS command",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:Program.cs:function:6:<top-level>",
+            "callee": "file:Services/ReportService.cs:function:10:Shop.Services.ReportService.RevenueAsync",
+            "line": 14
+          },
+          {
+            "caller": "file:Program.cs:function:6:<top-level>",
+            "callee": "file:Services/ReportService.cs:function:14:Shop.Services.ReportService.CleanupAsync",
+            "line": 16
+          },
+          {
+            "caller": "file:Repositories/LocalCatalog.cs:function:16:Shop.Repositories.LocalCatalog.Put",
+            "callee": "file:Repositories/LocalCatalog.cs:function:8:Shop.Repositories.FakeSet.Add",
+            "line": 19
+          },
+          {
+            "caller": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open",
+            "callee": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "line": 19
+          },
+          {
+            "caller": "file:Web/OrdersController.cs:function:21:Shop.Web.OrdersController.Create",
+            "callee": "file:Repositories/OrderRepository.cs:function:21:Shop.Repositories.OrderRepository.AddAsync",
+            "line": 24
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:MODULE_CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(fn:Function) WHERE id(fn) IN $ids RETURN file.relativePath AS file, call.line AS line, call.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route)-[rel:ROUTE_HANDLED_BY|ROUTE_LIFECYCLE_STEP]->(fn:Function) WHERE id(fn) IN $ids RETURN id(route) AS routeId, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, file.relativePath AS file, route.line AS line, label(rel) AS relType, rel.role AS role, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": [
+          {
+            "routeId": "file:Web/OrdersController.cs:route:18:0:GET:/api/orders",
+            "method": "GET",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "aspnet-mvc",
+            "file": "Web/OrdersController.cs",
+            "line": 18,
+            "relType": "ROUTE_HANDLED_BY",
+            "role": null,
+            "fn": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint)-[:ENTRYPOINT_HANDLED_BY]->(fn:Function) WHERE id(fn) IN $ids RETURN entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, file.relativePath AS file, entrypoint.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE id(fn) IN $ids RETURN model.name AS model, model.library AS library, rel.operation AS operation, rel.file AS file, rel.line AS line, rel.expression AS expression, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          ]
+        },
+        "rows": [
+          {
+            "model": "Order",
+            "library": "efcore",
+            "operation": "read",
+            "file": "Repositories/OrderRepository.cs",
+            "line": 17,
+            "expression": "_db.Orders.Where",
+            "fn": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_FUNCTION|WRITES_FUNCTION]->(table:Table) WHERE id(fn) IN $ids RETURN id(table) AS tableId, table.name AS table, table.kind AS kind, table.library AS library, label(rel) AS tableAccess, rel.operation AS operation, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          ]
+        },
+        "rows": [
+          {
+            "tableId": "table:csharp:-:orders",
+            "table": "Orders",
+            "kind": "table",
+            "library": "efcore",
+            "tableAccess": "READS_FUNCTION",
+            "operation": "read",
+            "fn": "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:USES_ENV_FUNCTION]->(env:EnvVar) WHERE id(fn) IN $ids RETURN env.name AS name, rel.access AS access, rel.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:CONSUMES_CONFIG_FUNCTION]->(config:ConfigValue) WHERE id(fn) IN $ids RETURN config.name AS name, rel.localName AS localName, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Web/OrdersController.cs:route:18:0:GET:/api/orders"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:WRITES_STORE]->(store:Store) WHERE id(fn) IN $ids RETURN id(store) AS store, id(fn) AS fn, rel.members AS members",
+        "params": {
+          "ids": [
+            "file:Repositories/OrderRepository.cs:function:17:Shop.Repositories.OrderRepository.OpenAsync",
+            "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (store:Store)-[rel:STORE_ACTION|STORE_DEFINED_BY_FUNCTION]->(fn:Function) RETURN id(store) AS store, id(fn) AS fn, label(rel) AS relType",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (fn:Function)-[rel:READS_STORE]->(store:Store) RETURN id(store) AS store, id(fn) AS fn, rel.line AS line, rel.members AS members",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_STORE]->(store:Store) RETURN id(store) AS id, store.name AS name, store.library AS library, store.kind AS kind, file.relativePath AS file, store.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"OpenAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE fn.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, fn.name AS caller, fn.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"OpenAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.unresolvedCalls CONTAINS $name0 RETURN file.relativePath AS file, null AS caller, file.unresolvedCalls AS sites",
+        "params": {
+          "name0": "\"OpenAsync\""
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (call:Call) WHERE call.callee IN $names OPTIONAL MATCH (call)-[target:CALL_RESOLVES_TO]->() RETURN id(call) AS id, count(target) AS resolved",
+        "params": {
+          "names": [
+            "OpenAsync"
+          ]
+        },
+        "rows": [
+          {
+            "id": "file:Web/OrdersController.cs:function:18:Shop.Web.OrdersController.Open:call:19:39:_orders.OpenAsync",
+            "resolved": 1
+          }
+        ]
+      }
+    ],
+    "output": {
+      "symbol": "OpenAsync",
+      "file": null,
+      "maxDepth": 5,
+      "seeds": [
+        {
+          "name": "OpenAsync",
+          "className": "OrderRepository",
+          "file": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "endLine": 17
+        }
+      ],
+      "callers": [
+        {
+          "name": "Open",
+          "className": "OrdersController",
+          "file": "Web/OrdersController.cs",
+          "line": 18,
+          "endLine": 19,
+          "depth": 1
+        }
+      ],
+      "moduleCallers": [],
+      "routes": [
+        {
+          "method": "GET",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "aspnet-mvc",
+          "file": "Web/OrdersController.cs",
+          "line": 18,
+          "reachedThrough": [
+            {
+              "function": "Open",
+              "functionFile": "Web/OrdersController.cs",
+              "as": "handler"
+            }
+          ]
+        }
+      ],
+      "entrypoints": [],
+      "components": [],
+      "pages": [],
+      "apiConsumers": [],
+      "consumerComponents": [],
+      "consumerPages": [],
+      "stores": [],
+      "storeComponents": [],
+      "storePages": [],
+      "dataAccess": [
+        {
+          "model": "Order",
+          "library": "efcore",
+          "operation": "read",
+          "file": "Repositories/OrderRepository.cs",
+          "line": 17,
+          "expression": "_db.Orders.Where",
+          "usedBy": [
+            {
+              "function": "OpenAsync",
+              "functionFile": "Repositories/OrderRepository.cs"
+            }
+          ]
+        }
+      ],
+      "tables": [
+        {
+          "table": "Orders",
+          "kind": "table",
+          "library": "efcore",
+          "reads": [
+            "read"
+          ],
+          "writes": [],
+          "usedBy": [
+            {
+              "function": "OpenAsync",
+              "functionFile": "Repositories/OrderRepository.cs"
+            }
+          ]
+        }
+      ],
+      "envVars": [],
+      "config": [],
+      "unresolvedCalls": {
+        "count": 0,
+        "sites": []
+      },
+      "completeness": "No call named OpenAsync in the scanned files is left unresolved, so the resolved callers (on every page) are all of them; callbacks and other references are in find_references.",
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  }
+]

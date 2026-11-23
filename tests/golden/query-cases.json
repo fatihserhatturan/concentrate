@@ -1506,6 +1506,44 @@
         }
       }
     ],
+    "csharp-efcore": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "catalog_products"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "efcore"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "Order",
+          "operation": "create"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "OpenAsync"
+        }
+      }
+    ],
+    "csharp-dotnet-data-service": [
+      { "tool": "list_tables", "args": {} },
+      { "tool": "list_data_access", "args": { "library": "efcore" } },
+      { "tool": "list_data_access", "args": { "model": "shipments", "operation": "create" } },
+      { "tool": "list_env_config", "args": { "name": "ConnectionStrings" } },
+      { "tool": "list_env_config", "args": { "name": "FULFILMENT_REGION" } },
+      { "tool": "api_consumers", "args": { "client": "refit" } },
+      { "tool": "api_consumers", "args": { "method": "POST", "path": "/api/stock/{sku}/reserve" } },
+      { "tool": "impact_of", "args": { "symbol": "RecordAsync", "file": "ShipmentRepository.cs" } },
+      { "tool": "impact_of", "args": { "symbol": "ReserveAsync", "file": "InventoryClient.cs" } }
+    ],
     "java-jdbc": [
       {
         "tool": "list_tables",
@@ -1530,6 +1568,33 @@
         "tool": "impact_of",
         "args": {
           "symbol": "rename"
+        }
+      }
+    ],
+    "csharp-dapper-adonet": [
+      {
+        "tool": "list_tables",
+        "args": {
+          "name": "orders"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "library": "dapper"
+        }
+      },
+      {
+        "tool": "list_data_access",
+        "args": {
+          "model": "customers",
+          "operation": "update"
+        }
+      },
+      {
+        "tool": "impact_of",
+        "args": {
+          "symbol": "CloseAsync"
         }
       }
     ],
@@ -1583,6 +1648,32 @@
         }
       }
     ],
+    "csharp-config": [
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "Jwt"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "name": "Status__Banner"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "file": "EnvSettings.cs"
+        }
+      },
+      {
+        "tool": "list_env_config",
+        "args": {
+          "unread": true
+        }
+      }
+    ],
     "java-http-clients": [
       {
         "tool": "api_consumers",
@@ -1601,6 +1692,33 @@
         "tool": "list_routes",
         "args": {
           "framework": "spring-mvc"
+        }
+      }
+    ],
+    "csharp-http-clients": [
+      {
+        "tool": "api_consumers",
+        "args": {
+          "method": "GET",
+          "path": "/api/orders/{id}"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "refit"
+        }
+      },
+      {
+        "tool": "api_consumers",
+        "args": {
+          "client": "httpclient-factory"
+        }
+      },
+      {
+        "tool": "list_routes",
+        "args": {
+          "framework": "aspnet-core"
         }
       }
     ],

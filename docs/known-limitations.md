@@ -2822,7 +2822,7 @@ that scope.
 - `[assembly: ...]` attributes are not emitted.
 - The grammar is pinned at 0.23.5: 0.24.0 was under two weeks old when this phase
   was done. Revisit it. `csharp.wasm` is about 5.3 MB, the largest vendored grammar.
-- Frameworks (routes, entrypoints, dependency injection) are described in [C# frameworks](#c-frameworks).
+- Frameworks (routes, entrypoints, dependency injection) are described in [C# frameworks](#c-frameworks); data access, configuration and outbound HTTP in [C# data access, configuration and outbound HTTP](#c-data-access-configuration-and-outbound-http).
 
 ### C# frameworks
 
@@ -2855,7 +2855,12 @@ and stored on the `Call` node; the contributors turn them into `Route`, `EntryPo
   holds the group and from nested groups. A method group links to its `Function`. A lambda links to the enclosing
   `Function` with `handlerName: "<lambda>"`, and its typed parameters are the route's `handlerParameters` (JSON,
   shaped like a `Function`'s `parameters`; `[FromServices]` kept). A local function links to the enclosing
-  `Function` under its written name; **its parameters are not in `handlerParameters`**. `app.Map("/x", branch =>
+  `Function` under its written name; **its parameters are not in `handlerParameters`**. A minimal-API Route carries
+  the range of its handler's own syntax in `handlerStartLine`, `handlerStartColumn`, `handlerEndLine` and
+  `handlerEndColumn` (1-based lines, 0-based columns): the lambda, or the local function a method group names. The start
+  is the handler's start, not the line of the `Map*` call; reaching data accesses, calls and config / env reads is
+  limited to that range. A column-less fact (an ADO.NET `CommandText` assignment, `DestinationTableName`) is placed by
+  line only, so on a line shared by two route lambdas it reaches both. `app.Map("/x", branch =>
   ...)` (a middleware branch) is no route.
 - **Routes declared in an extension method on a `RouteGroupBuilder` parameter are relative.** In
   `app.MapGroup("/api").MapTodos()` the routes (and `MapHub` paths) inside `MapTodos(this RouteGroupBuilder g)` depend
@@ -2932,6 +2937,152 @@ and stored on the `Call` node; the contributors turn them into `Route`, `EntryPo
   `builder.Services`, a `this IServiceCollection` parameter or a fluent chain, and so does an unrelated method
   with the same name. **Conditional and environment-specific registrations** (`if (env.IsDevelopment())`, `#if`) are
   all read as providers: two branches that register one interface are ambiguous.
+
+### C# data access, configuration and outbound HTTP
+
+Data access, configuration, env reads and outbound HTTP are in `src/integrations/frameworks/csharp/` (`data-efcore.ts`,
+`data-sql.ts`, `config-env.ts`, `config-files.ts`, `http-clients.ts`). Tables, accesses, config keys, env variables and
+requests use the nodes and relationships of the other ecosystems, so `list_tables`, `list_data_access`,
+`list_env_config`, `api_consumers` and `impact_of` answer for .NET services. Test files are not read for outbound HTTP.
+
+- **EF Core.** A `DbContext` is a scanned class deriving from `DbContext`, `IdentityDbContext` or `IdentityUserContext`
+  (directly or through a scanned base). Each `DbSet<T>` entity is a `DataModel` (`datamodel:efcore:<ns>:<Entity>`)
+  with `MAPS_TO_TABLE` to the table. The table name is, in order: `ToTable("x"[, schema])`, `[Table("x", Schema = ...)]`,
+  the `DbSet` property name, the entity class name. `ToTable` is read in `OnModelCreating` (also inside
+  `Entity<T>(e => ...)`; a `ToTable` after a navigation link such as `OwnsOne`, `OwnsMany`, `HasOne`, `HasMany`,
+  `WithOne`, `WithMany`, `Navigation` or `UsingEntity` does not rename the owner) and in `IEntityTypeConfiguration<T>.Configure`. `[NotMapped]` and `Ignore<T>()` exclude an
+  entity. Columns come from `[Column]`, `HasColumnName`, `[Key]`, `HasKey`, the `Id` / `<Entity>Id` convention,
+  `[Required]`, `IsRequired` and nullable types. Only public properties are columns (a non-public one needs `[Column]` or
+  `HasColumnName`); a property with an expression body, or a getter body and no setter, or a get-only one without an
+  initializer, is not (`{ get; set; }`, `{ get; init; }`, `{ get; private set; }` and `{ get; } = init` are).
+  `IsRequired(false)` makes a column `optional` even for a non-nullable type; `IsRequired()` / `[Required]` make a
+  nullable one not optional. Accesses (`ACCESSES_DATA`, library `efcore`) come from calls on a
+  context or `DbSet<T>` reached through a field, property, parameter, primary-constructor parameter, `this.x`,
+  `new Ctx()`, `IDbContextFactory<T>.CreateDbContext[Async]`, a minimal-API lambda parameter or the context's own
+  members, or an interface that declares `DbSet<T>` properties and is implemented by a scanned context
+  (`IAppDbContext`, inherited interfaces included; an interface no scanned context implements is not a context). Calls
+  on the context itself map by the argument's static type: `Add`, `AddAsync`, `AddRange`, `Update(Range)`,
+  `Remove(Range)` and `Attach(Range)` take the entity of a parameter, field, local with a known type or `new T(..)` (for
+  a `Range` call the collection's type argument), and `Find<T>` / `FindAsync<T>` take `T`; nothing is recorded when
+  the type is unknown or not an entity. Operations: `Add*` is `create`; `Update*`, `ExecuteUpdate*` and `Attach*` are `update`; `Remove*` and
+  `ExecuteDelete*` are `delete`; `Count`, `Sum`, `Min`, `Max` and `Average` are `aggregate`; the rest is `read`; the chain after a `DbSet` counts up to the step that
+  materializes it (`ToList`, `ToArray`, `ToDictionary`, `ToHashSet`, `ToLookup`, `AsEnumerable`, `First*`, `Single*`,
+  `Last*`, `ElementAt*`, `Find`, `Any`, `All`, `Contains`, `Load`) or aggregates it, so `db.Orders.ToList().Add(x)` is a
+  `read` and `db.Orders.ToList().Count()` too. EFCore.BulkExtensions methods are mapped too. Raw SQL (`Database.ExecuteSqlRaw`, `ExecuteSqlInterpolated`,
+  `ExecuteSql[Async]`, `SqlQuery<T>`, `SqlQueryRaw<T>`, `FromSqlRaw`, `FromSqlInterpolated`, `FromSql`) is mapped to
+  tables by the SQL layer and takes its operation from the SQL; a `FromSql` with no table (`EXEC proc`) reads the entity.
+  The `Function` that makes the call holds the facts (an external call has no `Call` node); routes and callers reach
+  them with `direct: false`.
+- **Not handled in EF Core.** Compiled models, owned types, TPH / TPT / TPC inheritance mapping (a derived entity with
+  its own `DbSet<Derived>` gets a table named after the `DbSet`, a derived entity without one is not mapped), join
+  tables made by `UsingEntity`, `ToView` (a keyless view entity gets its `DbSet` or class name as table), value
+  converters, `Set(typeof(T))`, `Find(typeof(T), id)` and `ApplyConfigurationsFromAssembly` (a configuration class is read
+  wherever it is scanned, not by assembly). A `DbContext` known only through DI registration is missed. A `DbSet` held
+  in a variable (`var set = db.Orders`) or returned from a method is not followed, and a custom extension method on
+  `DbSet<T>` / `IQueryable<T>` (`db.Orders.Active()`) counts only through the standard method after it. Generic
+  repositories (`_ctx.Set<T>()` in `Repo<T>`) name no entity: nothing is recorded, and the calls of a closed subclass
+  are not substituted. `HasDefaultSchema(..)` is not read (a table without an explicit schema has `schemaName: null`);
+  `[Keyless]` / `HasNoKey()` are not read (a keyless entity may get an `Id`-by-convention key column). Positional
+  records used as entities get a table with no columns, and strongly-typed ID structs (`OrderId`) are dropped as
+  navigations, so the key column is missing. `_context.Add(x)` where `x` is known only from a call, a property chain of
+  unknown type or `object` gives nothing. `optional` comes only from `?` on the property type. **`Attach*` is an
+  `update`**, although it may only track the entity.
+- **Dapper and ADO.NET** (libraries `dapper`, `ado.net`). Dapper `Query`, `QueryFirst[OrDefault]`,
+  `QuerySingle[OrDefault]`, `QueryMultiple`, `Execute`, `ExecuteScalar` and `ExecuteReader` (and the `Async` forms) read the SQL from
+  the first argument or `sql:` / `commandText:`, or from a `CommandDefinition`. **The receiver must be typed as a
+  connection** (`IDbConnection`, `DbConnection`, or a `Sql`, `Npgsql`, `MySql`, `Sqlite`, `SQLite`, `Oracle`, `OleDb`,
+  `Odbc`, `Fb` or `DB2` connection) or be a local assigned from `Create…`, `Open…` or `Get…Connection`. ADO.NET reads
+  `new XCommand(sql, conn)`, `XDataAdapter`, a `CommandText` initializer and `cmd.CommandText =` on a typed command or
+  a `conn.CreateCommand()` local; `SqlBulkCopy` and `MySqlBulkCopy` with `DestinationTableName` are `create`. A stored
+  procedure skips its own command only: `CommandType.StoredProcedure` in the command's constructor arguments or object
+  initializer, `cmd.CommandType = CommandType.StoredProcedure` on the variable the command is created into (or whose
+  `CommandText` is assigned) and, for Dapper, `commandType: CommandType.StoredProcedure` in that call. Other commands
+  of the same method are read. The receiver is matched by variable name within the member, so a name reused for a
+  stored procedure and a text command in one method skips both. A dynamic SQL string is skipped; a partly dynamic one counts the tables its literal part names.
+- **Not handled in Dapper and ADO.NET.** SQL read from files or resources, built with `StringBuilder` or
+  `string.Create`, or made by `DbCommandBuilder`; Dapper.Contrib; a receiver of unknown type
+  (`(await GetConnection()).Query(...)`, `tx.Connection.Query(..)`, `factory.Create().Query(..)`,
+  `_factory.CreateDbContext().Orders`: use a local); a command created in one method and executed in another (the
+  stored-procedure check is per command variable within a member). **`MERGE`, `TRUNCATE TABLE` and `DROP TABLE` are not
+  mapped:** the shared SQL layer returns no table for them, in C# as in every other language. Interpolated SQL with a
+  dynamic schema or table (`$"FROM {schema}.Orders"`) names the table only through its literal part, so
+  `{schema}.Orders` gives nothing. Integer, char and `true` / `false` literals fold to their text inside a
+  concatenation, interpolation hole or `string.Format` / `Concat` / `Join` argument (`"LIMIT " + 10` is `LIMIT 10`); a
+  bare literal alone and floating-point literals (culture) are not folded.
+- **Tables are keyed by name only.** `Table` ids are `table:csharp:-:<lower-cased name>`, so the same name in two
+  schemas (`billing.Invoices`, `dbo.Invoices`) is one node. The schema of a SQL mention (`FROM dbo.Orders`) is ignored;
+  only a declaration (`[Table(.., Schema=..)]`, `ToTable(name, schema)`) sets `schemaName`, and it is the schema of the
+  first declaration.
+- **Lambda parameters are typed per lambda.** Typed lambda, anonymous-method and local-function parameters are scoped
+  to their lambda: when two lambdas of one member name a parameter alike with different types (`(AppCtx db) =>` and
+  `(AuditCtx db) =>`), the member-wide `csharpLocals` entry is `null` and the Function property `csharpLambdaLocals`
+  (JSON list of `{r: [startLine, startColumn, endLine, endColumn], l: {name: local}}`, present only when a lambda's
+  parameter differs from `csharpLocals`) types the receiver inside each lambda. EF Core, configuration and HTTP reads
+  pass their position to `receivers.typeOf`; the other readers (Dapper and ADO.NET, DI) still read the member-wide
+  local.
+- **Types outside the scan match by simple name.** Implicit usings and the SDK bring namespaces that no `using`
+  names, so a type such as `DbContext`, `IConfiguration` or `HttpClient` is matched by its simple name when the scan
+  does not declare a type of that name; one the scan declares is the user's own and never counts. A look-alike
+  type from another library is accepted.
+- **Configuration.** Every leaf of `appsettings*.json` is a `ConfigValue` (`DECLARES_CONFIG`; a secret key's value is
+  stored as `<redacted>`: a key with a password, secret, token, credential or api/access/signing key word, and a lone
+  `Key` under a jwt, auth, encryption, signing, crypto or hmac section; a number or boolean that matched only by a
+  password or token word, such as `Password:RequiredLength: 8`, is kept. In a connection string the `Password`, `Pwd`,
+  `AccountKey`, `SharedAccessKey`, `SharedAccessSignature`, `AccessToken`, `ApiKey`, `Secret` and `Token` parameters
+  are redacted, quoted values included, and so is the password of a URL's user info; the value of any other key is
+  shown as written). `Environment.GetEnvironmentVariable` (also the target overload),
+  `GetEnvironmentVariables()["X"]` and `ExpandEnvironmentVariables("%X%")` are `USES_ENV`. `IConfiguration`,
+  `IConfigurationRoot`, `ConfigurationManager` and `x.Configuration` reads (the last only when `x` has no type the scan knows: a scanned type
+  without a `Configuration` member is not the host builder) are `CONSUMES_CONFIG`: the indexer,
+  `GetValue<T>`, `GetConnectionString`, `GetSection` / `GetRequiredSection` chains, and `Get<T>`, `Bind` and
+  `GetChildren` (which read every key below the section). `Configure<T>(section)`,
+  `AddOptions<T>().Bind(section)` and `BindConfiguration` tie a section to `T`, and a consumer of `IOptions<T>`,
+  `IOptionsSnapshot<T>` or `IOptionsMonitor<T>` reads the section's keys, narrowed to the public properties of `T` when
+  `T` is scanned (`[ConfigurationKeyName("x")]` renames a property's key). A key that no `appsettings*.json` sets is a `ConfigValue` with `valueType` `default` or `unset`,
+  declared by the reading file. Each exact key with an `appsettings` entry also gets a `USES_ENV` access
+  (`config override`) to `env:A__B`, the variable that overrides it. A read is copied to the `Route` whose handler
+  makes it: the routes of a controller action or a method-group handler get the reads of that method; a minimal-API
+  route gets only the reads written inside its handler's own range (the Route's `handlerStartLine`, `handlerStartColumn`,
+  `handlerEndLine` and `handlerEndColumn`: the lambda, or the local function a method group names), so two routes on one
+  line stay apart and the startup code around them belongs to no route. Local functions and lambdas resolve to the
+  enclosing function (`<top-level>` for top-level statements), so `impact_of` and `route_details` still link a
+  minimal-API route to that enclosing function: a change under one lambda lists the sibling minimal routes too.
+- **Config file limits.** The `appsettings` value a URL reads is looked up without the environment: the base file
+  (`appsettings.json`) wins over `appsettings.Production.json`, as the closest file does for a monorepo. The items of a
+  JSON array share the array's line (a `ConfigValue` per item, one `line`). A JSON object with duplicate keys keeps
+  every occurrence as its own `ConfigValue` (`dup` and `DUP` are one .NET key; two on the same line share one node); a read takes the first by file order and line.
+- **Not handled in configuration.** An `IConfigurationSection` root taken from a parameter or field; `Get<T>()` on the
+  whole configuration; `AddJsonFile` with a custom file name and user secrets (only `appsettings*.json` are read);
+  `AddEnvironmentVariables("PREFIX_")` (the override name is not prefixed); named options;
+  `GetRequiredService<IOptions<T>>()`; `IOptions<T>` parameters of a minimal-API lambda; dynamic keys.
+- **Outbound HTTP** (labels `httpclient-factory`, `httpclient`, `refit`; request edges `REQUESTS`, as for the other
+  clients, so `api_consumers` links them to the route they reach). `HttpClient` `Get*`, `Post*`, `Put*`, `Patch*` and
+  `Delete*` (`Async`, including `GetFromJsonAsync`, `PostAsJsonAsync`, `PutAsJsonAsync`, `PatchAsJsonAsync` and
+  `DeleteFromJsonAsync`) and `SendAsync` / `Send` with an `HttpRequestMessage` (method and URL from its constructor,
+  initializer or a later assignment); subclasses of `HttpClient` count. URLs fold string concatenation and
+  interpolation, `new Uri(base, relative)` (and a local holding one) and `QueryHelpers.AddQueryString`; an unknown part
+  is a `${expr}` hole, and the query, fragment and user info are dropped. A request is joined to the base address the
+  .NET way (RFC 3986): a relative URL starting with `/` replaces the base's path (`http://h/api` + `/x` is
+  `http://h/x`), any other drops the base's last segment unless the base ends with `/` (`http://h/api` + `v1/x` is
+  `http://h/v1/x`, `http://h/api/` + `v1/x` is `http://h/api/v1/x`), an absolute URL ignores the base, and `""` is the
+  base itself. Refit differs: its method path is appended after the base path. The base comes from `new HttpClient { BaseAddress = ... }`,
+  `x.BaseAddress =`, `AddHttpClient("name")`, `AddHttpClient<T>()`, `AddHttpClient<I, C>()` or the default
+  `AddHttpClient()` with `ConfigureHttpClient`, and `factory.CreateClient("name")`. A base that is a configuration
+  read (`c["A:B"]`, `GetValue<T>`, `GetSection("A")["B"]`, `GetSection("A").GetValue<T>("B")`, `.Value`) is resolved
+  with `appsettings*.json` (an unknown key is `${config:KEY}`, a key that is not a literal `${expr}`; written
+  expressions and quotes never reach `httpUrl`). A secret key is never looked up, but the value of a non-secret key is
+  used as written, so a webhook URL with a token in its path can appear in `httpUrl`.
+  Refit interfaces (`[Get]`, `[Post]`, `[Put]`, `[Patch]`, `[Delete]`, `[Head]`, `[Options]`, inherited interfaces
+  included) give one request per method, with the base from `RestService.For<T>(url | new HttpClient { BaseAddress })`
+  (used for the calls through the local or field it is assigned to) or `AddRefitClient<T>().ConfigureHttpClient`
+  (the fallback). Named clients compare ordinally, as `IHttpClientFactory` does: `"Lit"` and `"LIT"` are two clients.
+- **Not handled in outbound HTTP.** `WebClient`, `WebRequest`, RestSharp and Flurl; a `DelegatingHandler` that rewrites
+  the URL; a message built in one method and sent in another; a `BaseAddress` from `IOptions<T>` or from a
+  configuration value held in a variable; `CreateClient<T>()` and a client name that is not a literal; a
+  field-initializer `HttpClient` outside a function. **Cost:** the owner lookups of
+  the config and HTTP readers scan a file's functions per expression, so a generated file of many thousand members is
+  slow. **The route linker turns `localhost:PORT` into a path whatever
+  the port**, so a call to another local service can link to a route of the wrong one.
 
 ## Non-code files
 

@@ -1,0 +1,3649 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 6
+          },
+          {
+            "table": "File",
+            "count": 16
+          },
+          {
+            "table": "Import",
+            "count": 11
+          },
+          {
+            "table": "Function",
+            "count": 28
+          },
+          {
+            "table": "Class",
+            "count": 12
+          },
+          {
+            "table": "Field",
+            "count": 19
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 4
+          },
+          {
+            "table": "Interface",
+            "count": 0
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 1
+          },
+          {
+            "table": "Route",
+            "count": 4
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 13
+          },
+          {
+            "table": "ConfigValue",
+            "count": 39
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 6
+        },
+        {
+          "table": "File",
+          "count": 16
+        },
+        {
+          "table": "Import",
+          "count": 11
+        },
+        {
+          "table": "Function",
+          "count": 28
+        },
+        {
+          "table": "Class",
+          "count": 12
+        },
+        {
+          "table": "Field",
+          "count": 19
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 4
+        },
+        {
+          "table": "Interface",
+          "count": 0
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 1
+        },
+        {
+          "table": "Route",
+          "count": 4
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 13
+        },
+        {
+          "table": "ConfigValue",
+          "count": 39
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<top-level>",
+            "kind": "Function",
+            "file": "Program.cs",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "StatusController",
+            "kind": "Class",
+            "file": "Controllers/StatusController.cs",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "EnvNames",
+            "kind": "Class",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "EnvSettings",
+            "kind": "Class",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Environment",
+            "kind": "Class",
+            "file": "Legacy/Lookup.cs",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "StorageOptions",
+            "kind": "Class",
+            "file": "Options/StorageOptions.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "FeatureFlags",
+            "kind": "Class",
+            "file": "Services/FeatureFlags.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "MailSender",
+            "kind": "Class",
+            "file": "Services/MailSender.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "StorageMonitor",
+            "kind": "Class",
+            "file": "Services/StorageMonitor.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "TokenService",
+            "kind": "Class",
+            "file": "Services/TokenService.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "StatusController",
+            "kind": "Method",
+            "file": "Controllers/StatusController.cs",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "StatusController"
+          },
+          {
+            "name": "Get",
+            "kind": "Method",
+            "file": "Controllers/StatusController.cs",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "StatusController"
+          },
+          {
+            "name": "Deployment",
+            "kind": "Method",
+            "file": "Controllers/StatusController.cs",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "StatusController"
+          },
+          {
+            "name": "Queue",
+            "kind": "Method",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvSettings"
+          },
+          {
+            "name": "MachineHome",
+            "kind": "Method",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvSettings"
+          },
+          {
+            "name": "Override",
+            "kind": "Method",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvSettings"
+          },
+          {
+            "name": "Expand",
+            "kind": "Method",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 25,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "EnvSettings"
+          },
+          {
+            "name": "GetEnvironmentVariable",
+            "kind": "Method",
+            "file": "Legacy/Lookup.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "Environment"
+          },
+          {
+            "name": "FeatureFlags",
+            "kind": "Method",
+            "file": "Services/FeatureFlags.cs",
+            "line": 7,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureFlags"
+          },
+          {
+            "name": "CacheSeconds",
+            "kind": "Method",
+            "file": "Services/FeatureFlags.cs",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureFlags"
+          },
+          {
+            "name": "BannerText",
+            "kind": "Method",
+            "file": "Services/FeatureFlags.cs",
+            "line": 19,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureFlags"
+          },
+          {
+            "name": "Legacy",
+            "kind": "Method",
+            "file": "Services/FeatureFlags.cs",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureFlags"
+          },
+          {
+            "name": "LogLevels",
+            "kind": "Method",
+            "file": "Services/FeatureFlags.cs",
+            "line": 29,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "FeatureFlags"
+          },
+          {
+            "name": "MailSender",
+            "kind": "Method",
+            "file": "Services/MailSender.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailSender"
+          },
+          {
+            "name": "Endpoint",
+            "kind": "Method",
+            "file": "Services/MailSender.cs",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "MailSender"
+          },
+          {
+            "name": "StorageMonitor",
+            "kind": "Method",
+            "file": "Services/StorageMonitor.cs",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "StorageMonitor"
+          },
+          {
+            "name": "get_Container",
+            "kind": "Method",
+            "file": "Services/StorageMonitor.cs",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "StorageMonitor"
+          },
+          {
+            "name": "TokenService",
+            "kind": "Method",
+            "file": "Services/TokenService.cs",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "TokenService"
+          },
+          {
+            "name": "Issuer",
+            "kind": "Method",
+            "file": "Services/TokenService.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "TokenService"
+          },
+          {
+            "name": "Lifetime",
+            "kind": "Method",
+            "file": "Services/TokenService.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "TokenService"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<top-level>",
+          "kind": "Function",
+          "file": "Program.cs",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "StatusController",
+          "kind": "Class",
+          "file": "Controllers/StatusController.cs",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "EnvNames",
+          "kind": "Class",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "EnvSettings",
+          "kind": "Class",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Environment",
+          "kind": "Class",
+          "file": "Legacy/Lookup.cs",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StorageOptions",
+          "kind": "Class",
+          "file": "Options/StorageOptions.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "FeatureFlags",
+          "kind": "Class",
+          "file": "Services/FeatureFlags.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "MailSender",
+          "kind": "Class",
+          "file": "Services/MailSender.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StorageMonitor",
+          "kind": "Class",
+          "file": "Services/StorageMonitor.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "TokenService",
+          "kind": "Class",
+          "file": "Services/TokenService.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StatusController",
+          "kind": "Method",
+          "file": "Controllers/StatusController.cs",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "StatusController"
+        },
+        {
+          "name": "Get",
+          "kind": "Method",
+          "file": "Controllers/StatusController.cs",
+          "line": 16,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "StatusController"
+        },
+        {
+          "name": "Deployment",
+          "kind": "Method",
+          "file": "Controllers/StatusController.cs",
+          "line": 19,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "StatusController"
+        },
+        {
+          "name": "Queue",
+          "kind": "Method",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvSettings"
+        },
+        {
+          "name": "MachineHome",
+          "kind": "Method",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvSettings"
+        },
+        {
+          "name": "Override",
+          "kind": "Method",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvSettings"
+        },
+        {
+          "name": "Expand",
+          "kind": "Method",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 25,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "EnvSettings"
+        },
+        {
+          "name": "GetEnvironmentVariable",
+          "kind": "Method",
+          "file": "Legacy/Lookup.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "Environment"
+        },
+        {
+          "name": "FeatureFlags",
+          "kind": "Method",
+          "file": "Services/FeatureFlags.cs",
+          "line": 7,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "FeatureFlags"
+        },
+        {
+          "name": "CacheSeconds",
+          "kind": "Method",
+          "file": "Services/FeatureFlags.cs",
+          "line": 12,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "FeatureFlags"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Controllers/StatusController.cs",
+            "name": "StatusController",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Infrastructure/EnvSettings.cs",
+            "name": "EnvNames",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Infrastructure/EnvSettings.cs",
+            "name": "EnvSettings",
+            "kind": "Class",
+            "line": 11,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookup.cs",
+            "name": "Environment",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Legacy/Lookup.cs",
+            "name": "Lookup",
+            "kind": "Class",
+            "line": 9,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Options/JwtOptions.cs",
+            "name": "JwtOptions",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Options/MailOptions.cs",
+            "name": "MailOptions",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Options/StorageOptions.cs",
+            "name": "StorageOptions",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/FeatureFlags.cs",
+            "name": "FeatureFlags",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/MailSender.cs",
+            "name": "MailSender",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/StorageMonitor.cs",
+            "name": "StorageMonitor",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/TokenService.cs",
+            "name": "TokenService",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "Controllers/StatusController.cs",
+          "name": "StatusController",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Infrastructure/EnvSettings.cs",
+          "name": "EnvNames",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Infrastructure/EnvSettings.cs",
+          "name": "EnvSettings",
+          "kind": "Class",
+          "line": 11,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookup.cs",
+          "name": "Environment",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Legacy/Lookup.cs",
+          "name": "Lookup",
+          "kind": "Class",
+          "line": 9,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Options/JwtOptions.cs",
+          "name": "JwtOptions",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Options/MailOptions.cs",
+          "name": "MailOptions",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Options/StorageOptions.cs",
+          "name": "StorageOptions",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/FeatureFlags.cs",
+          "name": "FeatureFlags",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/MailSender.cs",
+          "name": "MailSender",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/StorageMonitor.cs",
+          "name": "StorageMonitor",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/TokenService.cs",
+          "name": "TokenService",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 12
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Controllers/StatusController.cs",
+            "line": 16,
+            "method": "GET",
+            "path": "/api/status",
+            "fullPath": "/api/status",
+            "framework": "aspnet-mvc",
+            "handlerName": "Get",
+            "handler": "Get"
+          },
+          {
+            "file": "Controllers/StatusController.cs",
+            "line": 19,
+            "method": "GET",
+            "path": "/api/status/env",
+            "fullPath": "/api/status/env",
+            "framework": "aspnet-mvc",
+            "handlerName": "Deployment",
+            "handler": "Deployment"
+          },
+          {
+            "file": "Program.cs",
+            "line": 25,
+            "method": "GET",
+            "path": "/banner",
+            "fullPath": "/banner",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 26,
+            "method": "GET",
+            "path": "/region",
+            "fullPath": "/region",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "Controllers/StatusController.cs",
+          "line": 16,
+          "method": "GET",
+          "path": "/api/status",
+          "fullPath": "/api/status",
+          "framework": "aspnet-mvc",
+          "handlerName": "Get",
+          "handler": "Get"
+        },
+        {
+          "file": "Controllers/StatusController.cs",
+          "line": 19,
+          "method": "GET",
+          "path": "/api/status/env",
+          "fullPath": "/api/status/env",
+          "framework": "aspnet-mvc",
+          "handlerName": "Deployment",
+          "handler": "Deployment"
+        },
+        {
+          "file": "Program.cs",
+          "line": 25,
+          "method": "GET",
+          "path": "/banner",
+          "fullPath": "/banner",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 26,
+          "method": "GET",
+          "path": "/region",
+          "fullPath": "/region",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "id": "entrypoint:csharp:ConfigDemo.csproj",
+            "file": "ConfigDemo.csproj",
+            "line": 1,
+            "kind": "csharp-project",
+            "trigger": "ConfigDemo",
+            "library": "dotnet",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "id": "file:Program.cs:entrypoint:5:0:main:<none>",
+            "file": "Program.cs",
+            "line": 5,
+            "kind": "main",
+            "trigger": null,
+            "library": "csharp",
+            "handlerName": "<top-level>",
+            "handler": "<top-level>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:ConfigDemo.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:ConfigDemo.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": [
+          {
+            "id": "entrypoint:csharp:ConfigDemo.csproj",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 5,
+            "command": "dotnet run"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "ConfigDemo.csproj",
+          "line": 1,
+          "kind": "csharp-project",
+          "trigger": "ConfigDemo",
+          "library": "dotnet",
+          "handlerName": null,
+          "handler": null,
+          "runs": [
+            {
+              "file": "Program.cs",
+              "entrypoint": "main:null",
+              "command": "dotnet run"
+            }
+          ]
+        },
+        {
+          "file": "Program.cs",
+          "line": 5,
+          "kind": "main",
+          "trigger": null,
+          "library": "csharp",
+          "handlerName": "<top-level>",
+          "handler": "<top-level>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "Controllers/StatusController.cs",
+            "line": 17,
+            "name": "Status__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Controllers/StatusController.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Controllers/StatusController.cs",
+            "line": 20,
+            "name": "DEPLOY_ENV",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Controllers/StatusController.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 13,
+            "name": "APP_QUEUE_URL",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 15,
+            "name": "HOME",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 17,
+            "name": "Jwt__Issuer",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 22,
+            "name": "DIRECT_VALUE",
+            "value": "Environment.GetEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 22,
+            "name": "MAP_VALUE",
+            "value": "Environment.GetEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 25,
+            "name": "TEMP",
+            "value": "Environment.ExpandEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 7,
+            "name": "Features__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 8,
+            "name": "Limits__MaxItems",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 9,
+            "name": "ConnectionStrings__Orders",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 25,
+            "name": "Status__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 26,
+            "name": "AWS_REGION",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Services/FeatureFlags.cs",
+            "line": 16,
+            "name": "Features__Cache__Ttl__Seconds",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Services/FeatureFlags.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Services/FeatureFlags.cs",
+            "line": 21,
+            "name": "Features__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Services/FeatureFlags.cs",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Retry:Count",
+            "value": "3",
+            "valueType": "default",
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "Services/FeatureFlags.cs",
+            "line": 26,
+            "name": "Features:Fallback",
+            "value": "none",
+            "valueType": "default",
+            "consumer": "Services/FeatureFlags.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "Services/FeatureFlags.cs",
+            "line": 26,
+            "name": "Unset:Key",
+            "value": "",
+            "valueType": "unset",
+            "consumer": "Services/FeatureFlags.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 2,
+            "name": "Logging:LogLevel:Default",
+            "value": "Debug",
+            "valueType": "string",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 4,
+            "name": "Mail:Host",
+            "value": "localhost",
+            "valueType": "string",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 4,
+            "name": "Mail:Port",
+            "value": "1025",
+            "valueType": "number",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 5,
+            "name": "Features:Banner",
+            "value": "Dev build",
+            "valueType": "string",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 3,
+            "name": "ConnectionStrings:Orders",
+            "value": "Server=prod-db;Database=orders;User Id=app;Password=<redacted>;",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 6,
+            "name": "Storage:Container",
+            "value": "invoices-prod",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 7,
+            "name": "Payments:ApiKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 4,
+            "name": "Logging:LogLevel:Default",
+            "value": "Information",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 4,
+            "name": "Logging:LogLevel:Microsoft.AspNetCore",
+            "value": "Warning",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 7,
+            "name": "ConnectionStrings:Orders",
+            "value": "Server=db.local;Database=orders;User Id=app;Password=<redacted>;",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 16,
+            "name": "Mail:Host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 17,
+            "name": "Mail:Port",
+            "value": "587",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 18,
+            "name": "Mail:UseSsl",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 19,
+            "name": "Mail:Recipients:0",
+            "value": "ops@example.com",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 19,
+            "name": "Mail:Recipients:1",
+            "value": "billing@example.com",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 22,
+            "name": "Storage:Container",
+            "value": "invoices",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 23,
+            "name": "Storage:MaxBytes",
+            "value": "1048576",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 26,
+            "name": "Features:Banner",
+            "value": "Welcome",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 27,
+            "name": "Features:Cache:Ttl:Seconds",
+            "value": "60",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 29,
+            "name": "Limits:MaxItems",
+            "value": "100",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 30,
+            "name": "Status:Banner",
+            "value": "All systems go",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "Controllers/StatusController.cs",
+            "line": 30,
+            "name": "Status:Banner",
+            "value": "All systems go",
+            "valueType": "string",
+            "consumer": "Status:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "ConnectionStrings:Orders",
+            "value": "Server=prod-db;Database=orders;User Id=app;Password=<redacted>;",
+            "valueType": "string",
+            "consumer": "ConnectionStrings:Orders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 4,
+            "name": "Mail:Host",
+            "value": "localhost",
+            "valueType": "string",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 4,
+            "name": "Mail:Port",
+            "value": "1025",
+            "valueType": "number",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Features:Banner",
+            "value": "Dev build",
+            "valueType": "string",
+            "consumer": "Features:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 6,
+            "name": "Storage:Container",
+            "value": "invoices-prod",
+            "valueType": "string",
+            "consumer": "StorageOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 7,
+            "name": "ConnectionStrings:Orders",
+            "value": "Server=db.local;Database=orders;User Id=app;Password=<redacted>;",
+            "valueType": "string",
+            "consumer": "ConnectionStrings:Orders",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Retry:Count",
+            "value": "3",
+            "valueType": "default",
+            "consumer": "Retry:Count",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 16,
+            "name": "Mail:Host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 17,
+            "name": "Mail:Port",
+            "value": "587",
+            "valueType": "number",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 18,
+            "name": "Mail:UseSsl",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 19,
+            "name": "Mail:Recipients:0",
+            "value": "ops@example.com",
+            "valueType": "string",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 19,
+            "name": "Mail:Recipients:1",
+            "value": "billing@example.com",
+            "valueType": "string",
+            "consumer": "MailOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 22,
+            "name": "Storage:Container",
+            "value": "invoices",
+            "valueType": "string",
+            "consumer": "StorageOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 23,
+            "name": "Storage:MaxBytes",
+            "value": "1048576",
+            "valueType": "number",
+            "consumer": "StorageOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 26,
+            "name": "Features:Banner",
+            "value": "Welcome",
+            "valueType": "string",
+            "consumer": "Features:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 29,
+            "name": "Limits:MaxItems",
+            "value": "100",
+            "valueType": "number",
+            "consumer": "Limits:MaxItems",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 30,
+            "name": "Status:Banner",
+            "value": "All systems go",
+            "valueType": "string",
+            "consumer": "Status:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 2,
+            "name": "Logging:LogLevel:Default",
+            "value": "Debug",
+            "valueType": "string",
+            "consumer": "Logging:LogLevel",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 4,
+            "name": "Logging:LogLevel:Default",
+            "value": "Information",
+            "valueType": "string",
+            "consumer": "Logging:LogLevel",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 4,
+            "name": "Logging:LogLevel:Microsoft.AspNetCore",
+            "value": "Warning",
+            "valueType": "string",
+            "consumer": "Logging:LogLevel",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 5,
+            "name": "Features:Banner",
+            "value": "Dev build",
+            "valueType": "string",
+            "consumer": "Features:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 26,
+            "name": "Features:Fallback",
+            "value": "none",
+            "valueType": "default",
+            "consumer": "Features:Fallback",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 26,
+            "name": "Unset:Key",
+            "value": "",
+            "valueType": "unset",
+            "consumer": "Unset:Key",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 26,
+            "name": "Features:Banner",
+            "value": "Welcome",
+            "valueType": "string",
+            "consumer": "Features:Banner",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/FeatureFlags.cs",
+            "line": 27,
+            "name": "Features:Cache:Ttl:Seconds",
+            "value": "60",
+            "valueType": "number",
+            "consumer": "Features:Cache:Ttl:Seconds",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 4,
+            "name": "Mail:Host",
+            "value": "localhost",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 4,
+            "name": "Mail:Port",
+            "value": "1025",
+            "valueType": "number",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 16,
+            "name": "Mail:Host",
+            "value": "smtp.example.com",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 17,
+            "name": "Mail:Port",
+            "value": "587",
+            "valueType": "number",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 18,
+            "name": "Mail:UseSsl",
+            "value": "true",
+            "valueType": "boolean",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 19,
+            "name": "Mail:Recipients:0",
+            "value": "ops@example.com",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/MailSender.cs",
+            "line": 19,
+            "name": "Mail:Recipients:1",
+            "value": "billing@example.com",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/StorageMonitor.cs",
+            "line": 6,
+            "name": "Storage:Container",
+            "value": "invoices-prod",
+            "valueType": "string",
+            "consumer": "monitor",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/StorageMonitor.cs",
+            "line": 22,
+            "name": "Storage:Container",
+            "value": "invoices",
+            "valueType": "string",
+            "consumer": "monitor",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/StorageMonitor.cs",
+            "line": 23,
+            "name": "Storage:MaxBytes",
+            "value": "1048576",
+            "valueType": "number",
+            "consumer": "monitor",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "options",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "Controllers/StatusController.cs",
+          "line": 17,
+          "name": "Status__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Controllers/StatusController.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Controllers/StatusController.cs",
+          "line": 20,
+          "name": "DEPLOY_ENV",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Controllers/StatusController.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 13,
+          "name": "APP_QUEUE_URL",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 15,
+          "name": "HOME",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 17,
+          "name": "Jwt__Issuer",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 22,
+          "name": "DIRECT_VALUE",
+          "value": "Environment.GetEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 22,
+          "name": "MAP_VALUE",
+          "value": "Environment.GetEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 25,
+          "name": "TEMP",
+          "value": "Environment.ExpandEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 7,
+          "name": "Features__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 8,
+          "name": "Limits__MaxItems",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 9,
+          "name": "ConnectionStrings__Orders",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 25,
+          "name": "Status__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 26,
+          "name": "AWS_REGION",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Services/FeatureFlags.cs",
+          "line": 16,
+          "name": "Features__Cache__Ttl__Seconds",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Services/FeatureFlags.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Services/FeatureFlags.cs",
+          "line": 21,
+          "name": "Features__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Services/FeatureFlags.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "Program.cs",
+          "line": 10,
+          "name": "Retry:Count",
+          "value": "3",
+          "valueType": "default",
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "Services/FeatureFlags.cs",
+          "line": 26,
+          "name": "Features:Fallback",
+          "value": "none",
+          "valueType": "default",
+          "consumer": "Services/FeatureFlags.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "Services/FeatureFlags.cs",
+          "line": 26,
+          "name": "Unset:Key",
+          "value": "",
+          "valueType": "unset",
+          "consumer": "Services/FeatureFlags.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 2,
+          "name": "Logging:LogLevel:Default",
+          "value": "Debug",
+          "valueType": "string",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 4,
+          "name": "Mail:Host",
+          "value": "localhost",
+          "valueType": "string",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 4,
+          "name": "Mail:Port",
+          "value": "1025",
+          "valueType": "number",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 5,
+          "name": "Features:Banner",
+          "value": "Dev build",
+          "valueType": "string",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 3,
+          "name": "ConnectionStrings:Orders",
+          "value": "Server=prod-db;Database=orders;User Id=app;Password=<redacted>;",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 5,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 5,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.prod.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 6,
+          "name": "Storage:Container",
+          "value": "invoices-prod",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 7,
+          "name": "Payments:ApiKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 4,
+          "name": "Logging:LogLevel:Default",
+          "value": "Information",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 4,
+          "name": "Logging:LogLevel:Microsoft.AspNetCore",
+          "value": "Warning",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 7,
+          "name": "ConnectionStrings:Orders",
+          "value": "Server=db.local;Database=orders;User Id=app;Password=<redacted>;",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 10,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 11,
+          "name": "Jwt:Audience",
+          "value": "orders-api",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 12,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 13,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 16,
+          "name": "Mail:Host",
+          "value": "smtp.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 17,
+          "name": "Mail:Port",
+          "value": "587",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 18,
+          "name": "Mail:UseSsl",
+          "value": "true",
+          "valueType": "boolean",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 19,
+          "name": "Mail:Recipients:0",
+          "value": "ops@example.com",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 19,
+          "name": "Mail:Recipients:1",
+          "value": "billing@example.com",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 22,
+          "name": "Storage:Container",
+          "value": "invoices",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 23,
+          "name": "Storage:MaxBytes",
+          "value": "1048576",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 26,
+          "name": "Features:Banner",
+          "value": "Welcome",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 27,
+          "name": "Features:Cache:Ttl:Seconds",
+          "value": "60",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 29,
+          "name": "Limits:MaxItems",
+          "value": "100",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 30,
+          "name": "Status:Banner",
+          "value": "All systems go",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Controllers/StatusController.cs",
+          "line": 30,
+          "name": "Status:Banner",
+          "value": "All systems go",
+          "valueType": "string",
+          "consumer": "Status:Banner",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "ConnectionStrings:Orders",
+          "value": "Server=prod-db;Database=orders;User Id=app;Password=<redacted>;",
+          "valueType": "string",
+          "consumer": "ConnectionStrings:Orders",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 50,
+        "nextCursor": "eyJvIjo1MCwiayI6InozLXVFNmNRMVIydWE1bVQifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "name": "Jwt"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"Jwt\")) RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 17,
+            "name": "Jwt__Issuer",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"Jwt\")) RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "appsettings.Development.json",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "appsettings.Development.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"Jwt\")) RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "Jwt",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "JwtOptions",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 3,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "600",
+            "valueType": "number",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 5,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 5,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.prod.example.com",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 10,
+            "name": "Jwt:Issuer",
+            "value": "https://auth.example.com",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 11,
+            "name": "Jwt:Audience",
+            "value": "orders-api",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 12,
+            "name": "Jwt:SigningKey",
+            "value": "<redacted>",
+            "valueType": "string",
+            "consumer": "options",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/TokenService.cs",
+            "line": 13,
+            "name": "Jwt:ExpiryMinutes",
+            "value": "30",
+            "valueType": "number",
+            "consumer": "options",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "Jwt",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 17,
+          "name": "Jwt__Issuer",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Development.json",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "appsettings.Development.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 5,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 5,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.prod.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 10,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 11,
+          "name": "Jwt:Audience",
+          "value": "orders-api",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 12,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 13,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 5,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 5,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.prod.example.com",
+          "valueType": "string",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 5,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 5,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.prod.example.com",
+          "valueType": "string",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 10,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.example.com",
+          "valueType": "string",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 10,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.example.com",
+          "valueType": "string",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 11,
+          "name": "Jwt:Audience",
+          "value": "orders-api",
+          "valueType": "string",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 11,
+          "name": "Jwt:Audience",
+          "value": "orders-api",
+          "valueType": "string",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 12,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 12,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 13,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "Jwt",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 13,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "JwtOptions",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 3,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "600",
+          "valueType": "number",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 5,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 5,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.prod.example.com",
+          "valueType": "string",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 10,
+          "name": "Jwt:Issuer",
+          "value": "https://auth.example.com",
+          "valueType": "string",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 11,
+          "name": "Jwt:Audience",
+          "value": "orders-api",
+          "valueType": "string",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 12,
+          "name": "Jwt:SigningKey",
+          "value": "<redacted>",
+          "valueType": "string",
+          "consumer": "options",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/TokenService.cs",
+          "line": 13,
+          "name": "Jwt:ExpiryMinutes",
+          "value": "30",
+          "valueType": "number",
+          "consumer": "options",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 29
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "name": "Status__Banner"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND contains(lower(env.name), lower(\"Status__Banner\")) RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "Controllers/StatusController.cs",
+            "line": 17,
+            "name": "Status__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Controllers/StatusController.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 25,
+            "name": "Status__Banner",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"Status__Banner\")) RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND contains(lower(config.name), lower(\"Status__Banner\")) RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "Status__Banner",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "Controllers/StatusController.cs",
+          "line": 17,
+          "name": "Status__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Controllers/StatusController.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 25,
+          "name": "Status__Banner",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "file": "EnvSettings.cs"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) RETURN file.relativePath AS file",
+        "rows": [
+          {
+            "file": "ConfigDemo.csproj"
+          },
+          {
+            "file": "Controllers/StatusController.cs"
+          },
+          {
+            "file": "Infrastructure/EnvSettings.cs"
+          },
+          {
+            "file": "Legacy/Lookup.cs"
+          },
+          {
+            "file": "Options/JwtOptions.cs"
+          },
+          {
+            "file": "Options/MailOptions.cs"
+          },
+          {
+            "file": "Options/StorageOptions.cs"
+          },
+          {
+            "file": "Program.cs"
+          },
+          {
+            "file": "README.md"
+          },
+          {
+            "file": "Services/FeatureFlags.cs"
+          },
+          {
+            "file": "Services/MailSender.cs"
+          },
+          {
+            "file": "Services/StorageMonitor.cs"
+          },
+          {
+            "file": "Services/TokenService.cs"
+          },
+          {
+            "file": "appsettings.Development.json"
+          },
+          {
+            "file": "appsettings.Production.json"
+          },
+          {
+            "file": "appsettings.json"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true AND file.relativePath IN [\"Infrastructure/EnvSettings.cs\"] RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 13,
+            "name": "APP_QUEUE_URL",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 15,
+            "name": "HOME",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 17,
+            "name": "Jwt__Issuer",
+            "value": "Environment.GetEnvironmentVariable",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 22,
+            "name": "DIRECT_VALUE",
+            "value": "Environment.GetEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 22,
+            "name": "MAP_VALUE",
+            "value": "Environment.GetEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Infrastructure/EnvSettings.cs",
+            "line": 25,
+            "name": "TEMP",
+            "value": "Environment.ExpandEnvironmentVariables",
+            "valueType": null,
+            "consumer": "Infrastructure/EnvSettings.cs",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND file.relativePath IN [\"Infrastructure/EnvSettings.cs\"] RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true AND file.relativePath IN [\"Infrastructure/EnvSettings.cs\"] RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "file": "EnvSettings.cs",
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 13,
+          "name": "APP_QUEUE_URL",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 15,
+          "name": "HOME",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 17,
+          "name": "Jwt__Issuer",
+          "value": "Environment.GetEnvironmentVariable",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 22,
+          "name": "DIRECT_VALUE",
+          "value": "Environment.GetEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 22,
+          "name": "MAP_VALUE",
+          "value": "Environment.GetEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Infrastructure/EnvSettings.cs",
+          "line": 25,
+          "name": "TEMP",
+          "value": "Environment.ExpandEnvironmentVariables",
+          "valueType": null,
+          "consumer": "Infrastructure/EnvSettings.cs",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 6
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {
+      "unread": true
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) WHERE true OPTIONAL MATCH ()-[read:USES_ENV_FILE|USES_ENV_FUNCTION|USES_ENV_ROUTE|USES_ENV_REPO|USES_ENV_ENTRYPOINT]->(env) WITH env, decl, count(read) AS readCount WHERE readCount = 0 RETURN 'unread' AS kind, env.name AS name, decl.file AS file, decl.line AS line",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (:Repo)-[decl:DECLARES_ENV]->(env:EnvVar) RETURN DISTINCT env.name AS name",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "unread": true,
+        "limit": 50
+      },
+      "envConfig": [],
+      "note": "No scanned env file (.env, .env.*) declares a variable, so nothing is unread or undeclared; gitignored env files are not scanned.",
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]

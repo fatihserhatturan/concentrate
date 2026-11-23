@@ -1,11 +1,13 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
 import { describe, it } from "node:test";
-import { assertGolden, goldenRoot, scanToGoldenText } from "./helpers/golden.js";
+import { assertGolden, goldenRoot, isPlaceholderFixture, scanToGoldenText } from "./helpers/golden.js";
 
 const fixturesRoot = path.join(import.meta.dirname, "../fixtures");
 const fixtureNames = readdirSync(fixturesRoot, { withFileTypes: true })
   .filter((entry) => entry.isDirectory())
+  // A fixture directory holding nothing but a README.md is a pending placeholder (Phase 47 wave 0): no golden until it has sources.
+  .filter((entry) => !isPlaceholderFixture(path.join(fixturesRoot, entry.name)))
   .map((entry) => entry.name)
   .sort();
 

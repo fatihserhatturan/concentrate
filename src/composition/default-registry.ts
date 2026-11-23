@@ -78,7 +78,7 @@ import { csharpLanguages } from "../integrations/languages/csharp/descriptor.js"
 import { csharpCallResolver, csharpInheritanceResolver } from "../integrations/languages/csharp/resolvers.js";
 import { csharpManifestReader } from "../integrations/languages/csharp/manifest.js";
 import { csharpImportResolver } from "../integrations/languages/csharp/import-resolver.js";
-import { csharpDiContributor, csharpEntrypointsContributor, csharpFrameworkEntrypointsContributor, csharpFrameworkParser, csharpFrameworkSchemas, csharpGrpcContributor, csharpHandlerInjectionContributor, csharpProjectsContributor, csharpRoutesContributor, csharpSignalrContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
+import { csharpConfigEnvContributor, csharpDataEfcoreContributor, csharpDataSqlContributor, csharpDiContributor, csharpEntrypointsContributor, csharpFrameworkEntrypointsContributor, csharpFrameworkParser, csharpFrameworkSchemas, csharpGrpcContributor, csharpHandlerInjectionContributor, csharpHttpClientsContributor, csharpProjectsContributor, csharpRoutesContributor, csharpSignalrContributor, csharpStringsContributor, csharpTestsContributor } from "../integrations/frameworks/csharp/index.js";
 import { goGraphSchema } from "../integrations/languages/go/schema.js";
 import { rustGraphSchema } from "../integrations/languages/rust/schema.js";
 
@@ -175,6 +175,12 @@ export function createDefaultCoreIntegrationRegistry(): CoreIntegrationRegistry 
     csharpTestsContributor,
     csharpDiContributor,
     csharpHandlerInjectionContributor,
+    // Phase 47: before js-ts.data-access (READS / WRITES), js-ts.http-requests (REQUESTS) and js-ts.env-config / env-files, like Java's.
+    csharpDataEfcoreContributor,
+    csharpDataSqlContributor,
+    csharpConfigEnvContributor,
+    csharpHttpClientsContributor,
+    csharpStringsContributor,
     nextjsRoutesContributor,
     trpcRoutesContributor,
     nuxtServerRoutesContributor,

@@ -144,6 +144,7 @@
     "explicitInterface": "STRING",
     "constraints": "STRING",
     "csharpLocals": "STRING",
+    "csharpLambdaLocals": "STRING",
     "hasBody": "BOOLEAN",
     "unresolvedCalls": "STRING"
    }
@@ -334,6 +335,10 @@
     "framework": "STRING",
     "handlerName": "STRING",
     "handlerParameters": "STRING",
+    "handlerStartLine": "INT64",
+    "handlerStartColumn": "INT64",
+    "handlerEndLine": "INT64",
+    "handlerEndColumn": "INT64",
     "pendingHandlerRefs": "STRING",
     "scopeFunctionId": "STRING",
     "layers": "STRING",

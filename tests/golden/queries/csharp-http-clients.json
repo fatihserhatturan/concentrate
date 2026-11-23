@@ -1,0 +1,3949 @@
+[
+  {
+    "tool": "graph_stats",
+    "args": {},
+    "calls": [
+      {
+        "method": "schemaVersion",
+        "result": 92
+      },
+      {
+        "method": "stats",
+        "options": {},
+        "rows": [
+          {
+            "table": "Repo",
+            "count": 1
+          },
+          {
+            "table": "Package",
+            "count": 1
+          },
+          {
+            "table": "Directory",
+            "count": 4
+          },
+          {
+            "table": "File",
+            "count": 14
+          },
+          {
+            "table": "Import",
+            "count": 10
+          },
+          {
+            "table": "Function",
+            "count": 44
+          },
+          {
+            "table": "Class",
+            "count": 12
+          },
+          {
+            "table": "Field",
+            "count": 13
+          },
+          {
+            "table": "Variable",
+            "count": 0
+          },
+          {
+            "table": "Decorator",
+            "count": 13
+          },
+          {
+            "table": "Interface",
+            "count": 3
+          },
+          {
+            "table": "TypeAlias",
+            "count": 0
+          },
+          {
+            "table": "Enum",
+            "count": 0
+          },
+          {
+            "table": "Call",
+            "count": 20
+          },
+          {
+            "table": "Route",
+            "count": 13
+          },
+          {
+            "table": "EntryPoint",
+            "count": 2
+          },
+          {
+            "table": "EnvVar",
+            "count": 4
+          },
+          {
+            "table": "ConfigValue",
+            "count": 15
+          },
+          {
+            "table": "DataModel",
+            "count": 0
+          },
+          {
+            "table": "Table",
+            "count": 0
+          },
+          {
+            "table": "Component",
+            "count": 0
+          },
+          {
+            "table": "Page",
+            "count": 0
+          },
+          {
+            "table": "Store",
+            "count": 0
+          },
+          {
+            "table": "Style",
+            "count": 0
+          },
+          {
+            "table": "Service",
+            "count": 0
+          },
+          {
+            "table": "Rpc",
+            "count": 0
+          },
+          {
+            "table": "Message",
+            "count": 0
+          }
+        ]
+      }
+    ],
+    "output": {
+      "schemaVersion": 92,
+      "stats": [
+        {
+          "table": "Repo",
+          "count": 1
+        },
+        {
+          "table": "Package",
+          "count": 1
+        },
+        {
+          "table": "Directory",
+          "count": 4
+        },
+        {
+          "table": "File",
+          "count": 14
+        },
+        {
+          "table": "Import",
+          "count": 10
+        },
+        {
+          "table": "Function",
+          "count": 44
+        },
+        {
+          "table": "Class",
+          "count": 12
+        },
+        {
+          "table": "Field",
+          "count": 13
+        },
+        {
+          "table": "Variable",
+          "count": 0
+        },
+        {
+          "table": "Decorator",
+          "count": 13
+        },
+        {
+          "table": "Interface",
+          "count": 3
+        },
+        {
+          "table": "TypeAlias",
+          "count": 0
+        },
+        {
+          "table": "Enum",
+          "count": 0
+        },
+        {
+          "table": "Call",
+          "count": 20
+        },
+        {
+          "table": "Route",
+          "count": 13
+        },
+        {
+          "table": "EntryPoint",
+          "count": 2
+        },
+        {
+          "table": "EnvVar",
+          "count": 4
+        },
+        {
+          "table": "ConfigValue",
+          "count": 15
+        },
+        {
+          "table": "DataModel",
+          "count": 0
+        },
+        {
+          "table": "Table",
+          "count": 0
+        },
+        {
+          "table": "Component",
+          "count": 0
+        },
+        {
+          "table": "Page",
+          "count": 0
+        },
+        {
+          "table": "Store",
+          "count": 0
+        },
+        {
+          "table": "Style",
+          "count": 0
+        },
+        {
+          "table": "Service",
+          "count": 0
+        },
+        {
+          "table": "Rpc",
+          "count": 0
+        },
+        {
+          "table": "Message",
+          "count": 0
+        }
+      ]
+    }
+  },
+  {
+    "tool": "find_definitions",
+    "args": {
+      "name": "e"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Function' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "<top-level>",
+            "kind": "Function",
+            "file": "Program.cs",
+            "line": 5,
+            "isExported": false,
+            "relationship": "DEFINES_FUNCTION"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Class' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "InventoryClient",
+            "kind": "Class",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "Order",
+            "kind": "Class",
+            "file": "Clients/Order.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrdersClient",
+            "kind": "Class",
+            "file": "Clients/OrdersClient.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "OrdersController",
+            "kind": "Class",
+            "file": "Controllers/OrdersController.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CheckoutController",
+            "kind": "Class",
+            "file": "Controllers/OrdersController.cs",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "BillingGateway",
+            "kind": "Class",
+            "file": "Services/BillingGateway.cs",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "CatalogService",
+            "kind": "Class",
+            "file": "Services/CatalogService.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ShippingService",
+            "kind": "Class",
+            "file": "Services/CatalogService.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "ResponseCache",
+            "kind": "Class",
+            "file": "Services/ResponseCache.cs",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "name": "StatusProbe",
+            "kind": "Class",
+            "file": "Services/StatusProbe.cs",
+            "line": 4,
+            "isExported": true,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Variable' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Interface' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "IInventoryClient",
+            "kind": "Interface",
+            "file": "Clients/InventoryClient.cs",
+            "line": 5,
+            "isExported": true,
+            "relationship": "DEFINES_INTERFACE",
+            "implementations": [
+              {
+                "name": "InventoryClient",
+                "file": "Clients/InventoryClient.cs",
+                "line": 13
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'TypeAlias' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Enum' AS kind, file.relativePath AS file, n.line AS line, n.isExported AS isExported, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(cls:Class)-[:DEFINES_METHOD]->(n:Function) WHERE contains(lower(n.name), lower(\"e\")) RETURN n.name AS name, 'Method' AS kind, file.relativePath AS file, n.line AS line, cls.isExported AS isExported, 'DEFINES_METHOD' AS relationship, cls.name AS className ORDER BY file.relativePath, n.line, n.name LIMIT 21",
+        "rows": [
+          {
+            "name": "InventoryClient",
+            "kind": "Method",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InventoryClient"
+          },
+          {
+            "name": "GetStockAsync",
+            "kind": "Method",
+            "file": "Clients/InventoryClient.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InventoryClient"
+          },
+          {
+            "name": "ReserveAsync",
+            "kind": "Method",
+            "file": "Clients/InventoryClient.cs",
+            "line": 17,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InventoryClient"
+          },
+          {
+            "name": "IsHealthyAsync",
+            "kind": "Method",
+            "file": "Clients/InventoryClient.cs",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "InventoryClient"
+          },
+          {
+            "name": "Order",
+            "kind": "Method",
+            "file": "Clients/Order.cs",
+            "line": 3,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "Order"
+          },
+          {
+            "name": "OrdersClient",
+            "kind": "Method",
+            "file": "Clients/OrdersClient.cs",
+            "line": 11,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersClient"
+          },
+          {
+            "name": "GetOrderAsync",
+            "kind": "Method",
+            "file": "Clients/OrdersClient.cs",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersClient"
+          },
+          {
+            "name": "PlaceAsync",
+            "kind": "Method",
+            "file": "Clients/OrdersClient.cs",
+            "line": 18,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersClient"
+          },
+          {
+            "name": "CancelAsync",
+            "kind": "Method",
+            "file": "Clients/OrdersClient.cs",
+            "line": 20,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersClient"
+          },
+          {
+            "name": "Get",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "Create",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "Cancel",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 16,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "OrdersController"
+          },
+          {
+            "name": "CheckoutController",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CheckoutController"
+          },
+          {
+            "name": "Checkout",
+            "kind": "Method",
+            "file": "Controllers/OrdersController.cs",
+            "line": 24,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CheckoutController"
+          },
+          {
+            "name": "BillingGateway",
+            "kind": "Method",
+            "file": "Services/BillingGateway.cs",
+            "line": 9,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BillingGateway"
+          },
+          {
+            "name": "InvoicesAsync",
+            "kind": "Method",
+            "file": "Services/BillingGateway.cs",
+            "line": 15,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BillingGateway"
+          },
+          {
+            "name": "IssueAsync",
+            "kind": "Method",
+            "file": "Services/BillingGateway.cs",
+            "line": 21,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "BillingGateway"
+          },
+          {
+            "name": "CatalogService",
+            "kind": "Method",
+            "file": "Services/CatalogService.cs",
+            "line": 6,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatalogService"
+          },
+          {
+            "name": "RemoveAsync",
+            "kind": "Method",
+            "file": "Services/CatalogService.cs",
+            "line": 12,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatalogService"
+          },
+          {
+            "name": "Label",
+            "kind": "Method",
+            "file": "Services/CatalogService.cs",
+            "line": 14,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "CatalogService"
+          },
+          {
+            "name": "GetAsync",
+            "kind": "Method",
+            "file": "Services/ResponseCache.cs",
+            "line": 8,
+            "isExported": true,
+            "relationship": "DEFINES_METHOD",
+            "className": "ResponseCache"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(target:Interface) MATCH (classFile:File)-[:DEFINES_CLASS]->(cls:Class)-[:IMPLEMENTS]->(target) WHERE target.name IN [\"IInventoryClient\"] RETURN target.name AS interfaceName, file.relativePath AS interfaceFile, target.line AS interfaceLine, cls.name AS name, classFile.relativePath AS file, cls.line AS line ORDER BY classFile.relativePath, cls.line",
+        "rows": [
+          {
+            "interfaceName": "IInventoryClient",
+            "interfaceFile": "Clients/InventoryClient.cs",
+            "interfaceLine": 5,
+            "name": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "name": "e",
+        "exact": false,
+        "limit": 20
+      },
+      "definitions": [
+        {
+          "name": "<top-level>",
+          "kind": "Function",
+          "file": "Program.cs",
+          "line": 5,
+          "isExported": false,
+          "relationship": "DEFINES_FUNCTION"
+        },
+        {
+          "name": "InventoryClient",
+          "kind": "Class",
+          "file": "Clients/InventoryClient.cs",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "Order",
+          "kind": "Class",
+          "file": "Clients/Order.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrdersClient",
+          "kind": "Class",
+          "file": "Clients/OrdersClient.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "OrdersController",
+          "kind": "Class",
+          "file": "Controllers/OrdersController.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CheckoutController",
+          "kind": "Class",
+          "file": "Controllers/OrdersController.cs",
+          "line": 20,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "BillingGateway",
+          "kind": "Class",
+          "file": "Services/BillingGateway.cs",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "CatalogService",
+          "kind": "Class",
+          "file": "Services/CatalogService.cs",
+          "line": 6,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ShippingService",
+          "kind": "Class",
+          "file": "Services/CatalogService.cs",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "ResponseCache",
+          "kind": "Class",
+          "file": "Services/ResponseCache.cs",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "StatusProbe",
+          "kind": "Class",
+          "file": "Services/StatusProbe.cs",
+          "line": 4,
+          "isExported": true,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "name": "IInventoryClient",
+          "kind": "Interface",
+          "file": "Clients/InventoryClient.cs",
+          "line": 5,
+          "isExported": true,
+          "relationship": "DEFINES_INTERFACE",
+          "implementations": [
+            {
+              "name": "InventoryClient",
+              "file": "Clients/InventoryClient.cs",
+              "line": 13
+            }
+          ]
+        },
+        {
+          "name": "InventoryClient",
+          "kind": "Method",
+          "file": "Clients/InventoryClient.cs",
+          "line": 13,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InventoryClient"
+        },
+        {
+          "name": "GetStockAsync",
+          "kind": "Method",
+          "file": "Clients/InventoryClient.cs",
+          "line": 15,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InventoryClient"
+        },
+        {
+          "name": "ReserveAsync",
+          "kind": "Method",
+          "file": "Clients/InventoryClient.cs",
+          "line": 17,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InventoryClient"
+        },
+        {
+          "name": "IsHealthyAsync",
+          "kind": "Method",
+          "file": "Clients/InventoryClient.cs",
+          "line": 24,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "InventoryClient"
+        },
+        {
+          "name": "Order",
+          "kind": "Method",
+          "file": "Clients/Order.cs",
+          "line": 3,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "Order"
+        },
+        {
+          "name": "OrdersClient",
+          "kind": "Method",
+          "file": "Clients/OrdersClient.cs",
+          "line": 11,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersClient"
+        },
+        {
+          "name": "GetOrderAsync",
+          "kind": "Method",
+          "file": "Clients/OrdersClient.cs",
+          "line": 16,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersClient"
+        },
+        {
+          "name": "PlaceAsync",
+          "kind": "Method",
+          "file": "Clients/OrdersClient.cs",
+          "line": 18,
+          "isExported": true,
+          "relationship": "DEFINES_METHOD",
+          "className": "OrdersClient"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 20,
+        "nextCursor": "eyJvIjoyMCwiayI6IktqMXV2U2tidXF1XzItUFYifQ"
+      }
+    }
+  },
+  {
+    "tool": "list_exports",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(n:Function) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Function' AS kind, n.line AS line, 'DEFINES_FUNCTION' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(n:Class) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Class' AS kind, n.line AS line, 'DEFINES_CLASS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Clients/InventoryClient.cs",
+            "name": "InventoryClient",
+            "kind": "Class",
+            "line": 13,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Clients/Order.cs",
+            "name": "Order",
+            "kind": "Class",
+            "line": 3,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Clients/Order.cs",
+            "name": "Stock",
+            "kind": "Class",
+            "line": 5,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Clients/Order.cs",
+            "name": "Product",
+            "kind": "Class",
+            "line": 7,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Clients/OrdersClient.cs",
+            "name": "OrdersClient",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "name": "OrdersController",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "name": "CheckoutController",
+            "kind": "Class",
+            "line": 20,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/BillingGateway.cs",
+            "name": "BillingGateway",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/CatalogService.cs",
+            "name": "CatalogService",
+            "kind": "Class",
+            "line": 6,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/CatalogService.cs",
+            "name": "ShippingService",
+            "kind": "Class",
+            "line": 17,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/ResponseCache.cs",
+            "name": "ResponseCache",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          },
+          {
+            "file": "Services/StatusProbe.cs",
+            "name": "StatusProbe",
+            "kind": "Class",
+            "line": 4,
+            "relationship": "DEFINES_CLASS"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_VARIABLE]->(n:Variable) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Variable' AS kind, n.line AS line, 'DEFINES_VARIABLE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_INTERFACE]->(n:Interface) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Interface' AS kind, n.line AS line, 'DEFINES_INTERFACE' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Clients/ICatalogApi.cs",
+            "name": "ICatalogApi",
+            "kind": "Interface",
+            "line": 6,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "Clients/ICatalogApi.cs",
+            "name": "IShippingApi",
+            "kind": "Interface",
+            "line": 23,
+            "relationship": "DEFINES_INTERFACE"
+          },
+          {
+            "file": "Clients/InventoryClient.cs",
+            "name": "IInventoryClient",
+            "kind": "Interface",
+            "line": 5,
+            "relationship": "DEFINES_INTERFACE"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_TYPE_ALIAS]->(n:TypeAlias) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'TypeAlias' AS kind, n.line AS line, 'DEFINES_TYPE_ALIAS' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_ENUM]->(n:Enum) WHERE n.isExported = true RETURN file.relativePath AS file, n.name AS name, 'Enum' AS kind, n.line AS line, 'DEFINES_ENUM' AS relationship ORDER BY file.relativePath, n.line, n.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS]->(target:Import) WHERE true RETURN file.relativePath AS file, target.source AS name, 'Import' AS kind, target.line AS line, 'RE_EXPORTS' AS relationship ORDER BY file.relativePath, target.line, target.source LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_FUNCTION]->(target:Function) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Function' AS kind, target.line AS line, 'RE_EXPORTS_FUNCTION' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_CLASS]->(target:Class) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Class' AS kind, target.line AS line, 'RE_EXPORTS_CLASS' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:RE_EXPORTS_VARIABLE]->(target:Variable) WHERE true RETURN file.relativePath AS file, target.name AS name, 'Variable' AS kind, target.line AS line, 'RE_EXPORTS_VARIABLE' AS relationship ORDER BY file.relativePath, target.line, target.name LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "exports": [
+        {
+          "file": "Clients/InventoryClient.cs",
+          "name": "InventoryClient",
+          "kind": "Class",
+          "line": 13,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Clients/Order.cs",
+          "name": "Order",
+          "kind": "Class",
+          "line": 3,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Clients/Order.cs",
+          "name": "Stock",
+          "kind": "Class",
+          "line": 5,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Clients/Order.cs",
+          "name": "Product",
+          "kind": "Class",
+          "line": 7,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Clients/OrdersClient.cs",
+          "name": "OrdersClient",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "name": "OrdersController",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "name": "CheckoutController",
+          "kind": "Class",
+          "line": 20,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/BillingGateway.cs",
+          "name": "BillingGateway",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/CatalogService.cs",
+          "name": "CatalogService",
+          "kind": "Class",
+          "line": 6,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/CatalogService.cs",
+          "name": "ShippingService",
+          "kind": "Class",
+          "line": 17,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/ResponseCache.cs",
+          "name": "ResponseCache",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Services/StatusProbe.cs",
+          "name": "StatusProbe",
+          "kind": "Class",
+          "line": 4,
+          "relationship": "DEFINES_CLASS"
+        },
+        {
+          "file": "Clients/ICatalogApi.cs",
+          "name": "ICatalogApi",
+          "kind": "Interface",
+          "line": 6,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "Clients/ICatalogApi.cs",
+          "name": "IShippingApi",
+          "kind": "Interface",
+          "line": 23,
+          "relationship": "DEFINES_INTERFACE"
+        },
+        {
+          "file": "Clients/InventoryClient.cs",
+          "name": "IInventoryClient",
+          "kind": "Interface",
+          "line": 5,
+          "relationship": "DEFINES_INTERFACE"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 15
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": [
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 10,
+            "method": "GET",
+            "path": "/api/orders/{id}",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "handlerName": "Get",
+            "handler": "Get"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "method": "POST",
+            "path": "/api/orders",
+            "fullPath": "/api/orders",
+            "framework": "aspnet-mvc",
+            "handlerName": "Create",
+            "handler": "Create"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 16,
+            "method": "DELETE",
+            "path": "/api/orders/{id}",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "handlerName": "Cancel",
+            "handler": "Cancel"
+          },
+          {
+            "file": "Controllers/OrdersController.cs",
+            "line": 24,
+            "method": "POST",
+            "path": "/api/checkout/{orderId}",
+            "fullPath": "/api/checkout/{orderId}",
+            "framework": "aspnet-mvc",
+            "handlerName": "Checkout",
+            "handler": "Checkout"
+          },
+          {
+            "file": "Program.cs",
+            "line": 34,
+            "method": "GET",
+            "path": "/api/inventory/{sku}",
+            "fullPath": "/api/inventory/{sku}",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 35,
+            "method": "PUT",
+            "path": "/api/inventory/{sku}/reserve",
+            "fullPath": "/api/inventory/{sku}/reserve",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 36,
+            "method": "GET",
+            "path": "/api/inventory/health",
+            "fullPath": "/api/inventory/health",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 37,
+            "method": "GET",
+            "path": "/api/billing/invoices",
+            "fullPath": "/api/billing/invoices",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 38,
+            "method": "POST",
+            "path": "/api/billing/invoices",
+            "fullPath": "/api/billing/invoices",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 39,
+            "method": "GET",
+            "path": "/api/catalog/products/{id}",
+            "fullPath": "/api/catalog/products/{id}",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 40,
+            "method": "POST",
+            "path": "/api/catalog/products",
+            "fullPath": "/api/catalog/products",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 41,
+            "method": "DELETE",
+            "path": "/api/catalog/products/{id}",
+            "fullPath": "/api/catalog/products/{id}",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          },
+          {
+            "file": "Program.cs",
+            "line": 42,
+            "method": "GET",
+            "path": "/api/shipping/{orderId}/status",
+            "fullPath": "/api/shipping/{orderId}/status",
+            "framework": "aspnet-minimal",
+            "handlerName": "<lambda>",
+            "handler": "<top-level>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "routes": [
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 10,
+          "method": "GET",
+          "path": "/api/orders/{id}",
+          "fullPath": "/api/orders/{id}",
+          "framework": "aspnet-mvc",
+          "handlerName": "Get",
+          "handler": "Get"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 13,
+          "method": "POST",
+          "path": "/api/orders",
+          "fullPath": "/api/orders",
+          "framework": "aspnet-mvc",
+          "handlerName": "Create",
+          "handler": "Create"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 16,
+          "method": "DELETE",
+          "path": "/api/orders/{id}",
+          "fullPath": "/api/orders/{id}",
+          "framework": "aspnet-mvc",
+          "handlerName": "Cancel",
+          "handler": "Cancel"
+        },
+        {
+          "file": "Controllers/OrdersController.cs",
+          "line": 24,
+          "method": "POST",
+          "path": "/api/checkout/{orderId}",
+          "fullPath": "/api/checkout/{orderId}",
+          "framework": "aspnet-mvc",
+          "handlerName": "Checkout",
+          "handler": "Checkout"
+        },
+        {
+          "file": "Program.cs",
+          "line": 34,
+          "method": "GET",
+          "path": "/api/inventory/{sku}",
+          "fullPath": "/api/inventory/{sku}",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 35,
+          "method": "PUT",
+          "path": "/api/inventory/{sku}/reserve",
+          "fullPath": "/api/inventory/{sku}/reserve",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 36,
+          "method": "GET",
+          "path": "/api/inventory/health",
+          "fullPath": "/api/inventory/health",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 37,
+          "method": "GET",
+          "path": "/api/billing/invoices",
+          "fullPath": "/api/billing/invoices",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 38,
+          "method": "POST",
+          "path": "/api/billing/invoices",
+          "fullPath": "/api/billing/invoices",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 39,
+          "method": "GET",
+          "path": "/api/catalog/products/{id}",
+          "fullPath": "/api/catalog/products/{id}",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 40,
+          "method": "POST",
+          "path": "/api/catalog/products",
+          "fullPath": "/api/catalog/products",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 41,
+          "method": "DELETE",
+          "path": "/api/catalog/products/{id}",
+          "fullPath": "/api/catalog/products/{id}",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        },
+        {
+          "file": "Program.cs",
+          "line": 42,
+          "method": "GET",
+          "path": "/api/shipping/{orderId}/status",
+          "fullPath": "/api/shipping/{orderId}/status",
+          "framework": "aspnet-minimal",
+          "handlerName": "<lambda>",
+          "handler": "<top-level>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 13
+      }
+    }
+  },
+  {
+    "tool": "list_entrypoints",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(entrypoint:EntryPoint) WHERE true OPTIONAL MATCH (entrypoint)-[:ENTRYPOINT_HANDLED_BY]->(handler:Function) RETURN id(entrypoint) AS id, file.relativePath AS file, entrypoint.line AS line, entrypoint.kind AS kind, entrypoint.trigger AS trigger, entrypoint.library AS library, entrypoint.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, entrypoint.line, entrypoint.kind, entrypoint.trigger, handler.name LIMIT 51",
+        "rows": [
+          {
+            "id": "entrypoint:csharp:Gateway.csproj",
+            "file": "Gateway.csproj",
+            "line": 1,
+            "kind": "csharp-project",
+            "trigger": "Gateway",
+            "library": "dotnet",
+            "handlerName": null,
+            "handler": null
+          },
+          {
+            "id": "file:Program.cs:entrypoint:5:0:main:<none>",
+            "file": "Program.cs",
+            "line": 5,
+            "kind": "main",
+            "trigger": null,
+            "library": "csharp",
+            "handlerName": "<top-level>",
+            "handler": "<top-level>"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_FILE]->(target:File) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, target.relativePath AS file, run.line AS line, run.command AS command ORDER BY run.line, target.relativePath",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:Gateway.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (entrypoint:EntryPoint)-[run:RUNS_ENTRYPOINT]->(target:EntryPoint) MATCH (targetFile:File)-[:DECLARES_ENTRYPOINT]->(target) WHERE id(entrypoint) IN $ids RETURN id(entrypoint) AS id, targetFile.relativePath AS file, target.kind AS kind, target.trigger AS trigger, run.line AS line, run.command AS command ORDER BY run.line, targetFile.relativePath, target.trigger",
+        "params": {
+          "ids": [
+            "entrypoint:csharp:Gateway.csproj",
+            "file:Program.cs:entrypoint:5:0:main:<none>"
+          ]
+        },
+        "rows": [
+          {
+            "id": "entrypoint:csharp:Gateway.csproj",
+            "file": "Program.cs",
+            "kind": "main",
+            "trigger": null,
+            "line": 5,
+            "command": "dotnet run"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "entrypoints": [
+        {
+          "file": "Gateway.csproj",
+          "line": 1,
+          "kind": "csharp-project",
+          "trigger": "Gateway",
+          "library": "dotnet",
+          "handlerName": null,
+          "handler": null,
+          "runs": [
+            {
+              "file": "Program.cs",
+              "entrypoint": "main:null",
+              "command": "dotnet run"
+            }
+          ]
+        },
+        {
+          "file": "Program.cs",
+          "line": 5,
+          "kind": "main",
+          "trigger": null,
+          "library": "csharp",
+          "handlerName": "<top-level>",
+          "handler": "<top-level>"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 2
+      }
+    }
+  },
+  {
+    "tool": "list_env_config",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:USES_ENV_FILE]->(env:EnvVar) WHERE true RETURN 'env' AS kind, file.relativePath AS file, rel.line AS line, env.name AS name, rel.access AS value, NULL AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 11,
+            "name": "Services__Orders__BaseUrl",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 14,
+            "name": "Services__Inventory__BaseUrl",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Program.cs",
+            "line": 18,
+            "name": "Services__Billing__BaseUrl",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "env",
+            "file": "Services/StatusProbe.cs",
+            "line": 15,
+            "name": "Services__Legacy__BaseUrl",
+            "value": "config override",
+            "valueType": null,
+            "consumer": "Services/StatusProbe.cs",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, file.relativePath AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config",
+            "file": "Program.cs",
+            "line": 19,
+            "name": "Services:Audit:BaseUrl",
+            "value": "",
+            "valueType": "unset",
+            "consumer": "Program.cs",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.Production.json",
+            "line": 3,
+            "name": "Services:Orders:BaseUrl",
+            "value": "https://orders.internal.example.com",
+            "valueType": "string",
+            "consumer": "appsettings.Production.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 2,
+            "name": "Logging:LogLevel:Default",
+            "value": "Information",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 4,
+            "name": "Services:Orders:BaseUrl",
+            "value": "http://localhost:5001",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 5,
+            "name": "Services:Inventory:BaseUrl",
+            "value": "http://localhost:5002/",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 6,
+            "name": "Services:Billing:BaseUrl",
+            "value": "http://localhost:5003",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config",
+            "file": "appsettings.json",
+            "line": 7,
+            "name": "Services:Legacy:BaseUrl",
+            "value": "http://svc:<redacted>@localhost:5004",
+            "valueType": "string",
+            "consumer": "appsettings.json",
+            "consumerKind": "File"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[rel:CONSUMES_CONFIG_FILE]->(config:ConfigValue) WHERE true RETURN 'config-consumer' AS kind, file.relativePath AS file, config.line AS line, config.name AS name, config.value AS value, config.valueType AS valueType, rel.localName AS consumer, 'File' AS consumerKind ORDER BY file.relativePath, config.line LIMIT 51",
+        "rows": [
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 3,
+            "name": "Services:Orders:BaseUrl",
+            "value": "https://orders.internal.example.com",
+            "valueType": "string",
+            "consumer": "Services:Orders:BaseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 4,
+            "name": "Services:Orders:BaseUrl",
+            "value": "http://localhost:5001",
+            "valueType": "string",
+            "consumer": "Services:Orders:BaseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 5,
+            "name": "Services:Inventory:BaseUrl",
+            "value": "http://localhost:5002/",
+            "valueType": "string",
+            "consumer": "Services:Inventory:BaseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 6,
+            "name": "Services:Billing:BaseUrl",
+            "value": "http://localhost:5003",
+            "valueType": "string",
+            "consumer": "Services:Billing:BaseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Program.cs",
+            "line": 19,
+            "name": "Services:Audit:BaseUrl",
+            "value": "",
+            "valueType": "unset",
+            "consumer": "Services:Audit:BaseUrl",
+            "consumerKind": "File"
+          },
+          {
+            "kind": "config-consumer",
+            "file": "Services/StatusProbe.cs",
+            "line": 7,
+            "name": "Services:Legacy:BaseUrl",
+            "value": "http://svc:<redacted>@localhost:5004",
+            "valueType": "string",
+            "consumer": "Services:Legacy:BaseUrl",
+            "consumerKind": "File"
+          }
+        ]
+      }
+    ],
+    "output": {
+      "query": {
+        "limit": 50
+      },
+      "envConfig": [
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 11,
+          "name": "Services__Orders__BaseUrl",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 14,
+          "name": "Services__Inventory__BaseUrl",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Program.cs",
+          "line": 18,
+          "name": "Services__Billing__BaseUrl",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "env",
+          "file": "Services/StatusProbe.cs",
+          "line": 15,
+          "name": "Services__Legacy__BaseUrl",
+          "value": "config override",
+          "valueType": null,
+          "consumer": "Services/StatusProbe.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "Program.cs",
+          "line": 19,
+          "name": "Services:Audit:BaseUrl",
+          "value": "",
+          "valueType": "unset",
+          "consumer": "Program.cs",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.Production.json",
+          "line": 3,
+          "name": "Services:Orders:BaseUrl",
+          "value": "https://orders.internal.example.com",
+          "valueType": "string",
+          "consumer": "appsettings.Production.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 2,
+          "name": "Logging:LogLevel:Default",
+          "value": "Information",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 4,
+          "name": "Services:Orders:BaseUrl",
+          "value": "http://localhost:5001",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 5,
+          "name": "Services:Inventory:BaseUrl",
+          "value": "http://localhost:5002/",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 6,
+          "name": "Services:Billing:BaseUrl",
+          "value": "http://localhost:5003",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config",
+          "file": "appsettings.json",
+          "line": 7,
+          "name": "Services:Legacy:BaseUrl",
+          "value": "http://svc:<redacted>@localhost:5004",
+          "valueType": "string",
+          "consumer": "appsettings.json",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 3,
+          "name": "Services:Orders:BaseUrl",
+          "value": "https://orders.internal.example.com",
+          "valueType": "string",
+          "consumer": "Services:Orders:BaseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 4,
+          "name": "Services:Orders:BaseUrl",
+          "value": "http://localhost:5001",
+          "valueType": "string",
+          "consumer": "Services:Orders:BaseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 5,
+          "name": "Services:Inventory:BaseUrl",
+          "value": "http://localhost:5002/",
+          "valueType": "string",
+          "consumer": "Services:Inventory:BaseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 6,
+          "name": "Services:Billing:BaseUrl",
+          "value": "http://localhost:5003",
+          "valueType": "string",
+          "consumer": "Services:Billing:BaseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Program.cs",
+          "line": 19,
+          "name": "Services:Audit:BaseUrl",
+          "value": "",
+          "valueType": "unset",
+          "consumer": "Services:Audit:BaseUrl",
+          "consumerKind": "File"
+        },
+        {
+          "kind": "config-consumer",
+          "file": "Services/StatusProbe.cs",
+          "line": 7,
+          "name": "Services:Legacy:BaseUrl",
+          "value": "http://svc:<redacted>@localhost:5004",
+          "valueType": "string",
+          "consumer": "Services:Legacy:BaseUrl",
+          "consumerKind": "File"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 17
+      }
+    }
+  },
+  {
+    "tool": "list_data_access",
+    "args": {},
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (source:File)-[rel:ACCESSES_DATA_FILE]->(model:DataModel) WHERE true WITH source AS file, source, rel, model OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'File' AS sourceKind, source.relativePath AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Function)-[rel:ACCESSES_DATA_FUNCTION]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DEFINES_FUNCTION]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Function' AS sourceKind, source.name AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:Route)-[rel:ACCESSES_DATA_ROUTE]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ROUTE]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'Route' AS sourceKind, source.path AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (source:EntryPoint)-[rel:ACCESSES_DATA_ENTRYPOINT]->(model:DataModel) WHERE true OPTIONAL MATCH (file:File)-[:DECLARES_ENTRYPOINT]->(source) OPTIONAL MATCH (model)-[:MAPS_TO_TABLE]->(table:Table) RETURN 'EntryPoint' AS sourceKind, source.trigger AS sourceName, file.relativePath AS file, id(source) AS sourceId, rel.direct AS direct, rel.file AS accessFile, rel.line AS line, model.name AS model, model.library AS library, table.name AS table, rel.operation AS operation, rel.expression AS expression ORDER BY file.relativePath, rel.line LIMIT 51",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "direct": false,
+        "limit": 50
+      },
+      "dataAccess": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "method": "GET",
+      "path": "/api/orders/{id}"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Program.cs:function:5:<top-level>",
+            "name": "<top-level>",
+            "className": null,
+            "file": "Program.cs",
+            "line": 5,
+            "endLine": 44
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Clients/InventoryClient.cs:function:13:Gateway.Clients.InventoryClient.InventoryClient",
+            "name": "InventoryClient",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "name": "GetStockAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 15,
+            "endLine": 15
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "name": "ReserveAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 17,
+            "endLine": 22
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "name": "IsHealthyAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 24,
+            "endLine": 28
+          },
+          {
+            "id": "file:Clients/Order.cs:function:3:Gateway.Clients.Order.Order",
+            "name": "Order",
+            "className": "Order",
+            "file": "Clients/Order.cs",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:Clients/Order.cs:function:5:Gateway.Clients.Stock.Stock",
+            "name": "Stock",
+            "className": "Stock",
+            "file": "Clients/Order.cs",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:Clients/Order.cs:function:7:Gateway.Clients.Product.Product",
+            "name": "Product",
+            "className": "Product",
+            "file": "Clients/Order.cs",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:11:Gateway.Clients.OrdersClient.OrdersClient",
+            "name": "OrdersClient",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "name": "GetOrderAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 16,
+            "endLine": 16
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "name": "PlaceAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 18,
+            "endLine": 18
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "name": "CancelAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 20,
+            "endLine": 24
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:26:Gateway.Clients.OrdersClient.RawAsync",
+            "name": "RawAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 26,
+            "endLine": 26
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:10:Gateway.Controllers.OrdersController.Get",
+            "name": "Get",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:13:Gateway.Controllers.OrdersController.Create",
+            "name": "Create",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:16:Gateway.Controllers.OrdersController.Cancel",
+            "name": "Cancel",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 16,
+            "endLine": 17
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:22:Gateway.Controllers.CheckoutController.CheckoutController",
+            "name": "CheckoutController",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:24:Gateway.Controllers.CheckoutController.Checkout",
+            "name": "Checkout",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 24,
+            "endLine": 30
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:9:Gateway.Services.BillingGateway.BillingGateway",
+            "name": "BillingGateway",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 9,
+            "endLine": 13
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "name": "InvoicesAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 15,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "name": "IssueAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:23:Gateway.Services.BillingGateway.AuditAsync",
+            "name": "AuditAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 23,
+            "endLine": 23
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:6:Gateway.Services.CatalogService.CatalogService",
+            "name": "CatalogService",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "name": "FindAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "name": "AddAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "name": "RemoveAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:14:Gateway.Services.CatalogService.Label",
+            "name": "Label",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "name": "StatusAsync",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:19:Gateway.Services.ShippingService.<init-block>",
+            "name": "<init-block>",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "name": "GetAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "name": "PostAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 10,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "name": "WarmAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 16,
+            "endLine": 20
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:6:Gateway.Services.ResponseCache.<init-block>",
+            "name": "<init-block>",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "name": "PingAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 6,
+            "endLine": 11
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:13:Gateway.Services.StatusProbe.LegacyAsync",
+            "name": "LegacyAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 13,
+            "endLine": 18
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:20:Gateway.Services.StatusProbe.DynamicAsync",
+            "name": "DynamicAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 20,
+            "endLine": 20
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "callee": "file:Clients/ICatalogApi.cs:function:25:Gateway.Clients.IShippingApi.Status",
+            "line": 21
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "line": 18
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "line": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND lower(route.method) = lower($method) AND (route.fullPath = $path OR route.path = $path) RETURN id(route) AS id",
+        "params": {
+          "method": "GET",
+          "path": "/api/orders/{id}",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/orders/{id}",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 10,
+            "call": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync:call:16:49:_http.GetFromJsonAsync",
+            "line": 16,
+            "expression": "_http.GetFromJsonAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/orders/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": "GET",
+        "path": "/api/orders/{id}",
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": null,
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10
+          },
+          "client": "httpclient-factory",
+          "method": "GET",
+          "url": "/api/orders/${id}",
+          "match": "parameter",
+          "file": "Clients/OrdersClient.cs",
+          "line": 16,
+          "expression": "_http.GetFromJsonAsync",
+          "function": "GetOrderAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 1
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "refit"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Program.cs:function:5:<top-level>",
+            "name": "<top-level>",
+            "className": null,
+            "file": "Program.cs",
+            "line": 5,
+            "endLine": 44
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Clients/InventoryClient.cs:function:13:Gateway.Clients.InventoryClient.InventoryClient",
+            "name": "InventoryClient",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "name": "GetStockAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 15,
+            "endLine": 15
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "name": "ReserveAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 17,
+            "endLine": 22
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "name": "IsHealthyAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 24,
+            "endLine": 28
+          },
+          {
+            "id": "file:Clients/Order.cs:function:3:Gateway.Clients.Order.Order",
+            "name": "Order",
+            "className": "Order",
+            "file": "Clients/Order.cs",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:Clients/Order.cs:function:5:Gateway.Clients.Stock.Stock",
+            "name": "Stock",
+            "className": "Stock",
+            "file": "Clients/Order.cs",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:Clients/Order.cs:function:7:Gateway.Clients.Product.Product",
+            "name": "Product",
+            "className": "Product",
+            "file": "Clients/Order.cs",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:11:Gateway.Clients.OrdersClient.OrdersClient",
+            "name": "OrdersClient",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "name": "GetOrderAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 16,
+            "endLine": 16
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "name": "PlaceAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 18,
+            "endLine": 18
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "name": "CancelAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 20,
+            "endLine": 24
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:26:Gateway.Clients.OrdersClient.RawAsync",
+            "name": "RawAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 26,
+            "endLine": 26
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:10:Gateway.Controllers.OrdersController.Get",
+            "name": "Get",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:13:Gateway.Controllers.OrdersController.Create",
+            "name": "Create",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:16:Gateway.Controllers.OrdersController.Cancel",
+            "name": "Cancel",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 16,
+            "endLine": 17
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:22:Gateway.Controllers.CheckoutController.CheckoutController",
+            "name": "CheckoutController",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:24:Gateway.Controllers.CheckoutController.Checkout",
+            "name": "Checkout",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 24,
+            "endLine": 30
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:9:Gateway.Services.BillingGateway.BillingGateway",
+            "name": "BillingGateway",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 9,
+            "endLine": 13
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "name": "InvoicesAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 15,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "name": "IssueAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:23:Gateway.Services.BillingGateway.AuditAsync",
+            "name": "AuditAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 23,
+            "endLine": 23
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:6:Gateway.Services.CatalogService.CatalogService",
+            "name": "CatalogService",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "name": "FindAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "name": "AddAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "name": "RemoveAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:14:Gateway.Services.CatalogService.Label",
+            "name": "Label",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "name": "StatusAsync",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:19:Gateway.Services.ShippingService.<init-block>",
+            "name": "<init-block>",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "name": "GetAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "name": "PostAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 10,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "name": "WarmAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 16,
+            "endLine": 20
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:6:Gateway.Services.ResponseCache.<init-block>",
+            "name": "<init-block>",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "name": "PingAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 6,
+            "endLine": 11
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:13:Gateway.Services.StatusProbe.LegacyAsync",
+            "name": "LegacyAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 13,
+            "endLine": 18
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:20:Gateway.Services.StatusProbe.DynamicAsync",
+            "name": "DynamicAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 20,
+            "endLine": 20
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "callee": "file:Clients/ICatalogApi.cs:function:25:Gateway.Clients.IShippingApi.Status",
+            "line": 21
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "line": 18
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "line": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:24:0:POST:/api/checkout/{orderId}"
+          },
+          {
+            "id": "file:Program.cs:route:34:0:GET:/api/inventory/{sku}"
+          },
+          {
+            "id": "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve"
+          },
+          {
+            "id": "file:Program.cs:route:36:0:GET:/api/inventory/health"
+          },
+          {
+            "id": "file:Program.cs:route:37:0:GET:/api/billing/invoices"
+          },
+          {
+            "id": "file:Program.cs:route:38:0:POST:/api/billing/invoices"
+          },
+          {
+            "id": "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}"
+          },
+          {
+            "id": "file:Program.cs:route:40:0:POST:/api/catalog/products"
+          },
+          {
+            "id": "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}"
+          },
+          {
+            "id": "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}",
+            "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders",
+            "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}",
+            "file:Controllers/OrdersController.cs:route:24:0:POST:/api/checkout/{orderId}",
+            "file:Program.cs:route:34:0:GET:/api/inventory/{sku}",
+            "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve",
+            "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "file:Program.cs:route:37:0:GET:/api/billing/invoices",
+            "file:Program.cs:route:38:0:POST:/api/billing/invoices",
+            "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}",
+            "file:Program.cs:route:40:0:POST:/api/catalog/products",
+            "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}",
+            "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/orders/{id}",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 10,
+            "call": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync:call:16:49:_http.GetFromJsonAsync",
+            "line": 16,
+            "expression": "_http.GetFromJsonAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/orders/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          },
+          {
+            "route": "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/orders",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 13,
+            "call": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync:call:18:76:_http.PostAsJsonAsync",
+            "line": 18,
+            "expression": "_http.PostAsJsonAsync",
+            "client": "httpclient-factory",
+            "method": "POST",
+            "url": "/api/orders",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync"
+          },
+          {
+            "route": "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/orders/{id}",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 16,
+            "call": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync:call:22:29:_http.DeleteAsync",
+            "line": 22,
+            "expression": "_http.DeleteAsync",
+            "client": "httpclient-factory",
+            "method": "DELETE",
+            "url": "/api/orders/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync"
+          },
+          {
+            "route": "file:Program.cs:route:34:0:GET:/api/inventory/{sku}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/{sku}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 34,
+            "call": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync:call:15:53:http.GetFromJsonAsync",
+            "line": 15,
+            "expression": "http.GetFromJsonAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/inventory/${sku}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync"
+          },
+          {
+            "route": "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/inventory/{sku}/reserve",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 35,
+            "call": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync:call:19:28:new HttpRequestMessage",
+            "line": 19,
+            "expression": "new HttpRequestMessage",
+            "client": "httpclient-factory",
+            "method": "PUT",
+            "url": "/api/inventory/${sku}/reserve",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync"
+          },
+          {
+            "route": "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/health",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 36,
+            "call": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync:call:26:44:new HttpRequestMessage",
+            "line": 26,
+            "expression": "new HttpRequestMessage",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/inventory/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync"
+          },
+          {
+            "route": "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/health",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 36,
+            "call": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync:call:9:29:client.GetAsync",
+            "line": 9,
+            "expression": "client.GetAsync",
+            "client": "httpclient",
+            "method": "GET",
+            "url": "/api/inventory/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync"
+          },
+          {
+            "route": "file:Program.cs:route:37:0:GET:/api/billing/invoices",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/billing/invoices",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 37,
+            "call": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync:call:18:21:client.GetStringAsync",
+            "line": 18,
+            "expression": "client.GetStringAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/billing/invoices",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync"
+          },
+          {
+            "route": "file:Program.cs:route:38:0:POST:/api/billing/invoices",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/billing/invoices",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 38,
+            "call": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync:call:21:72:_factory.CreateClient(\"billing\").PostAsync",
+            "line": 21,
+            "expression": "_factory.CreateClient(\"billing\").PostAsync",
+            "client": "httpclient-factory",
+            "method": "POST",
+            "url": "/api/billing/invoices",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync"
+          },
+          {
+            "route": "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/catalog/products/{id}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 39,
+            "call": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync:call:8:46:catalog.GetProduct",
+            "line": 8,
+            "expression": "catalog.GetProduct",
+            "client": "refit",
+            "method": "GET",
+            "url": "/api/catalog/products/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync"
+          },
+          {
+            "route": "file:Program.cs:route:40:0:POST:/api/catalog/products",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/catalog/products",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 40,
+            "call": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync:call:10:54:catalog.CreateProduct",
+            "line": 10,
+            "expression": "catalog.CreateProduct",
+            "client": "refit",
+            "method": "POST",
+            "url": "/api/catalog/products",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync"
+          },
+          {
+            "route": "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/catalog/products/{id}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 41,
+            "call": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync:call:12:39:catalog.DeleteProduct",
+            "line": 12,
+            "expression": "catalog.DeleteProduct",
+            "client": "refit",
+            "method": "DELETE",
+            "url": "/api/catalog/products/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync"
+          },
+          {
+            "route": "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/shipping/{orderId}/status",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 42,
+            "call": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync:call:21:52:_shipping.Status",
+            "line": 21,
+            "expression": "_shipping.Status",
+            "client": "refit",
+            "method": "GET",
+            "url": "/api/shipping/${orderId}/status",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "refit",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/catalog/products",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 40
+          },
+          "client": "refit",
+          "method": "POST",
+          "url": "/api/catalog/products",
+          "match": "exact",
+          "file": "Services/CatalogService.cs",
+          "line": 10,
+          "expression": "catalog.CreateProduct",
+          "function": "AddAsync"
+        },
+        {
+          "route": {
+            "method": "DELETE",
+            "fullPath": "/api/catalog/products/{id}",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 41
+          },
+          "client": "refit",
+          "method": "DELETE",
+          "url": "/api/catalog/products/${id}",
+          "match": "parameter",
+          "file": "Services/CatalogService.cs",
+          "line": 12,
+          "expression": "catalog.DeleteProduct",
+          "function": "RemoveAsync"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/catalog/products/{id}",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 39
+          },
+          "client": "refit",
+          "method": "GET",
+          "url": "/api/catalog/products/${id}",
+          "match": "parameter",
+          "file": "Services/CatalogService.cs",
+          "line": 8,
+          "expression": "catalog.GetProduct",
+          "function": "FindAsync"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/shipping/{orderId}/status",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 42
+          },
+          "client": "refit",
+          "method": "GET",
+          "url": "/api/shipping/${orderId}/status",
+          "match": "parameter",
+          "file": "Services/CatalogService.cs",
+          "line": 21,
+          "expression": "_shipping.Status",
+          "function": "StatusAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 4
+      }
+    }
+  },
+  {
+    "tool": "api_consumers",
+    "args": {
+      "client": "httpclient-factory"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_FUNCTION]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, fn.className AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Program.cs:function:5:<top-level>",
+            "name": "<top-level>",
+            "className": null,
+            "file": "Program.cs",
+            "line": 5,
+            "endLine": 44
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DEFINES_CLASS]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) RETURN id(fn) AS id, fn.name AS name, class.name AS className, file.relativePath AS file, fn.line AS line, fn.endLine AS endLine",
+        "params": {},
+        "rows": [
+          {
+            "id": "file:Clients/InventoryClient.cs:function:13:Gateway.Clients.InventoryClient.InventoryClient",
+            "name": "InventoryClient",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 13,
+            "endLine": 13
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "name": "GetStockAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 15,
+            "endLine": 15
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "name": "ReserveAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 17,
+            "endLine": 22
+          },
+          {
+            "id": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "name": "IsHealthyAsync",
+            "className": "InventoryClient",
+            "file": "Clients/InventoryClient.cs",
+            "line": 24,
+            "endLine": 28
+          },
+          {
+            "id": "file:Clients/Order.cs:function:3:Gateway.Clients.Order.Order",
+            "name": "Order",
+            "className": "Order",
+            "file": "Clients/Order.cs",
+            "line": 3,
+            "endLine": 3
+          },
+          {
+            "id": "file:Clients/Order.cs:function:5:Gateway.Clients.Stock.Stock",
+            "name": "Stock",
+            "className": "Stock",
+            "file": "Clients/Order.cs",
+            "line": 5,
+            "endLine": 5
+          },
+          {
+            "id": "file:Clients/Order.cs:function:7:Gateway.Clients.Product.Product",
+            "name": "Product",
+            "className": "Product",
+            "file": "Clients/Order.cs",
+            "line": 7,
+            "endLine": 7
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:11:Gateway.Clients.OrdersClient.OrdersClient",
+            "name": "OrdersClient",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 11,
+            "endLine": 14
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "name": "GetOrderAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 16,
+            "endLine": 16
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "name": "PlaceAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 18,
+            "endLine": 18
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "name": "CancelAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 20,
+            "endLine": 24
+          },
+          {
+            "id": "file:Clients/OrdersClient.cs:function:26:Gateway.Clients.OrdersClient.RawAsync",
+            "name": "RawAsync",
+            "className": "OrdersClient",
+            "file": "Clients/OrdersClient.cs",
+            "line": 26,
+            "endLine": 26
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:10:Gateway.Controllers.OrdersController.Get",
+            "name": "Get",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10,
+            "endLine": 11
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:13:Gateway.Controllers.OrdersController.Create",
+            "name": "Create",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13,
+            "endLine": 14
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:16:Gateway.Controllers.OrdersController.Cancel",
+            "name": "Cancel",
+            "className": "OrdersController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 16,
+            "endLine": 17
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:22:Gateway.Controllers.CheckoutController.CheckoutController",
+            "name": "CheckoutController",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 22,
+            "endLine": 22
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:function:24:Gateway.Controllers.CheckoutController.Checkout",
+            "name": "Checkout",
+            "className": "CheckoutController",
+            "file": "Controllers/OrdersController.cs",
+            "line": 24,
+            "endLine": 30
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:9:Gateway.Services.BillingGateway.BillingGateway",
+            "name": "BillingGateway",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 9,
+            "endLine": 13
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "name": "InvoicesAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 15,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "name": "IssueAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/BillingGateway.cs:function:23:Gateway.Services.BillingGateway.AuditAsync",
+            "name": "AuditAsync",
+            "className": "BillingGateway",
+            "file": "Services/BillingGateway.cs",
+            "line": 23,
+            "endLine": 23
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:6:Gateway.Services.CatalogService.CatalogService",
+            "name": "CatalogService",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "name": "FindAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "name": "AddAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 10,
+            "endLine": 10
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "name": "RemoveAsync",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 12,
+            "endLine": 12
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:14:Gateway.Services.CatalogService.Label",
+            "name": "Label",
+            "className": "CatalogService",
+            "file": "Services/CatalogService.cs",
+            "line": 14,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "name": "StatusAsync",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 21,
+            "endLine": 21
+          },
+          {
+            "id": "file:Services/CatalogService.cs:function:19:Gateway.Services.ShippingService.<init-block>",
+            "name": "<init-block>",
+            "className": "ShippingService",
+            "file": "Services/CatalogService.cs",
+            "line": 19,
+            "endLine": 19
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "name": "GetAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 8,
+            "endLine": 8
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "name": "PostAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 10,
+            "endLine": 14
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "name": "WarmAsync",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 16,
+            "endLine": 20
+          },
+          {
+            "id": "file:Services/ResponseCache.cs:function:6:Gateway.Services.ResponseCache.<init-block>",
+            "name": "<init-block>",
+            "className": "ResponseCache",
+            "file": "Services/ResponseCache.cs",
+            "line": 6,
+            "endLine": 6
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "name": "PingAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 6,
+            "endLine": 11
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:13:Gateway.Services.StatusProbe.LegacyAsync",
+            "name": "LegacyAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 13,
+            "endLine": 18
+          },
+          {
+            "id": "file:Services/StatusProbe.cs:function:20:Gateway.Services.StatusProbe.DynamicAsync",
+            "name": "DynamicAsync",
+            "className": "StatusProbe",
+            "file": "Services/StatusProbe.cs",
+            "line": 20,
+            "endLine": 20
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (caller:Function)-[:CALLS]->(call:Call)-[:CALL_RESOLVES_TO]->(callee:Function) RETURN id(caller) AS caller, id(callee) AS callee, call.line AS line",
+        "rows": [
+          {
+            "caller": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync",
+            "callee": "file:Clients/ICatalogApi.cs:function:25:Gateway.Clients.IShippingApi.Status",
+            "line": 21
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:10:Gateway.Services.ResponseCache.PostAsync",
+            "line": 18
+          },
+          {
+            "caller": "file:Services/ResponseCache.cs:function:16:Gateway.Services.ResponseCache.WarmAsync",
+            "callee": "file:Services/ResponseCache.cs:function:8:Gateway.Services.ResponseCache.GetAsync",
+            "line": 19
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true RETURN id(route) AS id",
+        "params": {
+          "method": "",
+          "path": "",
+          "routeFiles": [],
+          "framework": ""
+        },
+        "rows": [
+          {
+            "id": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}"
+          },
+          {
+            "id": "file:Controllers/OrdersController.cs:route:24:0:POST:/api/checkout/{orderId}"
+          },
+          {
+            "id": "file:Program.cs:route:34:0:GET:/api/inventory/{sku}"
+          },
+          {
+            "id": "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve"
+          },
+          {
+            "id": "file:Program.cs:route:36:0:GET:/api/inventory/health"
+          },
+          {
+            "id": "file:Program.cs:route:37:0:GET:/api/billing/invoices"
+          },
+          {
+            "id": "file:Program.cs:route:38:0:POST:/api/billing/invoices"
+          },
+          {
+            "id": "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}"
+          },
+          {
+            "id": "file:Program.cs:route:40:0:POST:/api/catalog/products"
+          },
+          {
+            "id": "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}"
+          },
+          {
+            "id": "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (routeFile:File)-[:DECLARES_ROUTE]->(route:Route)<-[request:REQUESTS]-(call:Call) WHERE id(route) IN $ids OPTIONAL MATCH (fn:Function)-[:CALLS]->(call) RETURN id(route) AS route, route.method AS routeMethod, route.fullPath AS routeFullPath, route.framework AS routeFramework, routeFile.relativePath AS routeFile, route.line AS routeLine, id(call) AS call, call.line AS line, call.expression AS expression, call.httpClient AS client, request.method AS method, request.url AS url, request.match AS match, request.provenance AS provenance, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}",
+            "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders",
+            "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}",
+            "file:Controllers/OrdersController.cs:route:24:0:POST:/api/checkout/{orderId}",
+            "file:Program.cs:route:34:0:GET:/api/inventory/{sku}",
+            "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve",
+            "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "file:Program.cs:route:37:0:GET:/api/billing/invoices",
+            "file:Program.cs:route:38:0:POST:/api/billing/invoices",
+            "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}",
+            "file:Program.cs:route:40:0:POST:/api/catalog/products",
+            "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}",
+            "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status"
+          ]
+        },
+        "rows": [
+          {
+            "route": "file:Controllers/OrdersController.cs:route:10:0:GET:/api/orders/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/orders/{id}",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 10,
+            "call": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync:call:16:49:_http.GetFromJsonAsync",
+            "line": 16,
+            "expression": "_http.GetFromJsonAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/orders/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync"
+          },
+          {
+            "route": "file:Controllers/OrdersController.cs:route:13:0:POST:/api/orders",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/orders",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 13,
+            "call": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync:call:18:76:_http.PostAsJsonAsync",
+            "line": 18,
+            "expression": "_http.PostAsJsonAsync",
+            "client": "httpclient-factory",
+            "method": "POST",
+            "url": "/api/orders",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync"
+          },
+          {
+            "route": "file:Controllers/OrdersController.cs:route:16:0:DELETE:/api/orders/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/orders/{id}",
+            "routeFramework": "aspnet-mvc",
+            "routeFile": "Controllers/OrdersController.cs",
+            "routeLine": 16,
+            "call": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync:call:22:29:_http.DeleteAsync",
+            "line": 22,
+            "expression": "_http.DeleteAsync",
+            "client": "httpclient-factory",
+            "method": "DELETE",
+            "url": "/api/orders/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync"
+          },
+          {
+            "route": "file:Program.cs:route:34:0:GET:/api/inventory/{sku}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/{sku}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 34,
+            "call": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync:call:15:53:http.GetFromJsonAsync",
+            "line": 15,
+            "expression": "http.GetFromJsonAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/inventory/${sku}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync"
+          },
+          {
+            "route": "file:Program.cs:route:35:0:PUT:/api/inventory/{sku}/reserve",
+            "routeMethod": "PUT",
+            "routeFullPath": "/api/inventory/{sku}/reserve",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 35,
+            "call": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync:call:19:28:new HttpRequestMessage",
+            "line": 19,
+            "expression": "new HttpRequestMessage",
+            "client": "httpclient-factory",
+            "method": "PUT",
+            "url": "/api/inventory/${sku}/reserve",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync"
+          },
+          {
+            "route": "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/health",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 36,
+            "call": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync:call:26:44:new HttpRequestMessage",
+            "line": 26,
+            "expression": "new HttpRequestMessage",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/inventory/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync"
+          },
+          {
+            "route": "file:Program.cs:route:36:0:GET:/api/inventory/health",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/inventory/health",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 36,
+            "call": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync:call:9:29:client.GetAsync",
+            "line": 9,
+            "expression": "client.GetAsync",
+            "client": "httpclient",
+            "method": "GET",
+            "url": "/api/inventory/health",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync"
+          },
+          {
+            "route": "file:Program.cs:route:37:0:GET:/api/billing/invoices",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/billing/invoices",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 37,
+            "call": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync:call:18:21:client.GetStringAsync",
+            "line": 18,
+            "expression": "client.GetStringAsync",
+            "client": "httpclient-factory",
+            "method": "GET",
+            "url": "/api/billing/invoices",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync"
+          },
+          {
+            "route": "file:Program.cs:route:38:0:POST:/api/billing/invoices",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/billing/invoices",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 38,
+            "call": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync:call:21:72:_factory.CreateClient(\"billing\").PostAsync",
+            "line": 21,
+            "expression": "_factory.CreateClient(\"billing\").PostAsync",
+            "client": "httpclient-factory",
+            "method": "POST",
+            "url": "/api/billing/invoices",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync"
+          },
+          {
+            "route": "file:Program.cs:route:39:0:GET:/api/catalog/products/{id}",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/catalog/products/{id}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 39,
+            "call": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync:call:8:46:catalog.GetProduct",
+            "line": 8,
+            "expression": "catalog.GetProduct",
+            "client": "refit",
+            "method": "GET",
+            "url": "/api/catalog/products/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync"
+          },
+          {
+            "route": "file:Program.cs:route:40:0:POST:/api/catalog/products",
+            "routeMethod": "POST",
+            "routeFullPath": "/api/catalog/products",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 40,
+            "call": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync:call:10:54:catalog.CreateProduct",
+            "line": 10,
+            "expression": "catalog.CreateProduct",
+            "client": "refit",
+            "method": "POST",
+            "url": "/api/catalog/products",
+            "match": "exact",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync"
+          },
+          {
+            "route": "file:Program.cs:route:41:0:DELETE:/api/catalog/products/{id}",
+            "routeMethod": "DELETE",
+            "routeFullPath": "/api/catalog/products/{id}",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 41,
+            "call": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync:call:12:39:catalog.DeleteProduct",
+            "line": 12,
+            "expression": "catalog.DeleteProduct",
+            "client": "refit",
+            "method": "DELETE",
+            "url": "/api/catalog/products/${id}",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync"
+          },
+          {
+            "route": "file:Program.cs:route:42:0:GET:/api/shipping/{orderId}/status",
+            "routeMethod": "GET",
+            "routeFullPath": "/api/shipping/{orderId}/status",
+            "routeFramework": "aspnet-minimal",
+            "routeFile": "Program.cs",
+            "routeLine": 42,
+            "call": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync:call:21:52:_shipping.Status",
+            "line": 21,
+            "expression": "_shipping.Status",
+            "client": "refit",
+            "method": "GET",
+            "url": "/api/shipping/${orderId}/status",
+            "match": "parameter",
+            "provenance": "exact",
+            "fn": "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          }
+        ]
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY_FUNCTION]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (component:Component)-[:COMPONENT_DEFINED_BY]->(class:Class)-[:DEFINES_METHOD]->(fn:Function) WHERE id(fn) IN $ids RETURN id(component) AS component, id(fn) AS fn, class.name AS className",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_PAGE]->(page:Page)-[:PAGE_LOADS]->(fn:Function) WHERE id(fn) IN $ids RETURN page.fullPath AS fullPath, page.framework AS framework, page.router AS router, page.kind AS kind, file.relativePath AS file, page.line AS line, id(fn) AS fn",
+        "params": {
+          "ids": [
+            "file:Services/BillingGateway.cs:function:15:Gateway.Services.BillingGateway.InvoicesAsync",
+            "file:Services/BillingGateway.cs:function:21:Gateway.Services.BillingGateway.IssueAsync",
+            "file:Services/CatalogService.cs:function:10:Gateway.Services.CatalogService.AddAsync",
+            "file:Services/CatalogService.cs:function:12:Gateway.Services.CatalogService.RemoveAsync",
+            "file:Services/CatalogService.cs:function:8:Gateway.Services.CatalogService.FindAsync",
+            "file:Clients/InventoryClient.cs:function:15:Gateway.Clients.InventoryClient.GetStockAsync",
+            "file:Clients/InventoryClient.cs:function:17:Gateway.Clients.InventoryClient.ReserveAsync",
+            "file:Clients/InventoryClient.cs:function:24:Gateway.Clients.InventoryClient.IsHealthyAsync",
+            "file:Services/StatusProbe.cs:function:6:Gateway.Services.StatusProbe.PingAsync",
+            "file:Clients/OrdersClient.cs:function:18:Gateway.Clients.OrdersClient.PlaceAsync",
+            "file:Clients/OrdersClient.cs:function:20:Gateway.Clients.OrdersClient.CancelAsync",
+            "file:Clients/OrdersClient.cs:function:16:Gateway.Clients.OrdersClient.GetOrderAsync",
+            "file:Services/CatalogService.cs:function:21:Gateway.Services.ShippingService.StatusAsync"
+          ]
+        },
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "method": null,
+        "path": null,
+        "routeFile": null,
+        "framework": null,
+        "file": null,
+        "client": "httpclient-factory",
+        "limit": 50
+      },
+      "consumers": [
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/billing/invoices",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 37
+          },
+          "client": "httpclient-factory",
+          "method": "GET",
+          "url": "/api/billing/invoices",
+          "match": "exact",
+          "file": "Services/BillingGateway.cs",
+          "line": 18,
+          "expression": "client.GetStringAsync",
+          "function": "InvoicesAsync"
+        },
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/billing/invoices",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 38
+          },
+          "client": "httpclient-factory",
+          "method": "POST",
+          "url": "/api/billing/invoices",
+          "match": "exact",
+          "file": "Services/BillingGateway.cs",
+          "line": 21,
+          "expression": "_factory.CreateClient(\"billing\").PostAsync",
+          "function": "IssueAsync"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/inventory/{sku}",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 34
+          },
+          "client": "httpclient-factory",
+          "method": "GET",
+          "url": "/api/inventory/${sku}",
+          "match": "parameter",
+          "file": "Clients/InventoryClient.cs",
+          "line": 15,
+          "expression": "http.GetFromJsonAsync",
+          "function": "GetStockAsync"
+        },
+        {
+          "route": {
+            "method": "PUT",
+            "fullPath": "/api/inventory/{sku}/reserve",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 35
+          },
+          "client": "httpclient-factory",
+          "method": "PUT",
+          "url": "/api/inventory/${sku}/reserve",
+          "match": "parameter",
+          "file": "Clients/InventoryClient.cs",
+          "line": 19,
+          "expression": "new HttpRequestMessage",
+          "function": "ReserveAsync"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/inventory/health",
+            "framework": "aspnet-minimal",
+            "file": "Program.cs",
+            "line": 36
+          },
+          "client": "httpclient-factory",
+          "method": "GET",
+          "url": "/api/inventory/health",
+          "match": "exact",
+          "file": "Clients/InventoryClient.cs",
+          "line": 26,
+          "expression": "new HttpRequestMessage",
+          "function": "IsHealthyAsync"
+        },
+        {
+          "route": {
+            "method": "POST",
+            "fullPath": "/api/orders",
+            "framework": "aspnet-mvc",
+            "file": "Controllers/OrdersController.cs",
+            "line": 13
+          },
+          "client": "httpclient-factory",
+          "method": "POST",
+          "url": "/api/orders",
+          "match": "exact",
+          "file": "Clients/OrdersClient.cs",
+          "line": 18,
+          "expression": "_http.PostAsJsonAsync",
+          "function": "PlaceAsync"
+        },
+        {
+          "route": {
+            "method": "DELETE",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "file": "Controllers/OrdersController.cs",
+            "line": 16
+          },
+          "client": "httpclient-factory",
+          "method": "DELETE",
+          "url": "/api/orders/${id}",
+          "match": "parameter",
+          "file": "Clients/OrdersClient.cs",
+          "line": 22,
+          "expression": "_http.DeleteAsync",
+          "function": "CancelAsync"
+        },
+        {
+          "route": {
+            "method": "GET",
+            "fullPath": "/api/orders/{id}",
+            "framework": "aspnet-mvc",
+            "file": "Controllers/OrdersController.cs",
+            "line": 10
+          },
+          "client": "httpclient-factory",
+          "method": "GET",
+          "url": "/api/orders/${id}",
+          "match": "parameter",
+          "file": "Clients/OrdersClient.cs",
+          "line": 16,
+          "expression": "_http.GetFromJsonAsync",
+          "function": "GetOrderAsync"
+        }
+      ],
+      "page": {
+        "offset": 0,
+        "returned": 8
+      }
+    }
+  },
+  {
+    "tool": "list_routes",
+    "args": {
+      "framework": "aspnet-core"
+    },
+    "calls": [
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File)-[:DECLARES_ROUTE]->(route:Route) WHERE true AND route.framework = \"aspnet-core\" OPTIONAL MATCH (route)-[:ROUTE_HANDLED_BY]->(handler:Function) RETURN file.relativePath AS file, route.line AS line, route.method AS method, route.path AS path, route.fullPath AS fullPath, route.framework AS framework, route.handlerName AS handlerName, handler.name AS handler ORDER BY file.relativePath, route.line, route.method, route.path, handler.name LIMIT 51",
+        "rows": []
+      },
+      {
+        "method": "query",
+        "cypher": "MATCH (file:File) WHERE file.dynamicRouteCalls IS NOT NULL RETURN file.relativePath AS file, file.dynamicRouteCalls AS calls ORDER BY file.relativePath",
+        "rows": []
+      }
+    ],
+    "output": {
+      "query": {
+        "framework": "aspnet-core",
+        "limit": 50
+      },
+      "routes": [],
+      "page": {
+        "offset": 0,
+        "returned": 0
+      }
+    }
+  }
+]

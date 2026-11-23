@@ -37,7 +37,8 @@ export type JavaTableExtra = {
 };
 
 const TABLE_PREFIX = "table:java:-:";
-const tablesByGraph = new WeakMap<object, Map<string, string>>();
+// Per graph, per language prefix: lower-cased name -> Table id.
+const tablesByGraph = new WeakMap<object, Map<string, Map<string, string>>>();
 
 export const javaTableId = (name: string): string => `${TABLE_PREFIX}${name.toLowerCase()}`;
 
@@ -47,15 +48,17 @@ export function normalizeTableName(raw: string): string {
   return parts.at(-1) ?? "";
 }
 
-// Lower-cased name → Table id of the Java tables the graph already has (another contributor made them).
-function knownTables(graph: IGraphContributor): Map<string, string> {
-  let known = tablesByGraph.get(graph);
+// Lower-cased name → Table id of the tables of one language (`prefix`) the graph already has (another contributor made them).
+function knownTables(graph: IGraphContributor, prefix: string): Map<string, string> {
+  let byPrefix = tablesByGraph.get(graph);
+  if (!byPrefix) tablesByGraph.set(graph, (byPrefix = new Map()));
+  let known = byPrefix.get(prefix);
   if (!known) {
     known = new Map();
     for (const node of graph.nodesWithLabel("Table")) {
-      if (node.id.startsWith(TABLE_PREFIX)) known.set(node.id.slice(TABLE_PREFIX.length), node.id);
+      if (node.id.startsWith(prefix)) known.set(node.id.slice(prefix.length), node.id);
     }
-    tablesByGraph.set(graph, known);
+    byPrefix.set(prefix, known);
   }
   return known;
 }
@@ -66,8 +69,13 @@ function knownTables(graph: IGraphContributor): Map<string, string> {
  * `columns`. A mention (a query) fills in `schemaName` when the table has none.
  */
 export function javaTable(graph: IGraphContributor, name: string, extra: JavaTableExtra = {}): string {
+  return tableWithPrefix(graph, TABLE_PREFIX, name, extra);
+}
+
+/** `javaTable` for another language: its Table ids are `<prefix><lower-cased name>` (C#: `table:csharp:-:`). */
+export function tableWithPrefix(graph: IGraphContributor, prefix: string, name: string, extra: JavaTableExtra = {}): string {
   const clean = normalizeTableName(name);
-  const known = knownTables(graph);
+  const known = knownTables(graph, prefix);
   const key = clean.toLowerCase();
   const existing = known.get(key);
   if (existing) {
@@ -81,7 +89,7 @@ export function javaTable(graph: IGraphContributor, name: string, extra: JavaTab
     if (node && extra.schemaName && (node.properties.schemaName === null || node.properties.schemaName === undefined)) node.properties.schemaName = extra.schemaName;
     return existing;
   }
-  const id = javaTableId(clean);
+  const id = `${prefix}${key}`;
   known.set(key, id);
   graph.addNode({
     id,
@@ -129,7 +137,12 @@ export function javaDataModel(graph: IGraphContributor, input: JavaDataModelInpu
 
 /** The stand-in DataModel of a library for a table (`datamodel:<library>:<lower-cased name>`), created on first use. */
 export function javaTableModel(graph: IGraphContributor, table: string, library: string): string {
-  const name = String(graph.node(table)?.properties.name ?? table.slice(TABLE_PREFIX.length));
+  return tableModelWithPrefix(graph, table, library, TABLE_PREFIX);
+}
+
+/** `javaTableModel` for a table made with `tableWithPrefix(…, prefix, …)`. */
+export function tableModelWithPrefix(graph: IGraphContributor, table: string, library: string, prefix: string): string {
+  const name = String(graph.node(table)?.properties.name ?? table.slice(prefix.length));
   return javaDataModel(graph, { name, library, id: javaDataModelId(library, name.toLowerCase()), table });
 }
 
@@ -169,6 +182,8 @@ const aggregateSelect = new RegExp(String.raw`^\s*select\s+${aggregateFunction}(
 export type JavaDataAccess = {
   callId?: string;
   functionId?: string;
+  /** Column (0-based) of the access, when the line alone cannot tell two lambdas of one line apart. */
+  column?: number;
   modelId: string;
   operation: JavaDataOperation;
   library: string;
@@ -193,14 +208,55 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
       else handlers.set(relationship.to, [relationship.from]);
     }
   }
-  const callersOf = new Map<string, string[]>();
+  const callersOf = new Map<string, Array<{ caller: string; line: number | undefined; column: number | undefined }>>();
   for (const relationship of graph.relationshipsOfType("CALL_RESOLVES_TO")) {
     const caller = callerByCall.get(relationship.from);
     if (!caller || caller === relationship.to) continue;
+    const callLine = graph.node(relationship.from)?.properties.line;
+    const callColumn = graph.node(relationship.from)?.properties.columnNumber;
+    const entry = { caller, line: typeof callLine === "number" ? callLine : undefined, column: typeof callColumn === "number" ? callColumn : undefined };
     const list = callersOf.get(relationship.to);
-    if (list) list.push(caller);
-    else callersOf.set(relationship.to, [caller]);
+    if (list) list.push(entry);
+    else callersOf.set(relationship.to, [entry]);
   }
+  // A minimal-API lambda handler is part of its enclosing function (`<top-level>`): a Route with `handlerEndLine` only
+  // reaches what is called between its own line and that end; an entrypoint of the function does not run the lambdas.
+  // `handlerStartLine` / `handlerStartColumn` / `handlerEndColumn` (C# Routes) narrow the range to the handler's own syntax:
+  // a local function handler, or two lambdas on one line. Without them the range is the Route's `line` to `handlerEndLine`.
+  type Range = { start: number; end: number; startColumn?: number; endColumn?: number };
+  const lambdaRange = (source: string): Range | null => {
+    const properties = graph.node(source)?.properties;
+    if (!properties || typeof properties.handlerEndLine !== "number") return null;
+    const start = typeof properties.handlerStartLine === "number" ? properties.handlerStartLine : properties.line;
+    if (typeof start !== "number") return null;
+    return {
+      start,
+      end: properties.handlerEndLine,
+      ...(typeof properties.handlerStartColumn === "number" ? { startColumn: properties.handlerStartColumn } : {}),
+      ...(typeof properties.handlerEndColumn === "number" ? { endColumn: properties.handlerEndColumn } : {}),
+    };
+  };
+  const inside = (range: Range, line: number, column: number | undefined): boolean => {
+    if (line < range.start || line > range.end) return false;
+    if (column === undefined) return true;
+    if (line === range.start && range.startColumn !== undefined && column < range.startColumn) return false;
+    if (line === range.end && range.endColumn !== undefined && column > range.endColumn) return false;
+    return true;
+  };
+  const reaches = (source: string, host: string, line: number | undefined, column?: number): boolean => {
+    if (line === undefined) return true;
+    const own = lambdaRange(source);
+    if (own) return inside(own, line, column);
+    if (graph.node(source)?.label === "Route") return true;
+    return !(handlers.get(host) ?? []).some((other) => {
+      const range = lambdaRange(other);
+      return range !== null && inside(range, line, column);
+    });
+  };
+  const columnOfCall = (callId: string): number | undefined => {
+    const column = graph.node(callId)?.properties.columnNumber;
+    return typeof column === "number" ? column : undefined;
+  };
   const filePaths = new Set(graph.nodesWithLabel("File").flatMap((node) => (typeof node.properties.relativePath === "string" ? [node.properties.relativePath] : [])));
 
   const added: GraphRelationship[] = [];
@@ -230,18 +286,20 @@ export function recordJavaDataAccesses(graph: IGraphContributor, accesses: reado
     const functionId = access.functionId ?? (access.callId ? callerByCall.get(access.callId) : undefined);
     if (!site || !functionId) continue;
     if (record(functionId, access, site, true)) push(functionId, { access, site });
-    for (const source of handlers.get(functionId) ?? []) record(source, access, site, false);
+    const accessLine = typeof access.line === "number" ? access.line : undefined;
+    const accessColumn = access.column ?? (access.callId ? columnOfCall(access.callId) : undefined);
+    for (const source of handlers.get(functionId) ?? []) if (reaches(source, functionId, accessLine, accessColumn)) record(source, access, site, false);
   }
   const queue = [...byFunction.keys()];
   for (let head = 0; head < queue.length; head += 1) {
     const functionId = queue[head]!;
-    for (const caller of callersOf.get(functionId) ?? []) {
+    for (const { caller, line, column } of callersOf.get(functionId) ?? []) {
       let changed = false;
       for (const { access, site } of byFunction.get(functionId) ?? []) {
-        if (!record(caller, access, site, false)) continue;
-        push(caller, { access, site });
-        for (const source of handlers.get(caller) ?? []) record(source, access, site, false);
-        changed = true;
+        const isNew = record(caller, access, site, false);
+        if (isNew) push(caller, { access, site });
+        for (const source of handlers.get(caller) ?? []) if (reaches(source, caller, line, column)) record(source, access, site, false);
+        if (isNew) changed = true;
       }
       if (changed) queue.push(caller);
     }
